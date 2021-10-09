@@ -103,8 +103,6 @@ class EntityMetadata(Type):
 class Slot(Type):
 	# TODO
 	pass
-			if buf & 0b10000000 == 0:
-				break
 
 class NBTTag(Type):
 	# TODO
