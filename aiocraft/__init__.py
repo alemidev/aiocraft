@@ -1,6 +1,5 @@
 """aiocraft is an asyncio-driven headless minecraft client"""
 from .session import Session
-from .impl import *
 from .mc import *
 
 __version__ = "0.0.1"
