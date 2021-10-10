@@ -1,5 +1,9 @@
 from setuptools import setup, find_packages
 
+from compiler.proto import compile
+
+compile()
+
 setup(
 	name='aiocraft',
 	version='0.0.1',	
@@ -9,7 +13,7 @@ setup(
 	author_email='me@alemi.dev',
 	license='MIT',
 	packages=find_packages(),
-	install_requires=['requests'],
+	install_requires=[],
 	classifiers=[
 		'Development Status :: 1 - Planning',
 		'Intended Audience :: Developers',
@@ -19,4 +23,3 @@ setup(
 		'Programming Language :: Python :: 3.8',
 	],
 )
-
