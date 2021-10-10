@@ -63,6 +63,15 @@ class VarInt(Type):
 	_maxBytes = 5
 
 	@classmethod
+	async def read(cls, stream: asyncio.StreamReader) -> int:
+		buf = 0b10000000
+		off = 0
+		while (buf & 0b0000000) != 0:
+			buf |= (await stream.read(1)) >> (7*off)
+			off += 1
+		return buf
+
+	@classmethod
 	def serialize(cls, data:int) -> bytes:
 		res : bytearray = bytearray()
 		count = 0
