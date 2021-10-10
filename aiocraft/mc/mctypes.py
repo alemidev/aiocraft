@@ -3,6 +3,7 @@ import struct
 from typing import Any
 
 class Type(object):
+	_pytype : type
 	_fmt : str
 
 	@classmethod
@@ -14,34 +15,53 @@ class Type(object):
 		return struct.unpack(cls._fmt, data)[0]
 
 class Boolean(Type):
+	_pytype : type = bool
 	_fmt : str = ">?"
 
 class Byte(Type):
+	_pytype : type = int
 	_fmt : str = ">b"
 
 class UnsignedByte(Type):
+	_pytype : type = int
 	_fmt : str = ">B"
 
 class Short(Type):
+	_pytype : type = int
 	_fmt : str = ">h"
 
 class UnsignedShort(Type):
+	_pytype : type = int
 	_fmt : str = ">H"
 
 class Int(Type):
+	_pytype : type = int
 	_fmt : str = ">i"
 
+class UnsignedInt(Type):
+	_pytype : type = int
+	_fmt : str = ">I"
+
 class Long(Type):
+	_pytype : type = int
 	_fmt : str = ">q"
 
+class UnsignedLong(Type):
+	_pytype : type = int
+	_fmt : str = ">Q"
+
 class Float(Type):
+	_pytype : type = float
 	_fmt : str = ">f"
 
 class Double(Type):
+	_pytype : type = float
 	_fmt : str = ">d"
 
 class VarInt(Type):
+	_pytype : type = int
 	_maxBytes = 5
+
 	@classmethod
 	def serialize(cls, data:int) -> bytes:
 		res : bytearray = bytearray()
@@ -76,9 +96,12 @@ class VarInt(Type):
 		return result
 
 class VarLong(VarInt):
+	_pytype : type = int
 	_maxBytes = 10
 
 class String(Type):
+	_pytype : type = str
+
 	@classmethod
 	def serialize(cls, data:str) -> bytes:
 		encoded = data.encode('utf-8')
@@ -91,31 +114,44 @@ class String(Type):
 		return struct.unpack(f">{length}s", data[start_index:])[0]
 
 class Chat(String):
+	_pytype : type = str
 	pass
 
 class Identifier(String):
+	_pytype : type = str
 	pass
 
 class EntityMetadata(Type):
+	_pytype : type = bytes
+	# TODO
+	pass
+
+class EntityMetadataItem(Type):
+	_pytype : type = bytes
 	# TODO
 	pass
 
 class Slot(Type):
+	_pytype : type = bytes
 	# TODO
 	pass
 
 class NBTTag(Type):
+	_pytype : type = bytes
 	# TODO
 	pass
 
 class Position(Type):
+	_pytype : type = bytes
 	# TODO
 	pass
 
 class Angle(Type):
+	_pytype : type = bytes
 	# TODO
 	pass
 
 class UUID(Type):
+	_pytype : type = bytes
 	# TODO
 	pass
