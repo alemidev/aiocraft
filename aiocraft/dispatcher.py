@@ -1,20 +1,19 @@
 import asyncio
-from asyncio import StreamReader, StreamWriter
+from asyncio import StreamReader, StreamWriter, Queue, Task
 from enum import Enum
-
-class ConnectionState(Enum):
-	HANDSHAKING = 0
-	STATUS = 1
-	LOGIN = 2
-	PLAY = 3
 
 class InvalidState(Exception):
 	pass
 
 class Dispatcher:
+	_down : StreamReader
+	_up   : StreamWriter
+	_reader : Task
+	_writer : Task
+	_dispatching : bool
+	incoming : Queue
+	outgoing : Queue
 	connected : bool
-	down : StreamReader
-	up   : StreamWriter
 	host : str
 	port : int
 
@@ -22,21 +21,41 @@ class Dispatcher:
 		self.host = host
 		self.port = port
 		self.connected = False
+		self._dispatching = False
 
-	async def _connect(self):
-		self.down, self.up = await asyncio.open_connection(
+	async def connect(self):
+		self._down, self._up = await asyncio.open_connection(
 			host=self.host,
 			port=self.port,
 		)
 		self.connected = True
 
-	async def _work(self):
-		while True:
-			buf = await self.down.
+	async def _down_worker(self):
+		while self._dispatching:
+			length = await VarInt.read(self._down)
+			buffer = await self._down.read(length)
+			# TODO encryption
+			# TODO compression
+			await self.incoming.put(packet)
+
+	async def _up_worker(self):
+		while self._dispatching:
+			buffer = await self.outgoing.get()
+			length = len(buffer)
+			# TODO compression
+			# TODO encryption
+			await self._up.write(VarInt.serialize(length) + buffer)
 
 	async def run(self):
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
-		await self._connect()
+		await self.connect()
+		self._dispatching = True
+		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
+		self._writer = asyncio.get_event_loop().create_task(self._up_worker())
+
+	async def stop(self):
+		self._dispatching = False
+		await asyncio.gather(self._writer, self._reader)
 
 

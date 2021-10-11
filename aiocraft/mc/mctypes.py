@@ -65,10 +65,14 @@ class VarInt(Type):
 
 	@classmethod
 	async def read(cls, stream: asyncio.StreamReader) -> int:
-		buf = 0b10000000
+		"""Utility method to read a VarInt off the socket, because len comes as a VarInt..."""
+		buf = 0
 		off = 0
-		while (buf & 0b0000000) != 0:
-			buf |= (await stream.read(1)) >> (7*off)
+		while True:
+			byte = await stream.read(1)
+			buf |= (byte & 0b01111111) >> (7*off)
+			if not byte & 0b10000000:
+				break
 			off += 1
 		return buf
 
