@@ -44,9 +44,27 @@ class Client:
 	async def _logic_worker(self):
 		while self._processing:
 			buffer = await self.dispatcher.incoming.get()
+			if self.state == ConnectionState.HANDSHAKING:
+				self.handshaking_logic(buffer)
+			elif self.state == ConnectionState.LOGIN:
+				self.login_logic(buffer)
+			elif self.state == ConnectionState.PLAY:
+				self.play_logic(buffer)
+			
 			packet_id = VarInt.deserialize(buffer)
 			cls = PacketRegistry.state(self.state).clientbound.get(packet_id)
 			packet = cls(buffer)
 			# Process packets? switch state, invoke callbacks? Maybe implement Reactors?
 
+	async def handshaking_logic(self, buffer: bytes):
+		pass
+
+	async def status_logic(self, buffer: bytes):
+		pass
+
+	async def login_logic(self, buffer: bytes):
+		pass
+
+	async def play_logic(self, buffer: bytes):
+		pass
 
