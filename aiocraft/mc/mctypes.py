@@ -12,7 +12,7 @@ class Type(object):
 		return struct.pack(cls._fmt, data)
 
 	@classmethod
-	def unserialize(cls, data:bytes) -> Any:
+	def deserialize(cls, data:bytes) -> Any:
 		return struct.unpack(cls._fmt, data)[0]
 
 class Boolean(Type):
