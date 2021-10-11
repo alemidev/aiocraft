@@ -183,9 +183,6 @@ def compile():
 						"slots" : packet[1],
 					}
 
-	with open("/home/dev/HELP.json", "w") as f:
-		json.dump(PACKETS, f, indent=2)
-			
 	_make_module(mc_path / 'proto', { k:"*" for k in PACKETS.keys() })
 	for state in PACKETS.keys():
 		_make_module(mc_path / f"proto/{state}", { k:"*" for k in PACKETS[state].keys() })
@@ -202,8 +199,6 @@ def compile():
 					v_slots = []
 					v_fields = []
 					for slot in defn["slots"]:
-						with open("/home/dev/SLOTS", "a") as f:
-							f.write(str(slot) + "\n")
 						v_slots.append(parse_slot(slot))
 						fields.add(parse_field(slot))
 					slots.append(f"{v} : ( {','.join(v_slots)} ),")
