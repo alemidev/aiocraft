@@ -1,3 +1,4 @@
+import io
 import json
 from typing import Tuple, Dict
 
@@ -18,14 +19,28 @@ class Packet:
 			setattr(self, name, t._pytype(kwargs[name]) if name in kwargs else None)
 
 	@classmethod
-	def deserialize(cls, proto:int, data:bytes):
-		return cls(proto, **{ name : t.deserialize(data) for (name, t) in cls._slots[proto] })
+	def deserialize(cls, proto:int, buffer:io.BytesIO):
+		pid = VarInt.read(buffer)
+		return cls(proto, **{ name : t.read(buffer) for (name, t) in cls._slots[proto] })
 
-	def serialize(self) -> bytes:
-		return VarInt.serialize(self.id) + b''.join(
-			slot[1].serialize(getattr(self, slot[0], None))
-			for slot in self.slots
-		)
+	def serialize(self) -> io.BytesIO:
+		buf = io.BytesIO()
+		VarInt.write(self.id, buf)
+		for name, t in self.slots:
+			t.write(getattr(self, name, None), buf)
+		buf.seek(0)
+		return buf
+
+	def __eq__(self, other) -> bool:
+		if not isinstance(other, self.__class__):
+			return False
+		if self._protocol != other._protocol:
+			return False
+		for name, t in self.slots:
+			if getattr(self, name) != getattr(other, name):
+				return False
+		return True
+
 
 	def __str__(self) -> str:
 		obj = {} # could be done with dict comp but the _ key gets put last :(

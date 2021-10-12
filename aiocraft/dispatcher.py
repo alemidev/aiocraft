@@ -5,6 +5,18 @@ from enum import Enum
 class InvalidState(Exception):
 	pass
 
+async def read_varint(stream: asyncio.StreamReader) -> int:
+	"""Utility method to read a VarInt off the socket, because len comes as a VarInt..."""
+	buf = 0
+	off = 0
+	while True:
+		byte = int.from_bytes(await stream.read(1), 'little')
+		buf |= (byte & 0b01111111) >> (7*off)
+		if not byte & 0b10000000:
+			break
+		off += 1
+	return buf
+
 class Dispatcher:
 	_down : StreamReader
 	_up   : StreamWriter
@@ -32,7 +44,7 @@ class Dispatcher:
 
 	async def _down_worker(self):
 		while self._dispatching:
-			length = await VarInt.read(self._down)
+			length = await read_varint(self._down)
 			buffer = await self._down.read(length)
 			# TODO encryption
 			# TODO compression
