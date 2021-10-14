@@ -2,6 +2,8 @@ import asyncio
 from asyncio import StreamReader, StreamWriter, Queue, Task
 from enum import Enum
 
+from .mc import proto
+
 class InvalidState(Exception):
 	pass
 
@@ -16,6 +18,13 @@ async def read_varint(stream: asyncio.StreamReader) -> int:
 			break
 		off += 1
 	return buf
+
+_STATE_REGS = {
+	ConnectionStatus.HANDSHAKING : proto.handshaking,
+	ConnectionStatus.STATUS : proto.status,
+	ConnectionStatus.LOGIN : proto.login,
+	ConnectionStatus.PLAY : proto.play,
+}
 
 class Dispatcher:
 	_down : StreamReader
@@ -42,17 +51,34 @@ class Dispatcher:
 		)
 		self.connected = True
 
+		packet_handshake = proto.handshaking.serverbound.PacketSetProtocol(
+			self.proto,
+			protocolVersion=self.proto,
+			serverHost=self.host,
+			serverPost=self.port,
+			nextState=3, # play
+		)
+		packet_login = proto.login.serverbound.PacketLoginStart(340, username=self.username)
+
+		await self.outgoing.put(packet_handshake)
+		await self.outgoing.put(packet_login)
+
+		self._dispatching = True
+		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
+		self._writer = asyncio.get_event_loop().create_task(self._up_worker())
+
 	async def _down_worker(self):
 		while self._dispatching:
 			length = await read_varint(self._down)
 			buffer = await self._down.read(length)
 			# TODO encryption
 			# TODO compression
-			await self.incoming.put(packet)
+			await self.incoming.put(buffer)
 
 	async def _up_worker(self):
 		while self._dispatching:
-			buffer = await self.outgoing.get()
+			packet = await self.outgoing.get()
+			buffer = packet.serialize()
 			length = len(buffer)
 			# TODO compression
 			# TODO encryption
@@ -62,9 +88,6 @@ class Dispatcher:
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
 		await self.connect()
-		self._dispatching = True
-		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
-		self._writer = asyncio.get_event_loop().create_task(self._up_worker())
 
 	async def stop(self):
 		self._dispatching = False
