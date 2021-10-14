@@ -15,6 +15,8 @@ IMPORTS = """from typing import Tuple, List, Dict
 from ....packet import Packet
 from ....mctypes import *\n"""
 IMPORT_ALL = """__all__ = [\n\t{all}\n]\n"""
+REGISTRY_ENTRY = """
+REGISTRY = {entries}\n"""
 OBJECT = """
 class {name}(Packet):
 	{fields}
@@ -139,6 +141,7 @@ def compile():
 	# TODO load all versions!
 	all_versions = os.listdir(mc_path / f'{folder_name}/data/pc/')
 	all_versions.remove("common")
+	all_proto_numbers = []
 	# _make_module(mc_path / 'proto', { f"v{v.replace('.', '_').replace('-', '_')}":"*" for v in all_versions })
 
 	for v in all_versions:
@@ -149,6 +152,7 @@ def compile():
 			continue
 		with open(mc_path / f'{folder_name}/data/pc/{v}/version.json') as f:
 			proto_version = json.load(f)['version']
+		all_proto_numbers.append(proto_version)
 
 		with open(mc_path / f'{folder_name}/data/pc/{v}/protocol.json') as f:
 			data = json.load(f)
@@ -187,6 +191,7 @@ def compile():
 	for state in PACKETS.keys():
 		_make_module(mc_path / f"proto/{state}", { k:"*" for k in PACKETS[state].keys() })
 		for direction in PACKETS[state].keys():
+			registry = {}
 			_make_module(mc_path / f"proto/{state}/{direction}", { k:snake_to_camel(k) for k in PACKETS[state][direction].keys() })
 			for packet in PACKETS[state][direction].keys():
 				pkt = PACKETS[state][direction][packet]
@@ -195,6 +200,9 @@ def compile():
 				ids = []
 				for v in sorted(PACKETS[state][direction][packet]["definitions"].keys()):
 					defn = pkt["definitions"][v]
+					if v not in registry:
+						registry[v] = {}
+					registry[v][defn['id']] = snake_to_camel(packet)
 					ids.append(f"{v} : 0x{defn['id']:02X}")
 					v_slots = []
 					v_fields = []
@@ -212,6 +220,19 @@ def compile():
 							'\n\t'.join(fields),
 						).compile()
 					)
+
+			with open(mc_path / f"proto/{state}/{direction}/__init__.py", "a") as f, open("/home/alemi/REGISTRY", "a") as fdbg:
+				buf = ( # TODO make this thing actually readable, maybe not using nested joins and generators
+					REGISTRY_ENTRY.format(
+						entries='{\n\t' + ",\n\t".join((
+							str(v) + " : { " + ", ".join(
+								f"{pid}:{clazz}" for (pid, clazz) in registry[v].items()
+							) + ' }' ) for v in registry.keys()
+						) + '\n}'
+					)
+				)
+				f.write(buf)
+				fdbg.write(buf)
 
 
 
