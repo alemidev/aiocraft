@@ -6,8 +6,8 @@ compile()
 
 setup(
 	name='aiocraft',
-	version='0.0.1',	
-	description='asyncio-powered headless minecraft client',
+	version='0.0.2',	
+	description='asyncio-powered headless minecraft client library',
 	url='https://github.com/alemidev/aiocraft',
 	author='alemi',
 	author_email='me@alemi.dev',

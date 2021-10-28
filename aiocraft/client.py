@@ -4,16 +4,11 @@ from enum import Enum
 
 from typing import Dict
 
-from .dispatcher import Dispatcher
+from .dispatcher import Dispatcher, ConnectionState
 from .mc.mctypes import VarInt
 from .mc.packet import Packet
 from .mc import proto
 
-class ConnectionState(Enum):
-	HANDSHAKING = 0
-	STATUS = 1
-	LOGIN = 2
-	PLAY = 3
 
 def _registry_from_state(state:ConnectionState) -> Dict[int, Dict[int, Packet]]:
 	if state == ConnectionState.HANDSHAKING:
