@@ -21,15 +21,19 @@ OBJECT = """
 class {name}(Packet):
 	{fields}
 
+	_state : int = {state}
+
 	_ids : Dict[int, int] = {ids}
-	_slots : Dict[int, List[Tuple[str, Type]]] = {slots}
+	_definitions : Dict[int, List[Tuple[str, Type]]] = {slots}
 """
 
 TYPE_MAP = {
 	"varint": VarInt,
-	"u8": UnsignedShort,
-	"u16": UnsignedInt,
-	"u32": UnsignedLong,
+	"u8": Byte,
+	"i8": Byte,
+	"u16": UnsignedShort,
+	"u32": UnsignedInt,
+	"u64": UnsignedLong,
 	"i16": Short,
 	"i32": Int,
 	"i64": Long,
@@ -45,11 +49,14 @@ TYPE_MAP = {
 	"entityMetadata": EntityMetadata,
 }
 
-def mctype(name:str) -> Type:
-	if not isinstance(name, str):
-		return 	TrailingByteArray
-	if name in TYPE_MAP:
-		return TYPE_MAP[name]
+def mctype(slot_type:Any) -> Type:
+	if isinstance(slot_type, str) and slot_type in TYPE_MAP:
+		return TYPE_MAP[slot_type]
+	if isinstance(slot_type, list):
+		name = slot_type[0]
+		if name == "buffer":
+			return ByteArray
+		# TODO composite data types
 	return TrailingByteArray
 
 def snake_to_camel(name:str) -> str:
@@ -74,22 +81,25 @@ class PacketClassWriter:
 	ids   : str
 	slots : str
 	fields: str
+	state : int
 
 
-	def __init__(self, title:str, ids:str, slots:str, fields:str):
+	def __init__(self, title:str, ids:str, slots:str, fields:str, state:int):
 		self.title = title
 		self.ids = ids
 		self.slots = slots
 		self.fields = fields
+		self.state = state
 
 	def compile(self) -> str:
 		return PREFACE + \
 			IMPORTS + \
 			OBJECT.format(
 				name=self.title, 
-				ids=self.ids, 
+				ids='{\n\t\t' + ',\n\t\t'.join(self.ids) + '\n\t}\n', 
 				slots=self.slots,
 				fields=self.fields,
+				state=self.state,
 			)
 
 def _make_module(path:Path, contents:dict):
@@ -187,6 +197,8 @@ def compile():
 						"slots" : packet[1],
 					}
 
+	_STATE_MAP = {"handshaking": 0, "status":1, "login":2, "play":3}
+
 	_make_module(mc_path / 'proto', { k:"*" for k in PACKETS.keys() })
 	for state in PACKETS.keys():
 		_make_module(mc_path / f"proto/{state}", { k:"*" for k in PACKETS[state].keys() })
@@ -215,9 +227,10 @@ def compile():
 					f.write(
 						PacketClassWriter(
 							pkt["name"],
-							'{\n\t\t' + ',\n\t\t'.join(ids) + '\n\t}\n',
+							ids,
 							'{\n\t\t' + '\n\t\t'.join(slots) + '\n\t}\n',
 							'\n\t'.join(fields),
+							_STATE_MAP[state]
 						).compile()
 					)
 
