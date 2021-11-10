@@ -95,16 +95,14 @@ class VarInt(Type):
 	@classmethod
 	def write(cls, data:int, buffer:io.BytesIO):
 		count = 0
-		while True:
-			buf = data >> (7*count)
-			val = (buf & 0b01111111)
-			if (buf & 0b0000000) != 0:
-				val |= 0b1000000
-			buffer.write(val.to_bytes(1, 'little'))
+		while count < cls._size:
+			byte = data & 0b01111111
+			data >>= 7
+			if data > 0:
+				byte |= 0b10000000
+			buffer.write(struct.pack("B", byte))
 			count += 1
-			if count >= cls._size:
-				break
-			if (buf & 0b0000000) == 0:
+			if not data:
 				break
 
 	@classmethod
@@ -112,7 +110,10 @@ class VarInt(Type):
 		numRead = 0
 		result = 0
 		while True:
-			buf = int.from_bytes(buffer.read(1), 'little')
+			data = buffer.read(1)
+			if len(data) < 1:
+				raise ValueError("VarInt is too short")
+			buf = int.from_bytes(data, 'little')
 			result |= (buf & 0b01111111) << (7 * numRead)
 			numRead +=1
 			if numRead > cls._size:
@@ -128,6 +129,11 @@ class VarInt(Type):
 		buf.seek(0)
 		return buf.read()
 
+	@classmethod
+	def deserialize(cls, data:bytes) -> int:
+		buf = io.BytesIO(data)
+		return cls.read(buf)
+
 class VarLong(VarInt):
 	_pytype : type = int
 	_size = 10
@@ -139,12 +145,25 @@ class String(Type):
 	def write(cls, data:str, buffer:io.BytesIO):
 		encoded = data.encode('utf-8')
 		VarInt.write(len(encoded), buffer)
-		buffer.write(struct.pack(f">{len(encoded)}s", encoded))
+		buffer.write(encoded)
 
 	@classmethod
 	def read(cls, buffer:io.BytesIO) -> str:
 		length = VarInt.read(buffer)
-		return struct.unpack(f">{length}s", buffer.read(length))[0]
+		return buffer.read(length).decode('utf-8')
+
+class ByteArray(Type):
+	_pytype : type = bytes
+
+	@classmethod
+	def write(cls, data:bytes, buffer:io.BytesIO):
+		VarInt.write(len(data), buffer)
+		buffer.write(data)
+
+	@classmethod
+	def read(cls, buffer:io.BytesIO) -> bytes:
+		length = VarInt.read(buffer)
+		return buffer.read(length)
 
 class Chat(String):
 	_pytype : type = str
@@ -199,3 +218,4 @@ class TrailingByteArray(Type):
 	@classmethod
 	def read(cls, buffer:io.BytesIO) -> bytes:
 		return buffer.read()
+
