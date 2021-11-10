@@ -53,7 +53,6 @@ class Dispatcher:
 	port : int
 
 	proto : int
-	connected : bool
 	state : ConnectionState
 	encryption : bool
 	compression : Optional[int]
@@ -63,13 +62,17 @@ class Dispatcher:
 		self.port = port
 
 		self.proto = 340
-		self.connected = False
 		self._dispatching = False
 		self.compression = None
 		self.encryption = False
-
 		self.incoming = Queue()
 		self.outgoing = Queue()
+		self._reader = None
+		self._writer = None
+
+	@property
+	def connected(self) -> bool:
+		return self._dispatching
 
 	async def write(self, packet:Packet, wait:bool=False) -> int:
 		await self.outgoing.put(packet)
@@ -77,36 +80,44 @@ class Dispatcher:
 			await packet.sent.wait()
 		return self.outgoing.qsize()
 
-	async def start(self):
-		if self.connected:
-			raise InvalidState("Dispatcher already connected")
-		await self.connect()
-
-	async def stop(self, block:bool=True):
+	async def disconnect(self, block:bool=True):
 		self._dispatching = False
-		if block:
+		if block and self._writer and self._reader:
 			await asyncio.gather(self._writer, self._reader)
+		if self._up.can_write_eof():
+			self._up.write_eof()
+		self._up.close()
+		if block:
+			await self._up.wait_closed()
+		logger.info("Disconnected")
 
 	async def connect(self):
+		if self.connected:
+			raise InvalidState("Dispatcher already connected")
+		self.encryption = False
+		self.compression = None
+		self.state = ConnectionState.HANDSHAKING
+		# self.proto = 340 # TODO 
+
+		self.incoming = Queue()
+		self.outgoing = Queue()
+
 		self._down, self._up = await asyncio.open_connection(
 			host=self.host,
 			port=self.port,
 		)
-		self.encryption = False
-		self.compression = None
-		self.connected = True
-		self.state = ConnectionState.HANDSHAKING
 
 		self._dispatching = True
 		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
 		self._writer = asyncio.get_event_loop().create_task(self._up_worker())
+		logger.info("Connected")
 
-	async def encrypt(self, secret:bytes):
+	def encrypt(self, secret:bytes):
 		cipher = encryption.create_AES_cipher(secret)
 		self._encryptor = cipher.encryptor()
 		self._decryptor = cipher.decryptor()
 		self.encryption = True
-
+		logger.info("Encryption enabled")
 
 	async def _read_varint(self) -> int:
 		numRead = 0
@@ -154,6 +165,7 @@ class Dispatcher:
 				# logger.info("Parsing packet '%d' [%s] | %s", packet_id, str(self.state), buffer.getvalue())
 				cls = _STATE_REGS[self.state][self.proto][packet_id]
 				packet = cls.deserialize(self.proto, buffer)
+				logger.debug("[<--] Received | %s", str(packet))
 				await self.incoming.put(packet)
 			except AttributeError:
 				logger.debug("Received unimplemented packet %d", packet_id)
@@ -193,8 +205,9 @@ class Dispatcher:
 				await self._up.drain()
 
 				packet.sent.set() # Notify
+				logger.debug("[-->] Sent | %s", str(packet))
 			except asyncio.TimeoutError:
 				pass # need this to recheck self._dispatching periodically
 			except Exception:
-				logger.exception("Error while sending packet %s", str(packet))
+				logger.exception("Exception dispatching packet %s", str(packet))
 

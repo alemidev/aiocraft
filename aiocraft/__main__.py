@@ -32,9 +32,7 @@ if __name__ == "__main__":
 	# TODO rework how this is started! Maybe implement client context manager?
 	loop = asyncio.get_event_loop()
 
-	token = loop.run_until_complete(Token.authenticate(username, pwd))
-
-	client = Client(token, host, port)
+	client = Client(host, port, username=username, password=pwd)
 
 	@client.on_packet(PacketChat, ConnectionState.PLAY)
 	async def print_chat(packet: PacketChat):

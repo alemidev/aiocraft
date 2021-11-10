@@ -3,7 +3,7 @@ import logging
 from asyncio import Task
 from enum import Enum
 
-from typing import Dict, List, Callable, Type
+from typing import Dict, List, Callable, Type, Optional, Tuple
 
 from .dispatcher import Dispatcher, ConnectionState
 from .mc.mctypes import VarInt
@@ -34,7 +34,9 @@ _STATE_REGS = {
 class Client:
 	host:str
 	port:int
-	token:Token
+	username:Optional[str]
+	password:Optional[str]
+	token:Optional[Token]
 
 	dispatcher : Dispatcher
 	_processing : bool
@@ -44,13 +46,18 @@ class Client:
 
 	def __init__(
 		self,
-		token:Token,
 		host:str,
 		port:int = 25565,
+		username:Optional[str] = None,
+		password:Optional[str] = None,
+		token:Optional[Token] = None,
 	):
 		self.host = host
 		self.port = port
+
 		self.token = token
+		self.username = username
+		self.password = password
 
 		self.dispatcher = Dispatcher(host, port)
 		self._processing = False
@@ -72,42 +79,80 @@ class Client:
 			return fun
 		return wrapper
 
-	async def start(self):
-		await self.dispatcher.start()
-		self._processing = True
+	async def authenticate(self) -> bool:
+		if not self.token:
+			if self.username and self.password:
+				self.token = await Token.authenticate(self.username, self.password)
+				logger.info("Authenticated from credentials")
+				return True
+			return False
+		try:
+			await self.token.validate() # will raise an exc if token is invalid
+		except Exception: # idk TODO
+			try:
+				await self.token.refresh()
+				logger.info("Refreshed Token")
+			except Exception:
+				return False
+		return True
 
-		await self.dispatcher.write(
-			proto.handshaking.serverbound.PacketSetProtocol(
+	async def run(self):
+		await self.start()
+
+		try:
+			while True: # TODO don't busywait even if it doesn't matter much
+				await asyncio.sleep(5)
+		except KeyboardInterrupt:
+			logger.info("Received SIGINT, stopping...")
+
+		await self.stop()
+
+	async def start(self):
+		self._processing = True
+		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
+		logger.info("Client started")
+
+	async def stop(self, block=True):
+		await self.dispatcher.disconnect()
+		self._processing = False
+		if block:
+			await self._worker
+		logger.info("Client stopped")
+
+	async def _client_worker(self):
+		while self._processing:
+			if not await self.authenticate():
+				raise Exception("Token not refreshable or credentials invalid") # TODO!
+			try:
+				await self.dispatcher.connect()
+				for packet in self._handshake():
+					await self.dispatcher.write(packet)
+				self.dispatcher.state = ConnectionState.LOGIN
+				await self._process_packets()
+			except Exception:
+				logger.exception("Connection terminated")
+			await asyncio.sleep(2)
+
+	def _handshake(self, force:bool=False) -> Tuple[Packet, Packet]: # TODO make this fancier! poll for version and status first
+		return ( proto.handshaking.serverbound.PacketSetProtocol(
 				340, # TODO!!!!
 				protocolVersion=340,
 				serverHost=self.host,
 				serverPort=self.port,
 				nextState=2, # play
+			),
+			proto.login.serverbound.PacketLoginStart(
+				340,
+				username=self.token.profile.name if self.token else self.username
 			)
 		)
 
-		await self.dispatcher.write( # TODO PROTO!!!!
-			proto.login.serverbound.PacketLoginStart(340, username=self.token.profile.name)
-		)
-
-		self.dispatcher.state = ConnectionState.LOGIN
-		self._processing = True
-		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
-
-	async def stop(self, block=True):
-		await self.dispatcher.stop()
-		self._processing = False
-		if block:
-			await self._worker
-
-	async def _client_worker(self):
-		while self._processing:
+	async def _process_packets(self):
+		while self.dispatcher.connected:
 			try:
-				# logger.info("Awaiting packet")
 				packet = await asyncio.wait_for(self.dispatcher.incoming.get(), timeout=5)
-				# logger.info("Client processing packet %s [state %s]", str(packet), str(self.dispatcher.state))
+				logger.debug("[ * ] Processing | %s", str(packet))
 
-				# Process packets? switch state, invoke callbacks? Maybe implement Reactors?
 				if self.dispatcher.state == ConnectionState.LOGIN:
 					await self.login_logic(packet)
 				elif self.dispatcher.state == ConnectionState.PLAY:
@@ -126,9 +171,10 @@ class Client:
 			except Exception:
 				logger.exception("Exception while processing packet %s", packet)
 
+	# TODO move these in separate module
+
 	async def login_logic(self, packet:Packet):
 		if isinstance(packet, proto.login.clientbound.PacketEncryptionBegin):
-			logger.info("Encryption request")
 			secret = encryption.generate_shared_secret()
 
 			token, encrypted_secret = encryption.encrypt_token_and_secret(
@@ -154,19 +200,19 @@ class Client:
 
 			await self.dispatcher.write(encryption_response, wait=True)
 
-			await self.dispatcher.encrypt(secret)
+			self.dispatcher.encrypt(secret)
 		
 		elif isinstance(packet, proto.login.clientbound.PacketDisconnect):
 			logger.error("Disconnected while logging in")
-			await self.stop(False)
+			await self.dispatcher.disconnect(block=False)
 			# raise Exception("Disconnected while logging in") # TODO make a more specific one, do some shit
 
 		elif isinstance(packet, proto.login.clientbound.PacketCompress):
-			logger.info("Set compression")
+			logger.info("Compression enabled")
 			self.dispatcher.compression = packet.threshold
 
 		elif isinstance(packet, proto.login.clientbound.PacketSuccess):
-			logger.info("Login success")
+			logger.info("Login success, joining world...")
 			self.dispatcher.state = ConnectionState.PLAY
 
 		elif isinstance(packet, proto.login.clientbound.PacketLoginPluginRequest):
@@ -174,33 +220,30 @@ class Client:
 
 	async def play_logic(self, packet:Packet):
 		if isinstance(packet, proto.play.clientbound.PacketSetCompression):
-			logger.info("Set compression")
+			logger.info("Compression updated")
 			self.dispatcher.compression = packet.threshold
 
 		elif isinstance(packet, proto.play.clientbound.PacketKeepAlive):
-			logger.info("Keep Alive")
 			keep_alive_packet = proto.play.serverbound.packet_keep_alive.PacketKeepAlive(340, keepAliveId=packet.keepAliveId)
 			await self.dispatcher.write(keep_alive_packet)
 
 		elif isinstance(packet, proto.play.clientbound.PacketPosition):
-			logger.info("PlayerPosLook")
-			# if self.connection.context.protocol_later_eq(107):
-			# 	teleport_confirm = serverbound.play.TeleportConfirmPacket()
-			# 	teleport_confirm.teleport_id = packet.teleport_id
-			# 	self.connection.write_packet(teleport_confirm)
-			# else:
-			# 	position_response = serverbound.play.PositionAndLookPacket()
-			# 	position_response.x = packet.x
-			# 	position_response.feet_y = packet.y
-			# 	position_response.z = packet.z
-			# 	position_response.yaw = packet.yaw
-			# 	position_response.pitch = packet.pitch
-			# 	position_response.on_ground = True
-			# 	self.connection.write_packet(position_response)
-			# self.connection.spawned = True
-			pass
+			logger.info("Position synchronized")
+			await self.dispatcher.write(
+				proto.play.serverbound.PacketTeleportConfirm(
+					340,
+					teleportId=packet.teleportId
+				)
+			)
+
+		elif isinstance(packet, proto.play.clientbound.PacketUpdateHealth):
+			if packet.health <= 0:
+				logger.info("Dead, respawning...")
+				await self.dispatcher.write(
+					proto.play.serverbound.PacketClientCommand(self.dispatcher.proto, actionId=0) # respawn
+				)
 
 		elif isinstance(packet, proto.play.clientbound.PacketKickDisconnect):
-			logger.info("Play Disconnect")
-			raise Exception("Disconnected while playing") # TODO make a more specific one, do some shit
+			logger.error("Disconnected")
+			await self.dispatcher.disconnect(block=False)
 
