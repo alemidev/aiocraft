@@ -4,16 +4,19 @@ from compiler.proto import compile
 
 compile()
 
+with open("requirements.txt") as f:
+	requirements = f.read().split("\n")
+
 setup(
 	name='aiocraft',
-	version='0.0.2',	
+	version='0.0.4',	
 	description='asyncio-powered headless minecraft client library',
 	url='https://github.com/alemidev/aiocraft',
 	author='alemi',
 	author_email='me@alemi.dev',
 	license='MIT',
 	packages=find_packages(),
-	install_requires=[],
+	install_requires=requirements,
 	classifiers=[
 		'Development Status :: 1 - Planning',
 		'Intended Audience :: Developers',
