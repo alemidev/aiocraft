@@ -1,11 +1,15 @@
 """Minecraft identity utilities."""
 import json
 import uuid
+import logging
 
 from dataclasses import dataclass
 from typing import Optional
 
 import aiohttp
+
+class AuthException(Exception):
+	pass
 
 @dataclass
 class Profile:
@@ -96,6 +100,9 @@ class Token:
 	async def _post(cls, endpoint:str, data:dict) -> dict:
 		async with aiohttp.ClientSession() as sess:
 			async with sess.post(endpoint, headers=cls.HEADERS, data=json.dumps(data).encode('utf-8')) as res:
-				# TODO parse and raise exceptions
-				return await res.json(content_type=None)
+				data = await res.json(content_type=None)
+				logging.info(f"Auth request | {data}")
+				if res.status != 200:
+					raise AuthException(f"Action '{endpoint.rsplit('/',1)[1]}' did not succeed")
+				return data
 

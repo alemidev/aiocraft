@@ -8,7 +8,7 @@ from typing import Dict, List, Callable, Type, Optional, Tuple
 from .dispatcher import Dispatcher, ConnectionState
 from .mc.mctypes import VarInt
 from .mc.packet import Packet
-from .mc.identity import Token
+from .mc.identity import Token, AuthException
 from .mc import proto, encryption
 
 LOGGER = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ _STATE_REGS = {
 class Client:
 	host:str
 	port:int
+	options:dict
 
 	username:Optional[str]
 	password:Optional[str]
@@ -41,6 +42,7 @@ class Client:
 
 	dispatcher : Dispatcher
 	_processing : bool
+	_authenticated : bool
 	_worker : Task
 
 	_packet_callbacks : Dict[ConnectionState, Dict[Packet, List[Callable]]]
@@ -50,12 +52,14 @@ class Client:
 		self,
 		host:str,
 		port:int,
+		options:dict = None,
 		username:Optional[str] = None,
 		password:Optional[str] = None,
 		token:Optional[Token] = None,
 	):
 		self.host = host
 		self.port = port
+		self.options = options or {}
 
 		self.token = token
 		self.username = username
@@ -63,6 +67,7 @@ class Client:
 
 		self.dispatcher = Dispatcher()
 		self._processing = False
+		self._authenticated = False
 
 		self._packet_callbacks = {}
 
@@ -97,15 +102,12 @@ class Client:
 				self.token = await Token.authenticate(self.username, self.password)
 				self._logger.info("Authenticated from credentials")
 				return True
-			return False
+			raise AuthException("No token or credentials provided")
 		try:
 			await self.token.validate() # will raise an exc if token is invalid
-		except Exception: # idk TODO
-			try:
-				await self.token.refresh()
-				self._logger.warning("Refreshed Token")
-			except Exception:
-				return False
+		except AuthException:
+			await self.token.refresh()
+			self._logger.warning("Refreshed Token")
 		return True
 
 	async def change_server(self, server:str):
@@ -129,10 +131,12 @@ class Client:
 		await self.start()
 
 		try:
-			while True: # TODO don't busywait even if it doesn't matter much
+			while self._processing: # TODO don't busywait even if it doesn't matter much
 				await asyncio.sleep(5)
 		except KeyboardInterrupt:
 			self._logger.info("Received SIGINT, stopping...")
+		else:
+			self._logger.warning("Client terminating...")
 
 		await self.stop()
 
@@ -150,19 +154,25 @@ class Client:
 
 	async def _client_worker(self):
 		while self._processing:
-			if not await self.authenticate():
-				raise Exception("Token not refreshable or credentials invalid") # TODO!
+			try:
+				await self.authenticate()
+			except AuthException:
+				self._logger.error("Token not refreshable or credentials invalid")
+				await self.stop(block=False)
 			try:
 				await self.dispatcher.connect(self.host, self.port)
 				for packet in self._handshake():
 					await self.dispatcher.write(packet)
 				self.dispatcher.state = ConnectionState.LOGIN
 				await self._process_packets()
+			except AuthException as e: # TODO maybe tell what went wrong
+				self._authenticated = False
+				self._logger.error("Authentication exception")
 			except ConnectionRefusedError:
 				self._logger.error("Server rejected connection")
 			except Exception:
 				self._logger.exception("Exception in Client connection")
-			await asyncio.sleep(2)
+			await asyncio.sleep(self.options["rctime"])
 
 	def _handshake(self, force:bool=False) -> Tuple[Packet, Packet]: # TODO make this fancier! poll for version and status first
 		return ( proto.handshaking.serverbound.PacketSetProtocol(
