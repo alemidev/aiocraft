@@ -46,8 +46,8 @@ class Dispatcher:
 
 	_dispatching : bool
 
-	incoming : Queue[Packet]
-	outgoing : Queue[Packet]
+	incoming : Queue
+	outgoing : Queue
 
 	host : str
 	port : int
