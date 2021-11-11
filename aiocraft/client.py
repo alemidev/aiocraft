@@ -11,7 +11,7 @@ from .mc.packet import Packet
 from .mc.identity import Token
 from .mc import proto, encryption
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 def _registry_from_state(state:ConnectionState) -> Dict[int, Dict[int, Type[Packet]]]:
 	if state == ConnectionState.HANDSHAKING:
@@ -34,6 +34,7 @@ _STATE_REGS = {
 class Client:
 	host:str
 	port:int
+
 	username:Optional[str]
 	password:Optional[str]
 	token:Optional[Token]
@@ -43,11 +44,12 @@ class Client:
 	_worker : Task
 
 	_packet_callbacks : Dict[ConnectionState, Dict[Packet, List[Callable]]]
+	_logger : logging.Logger
 
 	def __init__(
 		self,
 		host:str,
-		port:int = 25565,
+		port:int,
 		username:Optional[str] = None,
 		password:Optional[str] = None,
 		token:Optional[Token] = None,
@@ -59,10 +61,20 @@ class Client:
 		self.username = username
 		self.password = password
 
-		self.dispatcher = Dispatcher(host, port)
+		self.dispatcher = Dispatcher()
 		self._processing = False
 
 		self._packet_callbacks = {}
+
+		self._logger = LOGGER.getChild(f"{self.host}:{self.port}")
+
+	@property
+	def started(self) -> bool:
+		return self._processing
+
+	@property
+	def connected(self) -> bool:
+		return self.started and self.dispatcher.connected
 
 	def on(self, hook):
 		def wrapper(fun):
@@ -83,7 +95,7 @@ class Client:
 		if not self.token:
 			if self.username and self.password:
 				self.token = await Token.authenticate(self.username, self.password)
-				logger.info("Authenticated from credentials")
+				self._logger.info("Authenticated from credentials")
 				return True
 			return False
 		try:
@@ -91,10 +103,27 @@ class Client:
 		except Exception: # idk TODO
 			try:
 				await self.token.refresh()
-				logger.info("Refreshed Token")
+				self._logger.warning("Refreshed Token")
 			except Exception:
 				return False
 		return True
+
+	async def change_server(self, server:str):
+		restart = self.started
+		if restart:
+			await self.stop()
+
+		if ":" in server:
+			_host, _port = server.split(":", 1)
+			self.host = _host.strip()
+			self.port = int(_port)
+		else:
+			self.host = server.strip()
+			self.port = 25565
+		self._logger = LOGGER.getChild(f"{self.host}:{self.port}")
+
+		if restart:
+			await self.start()
 
 	async def run(self):
 		await self.start()
@@ -103,34 +132,36 @@ class Client:
 			while True: # TODO don't busywait even if it doesn't matter much
 				await asyncio.sleep(5)
 		except KeyboardInterrupt:
-			logger.info("Received SIGINT, stopping...")
+			self._logger.info("Received SIGINT, stopping...")
 
 		await self.stop()
 
 	async def start(self):
 		self._processing = True
 		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
-		logger.info("Minecraft client started")
+		self._logger.info("Minecraft client started")
 
 	async def stop(self, block=True):
 		self._processing = False
 		await self.dispatcher.disconnect()
 		if block:
 			await self._worker
-		logger.info("Minecraft client stopped")
+		self._logger.info("Minecraft client stopped")
 
 	async def _client_worker(self):
 		while self._processing:
 			if not await self.authenticate():
 				raise Exception("Token not refreshable or credentials invalid") # TODO!
 			try:
-				await self.dispatcher.connect()
+				await self.dispatcher.connect(self.host, self.port)
 				for packet in self._handshake():
 					await self.dispatcher.write(packet)
 				self.dispatcher.state = ConnectionState.LOGIN
 				await self._process_packets()
+			except ConnectionRefusedError:
+				self._logger.error("Server rejected connection")
 			except Exception:
-				logger.exception("Connection terminated")
+				self._logger.exception("Exception in Client connection")
 			await asyncio.sleep(2)
 
 	def _handshake(self, force:bool=False) -> Tuple[Packet, Packet]: # TODO make this fancier! poll for version and status first
@@ -151,7 +182,7 @@ class Client:
 		while self.dispatcher.connected:
 			try:
 				packet = await asyncio.wait_for(self.dispatcher.incoming.get(), timeout=5)
-				logger.debug("[ * ] Processing | %s", str(packet))
+				self._logger.debug("[ * ] Processing | %s", str(packet))
 
 				if self.dispatcher.state == ConnectionState.LOGIN:
 					await self.login_logic(packet)
@@ -169,7 +200,7 @@ class Client:
 			except asyncio.TimeoutError:
 				pass # need this to recheck self._processing periodically
 			except Exception:
-				logger.exception("Exception while processing packet %s", packet)
+				self._logger.exception("Exception while processing packet %s", packet)
 
 	# TODO move these in separate module
 
@@ -203,16 +234,16 @@ class Client:
 			self.dispatcher.encrypt(secret)
 		
 		elif isinstance(packet, proto.login.clientbound.PacketDisconnect):
-			logger.error("Disconnected while logging in")
+			self._logger.error("Kicked while logging in")
 			await self.dispatcher.disconnect(block=False)
 			# raise Exception("Disconnected while logging in") # TODO make a more specific one, do some shit
 
 		elif isinstance(packet, proto.login.clientbound.PacketCompress):
-			logger.info("Compression enabled")
+			self._logger.info("Compression enabled")
 			self.dispatcher.compression = packet.threshold
 
 		elif isinstance(packet, proto.login.clientbound.PacketSuccess):
-			logger.info("Login success, joining world...")
+			self._logger.info("Login success, joining world...")
 			self.dispatcher.state = ConnectionState.PLAY
 
 		elif isinstance(packet, proto.login.clientbound.PacketLoginPluginRequest):
@@ -220,7 +251,7 @@ class Client:
 
 	async def play_logic(self, packet:Packet):
 		if isinstance(packet, proto.play.clientbound.PacketSetCompression):
-			logger.info("Compression updated")
+			self._logger.info("Compression updated")
 			self.dispatcher.compression = packet.threshold
 
 		elif isinstance(packet, proto.play.clientbound.PacketKeepAlive):
@@ -228,7 +259,7 @@ class Client:
 			await self.dispatcher.write(keep_alive_packet)
 
 		elif isinstance(packet, proto.play.clientbound.PacketPosition):
-			logger.info("Position synchronized")
+			self._logger.info("Position synchronized")
 			await self.dispatcher.write(
 				proto.play.serverbound.PacketTeleportConfirm(
 					340,
@@ -238,12 +269,12 @@ class Client:
 
 		elif isinstance(packet, proto.play.clientbound.PacketUpdateHealth):
 			if packet.health <= 0:
-				logger.info("Dead, respawning...")
+				self._logger.info("Dead, respawning...")
 				await self.dispatcher.write(
 					proto.play.serverbound.PacketClientCommand(self.dispatcher.proto, actionId=0) # respawn
 				)
 
 		elif isinstance(packet, proto.play.clientbound.PacketKickDisconnect):
-			logger.error("Disconnected")
+			self._logger.error("Kicked while in game")
 			await self.dispatcher.disconnect(block=False)
 

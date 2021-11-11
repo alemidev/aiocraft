@@ -13,7 +13,7 @@ from .mc.mctypes import VarInt
 from .mc.packet import Packet
 from .mc import encryption
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 class ConnectionState(Enum):
 	NONE = -1
@@ -37,11 +37,11 @@ _STATE_REGS = {
 
 class Dispatcher:
 	_down : StreamReader
-	_reader : Task
+	_reader : Optional[Task]
 	_decryptor : CipherContext
 
 	_up   : StreamWriter
-	_writer : Task
+	_writer : Optional[Task]
 	_encryptor : CipherContext
 
 	_dispatching : bool
@@ -49,18 +49,17 @@ class Dispatcher:
 	incoming : Queue
 	outgoing : Queue
 
-	host : str
-	port : int
+	_host : str
+	_port : int
 
 	proto : int
 	state : ConnectionState
 	encryption : bool
 	compression : Optional[int]
 
-	def __init__(self, host:str, port:int):
-		self.host = host
-		self.port = port
+	_logger : logging.Logger
 
+	def __init__(self):
 		self.proto = 340
 		self._dispatching = False
 		self.compression = None
@@ -69,6 +68,10 @@ class Dispatcher:
 		self.outgoing = Queue()
 		self._reader = None
 		self._writer = None
+		self._host = "localhost"
+		self._port = 25565
+
+		self._logger = LOGGER.getChild(f"{self._host}:{self._port}")
 
 	@property
 	def connected(self) -> bool:
@@ -89,43 +92,49 @@ class Dispatcher:
 		self._up.close()
 		if block:
 			await self._up.wait_closed()
-		logger.info("Disconnected")
+		self._logger.info("Disconnected")
 
-	async def connect(self):
+	async def connect(self, host:Optional[str] = None, port:Optional[int] = None):
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
+
+		if host is not None:
+			self._host = host
+		if port is not None:
+			self._port = port
+		self._logger = LOGGER.getChild(f"{self._host}:{self._port}")
+
 		self.encryption = False
 		self.compression = None
 		self.state = ConnectionState.HANDSHAKING
 		# self.proto = 340 # TODO 
 
+		# Make new queues
 		self.incoming = Queue()
 		self.outgoing = Queue()
 
 		self._down, self._up = await asyncio.open_connection(
-			host=self.host,
-			port=self.port,
+			host=self._host,
+			port=self._port,
 		)
 
 		self._dispatching = True
 		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
 		self._writer = asyncio.get_event_loop().create_task(self._up_worker())
-		logger.info("Connected")
+		self._logger.info("Connected")
 
 	def encrypt(self, secret:bytes):
 		cipher = encryption.create_AES_cipher(secret)
 		self._encryptor = cipher.encryptor()
 		self._decryptor = cipher.decryptor()
 		self.encryption = True
-		logger.info("Encryption enabled")
+		self._logger.info("Encryption enabled")
 
 	async def _read_varint(self) -> int:
 		numRead = 0
 		result = 0
 		while True:
 			data = await self._down.readexactly(1)
-			if len(data) < 1:
-				raise ConnectionError("Could not read data off socket")
 			if self.encryption:
 				data = self._decryptor.update(data)
 			buf = int.from_bytes(data, 'little')
@@ -152,36 +161,31 @@ class Dispatcher:
 
 				if self.compression is not None:
 					decompressed_size = VarInt.read(buffer)
-					# logger.info("Decompressing packet to %d | %s", decompressed_size, buffer.getvalue())
 					if decompressed_size > 0:
 						decompressor = zlib.decompressobj()
 						decompressed_data = decompressor.decompress(buffer.read())
-						# logger.info("Obtained %s", decompressed_data)
 						if len(decompressed_data) != decompressed_size:
 							raise ValueError(f"Failed decompressing packet: expected size is {decompressed_size}, but actual size is {len(decompressed_data)}")
 						buffer = io.BytesIO(decompressed_data)
 
 				packet_id = VarInt.read(buffer)
-				# logger.info("Parsing packet '%d' [%s] | %s", packet_id, str(self.state), buffer.getvalue())
 				cls = _STATE_REGS[self.state][self.proto][packet_id]
 				packet = cls.deserialize(self.proto, buffer)
-				logger.debug("[<--] Received | %s", str(packet))
+				self._logger.debug("[<--] Received | %s", str(packet))
 				await self.incoming.put(packet)
 			except AttributeError:
-				logger.debug("Received unimplemented packet %d", packet_id)
-			except (ConnectionError, asyncio.IncompleteReadError):
-				logger.exception("Connection error")
-				await self.stop(block=False)
+				self._logger.debug("Unimplemented packet %d", packet_id)
+			except asyncio.IncompleteReadError:
+				self._logger.error("EOF from server")
+				await self.disconnect(block=False)
 			except Exception:
-				logger.exception("Error while processing packet %d | %s", packet_id, buffer.getvalue())
+				self._logger.exception("Exception parsing packet %d | %s", packet_id, buffer.getvalue())
 
 	async def _up_worker(self):
 		while self._dispatching:
-			# logger.info("Up packet")
 			try:
 				packet = await asyncio.wait_for(self.outgoing.get(), timeout=5)
 				buffer = packet.serialize()
-				# logger.info("Sending packet %s [%s]", str(packet), buffer.getvalue())
 				length = len(buffer.getvalue()) # ewww TODO
 
 				if self.compression is not None:
@@ -205,9 +209,9 @@ class Dispatcher:
 				await self._up.drain()
 
 				packet.sent.set() # Notify
-				logger.debug("[-->] Sent | %s", str(packet))
+				self._logger.debug("[-->] Sent | %s", str(packet))
 			except asyncio.TimeoutError:
 				pass # need this to recheck self._dispatching periodically
 			except Exception:
-				logger.exception("Exception dispatching packet %s", str(packet))
+				self._logger.exception("Exception dispatching packet %s", str(packet))
 
