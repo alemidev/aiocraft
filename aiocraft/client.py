@@ -110,14 +110,14 @@ class Client:
 	async def start(self):
 		self._processing = True
 		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
-		logger.info("Client started")
+		logger.info("Minecraft client started")
 
 	async def stop(self, block=True):
-		await self.dispatcher.disconnect()
 		self._processing = False
+		await self.dispatcher.disconnect()
 		if block:
 			await self._worker
-		logger.info("Client stopped")
+		logger.info("Minecraft client stopped")
 
 	async def _client_worker(self):
 		while self._processing:
