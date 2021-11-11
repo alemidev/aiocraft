@@ -97,6 +97,8 @@ class Client:
 		return wrapper
 
 	async def authenticate(self) -> bool:
+		if self._authenticated:
+			return True # Don't spam Auth endpoint!
 		if not self.token:
 			if self.username and self.password:
 				self.token = await Token.authenticate(self.username, self.password)
@@ -165,9 +167,6 @@ class Client:
 					await self.dispatcher.write(packet)
 				self.dispatcher.state = ConnectionState.LOGIN
 				await self._process_packets()
-			except AuthException as e: # TODO maybe tell what went wrong
-				self._authenticated = False
-				self._logger.error("Authentication exception")
 			except ConnectionRefusedError:
 				self._logger.error("Server rejected connection")
 			except Exception:
@@ -209,6 +208,10 @@ class Client:
 				self.dispatcher.incoming.task_done()
 			except asyncio.TimeoutError:
 				pass # need this to recheck self._processing periodically
+			except AuthException:
+				self._authenticated = False
+				self._logger.error("Authentication exception")
+				await self.dispatcher.disconnect(block=False)
 			except Exception:
 				self._logger.exception("Exception while processing packet %s", packet)
 
