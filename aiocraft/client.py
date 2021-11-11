@@ -107,12 +107,15 @@ class Client:
 			if self.username and self.password:
 				self.token = await Token.authenticate(self.username, self.password)
 				self._logger.info("Authenticated from credentials")
+				self._authenticated = True
 				return True
 			raise AuthException("No token or credentials provided")
 		try:
 			await self.token.validate() # will raise an exc if token is invalid
+			self._authenticated = True
 		except AuthException:
 			await self.token.refresh()
+			self._authenticated = True
 			self._logger.warning("Refreshed Token")
 		return True
 
@@ -212,6 +215,7 @@ class Client:
 					if packet.__class__ in self._packet_callbacks[self.dispatcher.state]: # callback for this packet
 						for cb in self._packet_callbacks[self.dispatcher.state][packet.__class__]:
 							await cb(packet)
+
 				self.dispatcher.incoming.task_done()
 			except asyncio.TimeoutError:
 				pass # need this to recheck self._processing periodically
