@@ -59,7 +59,11 @@ class Client:
 	):
 		self.host = host
 		self.port = port
-		self.options = options or {}
+		self.options = options or {
+			"reconnect" : True,
+			"rctime" : 5.0,
+
+		}
 
 		self.token = token
 		self.username = username
@@ -171,6 +175,9 @@ class Client:
 				self._logger.error("Server rejected connection")
 			except Exception:
 				self._logger.exception("Exception in Client connection")
+			if not self.options["reconnect"]:
+				await self.stop(block=False)
+				break
 			await asyncio.sleep(self.options["rctime"])
 
 	def _handshake(self, force:bool=False) -> Tuple[Packet, Packet]: # TODO make this fancier! poll for version and status first
