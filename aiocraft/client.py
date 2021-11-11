@@ -51,7 +51,7 @@ class Client:
 	def __init__(
 		self,
 		host:str,
-		port:int,
+		port:int = 25565,
 		options:dict = None,
 		username:Optional[str] = None,
 		password:Optional[str] = None,
