@@ -102,7 +102,7 @@ class Token:
 			async with sess.post(endpoint, headers=cls.HEADERS, data=json.dumps(data).encode('utf-8')) as res:
 				data = await res.json(content_type=None)
 				logging.info(f"Auth request | {data}")
-				if res.status != 200:
+				if res.status >= 400:
 					raise AuthException(f"Action '{endpoint.rsplit('/',1)[1]}' did not succeed")
 				return data
 

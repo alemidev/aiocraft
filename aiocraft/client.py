@@ -59,10 +59,10 @@ class Client:
 	):
 		self.host = host
 		self.port = port
+
 		self.options = options or {
 			"reconnect" : True,
 			"rctime" : 5.0,
-
 		}
 
 		self.token = token

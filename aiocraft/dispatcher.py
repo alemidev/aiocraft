@@ -87,11 +87,12 @@ class Dispatcher:
 		self._dispatching = False
 		if block and self._writer and self._reader:
 			await asyncio.gather(self._writer, self._reader)
-		if self._up.can_write_eof():
-			self._up.write_eof()
-		self._up.close()
-		if block:
-			await self._up.wait_closed()
+		if self._up:
+			if self._up.can_write_eof():
+				self._up.write_eof()
+			self._up.close()
+			if block:
+				await self._up.wait_closed()
 		self._logger.info("Disconnected")
 
 	async def connect(self, host:Optional[str] = None, port:Optional[int] = None):
