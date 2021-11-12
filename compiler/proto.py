@@ -55,7 +55,11 @@ def mctype(slot_type:Any) -> Type:
 	if isinstance(slot_type, list):
 		name = slot_type[0]
 		if name == "buffer":
-			return ByteArray
+			data = slot_type[1]
+			if data["countType"] == "varint":
+				return ByteArray
+			elif data["countType"] == "integer":
+				return IntegerByteArray
 		# TODO composite data types
 	return TrailingByteArray
 

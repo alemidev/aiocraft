@@ -165,13 +165,29 @@ class ByteArray(Type):
 		length = VarInt.read(buffer)
 		return buffer.read(length)
 
+class IntegerByteArray(Type):
+	_pytype : type = bytes
+
+	@classmethod
+	def write(cls, data:bytes, buffer:io.BytesIO):
+		Int.write(len(data), buffer)
+		buffer.write(data)
+
+	@classmethod
+	def read(cls, buffer:io.BytesIO) -> bytes:
+		length = Int.read(buffer)
+		return buffer.read(length)
+
 class Chat(String):
 	_pytype : type = str
-	pass
 
 class Identifier(String):
 	_pytype : type = str
-	pass
+
+class Angle(Type):
+	_pytype : type = int
+	_size : int = 1
+	_fmt : str = ">b"
 
 class EntityMetadata(Type):
 	_pytype : type = bytes
@@ -198,10 +214,6 @@ class Position(Type):
 	# TODO
 	pass
 
-class Angle(Type):
-	_pytype : type = bytes
-	# TODO
-	pass
 
 class UUID(Type):
 	_pytype : type = bytes
