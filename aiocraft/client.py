@@ -9,6 +9,7 @@ from .dispatcher import Dispatcher, ConnectionState
 from .mc.mctypes import VarInt
 from .mc.packet import Packet
 from .mc.identity import Token, AuthException
+from .mc.definitions import Dimension, Difficulty, Gamemode
 from .mc import proto, encryption
 
 LOGGER = logging.getLogger(__name__)
@@ -281,6 +282,14 @@ class Client:
 		elif isinstance(packet, proto.play.clientbound.PacketKeepAlive):
 			keep_alive_packet = proto.play.serverbound.packet_keep_alive.PacketKeepAlive(340, keepAliveId=packet.keepAliveId)
 			await self.dispatcher.write(keep_alive_packet)
+
+		elif isinstance(packet, proto.play.clientbound.PacketRespawn):
+			self._logger.info(
+				"Loading dimension: %s (%s) in %s",
+				Dimension(packet.dimension).name,
+				Difficulty(packet.difficulty).name,
+				Gamemode(packet.gamemode).name
+			)
 
 		elif isinstance(packet, proto.play.clientbound.PacketPosition):
 			self._logger.info("Position synchronized")
