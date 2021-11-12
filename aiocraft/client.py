@@ -291,10 +291,18 @@ class Client:
 
 		elif isinstance(packet, proto.play.clientbound.PacketRespawn):
 			self._logger.info(
-				"Loading dimension: %s (%s) in %s",
+				"Reloading world: %s (%s) in %s",
 				Dimension(packet.dimension).name,
 				Difficulty(packet.difficulty).name,
 				Gamemode(packet.gamemode).name
+			)
+
+		elif isinstance(packet, proto.play.clientbound.PacketLogin):
+			self._logger.info(
+				"Joined world: %s (%s) in %s",
+				Dimension(packet.dimension).name,
+				Difficulty(packet.difficulty).name,
+				Gamemode(packet.gameMode).name
 			)
 
 		elif isinstance(packet, proto.play.clientbound.PacketPosition):
