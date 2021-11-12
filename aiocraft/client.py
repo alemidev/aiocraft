@@ -209,13 +209,19 @@ class Client:
 				elif self.dispatcher.state == ConnectionState.PLAY:
 					await self.play_logic(packet)
 
-				if self.dispatcher.state in self._packet_callbacks:
-					if Packet in self._packet_callbacks[self.dispatcher.state]: # callback for any packet
-						for cb in self._packet_callbacks[self.dispatcher.state][Packet]:
-							await cb(packet)
-					if packet.__class__ in self._packet_callbacks[self.dispatcher.state]: # callback for this packet
-						for cb in self._packet_callbacks[self.dispatcher.state][packet.__class__]:
-							await cb(packet)
+					if self.dispatcher.state in self._packet_callbacks:
+						if Packet in self._packet_callbacks[self.dispatcher.state]: # callback for any packet
+							for cb in self._packet_callbacks[self.dispatcher.state][Packet]:
+								try:
+									await cb(packet)
+								except Exception as e:
+									self._logger.exception("Exception while handling callback")
+						if packet.__class__ in self._packet_callbacks[self.dispatcher.state]: # callback for this packet
+							for cb in self._packet_callbacks[self.dispatcher.state][packet.__class__]:
+								try:
+									await cb(packet)
+								except Exception as e:
+									self._logger.exception("Exception while handling callback")
 
 				self.dispatcher.incoming.task_done()
 			except asyncio.TimeoutError:
