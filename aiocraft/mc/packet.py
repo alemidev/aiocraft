@@ -3,14 +3,14 @@ import json
 from asyncio import Event
 from typing import Tuple, Dict, Any
 
-from .mctypes import Type, VarInt
+from .types import Type, VarInt
 
 class Packet:
-	__slots__ = 'id', 'definition', 'sent', '_protocol', '_state'
+	__slots__ = 'id', 'definition', '_processed', '_protocol', '_state'
 
 	id : int
 	definition : Tuple[Tuple[str, Type]]
-	sent : Event
+	_processed : Event
 	_protocol : int
 	_state : int
 
@@ -19,11 +19,16 @@ class Packet:
 
 	def __init__(self, proto:int, **kwargs):
 		self._protocol = proto
+		self._processed = Event()
 		self.definition = self._definitions[proto]
-		self.sent = Event()
 		self.id = self._ids[proto]
 		for name, t in self.definition:
 			setattr(self, name, t._pytype(kwargs[name]) if name in kwargs else None)
+
+	@property
+	def processed(self) -> Event:
+		"""Returns an event which will be set only after the packet has been processed (either sent or raised exc)"""
+		return self._processed
 
 	@classmethod
 	def deserialize(cls, proto:int, buffer:io.BytesIO):

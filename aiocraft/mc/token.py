@@ -101,8 +101,10 @@ class Token:
 		async with aiohttp.ClientSession() as sess:
 			async with sess.post(endpoint, headers=cls.HEADERS, data=json.dumps(data).encode('utf-8')) as res:
 				data = await res.json(content_type=None)
-				logging.info(f"Auth request | {res.status} | {data}")
 				if res.status >= 400:
-					raise AuthException(f"Action '{endpoint.rsplit('/',1)[1]}' did not succeed")
+					err_type = data["error"] if data and "error" in data else "Unknown Error"
+					err_msg = data["errorMessage"] if data and "errorMessage" in data else "Credentials invalid or token not refreshable anymore"
+					action = endpoint.rsplit('/',1)[1]
+					raise AuthException(f"[{action}] {err_type} : {err_msg}")
 				return data
 

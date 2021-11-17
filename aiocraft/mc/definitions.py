@@ -16,3 +16,10 @@ class Gamemode(Enum):
 	CREATIVE = 1
 	ADVENTURE = 2
 	SPECTATOR = 3
+
+class ConnectionState(Enum):
+	NONE = -1
+	HANDSHAKING = 0
+	STATUS = 1
+	LOGIN = 2
+	PLAY = 3

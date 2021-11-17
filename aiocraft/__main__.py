@@ -4,10 +4,10 @@ import asyncio
 import logging
 
 from .mc.proto.play.clientbound import PacketChat
-from .mc.identity import Token
+from .mc.token import Token
 from .dispatcher import ConnectionState
 from .client import Client
-from .helpers import parse_chat
+from .util.helpers import parse_chat
 
 async def idle():
 	while True:

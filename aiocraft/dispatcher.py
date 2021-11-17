@@ -1,26 +1,22 @@
 import io
 import asyncio
+import contextlib
 import zlib
 import logging
 from asyncio import StreamReader, StreamWriter, Queue, Task
 from enum import Enum
-from typing import Dict, Optional
+from typing import Dict, Optional, AsyncIterator
 
 from cryptography.hazmat.primitives.ciphers import CipherContext
 
 from .mc import proto
-from .mc.mctypes import VarInt
+from .mc.types import VarInt
 from .mc.packet import Packet
-from .mc import encryption
+from .mc.definitions import ConnectionState
+from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
 
-class ConnectionState(Enum):
-	NONE = -1
-	HANDSHAKING = 0
-	STATUS = 1
-	LOGIN = 2
-	PLAY = 3
 
 class InvalidState(Exception):
 	pass
@@ -35,6 +31,19 @@ _STATE_REGS = {
 	ConnectionState.PLAY : proto.play.clientbound.REGISTRY,
 }
 
+class PacketFrame:
+	_packet : Packet
+	_queue : Queue
+
+	def __init__(self, packet:Packet, queue:Queue):
+		self._packet = packet
+		self._queue = queue
+
+	def __enter__(self):
+		return self._packet
+	def __exit__(self):
+		self.queue.task_done()
+
 class Dispatcher:
 	_down : StreamReader
 	_reader : Optional[Task]
@@ -46,8 +55,8 @@ class Dispatcher:
 
 	_dispatching : bool
 
-	incoming : Queue
-	outgoing : Queue
+	_incoming : Queue
+	_outgoing : Queue
 
 	_host : str
 	_port : int
@@ -64,8 +73,8 @@ class Dispatcher:
 		self._dispatching = False
 		self.compression = None
 		self.encryption = False
-		self.incoming = Queue()
-		self.outgoing = Queue()
+		self._incoming = Queue()
+		self._outgoing = Queue()
 		self._reader = None
 		self._writer = None
 		self._host = "localhost"
@@ -78,24 +87,37 @@ class Dispatcher:
 		return self._dispatching
 
 	async def write(self, packet:Packet, wait:bool=False) -> int:
-		await self.outgoing.put(packet)
+		await self._outgoing.put(packet)
 		if wait:
-			await packet.sent.wait()
-		return self.outgoing.qsize()
+			await packet.processed.wait()
+		return self._outgoing.qsize()
+
+	async def packets(self, timeout=1) -> AsyncIterator[Packet]:
+		while self.connected:
+			try: # TODO replace this timed busy-wait with an event which resolves upon disconnection, and await both
+				packet = await asyncio.wait_for(self._incoming.get(), timeout=timeout)
+				try:
+					yield packet
+				finally:
+					self._incoming.task_done()
+			except asyncio.TimeoutError:
+				pass # so we recheck self.connected
 
 	async def disconnect(self, block:bool=True):
 		self._dispatching = False
 		if block and self._writer and self._reader:
 			await asyncio.gather(self._writer, self._reader)
+			self._logger.debug("Net workers stopped")
 		if self._up:
 			if self._up.can_write_eof():
 				self._up.write_eof()
 			self._up.close()
 			if block:
 				await self._up.wait_closed()
+				self._logger.debug("Socket closed")
 		self._logger.info("Disconnected")
 
-	async def connect(self, host:Optional[str] = None, port:Optional[int] = None):
+	async def connect(self, host:Optional[str] = None, port:Optional[int] = None, queue_timeout:int = 1, queue_size:int = 100):
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
 
@@ -110,9 +132,9 @@ class Dispatcher:
 		self.state = ConnectionState.HANDSHAKING
 		# self.proto = 340 # TODO 
 
-		# Make new queues
-		self.incoming = Queue()
-		self.outgoing = Queue()
+		# Make new queues, do set a max size to sorta propagate back pressure
+		self._incoming = Queue(queue_size)
+		self._outgoing = Queue(queue_size)
 
 		self._down, self._up = await asyncio.open_connection(
 			host=self._host,
@@ -121,7 +143,7 @@ class Dispatcher:
 
 		self._dispatching = True
 		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
-		self._writer = asyncio.get_event_loop().create_task(self._up_worker())
+		self._writer = asyncio.get_event_loop().create_task(self._up_worker(timeout=queue_timeout))
 		self._logger.info("Connected")
 
 	def encrypt(self, secret:bytes):
@@ -149,8 +171,6 @@ class Dispatcher:
 
 	async def _down_worker(self):
 		while self._dispatching:
-			if self.state != ConnectionState.PLAY:
-				await self.incoming.join() # During login we cannot pre-process any packet, first need to maybe get encryption/compression
 			try: # these 2 will timeout or raise EOFError if client gets disconnected
 				length = await self._read_varint()
 				data = await self._down.readexactly(length)
@@ -173,7 +193,9 @@ class Dispatcher:
 				cls = _STATE_REGS[self.state][self.proto][packet_id]
 				packet = cls.deserialize(self.proto, buffer)
 				self._logger.debug("[<--] Received | %s", str(packet))
-				await self.incoming.put(packet)
+				await self._incoming.put(packet)
+				if self.state == ConnectionState.LOGIN:
+					await self._incoming.join() # During login we cannot pre-process any packet, first need to maybe get encryption/compression
 			except AttributeError:
 				self._logger.debug("Unimplemented packet %d", packet_id)
 			except asyncio.IncompleteReadError:
@@ -182,10 +204,14 @@ class Dispatcher:
 			except Exception:
 				self._logger.exception("Exception parsing packet %d | %s", packet_id, buffer.getvalue())
 
-	async def _up_worker(self):
+	async def _up_worker(self, timeout=1):
 		while self._dispatching:
 			try:
-				packet = await asyncio.wait_for(self.outgoing.get(), timeout=5)
+				packet = await asyncio.wait_for(self._outgoing.get(), timeout=timeout)
+			except asyncio.TimeoutError:
+				continue # check again self._dispatching
+
+			try:
 				buffer = packet.serialize()
 				length = len(buffer.getvalue()) # ewww TODO
 
@@ -209,10 +235,9 @@ class Dispatcher:
 				self._up.write(data)
 				await self._up.drain()
 
-				packet.sent.set() # Notify
 				self._logger.debug("[-->] Sent | %s", str(packet))
-			except asyncio.TimeoutError:
-				pass # need this to recheck self._dispatching periodically
 			except Exception:
 				self._logger.exception("Exception dispatching packet %s", str(packet))
+
+			packet.processed.set() # Notify that packet has been processed
 
