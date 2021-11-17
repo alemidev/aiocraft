@@ -76,18 +76,11 @@ class Client:
 	def connected(self) -> bool:
 		return self.started and self.dispatcher.connected
 
-	def on(self, hook):
+	def on_packet(self, packet:Type[Packet], *args) -> Callable: # receive *args for retro compatibility
 		def wrapper(fun):
-			pass # TODO
-		return wrapper
-
-	def on_packet(self, packet:Type[Packet], state:ConnectionState) -> Callable:
-		def wrapper(fun):
-			if state not in self._packet_callbacks:
-				self._packet_callbacks[state] = {}
-			if packet not in self._packet_callbacks[state]:
-				self._packet_callbacks[state][packet] = []
-			self._packet_callbacks[state][packet].append(fun)
+			if packet not in self._packet_callbacks:
+				self._packet_callbacks[packet] = []
+			self._packet_callbacks[packet].append(fun)
 			return fun
 		return wrapper
 
