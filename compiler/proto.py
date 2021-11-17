@@ -19,12 +19,13 @@ REGISTRY_ENTRY = """
 REGISTRY = {entries}\n"""
 OBJECT = """
 class {name}(Packet):
+	__slots__ = {slots}
 	{fields}
 
 	_state : int = {state}
 
 	_ids : Dict[int, int] = {ids}
-	_definitions : Dict[int, List[Tuple[str, Type]]] = {slots}
+	_definitions : Dict[int, List[Tuple[str, Type]]] = {definitions}
 """
 
 TYPE_MAP = {
@@ -99,8 +100,8 @@ class PacketClassWriter:
 			OBJECT.format(
 				name=self.title, 
 				ids='{\n\t\t' + ',\n\t\t'.join(self.ids) + '\n\t}\n', 
-				slots=self.slots,
-				fields=self.fields,
+				definitions='{\n\t\t' + '\n\t\t'.join(self.slots) + '\n\t}\n',
+				fields='\n\t'.join(self.fields),
 				state=self.state,
 			)
 
@@ -228,11 +229,7 @@ def compile():
 				with open(mc_path / f"proto/{state}/{direction}/{packet}.py", "w") as f:
 					f.write(
 						PacketClassWriter(
-							pkt["name"],
-							ids,
-							'{\n\t\t' + '\n\t\t'.join(slots) + '\n\t}\n',
-							'\n\t'.join(fields),
-							_STATE_MAP[state]
+							pkt["name"], ids, slots, fields, _STATE_MAP[state]
 						).compile()
 					)
 
