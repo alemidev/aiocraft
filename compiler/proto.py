@@ -233,8 +233,8 @@ def compile():
 						).compile()
 					)
 
-			with open(mc_path / f"proto/{state}/{direction}/__init__.py", "a") as f, open("/home/alemi/REGISTRY", "a") as fdbg:
-				buf = ( # TODO make this thing actually readable, maybe not using nested joins and generators
+			with open(mc_path / f"proto/{state}/{direction}/__init__.py", "a") as f:
+				f.write( # TODO make this thing actually readable, maybe not using nested joins and generators
 					REGISTRY_ENTRY.format(
 						entries='{\n\t' + ",\n\t".join((
 							str(v) + " : { " + ", ".join(
@@ -243,8 +243,6 @@ def compile():
 						) + '\n}'
 					)
 				)
-				f.write(buf)
-				fdbg.write(buf)
 
 
 
