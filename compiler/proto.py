@@ -105,7 +105,7 @@ class PacketClassWriter:
 				name=self.title, 
 				ids='{\n\t\t' + ',\n\t\t'.join(self.ids) + '\n\t}\n', 
 				definitions='{\n\t\t' + '\n\t\t'.join(self.slots) + '\n\t}\n',
-				slots=', '.join(f"'{x}'" for x in self.attrs),
+				slots=', '.join(f"'{x}'" for x in self.attrs) + ' ,',
 				fields='\n\t'.join(self.fields),
 				state=self.state,
 			)
