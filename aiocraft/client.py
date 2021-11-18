@@ -120,18 +120,23 @@ class Client:
 		if restart:
 			await self.start()
 
-	async def run(self):
-		await self.start()
+	def run(self):
+		loop = asyncio.get_event_loop()
 
-		try:
+		loop.run_until_complete(self.start())
+
+		async def idle():
 			while self._processing: # TODO don't busywait even if it doesn't matter much
 				await asyncio.sleep(self.options["poll-timeout"])
+
+		try:
+			loop.run_forever(idle())
 		except KeyboardInterrupt:
 			self._logger.info("Received SIGINT, stopping...")
 		else:
 			self._logger.warning("Client terminating...")
 
-		await self.stop()
+		loop.run_until_complete(self.stop())
 
 	async def start(self):
 		self._processing = True
@@ -243,7 +248,7 @@ class Client:
 			elif isinstance(packet, PacketKickDisconnect):
 				self._logger.error("Kicked while in game")
 				break
-			for packet_type in (Packet, packet.__class__): # check both callbacks for base class and instance class
+			for packet_type in (Packet, type(packet)): # check both callbacks for base class and instance class
 				if packet_type in self._packet_callbacks:
 					for cb in self._packet_callbacks[packet_type]:
 						try: # TODO run in executor to not block

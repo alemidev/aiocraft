@@ -1,6 +1,5 @@
 import sys
 import json
-import asyncio
 import logging
 
 from .mc.proto.play.clientbound import PacketChat
@@ -29,9 +28,6 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level=logging.INFO)
 
-	# TODO rework how this is started! Maybe implement client context manager?
-	loop = asyncio.get_event_loop()
-
 	client = Client(host, port, username=username, password=pwd)
 
 	@client.on_packet(PacketChat, ConnectionState.PLAY)
@@ -39,13 +35,7 @@ if __name__ == "__main__":
 		msg = parse_chat(json.loads(packet.message), color=color)
 		print(f"[{packet.position}] {msg}")
 
-	loop.run_until_complete(client.start())
-
-	try:
-		loop.run_until_complete(idle())
-	except KeyboardInterrupt:
-		logging.info("Received SIGINT, stopping...")
-		loop.run_until_complete(client.stop())
+	client.run() # will block and start asyncio event loop
 
 	logging.info("Terminated")
 
