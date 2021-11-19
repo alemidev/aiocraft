@@ -109,8 +109,11 @@ class Dispatcher:
 			await asyncio.gather(self._writer, self._reader)
 			self._logger.debug("Net workers stopped")
 		if self._up:
-			if self._up.can_write_eof():
-				self._up.write_eof()
+			if not self._up.is_closing() and self._up.can_write_eof():
+				try:
+					self._up.write_eof()
+				except OSError as e:
+					self._logger.error("Could not write EOF : %s", str(e))
 			self._up.close()
 			if block:
 				await self._up.wait_closed()
