@@ -11,6 +11,12 @@ import aiohttp
 class AuthException(Exception):
 	pass
 
+def _raise_from_json(endpoint:str, data:dict):
+	err_type = data["error"] if data and "error" in data else "Unknown Error"
+	err_msg = data["errorMessage"] if data and "errorMessage" in data else "Credentials invalid or token not refreshable anymore"
+	action = endpoint.rsplit('/',1)[1]
+	raise AuthException(f"[{action}] {err_type} : {err_msg}")
+
 @dataclass
 class Profile:
 	id : str
@@ -97,14 +103,26 @@ class Token:
 		})
 
 	@classmethod
+	async def server_join(cls, username:str, serverId:str, ip:Optional[str] = None):
+		params = {"username":username, "serverId":serverId}
+		if ip:
+			params["ip"] = ip
+		return await cls._get(cls.SESSION_SERVER + "/hasJoined", params)
+
+	@classmethod
 	async def _post(cls, endpoint:str, data:dict) -> dict:
 		async with aiohttp.ClientSession() as sess:
-			async with sess.post(endpoint, headers=cls.HEADERS, data=json.dumps(data).encode('utf-8')) as res:
+			async with sess.post(endpoint, headers=cls.HEADERS, json=data) as res:
 				data = await res.json(content_type=None)
 				if res.status >= 400:
-					err_type = data["error"] if data and "error" in data else "Unknown Error"
-					err_msg = data["errorMessage"] if data and "errorMessage" in data else "Credentials invalid or token not refreshable anymore"
-					action = endpoint.rsplit('/',1)[1]
-					raise AuthException(f"[{action}] {err_type} : {err_msg}")
+					_raise_from_json(endpoint, data)
 				return data
 
+	@classmethod
+	async def _get(cls, endpoint:str, data:dict) -> dict:
+		async with aiohttp.ClientSession() as sess:
+			async with sess.get(endpoint, headers=cls.HEADERS, params=data) as res:
+				data = await res.json(content_type=None)
+				if res.status >= 400:
+					_raise_from_json(endpoint, data)
+				return data
