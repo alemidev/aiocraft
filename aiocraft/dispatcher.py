@@ -106,6 +106,8 @@ class Dispatcher:
 	async def connect(self,
 			host : Optional[str] = None,
 			port : Optional[int] = None,
+			reader : Optional[StreamReader] = None,
+			writer : Optional[StreamWriter] = None,
 			queue_timeout : int = 1,
 			queue_size : int = 100
 	):
@@ -114,35 +116,18 @@ class Dispatcher:
 
 		self._prepare(host, port, queue_timeout, queue_size)
 
-		self._down, self._up = await asyncio.open_connection(
-			host=self._host,
-			port=self._port,
-		)
+		if reader and writer:
+			self._down, self._up = reader, writer
+		else:
+			self._down, self._up = await asyncio.open_connection(
+				host=self._host,
+				port=self._port,
+			)
 
 		self._dispatching = True
 		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
 		self._writer = asyncio.get_event_loop().create_task(self._up_worker(timeout=queue_timeout))
 		self._logger.info("Connected")
-
-	@classmethod
-	def serve(cls,
-			container : List[Dispatcher],
-			host : Optional[str] = None,
-			port : Optional[int] = None,
-			queue_timeout : int = 1,
-			queue_size : int = 100
-	):
-		async def _client_connected(reader:StreamReader, writer:StreamWriter):
-			dispatcher = cls()
-			container.append(dispatcher)
-			dispatcher._prepare(host, port, queue_timeout, queue_size)
-	
-			dispatcher._down, dispatcher._up = reader, writer
-			dispatcher._dispatching = True
-			dispatcher._reader = asyncio.get_event_loop().create_task(dispatcher._down_worker())
-			dispatcher._writer = asyncio.get_event_loop().create_task(dispatcher._up_worker(timeout=queue_timeout))
-			dispatcher._logger.info("Serving client")
-		return _client_connected
 
 	async def disconnect(self, block:bool=True):
 		self._dispatching = False
