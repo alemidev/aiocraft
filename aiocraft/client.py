@@ -87,7 +87,7 @@ class Client:
 			try:
 				await func(packet)
 			except Exception as e:
-				self._logger.error("Exception in callback %s for packet %s | %s", func.__name__, str(packet), str(e))
+				self._logger.error("Exception in callback %s for packet %s | %s", func.__name__, packet, str(e))
 			self._callbacks.pop(key, None)
 
 		self._callbacks[key] = asyncio.get_event_loop().create_task(wrapper(pkt))
