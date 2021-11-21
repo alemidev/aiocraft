@@ -6,7 +6,7 @@ from typing import Tuple, Dict, Any
 from .types import Type, VarInt
 
 class Packet:
-	__slots__ = 'id', 'definition', '_processed', '_protocol', '_state'
+	__slots__ = 'definition', '_processed', '_protocol', '_state'
 
 	id : int
 	definition : Tuple[Tuple[str, Type]]

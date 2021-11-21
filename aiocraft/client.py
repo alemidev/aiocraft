@@ -142,11 +142,11 @@ class Client:
 		loop.run_until_complete(self.start())
 
 		async def idle():
-			while self._processing: # TODO don't busywait even if it doesn't matter much
+			while True: # TODO don't busywait even if it doesn't matter much
 				await asyncio.sleep(self.options["poll-timeout"])
 
 		try:
-			loop.run_forever(idle())
+			loop.run_until_complete(idle())
 		except KeyboardInterrupt:
 			self._logger.info("Received SIGINT, stopping...")
 			try:
