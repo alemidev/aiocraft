@@ -220,7 +220,7 @@ class Dispatcher:
 				if self.state != ConnectionState.PLAY:
 					await self._incoming.join() # During play we can pre-process packets
 			except AttributeError:
-				self._logger.warning("Received unimplemented packet [%d] %d", packet_id, cls.__name__)
+				self._logger.warning("Received unimplemented packet [%d] %s", packet_id, cls.__name__)
 			except ConnectionResetError:
 				self._logger.error("Connection reset while reading packet")
 				await self.disconnect(block=False)
