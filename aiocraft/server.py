@@ -6,7 +6,7 @@ from asyncio import Task, StreamReader, StreamWriter
 from asyncio.base_events import Server # just for typing
 from enum import Enum
 
-from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator
+from typing import Dict, List, Callable, Coroutine, Type, Optional, Tuple, AsyncIterator
 
 from .dispatcher import Dispatcher
 from .mc.packet import Packet
@@ -36,6 +36,10 @@ class MinecraftServer:
 
 	_logger : logging.Logger
 
+	_disconnect_handlers : List[Callable]
+	_connect_handlers : List[Callable]
+	_packet_handlers : List[Callable]
+
 	def __init__(
 		self,
 		host:str,
@@ -48,6 +52,7 @@ class MinecraftServer:
 		self.options = options or {
 			"poll-timeout" : 1,
 			"online-mode" : False,
+			"spawn-player" : True,
 		}
 
 		self._dispatcher_pool = []
@@ -55,9 +60,31 @@ class MinecraftServer:
 
 		self._logger = LOGGER.getChild(f"@({self.host}:{self.port})")
 
+		self._disconnect_handlers = []
+		self._connect_handlers = []
+		self._packet_handlers = []
+
 	@property
 	def started(self) -> bool:
 		return self._processing
+
+	def on_client_connect(self, *args):
+		def wrapper(fun):
+			self._connect_handlers.append(fun)
+			return fun
+		return wrapper
+
+	def on_client_disconnect(self, *args):
+		def wrapper(fun):
+			self._disconnect_handlers.append(fun)
+			return fun
+		return wrapper
+
+	def on_client_packet(self, *args):
+		def wrapper(fun):
+			self._packet_handlers.append(fun)
+			return fun
+		return wrapper
 
 	def run(self):
 		loop = asyncio.get_event_loop()
@@ -89,9 +116,8 @@ class MinecraftServer:
 
 	async def stop(self, block=True, wait_tasks=True):
 		self._processing = False
-		# if self.dispatcher.connected:
-		# 	await self.dispatcher.disconnect(block=block)
 		self._server.close()
+		await asyncio.gather(*[d.disconnect(block=block) for d in self._dispatcher_pool])
 		if block:
 			await self._server.wait_closed()
 		# if block and wait_tasks: # TODO wait for client workers
@@ -104,16 +130,8 @@ class MinecraftServer:
 			await dispatcher.write(PacketKickDisconnect(dispatcher.proto, reason="Connection terminated"))
 
 	async def _server_worker(self, reader:StreamReader, writer:StreamWriter):
-		if not self._processing:
-			if not writer.is_closing() and writer.can_write_eof():
-				try:
-					writer.write_eof()
-				except OSError as e:
-					self._logger.error("Failed to write EOF to connecting client : %s", str(e))
-			writer.close()
-			return await writer.wait_closed()
-
 		dispatcher = Dispatcher(server=True)
+		self._dispatcher_pool.append(dispatcher)
 
 		self._logger.debug("Starting dispatcher for client")
 		await dispatcher.connect(
@@ -189,45 +207,52 @@ class MinecraftServer:
 	async def _play(self, dispatcher:Dispatcher) -> bool:
 		self._logger.info("Player connected")
 
-		await dispatcher.write(
-			PacketLogin(
-				dispatcher.proto,
-				gameMode=3,
-				isFlat=False,
-				worldNames=b'',
-				worldName='aiocraft',
-				previousGameMode=3,
-				entityId=1,
-				isHardcore=False,
-				difficulty=0,
-				isDebug=True,
-				enableRespawnScreen=False,
-				maxPlayers=1,
-				dimension=1,
-				levelType='aiocraft',
-				reducedDebugInfo=False,
-				hashedSeed=1234,
-				viewDistance=4
+		if self.options["spawn-player"]:
+			await dispatcher.write(
+				PacketLogin(
+					dispatcher.proto,
+					gameMode=3,
+					isFlat=False,
+					worldNames=b'',
+					worldName='aiocraft',
+					previousGameMode=3,
+					entityId=1,
+					isHardcore=False,
+					difficulty=0,
+					isDebug=True,
+					enableRespawnScreen=False,
+					maxPlayers=1,
+					dimension=1,
+					levelType='aiocraft',
+					reducedDebugInfo=False,
+					hashedSeed=1234,
+					viewDistance=4
+				)
 			)
-		)
 
-		await dispatcher.write(
-			PacketPosition(
-				dispatcher.proto,
-				dismountVehicle=True,
-				x=0,
-				y=120,
-				flags=0,
-				yaw=0.0,
-				onGround=False,
-				teleportId=1,
-				pitch=0.0,
-				z=0,
+			await dispatcher.write(
+				PacketPosition(
+					dispatcher.proto,
+					dismountVehicle=True,
+					x=0,
+					y=120,
+					flags=0,
+					yaw=0.0,
+					onGround=False,
+					teleportId=1,
+					pitch=0.0,
+					z=0,
+				)
 			)
-		)
+
+		await asyncio.gather(*[cb(dispatcher) for cb in self._connect_handlers])
 
 		async for packet in dispatcher.packets():
+			for cb in self._packet_handlers:
+				asyncio.get_event_loop().create_task(cb(dispatcher, packet))
 			pass # TODO handle play
+
+		await asyncio.gather(*[cb(dispatcher) for cb in self._disconnect_handlers])
 
 		return False
 
