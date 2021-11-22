@@ -186,7 +186,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			if not self.options.reconnect:
 				break
 			await asyncio.sleep(self.options.reconnect_delay)
-		await self.stop(block=False)
+		await self.stop(force=True)
 
 	async def _handshake(self) -> bool: # TODO make this fancier! poll for version and status first
 		await self.dispatcher.write(

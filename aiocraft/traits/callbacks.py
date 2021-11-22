@@ -1,12 +1,12 @@
 import asyncio
-from uuid import uuid4
+import uuid
 
 from typing import Dict, List, Any, Callable
 
 class CallbacksHolder:
 
 	_callbacks : Dict[Any, List[Callable]]
-	_tasks : Dict[str, asyncio.Event]
+	_tasks : Dict[uuid.UUID, asyncio.Event]
 
 	def __init__(self):
 		super().__init__()
@@ -23,17 +23,20 @@ class CallbacksHolder:
 			return []
 		return self._callbacks[key]
 
+	def _wrap(self, cb:Callable, uid:uuid.UUID) -> Callable:
+		async def wrapper(*args):
+			ret = await cb(*args)
+			self._tasks[uid].set()
+			self._tasks.pop(uid)
+			return ret
+		return wrapper
+
 	def run_callbacks(self, key:Any, *args) -> None:
 		for cb in self.trigger(key):
-			task_id = str(uuid4())
+			task_id = uuid.uuid4()
 			self._tasks[task_id] = asyncio.Event()
 
-			async def wrapper(*args):
-				await cb(*args)
-				self._tasks[task_id].set()
-				self._tasks.pop(task_id)
-
-			asyncio.get_event_loop().create_task(wrapper(*args))
+			asyncio.get_event_loop().create_task(self._wrap(cb, task_id)(*args))
 
 	async def join_callbacks(self):
 		await asyncio.gather(*list(t.wait() for t in self._tasks.values()))
