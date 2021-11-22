@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
 		@client.on_packet(PacketChat, ConnectionState.PLAY)
 		async def print_chat(packet: PacketChat):
-			msg = parse_chat(json.loads(packet.message), color=color)
+			msg = parse_chat(packet.message, ansi_color=color)
 			print(f"[{packet.position}] {msg}")
 
 		client.run() # will block and start asyncio event loop

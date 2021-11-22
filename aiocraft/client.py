@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import json
 import uuid
 
 from dataclasses import dataclass
@@ -20,7 +21,7 @@ from .mc.proto.login.serverbound import PacketLoginStart, PacketEncryptionBegin 
 from .mc.proto.login.clientbound import (
 	PacketCompress, PacketDisconnect, PacketEncryptionBegin, PacketLoginPluginRequest, PacketSuccess
 )
-from .util import encryption
+from .util import encryption, helpers
 
 LOGGER = logging.getLogger(__name__)
 
@@ -246,7 +247,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				self._logger.info("Login success, joining world...")
 				return True
 			elif isinstance(packet, PacketDisconnect):
-				self._logger.error("Kicked while logging in")
+				self._logger.error("Kicked while logging in : %s", helpers.parse_chat(packet.reason))
 				break
 		return False
 
@@ -263,7 +264,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 					keep_alive_packet = PacketKeepAliveResponse(340, keepAliveId=packet.keepAliveId)
 					await self.dispatcher.write(keep_alive_packet)
 			elif isinstance(packet, PacketKickDisconnect):
-				self._logger.error("Kicked while in game")
+				self._logger.error("Kicked while in game : %s", helpers.parse_chat(packet.reason))
 				break
 			self.run_callbacks(Packet, packet)
 			self.run_callbacks(type(packet), packet)

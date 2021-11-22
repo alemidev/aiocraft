@@ -1,4 +1,8 @@
-from termcolor import colored
+import json
+
+from typing import Union
+
+from termcolor import colored # TODO don't use a lib and put ANSI escaped by hand maybe?
 
 _EQUIVALENTS = {
 	"dark_red" : "red",
@@ -32,18 +36,25 @@ def _parse_formatted_block(msg:dict) -> str:
 	else:
 		return colored(msg["text"], "white", attrs=attr)
 
-def parse_chat(msg:dict, color:bool=True) -> str:
+def parse_chat(msg:Union[dict,str], ansi_color:bool=False) -> str:
 	"""Recursive function to parse minecraft chat json, with optional colors"""
+	if isinstance(msg, str):
+		try:
+			data = json.loads(msg)
+		except ValueError:
+			return str(msg) # It's not json, it's already plaintext
+	else:
+		data = msg
 	out = ""
-	if "text" in msg:
-		if color:
-			out += _parse_formatted_block(msg)
+	if "text" in data:
+		if ansi_color:
+			out += _parse_formatted_block(data)
 		else:
-			out += msg["text"]
-	if "with" in msg:
-		for elem in msg["with"]:
-			out += parse_chat(elem, color)
-	if "extra" in msg:
-		for elem in msg["extra"]:
-			out += parse_chat(elem, color)
+			out += data["text"]
+	if "with" in data:
+		for elem in data["with"]:
+			out += parse_chat(elem, ansi_color)
+	if "extra" in data:
+		for elem in data["extra"]:
+			out += parse_chat(elem, ansi_color)
 	return out
