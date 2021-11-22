@@ -5,19 +5,19 @@ import logging
 from .mc.proto.play.clientbound import PacketChat
 from .mc.token import Token
 from .dispatcher import ConnectionState
-from .client import Client
+from .client import MinecraftClient
 from .server import MinecraftServer
 from .util.helpers import parse_chat
-
-async def idle():
-	while True:
-		await asyncio.sleep(1)
 
 if __name__ == "__main__":
 	logging.basicConfig(level=logging.DEBUG)
 
 	if sys.argv[1] == "--server":
-		serv = MinecraftServer("0.0.0.0", 25565)
+		host = sys.argv[2] if len(sys.argv) > 2 else "localhost"
+		port = sys.argv[3] if len(sys.argv) > 3 else 25565
+
+		serv = MinecraftServer(host, port)
+
 		serv.run() # will block and start asyncio event loop
 	else:
 		username = sys.argv[1]
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 			host = server.strip()
 			port = 25565
 
-		client = Client(host, port, username=username, password=pwd)
+		client = MinecraftClient(host, port, username=username, password=pwd)
 
 		@client.on_packet(PacketChat, ConnectionState.PLAY)
 		async def print_chat(packet: PacketChat):

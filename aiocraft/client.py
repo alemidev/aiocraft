@@ -2,12 +2,14 @@ import asyncio
 import logging
 import uuid
 
+from dataclasses import dataclass
 from asyncio import Task
 from enum import Enum
 
 from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator
 
 from .dispatcher import Dispatcher
+from .traits import CallbacksHolder, Runnable
 from .mc.packet import Packet
 from .mc.token import Token, AuthException
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
@@ -22,10 +24,21 @@ from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
 
-class Client:
+@dataclass
+class ClientOptions:
+	reconnect : bool
+	reconnect_delay : float
+	keep_alive : bool
+	poll_interval : float
+
+class ClientEvent(Enum):
+	CONNECTED = 0
+	DISCONNECTED = 1
+
+class MinecraftClient(CallbacksHolder, Runnable):
 	host:str
 	port:int
-	options:dict
+	options:ClientOptions
 
 	username:Optional[str]
 	password:Optional[str]
@@ -37,27 +50,30 @@ class Client:
 	_worker : Task
 	_callbacks = Dict[str, Task]
 
-	_packet_callbacks : Dict[Type[Packet], List[Callable]]
 	_logger : logging.Logger
 
 	def __init__(
 		self,
 		host:str,
 		port:int = 25565,
-		options:dict = None,
 		username:Optional[str] = None,
 		password:Optional[str] = None,
 		token:Optional[Token] = None,
+		reconnect:bool = True,
+		reconnect_delay:float = 10.0,
+		keep_alive:bool = True,
+		poll_interval:float = 1.0,
+
 	):
 		self.host = host
 		self.port = port
 
-		self.options = options or {
-			"reconnect" : True,
-			"rctime" : 5.0,
-			"keep-alive" : True,
-			"poll-timeout" : 1,
-		}
+		self.options = ClientOptions(
+			reconnect=reconnect,
+			reconnect_delay=reconnect_delay,
+			keep_alive=keep_alive,
+			poll_interval=poll_interval
+		)
 
 		self.token = token
 		self.username = username
@@ -66,9 +82,6 @@ class Client:
 		self.dispatcher = Dispatcher()
 		self._processing = False
 		self._authenticated = False
-
-		self._packet_callbacks = {}
-		self._callbacks = {}
 
 		self._logger = LOGGER.getChild(f"{self.host}:{self.port}")
 
@@ -80,23 +93,21 @@ class Client:
 	def connected(self) -> bool:
 		return self.started and self.dispatcher.connected
 
-	def _run_async(self, func, pkt:Packet):
-		key = str(uuid.uuid4()) # ugly!
-
-		async def wrapper(packet:Packet):
-			try:
-				await func(packet)
-			except Exception as e:
-				self._logger.error("Exception in callback %s for packet %s | %s", func.__name__, packet, str(e))
-			self._callbacks.pop(key, None)
-
-		self._callbacks[key] = asyncio.get_event_loop().create_task(wrapper(pkt))
-
-	def on_packet(self, packet:Type[Packet], *args) -> Callable: # receive *args for retro compatibility
+	def on_connected(self) -> Callable:
 		def wrapper(fun):
-			if packet not in self._packet_callbacks:
-				self._packet_callbacks[packet] = []
-			self._packet_callbacks[packet].append(fun)
+			self.register(ClientEvent.CONNECTED, fun)
+			return fun
+		return wrapper
+
+	def on_disconnected(self) -> Callable:
+		def wrapper(fun):
+			self.register(ClientEvent.DISCONNECTED, fun)
+			return fun
+		return wrapper
+
+	def on_packet(self, packet:Type[Packet]) -> Callable:
+		def wrapper(fun):
+			self.register(packet, fun)
 			return fun
 		return wrapper
 
@@ -136,39 +147,22 @@ class Client:
 		if restart:
 			await self.start()
 
-	def run(self):
-		loop = asyncio.get_event_loop()
-
-		loop.run_until_complete(self.start())
-
-		async def idle():
-			while True: # TODO don't busywait even if it doesn't matter much
-				await asyncio.sleep(self.options["poll-timeout"])
-
-		try:
-			loop.run_until_complete(idle())
-		except KeyboardInterrupt:
-			self._logger.info("Received SIGINT, stopping...")
-			try:
-				loop.run_until_complete(self.stop())
-			except KeyboardInterrupt:
-				self._logger.info("Received SIGINT, stopping for real")
-				loop.run_until_complete(self.stop(wait_tasks=False))
-
 	async def start(self):
+		if self.started:
+			return
 		self._processing = True
 		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
 		self._logger.info("Minecraft client started")
 
-	async def stop(self, block=True, wait_tasks=True):
+	async def stop(self, force:bool=False):
 		self._processing = False
 		if self.dispatcher.connected:
-			await self.dispatcher.disconnect(block=block)
-		if block:
+			await self.dispatcher.disconnect(block=not force)
+		if not force:
 			await self._worker
 			self._logger.info("Minecraft client stopped")
-		if block and wait_tasks:
-			await asyncio.gather(*list(self._callbacks.values()))
+		if not force:
+			await self.join_callbacks()
 
 	async def _client_worker(self):
 		while self._processing:
@@ -188,9 +182,9 @@ class Client:
 				self._logger.exception("Exception in Client connection")
 			if self.dispatcher.connected:
 				await self.dispatcher.disconnect()
-			if not self.options["reconnect"]:
+			if not self.options.reconnect:
 				break
-			await asyncio.sleep(self.options["rctime"])
+			await asyncio.sleep(self.options.reconnect_delay)
 		await self.stop(block=False)
 
 	async def _handshake(self) -> bool: # TODO make this fancier! poll for version and status first
@@ -255,20 +249,20 @@ class Client:
 
 	async def _play(self) -> bool:
 		self.dispatcher.state = ConnectionState.PLAY
+		self.run_callbacks(ClientEvent.CONNECTED)
 		async for packet in self.dispatcher.packets():
 			self._logger.debug("[ * ] Processing | %s", str(packet))
 			if isinstance(packet, PacketSetCompression):
 				self._logger.info("Compression updated")
 				self.dispatcher.compression = packet.threshold
 			elif isinstance(packet, PacketKeepAlive):
-				if self.options["keep-alive"]:
+				if self.options.keep_alive:
 					keep_alive_packet = PacketKeepAliveResponse(340, keepAliveId=packet.keepAliveId)
 					await self.dispatcher.write(keep_alive_packet)
 			elif isinstance(packet, PacketKickDisconnect):
 				self._logger.error("Kicked while in game")
 				break
-			for packet_type in (Packet, type(packet)): # check both callbacks for base class and instance class
-				if packet_type in self._packet_callbacks:
-					for cb in self._packet_callbacks[packet_type]:
-						self._run_async(cb, packet)
+			self.run_callbacks(Packet, packet)
+			self.run_callbacks(type(packet), packet)
+		self.run_callbacks(ClientEvent.DISCONNECTED)
 		return False

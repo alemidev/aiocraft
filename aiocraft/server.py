@@ -2,6 +2,7 @@ import asyncio
 import logging
 import uuid
 
+from dataclasses import dataclass
 from asyncio import Task, StreamReader, StreamWriter
 from asyncio.base_events import Server # just for typing
 from enum import Enum
@@ -9,6 +10,7 @@ from enum import Enum
 from typing import Dict, List, Callable, Coroutine, Type, Optional, Tuple, AsyncIterator
 
 from .dispatcher import Dispatcher
+from .traits import CallbacksHolder, Runnable
 from .mc.packet import Packet
 from .mc.token import Token, AuthException
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
@@ -23,89 +25,80 @@ from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
 
-class MinecraftServer:
+@dataclass
+class ServerOptions:
+	online_mode : bool
+	spawn_player : bool
+	poll_interval : float
+
+class ServerEvent(Enum):
+	CLIENT_CONNECTED = 0
+	CLIENT_DISCONNECTED = 1
+
+class MinecraftServer(CallbacksHolder, Runnable):
 	host:str
 	port:int
-	options:dict
+	options:ServerOptions
 
 	_dispatcher_pool : List[Dispatcher]
 	_processing : bool
 	_server : Server
 	_worker : Task
-	_callbacks = Dict[str, Task]
 
 	_logger : logging.Logger
-
-	_disconnect_handlers : List[Callable]
-	_connect_handlers : List[Callable]
-	_packet_handlers : List[Callable]
 
 	def __init__(
 		self,
 		host:str,
 		port:int = 25565,
-		options:dict = None,
+		online_mode:bool = False,
+		spawn_player:bool = True,
+		poll_interval:float = 1.0,
 	):
+		super().__init__()
 		self.host = host
 		self.port = port
 
-		self.options = options or {
-			"poll-timeout" : 1,
-			"online-mode" : False,
-			"spawn-player" : True,
-		}
+		self.options = ServerOptions(
+			online_mode=online_mode,
+			spawn_player=spawn_player,
+			poll_interval=poll_interval,
+		)
 
 		self._dispatcher_pool = []
 		self._processing = False
 
 		self._logger = LOGGER.getChild(f"@({self.host}:{self.port})")
 
-		self._disconnect_handlers = []
-		self._connect_handlers = []
-		self._packet_handlers = []
-
 	@property
 	def started(self) -> bool:
 		return self._processing
 
-	def on_client_connect(self, *args):
+	@property
+	def connected(self) -> int:
+		return len(self._dispatcher_pool)
+
+	def on_connect(self):
 		def wrapper(fun):
-			self._connect_handlers.append(fun)
+			self.register(ServerEvent.CLIENT_CONNECTED, fun)
 			return fun
 		return wrapper
 
-	def on_client_disconnect(self, *args):
+	def on_disconnect(self):
 		def wrapper(fun):
-			self._disconnect_handlers.append(fun)
+			self.register(ServerEvent.CLIENT_DISCONNECTED, fun)
 			return fun
 		return wrapper
 
-	def on_client_packet(self, *args):
+	def on_packet(self, packet:Type[Packet]):
 		def wrapper(fun):
-			self._packet_handlers.append(fun)
+			self.register(packet, fun)
 			return fun
 		return wrapper
-
-	def run(self):
-		loop = asyncio.get_event_loop()
-
-		loop.run_until_complete(self.start())
-
-		async def idle():
-			while True: # TODO don't busywait even if it doesn't matter much
-				await asyncio.sleep(self.options["poll-timeout"])
-
-		try:
-			loop.run_until_complete(idle())
-		except KeyboardInterrupt:
-			self._logger.info("Received SIGINT, stopping...")
-			try:
-				loop.run_until_complete(self.stop())
-			except KeyboardInterrupt:
-				self._logger.info("Received SIGINT, stopping for real")
-				loop.run_until_complete(self.stop(wait_tasks=False))
 
 	async def start(self):
+		if self.started:
+			return
 		self._server = await asyncio.start_server(
 			self._server_worker, self.host, self.port
 		)
@@ -114,14 +107,15 @@ class MinecraftServer:
 		await self._server.start_serving()
 		self._logger.info("Minecraft server started")
 
-	async def stop(self, block=True, wait_tasks=True):
+	async def stop(self, force:bool = False):
 		self._processing = False
 		self._server.close()
-		await asyncio.gather(*[d.disconnect(block=block) for d in self._dispatcher_pool])
-		if block:
-			await self._server.wait_closed()
-		# if block and wait_tasks: # TODO wait for client workers
-		# 	await asyncio.gather(*list(self._callbacks.values()))
+		await asyncio.gather(*[d.disconnect(block=not force) for d in self._dispatcher_pool])
+		if not force:
+			await asyncio.gather(
+				self._server.wait_closed(),
+				self.join_callbacks(),
+			)
 
 	async def _disconnect_client(self, dispatcher):
 		if dispatcher.state == ConnectionState.LOGIN:
@@ -178,7 +172,7 @@ class MinecraftServer:
 		self._logger.info("Logging in player")
 		async for packet in dispatcher.packets():
 			if isinstance(packet, PacketLoginStart):
-				if self.options["online-mode"]:
+				if self.options.online_mode:
 					# await dispatcher.write(
 					# 	PacketEncryptionBegin(
 					# 		dispatcher.proto,
@@ -207,7 +201,7 @@ class MinecraftServer:
 	async def _play(self, dispatcher:Dispatcher) -> bool:
 		self._logger.info("Player connected")
 
-		if self.options["spawn-player"]:
+		if self.options.spawn_player:
 			await dispatcher.write(
 				PacketLogin(
 					dispatcher.proto,
@@ -245,14 +239,14 @@ class MinecraftServer:
 				)
 			)
 
-		await asyncio.gather(*[cb(dispatcher) for cb in self._connect_handlers])
+		self.run_callbacks(ServerEvent.CLIENT_CONNECTED)
 
 		async for packet in dispatcher.packets():
-			for cb in self._packet_handlers:
-				asyncio.get_event_loop().create_task(cb(dispatcher, packet))
-			pass # TODO handle play
+			# TODO handle play
+			self.run_callbacks(Packet, packet)
+			self.run_callbacks(type(packet), packet)
 
-		await asyncio.gather(*[cb(dispatcher) for cb in self._disconnect_handlers])
+		self.run_callbacks(ServerEvent.CLIENT_DISCONNECTED)
 
 		return False
 
