@@ -179,6 +179,8 @@ class MinecraftClient(CallbacksHolder, Runnable):
 					await self._play()
 			except ConnectionRefusedError:
 				self._logger.error("Server rejected connection")
+			except OSError as e:
+				self._logger.error("Connection error : %s", str(e))
 			except Exception:
 				self._logger.exception("Exception in Client connection")
 			if self.dispatcher.connected:
