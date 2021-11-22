@@ -6,7 +6,7 @@ from typing import Dict, List, Any, Callable
 class CallbacksHolder:
 
 	_callbacks : Dict[Any, List[Callable]]
-	_tasks : Dict[str, asyncio.Task]
+	_tasks : Dict[str, asyncio.Event]
 
 	def __init__(self):
 		super().__init__()
@@ -26,15 +26,16 @@ class CallbacksHolder:
 	def run_callbacks(self, key:Any, *args) -> None:
 		for cb in self.trigger(key):
 			task_id = str(uuid4())
+			self._tasks[task_id] = asyncio.Event()
 
 			async def wrapper(*args):
 				await cb(*args)
+				self._tasks[task_id].set()
 				self._tasks.pop(task_id)
 
-			loop = asyncio.get_event_loop()
-			self._tasks[task_id] = loop.create_task(wrapper(*args))
+			asyncio.get_event_loop().create_task(wrapper(*args))
 
 	async def join_callbacks(self):
-		await asyncio.gather(*list(self._tasks.values()))
+		await asyncio.gather(*list(t.wait() for t in self._tasks.values()))
 		self._tasks.clear()
 
