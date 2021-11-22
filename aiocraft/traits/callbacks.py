@@ -1,5 +1,6 @@
 import asyncio
 import uuid
+import logging
 
 from typing import Dict, List, Any, Callable
 
@@ -7,6 +8,8 @@ class CallbacksHolder:
 
 	_callbacks : Dict[Any, List[Callable]]
 	_tasks : Dict[uuid.UUID, asyncio.Event]
+
+	_logger : logging.Logger
 
 	def __init__(self):
 		super().__init__()
@@ -25,7 +28,11 @@ class CallbacksHolder:
 
 	def _wrap(self, cb:Callable, uid:uuid.UUID) -> Callable:
 		async def wrapper(*args):
-			ret = await cb(*args)
+			try:
+				ret = await cb(*args)
+			except Exception:
+				logging.exception("Exception processing callback")
+				ret = None
 			self._tasks[uid].set()
 			self._tasks.pop(uid)
 			return ret
