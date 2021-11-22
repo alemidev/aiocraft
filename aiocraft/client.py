@@ -65,6 +65,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		poll_interval:float = 1.0,
 
 	):
+		super().__init__()
 		self.host = host
 		self.port = port
 

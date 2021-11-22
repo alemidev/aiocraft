@@ -9,6 +9,7 @@ class CallbacksHolder:
 	_tasks : Dict[str, asyncio.Task]
 
 	def __init__(self):
+		super().__init__()
 		self._callbacks = {}
 
 	def register(self, key:Any, callback:Callable):
