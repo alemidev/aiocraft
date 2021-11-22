@@ -71,7 +71,7 @@ class Dispatcher:
 		return self._outgoing.qsize()
 
 	async def packets(self, timeout=1) -> AsyncIterator[Packet]:
-		while self.connected:
+		while self.connected or self._incoming.qsize(): # Finish processing packets on disconnect
 			try: # TODO replace this timed busy-wait with an event which resolves upon disconnection, and await both
 				packet = await asyncio.wait_for(self._incoming.get(), timeout=timeout)
 				try:
