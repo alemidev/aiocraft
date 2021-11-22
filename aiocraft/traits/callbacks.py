@@ -11,6 +11,7 @@ class CallbacksHolder:
 	def __init__(self):
 		super().__init__()
 		self._callbacks = {}
+		self._tasks = {}
 
 	def register(self, key:Any, callback:Callable):
 		if key not in self._callbacks:
