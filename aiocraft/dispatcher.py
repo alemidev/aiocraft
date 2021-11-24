@@ -221,6 +221,9 @@ class Dispatcher:
 					await self._incoming.join() # During play we can pre-process packets
 			except AttributeError:
 				self._logger.debug("Received unimplemented packet [%d] %s", packet_id, cls.__name__) # TODO this is cheating! implement them!
+			except TimeoutError:
+				self._logger.error("Connection timed out")
+				await self.disconnect(block=False)
 			except ConnectionResetError:
 				self._logger.error("Connection reset while reading packet")
 				await self.disconnect(block=False)
