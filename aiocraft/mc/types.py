@@ -225,7 +225,8 @@ class TrailingByteArray(Type):
 
 	@classmethod
 	def write(cls, data:bytes, buffer:io.BytesIO):
-		buffer.write(data)
+		if data:
+			buffer.write(data)
 
 	@classmethod
 	def read(cls, buffer:io.BytesIO) -> bytes:
