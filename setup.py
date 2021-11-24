@@ -16,6 +16,9 @@ setup(
 	author_email='me@alemi.dev',
 	license='MIT',
 	packages=find_packages(),
+	package_data = {
+		'aiocraft': ['py.typed'],
+	},
 	install_requires=requirements,
 	classifiers=[
 		'Development Status :: 1 - Planning',
