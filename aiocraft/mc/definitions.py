@@ -1,4 +1,11 @@
 from enum import Enum
+from dataclasses import dataclass
+
+@dataclass # TODO use the one from types
+class Position:
+	x : float
+	y : float
+	z : float
 
 class Dimension(Enum):
 	NETHER = -1
