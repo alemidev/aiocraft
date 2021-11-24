@@ -38,7 +38,8 @@ class Packet:
 		buf = io.BytesIO()
 		VarInt.write(self.id, buf)
 		for name, t in self.definition:
-			t.write(getattr(self, name, None), buf)
+			if getattr(self, name, None) is not None: # minecraft proto has no null type: this is an optional field left unset
+				t.write(getattr(self, name, None), buf)
 		buf.seek(0)
 		return buf
 
