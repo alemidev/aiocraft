@@ -133,6 +133,7 @@ class Dispatcher:
 
 	async def disconnect(self, block:bool=True):
 		self._dispatching = False
+		self._outgoing.clear()
 		if block and self._writer and self._reader:
 			await asyncio.gather(self._writer, self._reader)
 			self._logger.debug("Net workers stopped")
@@ -190,12 +191,15 @@ class Dispatcher:
 				break
 		return result
 
-	async def _down_worker(self):
+	async def _read_packet(self) -> bytes:
+		length = await self._read_varint()
+		return await self._down.readexactly(length)
+
+	async def _down_worker(self, timeout:float=30):
 		while self._dispatching:
 			try: # these 2 will timeout or raise EOFError if client gets disconnected
 				self._logger.debug("Reading packet")
-				length = await self._read_varint()
-				data = await self._down.readexactly(length)
+				data = await asyncio.wait_for(self._read_packet(), timeout=timeout)
 
 				if self.encryption:
 					data = self._decryptor.update(data)
@@ -221,7 +225,7 @@ class Dispatcher:
 					await self._incoming.join() # During play we can pre-process packets
 			except AttributeError:
 				self._logger.debug("Received unimplemented packet [%d] %s", packet_id, cls.__name__) # TODO this is cheating! implement them!
-			except TimeoutError:
+			except (asyncio.TimeoutError, TimeoutError):
 				self._logger.error("Connection timed out")
 				await self.disconnect(block=False)
 			except ConnectionResetError:
