@@ -133,7 +133,6 @@ class Dispatcher:
 
 	async def disconnect(self, block:bool=True):
 		self._dispatching = False
-		self._outgoing.clear()
 		if block and self._writer and self._reader:
 			await asyncio.gather(self._writer, self._reader)
 			self._logger.debug("Net workers stopped")
