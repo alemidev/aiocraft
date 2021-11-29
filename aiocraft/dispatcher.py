@@ -17,6 +17,7 @@ from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
 
+DIFFICULT_PACKETS = (28, 36) # Explosion, Map
 
 class InvalidState(Exception):
 	pass
@@ -194,6 +195,7 @@ class Dispatcher:
 		length = await self._read_varint()
 		return await self._down.readexactly(length)
 
+
 	async def _down_worker(self, timeout:float=30):
 		while self._dispatching:
 			try: # these 2 will timeout or raise EOFError if client gets disconnected
@@ -215,6 +217,8 @@ class Dispatcher:
 						buffer = io.BytesIO(decompressed_data)
 
 				packet_id = VarInt.read(buffer)
+				if packet_id in DIFFICULT_PACKETS:
+					continue # don't try to parse, can't handle types this complex (yet! TODO)
 				cls = self._packet_type_from_registry(packet_id)
 				self._logger.debug("Deserializing packet %s | %s", str(cls), cls._state)
 				packet = cls.deserialize(self.proto, buffer)
@@ -222,8 +226,6 @@ class Dispatcher:
 				await self._incoming.put(packet)
 				if self.state != ConnectionState.PLAY:
 					await self._incoming.join() # During play we can pre-process packets
-			except AttributeError:
-				self._logger.debug("Received unimplemented packet [%d] %s", packet_id, cls.__name__) # TODO this is cheating! implement them!
 			except (asyncio.TimeoutError, TimeoutError):
 				self._logger.error("Connection timed out")
 				await self.disconnect(block=False)

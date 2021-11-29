@@ -1,8 +1,9 @@
 import io
 import struct
 import asyncio
+import uuid
 
-from typing import Any
+from typing import Any, Optional, Type as VarType
 
 class Type(object):
 	_pytype : type
@@ -138,6 +139,29 @@ class VarLong(VarInt):
 	_pytype : type = int
 	_size = 10
 
+# class Maybe(Type): # TODO better fucking name!
+# 	_t : Type
+# 
+# 	@classmethod
+# 	def of(cls, t:Type) -> VarType[Maybe]:
+# 		return type(f"Optional{t.__name__}", (Maybe,), {"_t":t})
+# 
+# 	@classmethod
+# 	def write(cls, data:Optional[Any], buffer:io.BytesIO):
+# 		if not hasattr(cls, "_t"):
+# 			raise NotImplementedError
+# 		Boolean.write(bool(data), buffer)
+# 		if data:
+# 			cls._t.write(data, buffer)
+# 
+# 	@classmethod
+# 	def read(cls, buffer:io.BytesIO) -> Optional[cls.T]:
+# 		if not hasattr(cls, "_t"):
+# 			raise NotImplementedError
+# 		if Boolean.read(buffer):
+# 			return cls._t.read(buffer)
+# 		return None
+
 class String(Type):
 	_pytype : type = str
 
@@ -189,17 +213,7 @@ class Angle(Type):
 	_size : int = 1
 	_fmt : str = ">b"
 
-class EntityMetadata(Type):
-	_pytype : type = bytes
-	# TODO
-	pass
-
 class EntityMetadataItem(Type):
-	_pytype : type = bytes
-	# TODO
-	pass
-
-class Slot(Type):
 	_pytype : type = bytes
 	# TODO
 	pass
@@ -210,15 +224,35 @@ class NBTTag(Type):
 	pass
 
 class Position(Type):
-	_pytype : type = bytes
-	# TODO
-	pass
+	_pytype : type = tuple
+	_size = 8
 
+	# TODO THIS IS FOR 1.12.2!!!
+
+	@classmethod
+	def write(cls, data:tuple, buffer:io.BytesIO):
+		packed = ((0x3FFFFFF & data[0]) << 38) | ((0xFFF & data[1]) << 26) | (0x3FFFFFF & data[2])
+		UnsignedLong.write(packed, buffer)
+
+	@classmethod
+	def read(cls, buffer:io.BytesIO) -> tuple:
+		packed = UnsignedLong.read(buffer)
+		x = packed >> 38
+		y = (packed >> 24) & 0xFFF
+		z = packed & 0x3FFFFFF
+		return (x, y, z)
 
 class UUID(Type):
-	_pytype : type = bytes
-	# TODO
-	pass
+	_pytype : type = str
+	_size = 16
+
+	@classmethod
+	def write(cls, data:uuid.UUID, buffer:io.BytesIO):
+		buffer.write(int(data).to_bytes(cls._size, 'big'))
+
+	@classmethod
+	def read(cls, buffer:io.BytesIO) -> uuid.UUID:
+		return uuid.UUID(int=int.from_bytes(buffer.read(cls._size), 'big'))
 
 class TrailingByteArray(Type):
 	_pytype : type = bytes
@@ -231,4 +265,13 @@ class TrailingByteArray(Type):
 	@classmethod
 	def read(cls, buffer:io.BytesIO) -> bytes:
 		return buffer.read()
+
+class EntityMetadata(TrailingByteArray):
+	# TODO
+	pass
+
+class Slot(TrailingByteArray):
+	_pytype : type = bytes
+	# TODO
+	pass
 
