@@ -105,7 +105,7 @@ class PacketClassWriter:
 				name=self.title, 
 				ids='{\n\t\t' + ',\n\t\t'.join(self.ids) + '\n\t}\n', 
 				definitions='{\n\t\t' + '\n\t\t'.join(self.slots) + '\n\t}\n',
-					slots=', '.join(f"'{x}'" for x in (list(self.attrs) + ["id"])), # TODO de-jank!
+				slots=', '.join((f"'is_{x}'" if keyword.iskeyword(x) else f"'{x}'") for x in (list(self.attrs) + ["id"])), # TODO de-jank!
 				fields='\n\t'.join(self.fields),
 				state=self.state,
 			)
