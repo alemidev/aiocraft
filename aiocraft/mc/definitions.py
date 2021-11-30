@@ -1,11 +1,19 @@
+from math import sqrt
 from enum import Enum
 from dataclasses import dataclass
 
 @dataclass # TODO use the one from types
-class Position:
+class BlockPos:
 	x : float
 	y : float
 	z : float
+
+	def distance(self, p:'BlockPos'):
+		return sqrt(
+			( self.x - p.x ) ** 2 +
+			( self.y - p.y ) ** 2 +
+			( self.z - p.z ) ** 2
+		)
 
 class Dimension(Enum):
 	NETHER = -1
