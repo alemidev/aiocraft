@@ -231,6 +231,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 						)
 					except AuthException:
 						self._logger.error("Could not authenticate with Mojang")
+						self._authenticated = False
 						break
 				encryption_response = PacketEncryptionResponse(
 					340, # TODO!!!!
