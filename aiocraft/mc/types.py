@@ -3,7 +3,7 @@ import struct
 import asyncio
 import uuid
 
-from typing import Any, Optional, Type as VarType
+from typing import List, Any, Optional, Type as Class
 
 class Type(object):
 	_pytype : type
@@ -80,19 +80,6 @@ class VarInt(Type):
 	_pytype : type = int
 	_size = 5
 
-	# @classmethod
-	# async def read(cls, stream: asyncio.StreamReader) -> int:
-	# 	"""Utility method to read a VarInt off the socket, because len comes as a VarInt..."""
-	# 	buf = 0
-	# 	off = 0
-	# 	while True:
-	# 		byte = await stream.read(1)
-	# 		buf |= (byte & 0b01111111) >> (7*off)
-	# 		if not byte & 0b10000000:
-	# 			break
-	# 		off += 1
-	# 	return buf
-
 	@classmethod
 	def write(cls, data:int, buffer:io.BytesIO):
 		count = 0
@@ -139,28 +126,46 @@ class VarLong(VarInt):
 	_pytype : type = int
 	_size = 10
 
-# class Maybe(Type): # TODO better fucking name!
-# 	_t : Type
-# 
-# 	@classmethod
-# 	def of(cls, t:Type) -> VarType[Maybe]:
-# 		return type(f"Optional{t.__name__}", (Maybe,), {"_t":t})
-# 
-# 	@classmethod
-# 	def write(cls, data:Optional[Any], buffer:io.BytesIO):
-# 		if not hasattr(cls, "_t"):
-# 			raise NotImplementedError
-# 		Boolean.write(bool(data), buffer)
-# 		if data:
-# 			cls._t.write(data, buffer)
-# 
-# 	@classmethod
-# 	def read(cls, buffer:io.BytesIO) -> Optional[cls.T]:
-# 		if not hasattr(cls, "_t"):
-# 			raise NotImplementedError
-# 		if Boolean.read(buffer):
-# 			return cls._t.read(buffer)
-# 		return None
+class Maybe(Type): # TODO better name without 
+	_t : Class[Type] = TrailingByteArray
+	_pytype : type = bytes
+
+	def __init__(self, t:Class[Type]):
+		self._t = t
+		self._pytype = t._pytype
+		self._size = Boolean._size + t._size
+
+	@classmethod
+	def write(cls, data:Optional[Any], buffer:io.BytesIO):
+		Boolean.write(bool(data), buffer)
+		if data:
+			cls._t.write(data, buffer)
+
+	@classmethod
+	def read(cls, buffer:io.BytesIO) -> Optional[Any]:
+		if Boolean.read(buffer):
+			return cls._t.read(buffer)
+		return None
+
+class Array(Type):
+	_counter : Class[Type] = VarInt
+	_content : Class[Type] = Byte
+	_pytype : type = bytes
+
+	def __init__(self, content:Class[Type] = Byte, counter:Class[Type] = VarInt):
+		self._content = content
+		self._counter = counter
+
+	@classmethod
+	def write(cls, data:List[Any], buffer:io.BytesIO):
+		cls._counter.write(len(data), buffer)
+		for el in data:
+			cls._content.write(el, buffer)
+
+	@classmethod
+	def read(cls, buffer:io.BytesIO) -> List[Any]:
+		length = cls._counter.read(buffer)
+		return [ cls._content.read(buffer) for _ in range(length) ]
 
 class String(Type):
 	_pytype : type = str
