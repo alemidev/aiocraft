@@ -5,7 +5,7 @@ import keyword
 import logging
 
 from pathlib import Path
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Type as Class
 
 from aiocraft.mc.types import *
 
@@ -52,7 +52,7 @@ TYPE_MAP = {
 	"entityMetadata": EntityMetadata,
 }
 
-def mctype(slot_type:Any) -> Type:
+def mctype(slot_type:Any) -> Class[Type]:
 	if isinstance(slot_type, str) and slot_type in TYPE_MAP:
 		return TYPE_MAP[slot_type]
 	if isinstance(slot_type, list):
