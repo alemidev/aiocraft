@@ -42,6 +42,28 @@ class Token:
 	CONTENT_TYPE = "application/json"
 	HEADERS = {"content-type": CONTENT_TYPE}
 
+	def dict(self):
+		return {
+			"username":self.username,
+			"access_token":self.access_token,
+			"client_token":self.client_token,
+			"profile": self.profile.dict(),
+		}
+
+	@classmethod
+	def from_file(cls, fname:str):
+		with open(fname) as f:
+			return cls.from_json(json.load(f))
+
+	@classmethod
+	def from_dict(cls, data:dict):
+		return cls(
+			username=data["username"],
+			access_token=data["accessToken"],
+			client_token=data["clientToken"],
+			profile=Profile(**data["selectedProfile"]),
+		)
+
 	@classmethod
 	async def authenticate(cls, username, password, invalidate=False):
 		payload = {
@@ -62,7 +84,7 @@ class Token:
 			username=username,
 			access_token=res["accessToken"],
 			client_token=res["clientToken"],
-			profile=Profile(res["selectedProfile"]["id"], res["selectedProfile"]["name"])
+			profile=Profile(**res["selectedProfile"])
 		)
 
 	@classmethod
@@ -80,7 +102,7 @@ class Token:
 
 		self.access_token = res["accessToken"]
 		self.client_token = res["clientToken"]
-		self.profile = Profile(res["selectedProfile"]["id"], res["selectedProfile"]["name"])
+		self.profile = Profile(**res["selectedProfile"])
 
 		return res
 
