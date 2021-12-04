@@ -21,6 +21,18 @@ class Type(object):
 	def read(cls, buffer:io.BytesIO) -> Any:
 		return struct.unpack(cls._fmt, buffer.read(cls._size))[0]
 
+class TrailingByteArray(Type):
+	_pytype : type = bytes
+
+	@classmethod
+	def write(cls, data:bytes, buffer:io.BytesIO):
+		if data:
+			buffer.write(data)
+
+	@classmethod
+	def read(cls, buffer:io.BytesIO) -> bytes:
+		return buffer.read()
+
 class Boolean(Type):
 	_pytype : type = bool
 	_size : int = 1
@@ -125,6 +137,16 @@ class VarInt(Type):
 class VarLong(VarInt):
 	_pytype : type = int
 	_size = 10
+
+class EntityMetadata(TrailingByteArray):
+	# TODO
+	pass
+
+class Slot(TrailingByteArray):
+	_pytype : type = bytes
+	# TODO
+	pass
+
 
 class Maybe(Type): # TODO better name without 
 	_t : Class[Type] = TrailingByteArray
@@ -258,25 +280,4 @@ class UUID(Type):
 	@classmethod
 	def read(cls, buffer:io.BytesIO) -> uuid.UUID:
 		return uuid.UUID(int=int.from_bytes(buffer.read(cls._size), 'big'))
-
-class TrailingByteArray(Type):
-	_pytype : type = bytes
-
-	@classmethod
-	def write(cls, data:bytes, buffer:io.BytesIO):
-		if data:
-			buffer.write(data)
-
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> bytes:
-		return buffer.read()
-
-class EntityMetadata(TrailingByteArray):
-	# TODO
-	pass
-
-class Slot(TrailingByteArray):
-	_pytype : type = bytes
-	# TODO
-	pass
 
