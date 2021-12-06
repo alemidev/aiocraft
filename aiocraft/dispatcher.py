@@ -237,6 +237,7 @@ class Dispatcher:
 				await self.disconnect(block=False)
 			except Exception:
 				self._logger.exception("Exception parsing packet %d | %s", packet_id, buffer.getvalue())
+				await self.disconnect(block=False)
 
 	async def _up_worker(self, timeout=1):
 		while self._dispatching:
