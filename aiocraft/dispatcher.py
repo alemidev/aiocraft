@@ -92,7 +92,7 @@ class Dispatcher:
 	def _prepare(self, host:Optional[str] = None, port:Optional[int] = None, queue_timeout:int = 1, queue_size:int = 100):
 		self._host = host or self._host or "localhost"
 		self._port = port or self._port or 25565
-		self._logger = LOGGER.getChild(f"@({self._host}:{self._port})")
+		self._logger = LOGGER.getChild(f"on({self._host}:{self._port})")
 
 		self.encryption = False
 		self.compression = None

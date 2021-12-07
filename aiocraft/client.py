@@ -85,7 +85,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		self._processing = False
 		self._authenticated = False
 
-		self._logger = LOGGER.getChild(f"{self.host}:{self.port}")
+		self._logger = LOGGER.getChild(f"on({self.host}:{self.port})")
 
 	@property
 	def started(self) -> bool:
