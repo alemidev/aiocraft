@@ -60,6 +60,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		username:Optional[str] = None,
 		password:Optional[str] = None,
 		token:Optional[Token] = None,
+		online_mode:bool = True,
 		reconnect:bool = True,
 		reconnect_delay:float = 10.0,
 		keep_alive:bool = True,
@@ -80,6 +81,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		self.token = token
 		self.username = username
 		self.password = password
+		self.online_mode = online_mode
 
 		self.dispatcher = Dispatcher()
 		self._processing = False
@@ -168,11 +170,12 @@ class MinecraftClient(CallbacksHolder, Runnable):
 
 	async def _client_worker(self):
 		while self._processing:
-			try:
-				await self.authenticate()
-			except AuthException as e:
-				self._logger.error(str(e))
-				break
+			if self.online_mode:
+				try:
+					await self.authenticate()
+				except AuthException as e:
+					self._logger.error(str(e))
+					break
 			try:
 				await self.dispatcher.connect(self.host, self.port)
 				await self._handshake()
@@ -205,7 +208,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		await self.dispatcher.write(
 			PacketLoginStart(
 				340,
-				username=self.token.profile.name if self.token else self.username
+				username=self.token.profile.name if self.online_mode and self.token else self.username
 			)
 		)
 		return True
@@ -214,13 +217,19 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		self.dispatcher.state = ConnectionState.LOGIN
 		async for packet in self.dispatcher.packets():
 			if isinstance(packet, PacketEncryptionBegin):
+				if not self.online_mode:
+					self._logger.error("Cannot answer Encryption Request in offline mode")
+					return False
+				if not self.token:
+					self._logger.error("No available token to enable encryption")
+					return False
 				secret = encryption.generate_shared_secret()
 				token, encrypted_secret = encryption.encrypt_token_and_secret(
 					packet.publicKey,
 					packet.verifyToken,
 					secret
 				)
-				if packet.serverId != '-' and self.token:
+				if packet.serverId != '-':
 					try:
 						await self.token.join(
 							encryption.generate_verification_hash(
@@ -232,7 +241,9 @@ class MinecraftClient(CallbacksHolder, Runnable):
 					except AuthException:
 						self._logger.error("Could not authenticate with Mojang")
 						self._authenticated = False
-						break
+						return False
+				else:
+					self._logger.warning("Server gave an offline-mode serverId but still requested Encryption")
 				encryption_response = PacketEncryptionResponse(
 					340, # TODO!!!!
 					sharedSecret=encrypted_secret,
@@ -250,7 +261,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				return True
 			elif isinstance(packet, PacketDisconnect):
 				self._logger.error("Kicked while logging in : %s", helpers.parse_chat(packet.reason))
-				break
+				return False
 		return False
 
 	async def _play(self) -> bool:
