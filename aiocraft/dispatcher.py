@@ -229,7 +229,7 @@ class Dispatcher:
 			except (asyncio.TimeoutError, TimeoutError):
 				self._logger.error("Connection timed out")
 				await self.disconnect(block=False)
-			except ConnectionResetError:
+			except (ConnectionResetError, BrokenPipeError):
 				self._logger.error("Connection reset while reading packet")
 				await self.disconnect(block=False)
 			except (asyncio.IncompleteReadError, EOFError):
