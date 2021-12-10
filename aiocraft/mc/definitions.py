@@ -1,12 +1,17 @@
 from math import sqrt
 from enum import Enum
 from dataclasses import dataclass
+from typing import Tuple
 
 @dataclass # TODO use the one from types
 class BlockPos:
 	x : float
 	y : float
 	z : float
+
+	@classmethod
+	def from_tuple(cls, t:Tuple[int, int, int]):
+		return cls(x=t[0], y=t[1], z=t[2])
 
 	def distance(self, p:'BlockPos'):
 		return sqrt(
