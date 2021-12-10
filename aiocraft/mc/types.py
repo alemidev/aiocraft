@@ -20,6 +20,17 @@ class Type(object):
 		"""Check if this type exists in this context"""
 		return True
 
+class VoidType(Type):
+	pytype : type = type(None)
+
+	def write(self, v:None, buffer:io.BytesIO, ctx:object=None):
+		pass
+
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> None:
+		return None
+
+Void = VoidType()
+
 class UnimplementedDataType(Type):
 	pytype : type = bytes
 

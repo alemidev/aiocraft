@@ -72,6 +72,7 @@ TYPE_MAP = {
 	"position": Ref('Position'),
 	"entityMetadataItem": Ref('EntityMetadataItem'),
 	"entityMetadata": Ref('EntityMetadata'),
+	"void": Ref('Void'),
 }
 
 HINT_MAP = {
@@ -138,6 +139,8 @@ def mctype(slot_type:Any) -> Ref:
 				v["default"] if "default" in v and v['default'] != 'void' else None,
 			)
 			# return SwitchType(mctype(v)) # TODO
+		elif t == "bitfield":
+			return Ref('Int')
 		# elif t == "mapper": # ????
 		# 	return TrailingData
 		else:
