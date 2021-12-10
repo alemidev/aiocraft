@@ -23,6 +23,8 @@ class InvalidState(Exception):
 class ConnectionError(Exception):
 	pass
 
+BROKEN_PACKETS = (77, ) # These packets are still not parseable due to missing data type
+
 class Dispatcher:
 	_is_server : bool # True when receiving packets from clients
 
@@ -215,6 +217,8 @@ class Dispatcher:
 						buffer = io.BytesIO(decompressed_data)
 
 				packet_id = VarInt.read(buffer)
+				if packet_id in BROKEN_PACKETS:
+					continue # cheap fix, still need to implement NBT, Slot and EntityMetadata...
 				cls = self._packet_type_from_registry(packet_id)
 				self._logger.debug("Deserializing packet %s | %s", str(cls), cls._state)
 				packet = cls.deserialize(self.proto, buffer)
