@@ -123,7 +123,7 @@ def mctype(slot_type:Any) -> Ref:
 				return Ref('IntegerByteArray')
 			return Ref('ByteArray')
 		elif t == "array": # Generic array
-			return Ref('ArrayType', mctype(v["type"]), (mctype(v["countType"]) if "countType" in v else 'VarInt'))
+			return Ref('ArrayType', mctype(v["type"]), (mctype(v["countType"]) if "countType" in v else Ref('VarInt')))
 		elif t == "container": # Struct
 			return Ref('StructType', Ref(", ".join(format_tuple((p["name"], mctype(p["type"]))) for p in v if "name" in p))) # some fields are anonymous???
 		elif t == "option": # Optional
