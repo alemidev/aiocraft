@@ -9,7 +9,7 @@ with open("requirements.txt") as f:
 
 setup(
 	name='aiocraft',
-	version='0.0.5',
+	version='0.0.6',
 	description='asyncio-powered headless minecraft client library',
 	url='https://github.com/alemidev/aiocraft',
 	author='alemi',
