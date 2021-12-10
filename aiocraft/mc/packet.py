@@ -23,7 +23,7 @@ class Packet:
 		self.definition = self._definitions[proto]
 		self.id = self._ids[proto]
 		for name, t in self.definition:
-			setattr(self, name, t._pytype(kwargs[name]) if name in kwargs else None)
+			setattr(self, name, t.pytype(kwargs[name]) if name in kwargs else None)
 
 	@property
 	def processed(self) -> Event:
@@ -32,14 +32,18 @@ class Packet:
 
 	@classmethod
 	def deserialize(cls, proto:int, buffer:io.BytesIO):
-		return cls(proto, **{ name : t.read(buffer) for (name, t) in cls._definitions[proto] })
+		pkt = cls(proto)
+		for k, t in cls._definitions[proto]:
+			setattr(pkt, k, t.read(buffer, ctx=pkt))
+		return pkt
+		# return cls(proto, **{ name : t.read(buffer) for (name, t) in cls._definitions[proto] })
 
 	def serialize(self) -> io.BytesIO:
 		buf = io.BytesIO()
 		VarInt.write(self.id, buf)
 		for name, t in self.definition:
 			if getattr(self, name, None) is not None: # minecraft proto has no null type: this is an optional field left unset
-				t.write(getattr(self, name, None), buf)
+				t.write(getattr(self, name), buf, ctx=self)
 		buf.seek(0)
 		return buf
 

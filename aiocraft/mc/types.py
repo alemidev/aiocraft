@@ -3,99 +3,77 @@ import struct
 import asyncio
 import uuid
 
-from typing import List, Any, Optional, Type as Class
+from typing import List, Tuple, Dict, Any, Optional, Type as Class
 
 class Type(object):
-	_pytype : type
-	_size : int
-	_fmt : str
+	pytype : type
 
-	# These methods will work only for fixed size data, if _size and _fmt are defined.
-	#  For anything variabile in size, define custom read() and write() classmethods
+	def write(self, data:Any, buffer:io.BytesIO, ctx:object=None) -> None:
+		"""Write data to a packet buffer"""
+		raise NotImplementedError
+	
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Any:
+		"""Read data off a packet buffer"""
+		raise NotImplementedError
 
-	@classmethod
-	def write(cls, data:Any, buffer:io.BytesIO):
-		buffer.write(struct.pack(cls._fmt, data))
+	def check(self, ctx:object) -> bool:
+		"""Check if this type exists in this context"""
+		return True
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> Any:
-		return struct.unpack(cls._fmt, buffer.read(cls._size))[0]
+class UnimplementedDataType(Type):
+	pytype : type = bytes
 
-class TrailingByteArray(Type):
-	_pytype : type = bytes
-
-	@classmethod
-	def write(cls, data:bytes, buffer:io.BytesIO):
+	def write(self, data:bytes, buffer:io.BytesIO, ctx:object=None):
 		if data:
 			buffer.write(data)
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> bytes:
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> bytes:
 		return buffer.read()
 
-class Boolean(Type):
-	_pytype : type = bool
-	_size : int = 1
-	_fmt : str = ">?"
+TrailingData = UnimplementedDataType()
+EntityMetadata = UnimplementedDataType()
+EntityMetadataItem = UnimplementedDataType()
+NBTTag = UnimplementedDataType()
+Slot = UnimplementedDataType()
 
-class Byte(Type):
-	_pytype : type = int
-	_size : int = 1
-	_fmt : str = ">b"
+class PrimitiveType(Type):
+	size : int
+	fmt : str
 
-class UnsignedByte(Type):
-	_pytype : type = int
-	_size : int = 1
-	_fmt : str = ">B"
+	def __init__(self, pytype:type, fmt:str, size:int):
+		self.pytype = pytype
+		self.fmt = fmt
+		self.size = size
 
-class Short(Type):
-	_pytype : type = int
-	_size : int = 2
-	_fmt : str = ">h"
+	def write(self, data:Any, buffer:io.BytesIO, ctx:object=None):
+		buffer.write(struct.pack(self.fmt, data))
 
-class UnsignedShort(Type):
-	_pytype : type = int
-	_size : int = 2
-	_fmt : str = ">H"
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Any:
+		return struct.unpack(self.fmt, buffer.read(self.size))[0]
 
-class Int(Type):
-	_pytype : type = int
-	_size : int = 4
-	_fmt : str = ">i"
+Boolean = PrimitiveType(bool, ">?", 1)
+Byte = PrimitiveType(int, ">b", 1)
+UnsignedByte = PrimitiveType(int, ">B", 1)
+Short = PrimitiveType(int, ">h", 2)
+UnsignedShort = PrimitiveType(int, ">H", 2)
+Int = PrimitiveType(int, ">i", 4)
+UnsignedInt = PrimitiveType(int, ">I", 4)
+Long = PrimitiveType(int, ">q", 8)
+UnsignedLong = PrimitiveType(int, ">Q", 8)
+Float = PrimitiveType(float, ">f", 4)
+Double = PrimitiveType(float, ">d", 8)
+Angle = PrimitiveType(int, ">b", 1)
 
-class UnsignedInt(Type):
-	_pytype : type = int
-	_size : int = 4
-	_fmt : str = ">I"
+class VarLenPrimitive(Type):
+	pytype : type = int
+	max_bytes : int
 
-class Long(Type):
-	_pytype : type = int
-	_size : int = 8
-	_fmt : str = ">q"
+	def __init__(self, max_bytes:int):
+		self.max_bytes = max_bytes
 
-class UnsignedLong(Type):
-	_pytype : type = int
-	_size : int = 8
-	_fmt : str = ">Q"
-
-class Float(Type):
-	_pytype : type = float
-	_size : int = 4
-	_fmt : str = ">f"
-
-class Double(Type):
-	_pytype : type = float
-	_size : int = 8
-	_fmt : str = ">d"
-
-class VarInt(Type):
-	_pytype : type = int
-	_size = 5
-
-	@classmethod
-	def write(cls, data:int, buffer:io.BytesIO):
+	def write(self, data:int, buffer:io.BytesIO, ctx:object=None):
 		count = 0
-		while count < cls._size:
+		while count < self.max_bytes:
 			byte = data & 0b01111111
 			data >>= 7
 			if data > 0:
@@ -105,179 +83,173 @@ class VarInt(Type):
 			if not data:
 				break
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> int:
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> int:
 		numRead = 0
 		result = 0
 		while True:
 			data = buffer.read(1)
 			if len(data) < 1:
-				raise ValueError("VarInt is too short")
+				raise ValueError("VarInt/VarLong is too short")
 			buf = int.from_bytes(data, 'little')
 			result |= (buf & 0b01111111) << (7 * numRead)
 			numRead +=1
-			if numRead > cls._size:
-				raise ValueError("VarInt is too big")
+			if numRead > self.max_bytes:
+				raise ValueError("VarInt/VarLong is too big")
 			if buf & 0b10000000 == 0:
 				break
 		return result
 
-	@classmethod
-	def serialize(cls, data:int) -> bytes:
+	# utility methods since VarInt is super used
+
+	def serialize(self, data:int) -> bytes:
 		buf = io.BytesIO()
-		cls.write(data, buf)
+		self.write(data, buf)
 		buf.seek(0)
 		return buf.read()
 
-	@classmethod
-	def deserialize(cls, data:bytes) -> int:
+	def deserialize(self, data:bytes) -> int:
 		buf = io.BytesIO(data)
-		return cls.read(buf)
+		return self.read(buf, ctx=ctx)
 
-class VarLong(VarInt):
-	_pytype : type = int
-	_size = 10
+VarInt = VarLenPrimitive(5)
+VarLong = VarLenPrimitive(10)
 
-class EntityMetadata(TrailingByteArray):
-	# TODO
-	pass
+class StringType(Type):
+	pytype : type = str
 
-class Slot(TrailingByteArray):
-	_pytype : type = bytes
-	# TODO
-	pass
-
-
-class Maybe(Type): # TODO better name without 
-	_t : Class[Type] = TrailingByteArray
-	_pytype : type = bytes
-
-	def __init__(self, t:Class[Type]):
-		self._t = t
-		self._pytype = t._pytype
-		self._size = Boolean._size + t._size
-
-	@classmethod
-	def write(cls, data:Optional[Any], buffer:io.BytesIO):
-		Boolean.write(bool(data), buffer)
-		if data:
-			cls._t.write(data, buffer)
-
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> Optional[Any]:
-		if Boolean.read(buffer):
-			return cls._t.read(buffer)
-		return None
-
-class Array(Type):
-	_counter : Class[Type] = VarInt
-	_content : Class[Type] = Byte
-	_pytype : type = bytes
-
-	def __init__(self, content:Class[Type] = Byte, counter:Class[Type] = VarInt):
-		self._content = content
-		self._counter = counter
-
-	@classmethod
-	def write(cls, data:List[Any], buffer:io.BytesIO):
-		cls._counter.write(len(data), buffer)
-		for el in data:
-			cls._content.write(el, buffer)
-
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> List[Any]:
-		length = cls._counter.read(buffer)
-		return [ cls._content.read(buffer) for _ in range(length) ]
-
-class String(Type):
-	_pytype : type = str
-
-	@classmethod
-	def write(cls, data:str, buffer:io.BytesIO):
+	def write(self, data:str, buffer:io.BytesIO, ctx:object=None):
 		encoded = data.encode('utf-8')
-		VarInt.write(len(encoded), buffer)
+		VarInt.write(len(encoded), buffer, ctx=ctx)
 		buffer.write(encoded)
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> str:
-		length = VarInt.read(buffer)
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> str:
+		length = VarInt.read(buffer, ctx=ctx)
 		return buffer.read(length).decode('utf-8')
 
-class ByteArray(Type):
-	_pytype : type = bytes
+String = StringType()
+Chat = StringType()
+Identifier = StringType()
 
-	@classmethod
-	def write(cls, data:bytes, buffer:io.BytesIO):
-		VarInt.write(len(data), buffer)
+class BufferType(Type):
+	pytype : type = bytes
+	count : Type
+
+	def __init__(self, count:Type = VarInt):
+		self.count = count
+
+	def write(self, data:bytes, buffer:io.BytesIO, ctx:object=None):
+		self.count.write(len(data), buffer, ctx=ctx)
 		buffer.write(data)
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> bytes:
-		length = VarInt.read(buffer)
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> bytes:
+		length = self.count.read(buffer, ctx=ctx)
 		return buffer.read(length)
 
-class IntegerByteArray(Type):
-	_pytype : type = bytes
+ByteArray = BufferType()
+IntegerByteArray = BufferType(Int)
 
-	@classmethod
-	def write(cls, data:bytes, buffer:io.BytesIO):
-		Int.write(len(data), buffer)
-		buffer.write(data)
+class PositionType(Type):
+	pytype : type = tuple
+	MAX_SIZE : int = 8
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> bytes:
-		length = Int.read(buffer)
-		return buffer.read(length)
+	# TODO THIS IS FOR 1.12.2!!! Make a generic version-less?
 
-class Chat(String):
-	_pytype : type = str
-
-class Identifier(String):
-	_pytype : type = str
-
-class Angle(Type):
-	_pytype : type = int
-	_size : int = 1
-	_fmt : str = ">b"
-
-class EntityMetadataItem(Type):
-	_pytype : type = bytes
-	# TODO
-	pass
-
-class NBTTag(Type):
-	_pytype : type = bytes
-	# TODO
-	pass
-
-class Position(Type):
-	_pytype : type = tuple
-	_size = 8
-
-	# TODO THIS IS FOR 1.12.2!!!
-
-	@classmethod
-	def write(cls, data:tuple, buffer:io.BytesIO):
+	def write(self, data:tuple, buffer:io.BytesIO, ctx:object=None):
 		packed = ((0x3FFFFFF & data[0]) << 38) | ((0xFFF & data[1]) << 26) | (0x3FFFFFF & data[2])
-		UnsignedLong.write(packed, buffer)
+		UnsignedLong.write(packed, buffer, ctx=ctx)
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> tuple:
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> tuple:
 		packed = UnsignedLong.read(buffer)
 		x = packed >> 38
 		y = (packed >> 24) & 0xFFF
 		z = packed & 0x3FFFFFF
 		return (x, y, z)
 
-class UUID(Type):
-	_pytype : type = str
-	_size = 16
+Position = PositionType()
 
-	@classmethod
-	def write(cls, data:uuid.UUID, buffer:io.BytesIO):
-		buffer.write(int(data).to_bytes(cls._size, 'big'))
+class UUIDType(Type):
+	pytype : type = str # TODO maybe use partial with uuid constructor?
+	MAX_SIZE : int = 16
 
-	@classmethod
-	def read(cls, buffer:io.BytesIO) -> uuid.UUID:
-		return uuid.UUID(int=int.from_bytes(buffer.read(cls._size), 'big'))
+	def write(self, data:uuid.UUID, buffer:io.BytesIO, ctx:object=None):
+		buffer.write(int(data).to_bytes(self.MAX_SIZE, 'big'))
+
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> uuid.UUID:
+		return uuid.UUID(int=int.from_bytes(buffer.read(self.MAX_SIZE), 'big'))
+
+UUID = UUIDType()
+
+class ArrayType(Type):
+	pytype : type = list
+	counter : Type
+	content : Type
+
+	def __init__(self, content:Type, counter:Type = VarInt):
+		self.content = content
+		self.counter = counter
+
+	def write(self, data:List[Any], buffer:io.BytesIO, ctx:object=None):
+		self.counter.write(len(data), buffer, ctx=ctx)
+		for el in data:
+			self.content.write(el, buffer, ctx=ctx)
+
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> List[Any]:
+		length = self.counter.read(buffer, ctx=ctx)
+		return [ self.content.read(buffer, ctx=ctx) for _ in range(length) ]
+
+class OptionalType(Type):
+	t : Type
+
+	def __init__(self, t:Type):
+		self.t = t
+		self.pytype = t.pytype
+
+	def write(self, data:Optional[Any], buffer:io.BytesIO, ctx:object=None):
+		Boolean.write(bool(data), buffer, ctx=ctx)
+		if data:
+			self.t.write(data, buffer, ctx=ctx)
+
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Optional[Any]:
+		if Boolean.read(buffer, ctx=ctx):
+			return self.t.read(buffer, ctx=ctx)
+		return None
+
+class SwitchType(Type):
+	field : str
+	mappings : Dict[Any, Type]
+
+	def __init__(self, watch:str, mappings:Dict[Any, Type], default:Type = None):
+		self.field = watch
+		self.mappings = mappings
+		self.default = default
+
+	def write(self, data:Any, buffer:io.BytesIO, ctx:object=None):
+		watched = getattr(ctx, self.field)
+		if watched in self.mappings:
+			return self.mappings[watched].write(data, buffer, ctx=ctx)
+		elif self.default:
+			return self.default.write(data, buffer, ctx=ctx)
+
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Dict[str, Any]:
+		watched = getattr(ctx, self.field)
+		if watched in self.mappings:
+			return self.mappings[watched].read(buffer, ctx=ctx)
+		elif self.default:
+			return self.default.read(buffer, ctx=ctx)
+		return {}
+
+class StructType(Type):
+	pytype : type = dict
+	fields : Tuple[Tuple[str, Type], ...]
+
+	def __init__(self, *args:Tuple[str, Type]):
+		self.fields = args
+
+	def write(self, data:Dict[str, Any], buffer:io.BytesIO, ctx:object=None):
+		for k, t in self.fields:
+			t.write(data[k], buffer, ctx=ctx)
+
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Dict[str, Any]:
+		return { k : t.read(buffer, ctx=ctx) for k, t in self.fields }
+
 
