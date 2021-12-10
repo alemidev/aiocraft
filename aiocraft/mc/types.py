@@ -3,7 +3,7 @@ import struct
 import asyncio
 import uuid
 
-from typing import List, Tuple, Dict, Any, Optional, Type as Class
+from typing import List, Tuple, Dict, Any, Union, Optional, Type as Class
 
 class Type(object):
 	pytype : type
@@ -109,7 +109,7 @@ class VarLenPrimitive(Type):
 
 	def deserialize(self, data:bytes) -> int:
 		buf = io.BytesIO(data)
-		return self.read(buf, ctx=ctx)
+		return self.read(buf)
 
 VarInt = VarLenPrimitive(5)
 VarLong = VarLenPrimitive(10)
@@ -181,20 +181,23 @@ UUID = UUIDType()
 
 class ArrayType(Type):
 	pytype : type = list
-	counter : Type
+	counter : Union[int, Type]
 	content : Type
 
-	def __init__(self, content:Type, counter:Type = VarInt):
+	def __init__(self, content:Type, counter:Union[int, Type] = VarInt):
 		self.content = content
 		self.counter = counter
 
 	def write(self, data:List[Any], buffer:io.BytesIO, ctx:object=None):
-		self.counter.write(len(data), buffer, ctx=ctx)
-		for el in data:
+		if isinstance(self.counter, Type):
+			self.counter.write(len(data), buffer, ctx=ctx)
+		for i, el in enumerate(data):
 			self.content.write(el, buffer, ctx=ctx)
+			if isinstance(self.counter, int) and i >= self.counter:
+				break # jank but should do
 
 	def read(self, buffer:io.BytesIO, ctx:object=None) -> List[Any]:
-		length = self.counter.read(buffer, ctx=ctx)
+		length = self.counter if isinstance(self.counter, int) else self.counter.read(buffer, ctx=ctx)
 		return [ self.content.read(buffer, ctx=ctx) for _ in range(length) ]
 
 class OptionalType(Type):
@@ -230,13 +233,13 @@ class SwitchType(Type):
 		elif self.default:
 			return self.default.write(data, buffer, ctx=ctx)
 
-	def read(self, buffer:io.BytesIO, ctx:object=None) -> Dict[str, Any]:
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Optional[Any]:
 		watched = getattr(ctx, self.field)
 		if watched in self.mappings:
 			return self.mappings[watched].read(buffer, ctx=ctx)
 		elif self.default:
 			return self.default.read(buffer, ctx=ctx)
-		return {}
+		return None
 
 class StructType(Type):
 	pytype : type = dict

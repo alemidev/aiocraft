@@ -17,8 +17,6 @@ from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
 
-DIFFICULT_PACKETS = (28, 36, 77) # Explosion, Map, Advancements
-
 class InvalidState(Exception):
 	pass
 
@@ -217,8 +215,6 @@ class Dispatcher:
 						buffer = io.BytesIO(decompressed_data)
 
 				packet_id = VarInt.read(buffer)
-				if packet_id in DIFFICULT_PACKETS:
-					continue # don't try to parse, can't handle types this complex (yet! TODO)
 				cls = self._packet_type_from_registry(packet_id)
 				self._logger.debug("Deserializing packet %s | %s", str(cls), cls._state)
 				packet = cls.deserialize(self.proto, buffer)
