@@ -10,8 +10,11 @@ class BlockPos:
 	z : float
 
 	@classmethod
-	def from_tuple(cls, t:Tuple[int, int, int]):
-		return cls(x=t[0], y=t[1], z=t[2])
+	def from_tuple(cls, t:Tuple[float, float, float]):
+		return cls(x=float(t[0]), y=float(t[1]), z=float(t[2]))
+
+	def to_tuple(self, cast=float) -> Tuple[float, float, float]:
+		return (cast(self.x), cast(self.y), cast(self.z))
 
 	def distance(self, p:'BlockPos'):
 		return sqrt(
