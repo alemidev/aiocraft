@@ -17,7 +17,7 @@ from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
 
-DIFFICULT_PACKETS = (28, 36) # Explosion, Map
+DIFFICULT_PACKETS = (28, 36, 77) # Explosion, Map, Advancements
 
 class InvalidState(Exception):
 	pass
