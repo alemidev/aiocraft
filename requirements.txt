@@ -1,3 +1,4 @@
+pynbt
 cryptography
 aiohttp
 termcolor
