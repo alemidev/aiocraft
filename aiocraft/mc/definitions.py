@@ -9,6 +9,22 @@ class BlockPos:
 	y : float
 	z : float
 
+	def __equals__(self, other) -> bool:
+		if not isinstance(other, self.__class__):
+			return False
+		return self.x == other.x \
+			and self.y == other.y \
+			and self.z == other.z
+
+	def __repr__(self) -> str:
+		return f"{self.__class__.__name__}(x={self.x},y={self.y},z={self.z})"
+
+	def __str__(self) -> str:
+		return repr(self)
+
+	def __hash__(self) -> int:
+		return hash(repr(self)) # TODO VERY cheap hack but Cantor pairing or hash combining is not something I want to get into now
+
 	@classmethod
 	def from_tuple(cls, t:Tuple[float, float, float]):
 		return cls(x=float(t[0]), y=float(t[1]), z=float(t[2]))
