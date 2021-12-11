@@ -6,19 +6,19 @@ from typing import Tuple, Dict, Any
 from .types import Type, VarInt
 
 class Packet:
-	__slots__ = 'definition', '_processed', '_protocol', '_state'
+	__slots__ = 'definition', '_processed', '_proto', '_state'
 
 	id : int
 	definition : Tuple[Tuple[str, Type]]
 	_processed : Event
-	_protocol : int
+	_proto : int
 	_state : int
 
 	_ids : Dict[int, int] # definitions are compiled at install time
 	_definitions : Dict[int, Tuple[Tuple[str, Type]]] # definitions are compiled at install time
 
 	def __init__(self, proto:int, **kwargs):
-		self._protocol = proto
+		self._proto = proto
 		self._processed = Event()
 		self.definition = self._definitions[proto]
 		self.id = self._ids[proto]
@@ -50,7 +50,7 @@ class Packet:
 	def __eq__(self, other) -> bool:
 		if not isinstance(other, self.__class__):
 			return False
-		if self._protocol != other._protocol:
+		if self._proto != other._proto:
 			return False
 		for name, t in self.definition:
 			if getattr(self, name) != getattr(other, name):
@@ -61,14 +61,15 @@ class Packet:
 	def __str__(self) -> str:
 		obj : Dict[str, Any] = {} # could be done with dict comp but the _ key gets put last :(
 		obj["_"] = self.__class__.__name__
-		obj["_proto"] = self._protocol
+		obj["_proto"] = self._proto
 		obj["_state"] = self._state
 		for key, t in self.definition:
 			obj[key] = getattr(self, key, None)
 		return json.dumps(obj, indent=2, default=str)
 
 	def __repr__(self) -> str:
-		attrs = (f"{key}={repr(getattr(self, key, None))}" for (key, t) in self.definition)
-		return f"{self.__class__.__name__}({self._protocol}, {', '.join(attrs)})"
+		trunc = lambda x : x if len(x) < 100 else "[blob]"
+		attrs = (f"{key}={trunc(repr(getattr(self, key, None)))}" for (key, t) in self.definition)
+		return f"{self.__class__.__name__}({self._proto}, {', '.join(attrs)})"
 
 
