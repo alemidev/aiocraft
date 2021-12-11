@@ -136,7 +136,7 @@ def mctype(slot_type:Any) -> Ref:
 			return Ref('SwitchType',
 				v["compareTo"].split('/')[-1],
 				Ref(format_dict({int(k) if k.isnumeric() else repr(k):mctype(x) for k,x in v["fields"].items()}, depth=0)),
-				v["default"] if "default" in v and v['default'] != 'void' else None,
+				mctype(v["default"]) if "default" in v and v['default'] != 'void' else None,
 			)
 			# return SwitchType(mctype(v)) # TODO
 		elif t == "bitfield":
