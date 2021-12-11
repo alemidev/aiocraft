@@ -199,7 +199,6 @@ class Dispatcher:
 	async def _down_worker(self, timeout:float=30):
 		while self._dispatching:
 			try: # these 2 will timeout or raise EOFError if client gets disconnected
-				self._logger.debug("Reading packet")
 				data = await asyncio.wait_for(self._read_packet(), timeout=timeout)
 
 				if self.encryption:
@@ -220,9 +219,8 @@ class Dispatcher:
 				if packet_id in BROKEN_PACKETS:
 					continue # cheap fix, still need to implement NBT, Slot and EntityMetadata...
 				cls = self._packet_type_from_registry(packet_id)
-				self._logger.debug("Deserializing packet %s | %s", str(cls), cls._state)
 				packet = cls.deserialize(self.proto, buffer)
-				self._logger.debug("[<--] Received | %s", str(packet))
+				self._logger.debug("[<--] Received | %s", repr(packet))
 				await self._incoming.put(packet)
 				if self.state != ConnectionState.PLAY:
 					await self._incoming.join() # During play we can pre-process packets
@@ -236,7 +234,8 @@ class Dispatcher:
 				self._logger.error("Received EOF while reading packet")
 				await self.disconnect(block=False)
 			except Exception:
-				self._logger.exception("Exception parsing packet %d | %s", packet_id, buffer.getvalue())
+				self._logger.exception("Exception parsing packet %d", packet_id)
+				self._logger.debug("%s", buffer.getvalue())
 				await self.disconnect(block=False)
 
 	async def _up_worker(self, timeout=1):
@@ -270,7 +269,7 @@ class Dispatcher:
 				self._up.write(data)
 				await self._up.drain()
 
-				self._logger.debug("[-->] Sent | %s", str(packet))
+				self._logger.debug("[-->] Sent | %s", repr(packet))
 			except Exception:
 				self._logger.exception("Exception dispatching packet %s", str(packet))
 

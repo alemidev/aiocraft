@@ -268,7 +268,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		self.dispatcher.state = ConnectionState.PLAY
 		self.run_callbacks(ClientEvent.CONNECTED)
 		async for packet in self.dispatcher.packets():
-			self._logger.debug("[ * ] Processing | %s", str(packet))
+			self._logger.debug("[ * ] Processing %s", packet.__class__.__name__)
 			if isinstance(packet, PacketSetCompression):
 				self._logger.info("Compression updated")
 				self.dispatcher.compression = packet.threshold
