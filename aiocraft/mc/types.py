@@ -205,7 +205,7 @@ class PositionType(Type):
 Position = PositionType()
 
 class UUIDType(Type):
-	pytype : type = str # TODO maybe use partial with uuid constructor?
+	pytype : type = uuid.UUID
 	MAX_SIZE : int = 16
 
 	def write(self, data:uuid.UUID, buffer:io.BytesIO, ctx:object=None):
