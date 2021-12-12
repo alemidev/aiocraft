@@ -191,7 +191,7 @@ class PositionType(Type):
 
 	def write(self, data:tuple, buffer:io.BytesIO, ctx:object=None):
 		packed = ((0x3FFFFFF & data[0]) << 38) \
-			| ((0xFFF & data[1]) << 12) \
+			| ((0xFFF & data[1]) << 26) \
 			| (0x3FFFFFF & data[2])
 		UnsignedLong.write(packed, buffer, ctx=ctx)
 
