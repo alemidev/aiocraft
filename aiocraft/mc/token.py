@@ -45,9 +45,9 @@ class Token:
 	def dict(self):
 		return {
 			"username":self.username,
-			"access_token":self.access_token,
-			"client_token":self.client_token,
-			"profile": self.profile.dict(),
+			"accessToken":self.access_token,
+			"clientToken":self.client_token,
+			"selectedProfile": self.profile.dict(),
 		}
 
 	@classmethod
@@ -58,7 +58,7 @@ class Token:
 	@classmethod
 	def from_dict(cls, data:dict):
 		return cls(
-			username=data["username"],
+			username=data["selectedProfile"]["name"],
 			access_token=data["accessToken"],
 			client_token=data["clientToken"],
 			profile=Profile(**data["selectedProfile"]),
