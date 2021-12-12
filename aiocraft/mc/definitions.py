@@ -23,7 +23,7 @@ class BlockPos:
 		return repr(self)
 
 	def __hash__(self) -> int:
-		return hash(repr(self)) # TODO VERY cheap hack but Cantor pairing or hash combining is not something I want to get into now
+		return hash(self.to_tuple())
 
 	@classmethod
 	def from_tuple(cls, t:Tuple[float, float, float]):
