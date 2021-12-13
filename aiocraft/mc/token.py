@@ -42,6 +42,22 @@ class Token:
 	CONTENT_TYPE = "application/json"
 	HEADERS = {"content-type": CONTENT_TYPE}
 
+	def __equals__(self, other) -> bool:
+		if not isinstance(other, self.__class__):
+			return False
+		if self.accessToken == other.accessToken \
+		and self.clientToken == other.clientToken \
+		and self.selectedProfile == other.selectedProfile:
+			# username doesn't matter, it can be included or not and we can fetch it at later time
+			return True
+		return False
+
+	def __repr__(self) -> str:
+		return json.dumps(self.as_dict())
+
+	def __str__(self) -> str:
+		return repr(self)
+
 	def as_dict(self):
 		return {
 			"username":self.username,
