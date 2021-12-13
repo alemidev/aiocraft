@@ -63,7 +63,7 @@ class Token:
 			"username":self.username,
 			"accessToken":self.accessToken,
 			"clientToken":self.clientToken,
-			"selectedProfile": self.profile.as_dict(),
+			"selectedProfile": self.selectedProfile.as_dict(),
 		}
 
 	@classmethod
