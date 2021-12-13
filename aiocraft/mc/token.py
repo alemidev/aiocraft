@@ -22,7 +22,7 @@ class Profile:
 	id : str
 	name : str
 
-	def dict(self):
+	def as_dict(self):
 		return {
 			"id": self.id,
 			"name": self.name
@@ -31,9 +31,9 @@ class Profile:
 @dataclass
 class Token:
 	username : str
-	access_token : str
-	client_token : str
-	profile : Profile
+	accessToken : str
+	clientToken : str
+	selectedProfile : Profile
 
 	AGENT_NAME = "Minecraft"
 	AGENT_VERSION = 1
@@ -42,26 +42,26 @@ class Token:
 	CONTENT_TYPE = "application/json"
 	HEADERS = {"content-type": CONTENT_TYPE}
 
-	def dict(self):
+	def as_dict(self):
 		return {
 			"username":self.username,
-			"accessToken":self.access_token,
-			"clientToken":self.client_token,
-			"selectedProfile": self.profile.dict(),
+			"accessToken":self.accessToken,
+			"clientToken":self.clientToken,
+			"selectedProfile": self.profile.as_dict(),
 		}
 
 	@classmethod
 	def from_file(cls, fname:str):
 		with open(fname) as f:
-			return cls.from_json(json.load(f))
+			return cls.from_dict(json.load(f))
 
 	@classmethod
 	def from_dict(cls, data:dict):
 		return cls(
 			username=data["selectedProfile"]["name"],
-			access_token=data["accessToken"],
-			client_token=data["clientToken"],
-			profile=Profile(**data["selectedProfile"]),
+			accessToken=data["accessToken"],
+			clientToken=data["clientToken"],
+			selectedProfile=Profile(**data["selectedProfile"]),
 		)
 
 	@classmethod
@@ -82,9 +82,9 @@ class Token:
 
 		return cls(
 			username=username,
-			access_token=res["accessToken"],
-			client_token=res["clientToken"],
-			profile=Profile(**res["selectedProfile"])
+			accessToken=res["accessToken"],
+			clientToken=res["clientToken"],
+			selectedProfile=Profile(**res["selectedProfile"])
 		)
 
 	@classmethod
@@ -94,34 +94,38 @@ class Token:
 			"password": password
 		})
 
-	async def refresh(self) -> dict:
+	async def refresh(self, requestUser:bool = False) -> dict:
 		res = await self._post(self.AUTH_SERVER + "/refresh", {
-			"accessToken": self.access_token,
-			"clientToken": self.client_token
+			"accessToken": self.accessToken,
+			"clientToken": self.clientToken
 		})
 
-		self.access_token = res["accessToken"]
-		self.client_token = res["clientToken"]
-		self.profile = Profile(**res["selectedProfile"])
+		self.accessToken = res["accessToken"]
+		self.clientToken = res["clientToken"]
+		self.selectedProfile = Profile(**res["selectedProfile"])
+
+		if "user" in res:
+			self.username = res["user"]["username"]
 
 		return res
 
-	async def validate(self) -> dict:
-		return await self._post(self.AUTH_SERVER + "/validate", {
-			"accessToken": self.access_token
-		})
+	async def validate(self, clientToken:bool = True) -> dict:
+		payload = { "accessToken": self.accessToken }
+		if clientToken:
+			payload["clientToken"] = self.clientToken
+		return await self._post(self.AUTH_SERVER + "/validate", payload)
 
 	async def invalidate(self) -> dict:
 		return await self._post(self.AUTH_SERVER + "/invalidate", {
-			"accessToken": self.access_token,
-			"clientToken": self.client_token
+			"accessToken": self.accessToken,
+			"clientToken": self.clientToken
 		})
 
 	async def join(self, server_id) -> dict:
 		return await self._post(self.SESSION_SERVER + "/join", {
 			"serverId": server_id,
-			"accessToken": self.access_token,
-			"selectedProfile": self.profile.dict()
+			"accessToken": self.accessToken,
+			"selectedProfile": self.selectedProfile.as_dict()
 		})
 
 	@classmethod

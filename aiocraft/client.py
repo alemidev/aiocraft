@@ -208,7 +208,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		await self.dispatcher.write(
 			PacketLoginStart(
 				340,
-				username=self.token.profile.name if self.online_mode and self.token else self.username
+				username=self.token.selectedProfile.name if self.online_mode and self.token else self.username
 			)
 		)
 		return True
