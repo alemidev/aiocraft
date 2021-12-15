@@ -18,7 +18,7 @@ def _raise_from_json(endpoint:str, data:dict):
 	raise AuthException(f"[{action}] {err_type} : {err_msg}")
 
 @dataclass
-class Profile:
+class GameProfile:
 	id : str
 	name : str
 
@@ -33,7 +33,7 @@ class Token:
 	username : str
 	accessToken : str
 	clientToken : str
-	selectedProfile : Profile
+	selectedProfile : GameProfile
 
 	AGENT_NAME = "Minecraft"
 	AGENT_VERSION = 1
@@ -74,10 +74,10 @@ class Token:
 	@classmethod
 	def from_dict(cls, data:dict):
 		return cls(
-			username=data["selectedProfile"]["name"],
+			username=data["username"] if "username" in data else data["selectedProfile"]["name"],
 			accessToken=data["accessToken"],
 			clientToken=data["clientToken"],
-			selectedProfile=Profile(**data["selectedProfile"]),
+			selectedProfile=GameProfile(**data["selectedProfile"]),
 		)
 
 	@classmethod
@@ -100,7 +100,7 @@ class Token:
 			username=username,
 			accessToken=res["accessToken"],
 			clientToken=res["clientToken"],
-			selectedProfile=Profile(**res["selectedProfile"])
+			selectedProfile=GameProfile(**res["selectedProfile"])
 		)
 
 	@classmethod
@@ -118,7 +118,7 @@ class Token:
 
 		self.accessToken = res["accessToken"]
 		self.clientToken = res["clientToken"]
-		self.selectedProfile = Profile(**res["selectedProfile"])
+		self.selectedProfile = GameProfile(**res["selectedProfile"])
 
 		if "user" in res:
 			self.username = res["user"]["username"]
