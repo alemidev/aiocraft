@@ -83,6 +83,9 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		self.password = password
 		self.online_mode = online_mode
 
+		if self.online_mode and not self.token and not self.username and not self.password:
+			raise ValueError("Cannot instantiate an online-mode client without token or credentials")
+
 		self.dispatcher = Dispatcher()
 		self._processing = False
 		self._authenticated = False
@@ -115,24 +118,30 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			return fun
 		return wrapper
 
-	async def authenticate(self) -> bool:
+	async def authenticate(self):
 		if self._authenticated:
-			return True # Don't spam Auth endpoint!
-		if not self.token:
-			if self.username and self.password:
-				self.token = await Token.authenticate(self.username, self.password)
-				self._logger.info("Authenticated from credentials")
+			return # Don't spam Auth endpoint!
+		if self.token:
+			try:
+				await self.token.validate() # will raise an exc if token is invalid
 				self._authenticated = True
-				return True
-			raise AuthException("No token or credentials provided")
-		try:
-			await self.token.validate() # will raise an exc if token is invalid
+				return
+			except AuthException:
+				try:
+					await self.token.refresh()
+					self._logger.warning("Refreshed Token")
+					self._authenticated = True
+					return
+				except AuthException as e:
+					self._logger.warning("Token is not refreshable : %s", e.message)
+					if not self.username and not self.password:
+						raise e # we don't have credentials to make a new token, nothing we can really do here
+		if self.username and self.password:
+			self.token = await Token.authenticate(self.username, self.password)
+			self._logger.info("Authenticated from credentials")
 			self._authenticated = True
-		except AuthException:
-			await self.token.refresh()
-			self._authenticated = True
-			self._logger.warning("Refreshed Token")
-		return True
+			return
+		raise ValueError("No token or credentials to authenticate") # This should never happen
 
 	async def change_server(self, server:str):
 		restart = self.started
