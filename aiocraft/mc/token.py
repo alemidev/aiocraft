@@ -9,13 +9,15 @@ from typing import Optional
 import aiohttp
 
 class AuthException(Exception):
-	pass
+	action : str
+	type : str
+	message : str
 
-def _raise_from_json(endpoint:str, data:dict):
-	err_type = data["error"] if data and "error" in data else "Unknown Error"
-	err_msg = data["errorMessage"] if data and "errorMessage" in data else "Credentials invalid or token not refreshable anymore"
-	action = endpoint.rsplit('/',1)[1]
-	raise AuthException(f"[{action}] {err_type} : {err_msg}")
+	def __init__(self, action:str, data:dict):
+		self.type = data["error"] if data and "error" in data else "Unknown"
+		self.message = data["errorMessage"] if data and "errorMessage" in data else "Token or credentials invalid"
+		self.action = action.rsplit('/',1)[1]
+		super().__init__(f"[{self.action}] {self.type} : {self.message}")
 
 @dataclass
 class GameProfile:
@@ -157,7 +159,7 @@ class Token:
 			async with sess.post(endpoint, headers=cls.HEADERS, json=data) as res:
 				data = await res.json(content_type=None)
 				if res.status >= 400:
-					_raise_from_json(endpoint, data)
+					raise AuthException(endpoint, data)
 				return data
 
 	@classmethod
@@ -166,5 +168,5 @@ class Token:
 			async with sess.get(endpoint, headers=cls.HEADERS, params=data) as res:
 				data = await res.json(content_type=None)
 				if res.status >= 400:
-					_raise_from_json(endpoint, data)
+					raise AuthException(endpoint, data)
 				return data
