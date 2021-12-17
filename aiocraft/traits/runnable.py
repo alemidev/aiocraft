@@ -12,7 +12,7 @@ class Runnable:
 		raise NotImplementedError
 
 	async def _stop_wrapper(self):
-		done, pending = await asyncio.wait(self.stop(), FORCE_QUIT.wait(), return_when=asyncio.FIRST_COMPLETED)
+		done, pending = await asyncio.wait((self.stop(), FORCE_QUIT.wait()), return_when=asyncio.FIRST_COMPLETED)
 		if FORCE_QUIT.is_set(): # means previous stop() didn't finish and user sent another SIGINT
 			await self.stop(force=True)
 
