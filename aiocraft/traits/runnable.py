@@ -17,12 +17,17 @@ class Runnable:
 			await self.stop(force=True)
 
 	def run(self):
+		global DONE
+		global FORCE_QUIT
+
 		logging.info("Starting process")
 
 		DONE = asyncio.Event()
 		FORCE_QUIT = asyncio.Event()
 		
 		def signal_handler(signum, __):
+			global DONE
+			global FORCE_QUIT
 			if signum == SIGINT:
 				if DONE.is_set():
 					logging.info("Received SIGINT, terminating")
