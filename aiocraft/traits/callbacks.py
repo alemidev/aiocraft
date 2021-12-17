@@ -17,7 +17,7 @@ class CallbacksHolder:
 		self._tasks = {}
 
 	def callback_keys(self, filter:Type = None) -> Set[Any]:
-		return set(x for x in self._callbacks.keys() if not filter or isinstance(x, filter))
+		return set(x for x in self._callbacks.keys() if not filter or issubclass(x, filter))
 
 	def register(self, key:Any, callback:Callable):
 		if key not in self._callbacks:
