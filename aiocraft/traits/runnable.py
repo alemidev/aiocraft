@@ -22,13 +22,14 @@ class Runnable:
 		DONE = asyncio.Event()
 		FORCE_QUIT = asyncio.Event()
 		
-		def signal_handler():
-			if DONE.is_set():
-				logging.info("Received SIGINT, terminating")
-				FORCE_QUIT.set()
-			else:
-				logging.info("Received SIGINT, stopping gracefully...")
-				DONE.set()
+		def signal_handler(signum, __):
+			if signum == SIGINT:
+				if DONE.is_set():
+					logging.info("Received SIGINT, terminating")
+					FORCE_QUIT.set()
+				else:
+					logging.info("Received SIGINT, stopping gracefully...")
+					DONE.set()
 
 		signal(SIGINT, signal_handler)
 
