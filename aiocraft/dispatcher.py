@@ -5,7 +5,7 @@ import zlib
 import logging
 from asyncio import StreamReader, StreamWriter, Queue, Task
 from enum import Enum
-from typing import List, Dict, Optional, AsyncIterator, Type
+from typing import List, Dict, Set, Optional, AsyncIterator, Type
 
 from cryptography.hazmat.primitives.ciphers import CipherContext
 
@@ -23,8 +23,6 @@ class InvalidState(Exception):
 class ConnectionError(Exception):
 	pass
 
-BROKEN_PACKETS = (77, ) # These packets are still not parseable due to missing data type
-
 class Dispatcher:
 	_is_server : bool # True when receiving packets from clients
 
@@ -40,6 +38,9 @@ class Dispatcher:
 
 	_incoming : Queue
 	_outgoing : Queue
+
+	_packet_whitelist : Set[Packet]
+	_packet_id_whitelist : Set[int]
 
 	_host : str
 	_port : int
@@ -89,15 +90,25 @@ class Dispatcher:
 		self.encryption = True
 		self._logger.info("Encryption enabled")
 
-	def _prepare(self, host:Optional[str] = None, port:Optional[int] = None, queue_timeout:int = 1, queue_size:int = 100):
+	def _prepare(self,
+			host:Optional[str] = None,
+			port:Optional[int] = None,
+			queue_timeout:int = 1,
+			queue_size:int = 100,
+			packet_whitelist : List[Packet] = None
+	):
 		self._host = host or self._host or "localhost"
 		self._port = port or self._port or 25565
 		self._logger = LOGGER.getChild(f"on({self._host}:{self._port})")
+		self._packet_whitelist = packet_whitelist or set()
 
 		self.encryption = False
 		self.compression = None
 		self.state = ConnectionState.HANDSHAKING
 		self.proto = 340 # TODO 
+
+		# This can only happen after we know the connection protocol
+		self._packet_id_whitelist = set((P(self.proto).id for P in packet_whitelist)) if packet_whitelist else set()
 
 		# Make new queues, do set a max size to sorta propagate back pressure
 		self._incoming = Queue(queue_size)
@@ -112,12 +123,13 @@ class Dispatcher:
 			reader : Optional[StreamReader] = None,
 			writer : Optional[StreamWriter] = None,
 			queue_timeout : int = 1,
-			queue_size : int = 100
+			queue_size : int = 100,
+			packet_whitelist : Set[Packet] = None,
 	):
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
 
-		self._prepare(host, port, queue_timeout, queue_size)
+		self._prepare(host, port, queue_timeout, queue_size, packet_whitelist)
 
 		if reader and writer:
 			self._down, self._up = reader, writer
@@ -216,8 +228,9 @@ class Dispatcher:
 						buffer = io.BytesIO(decompressed_data)
 
 				packet_id = VarInt.read(buffer)
-				if packet_id in BROKEN_PACKETS:
-					continue # cheap fix, still need to implement NBT, Slot and EntityMetadata...
+				if self._packet_id_whitelist and packet_id in self._packet_id_whitelist:
+					self._logger.debug("[<--] Received | Packet(0x%02x) (ignored)", packet_id)
+					continue # ignore this packet, we rarely need them all, should improve performance
 				cls = self._packet_type_from_registry(packet_id)
 				packet = cls.deserialize(self.proto, buffer)
 				self._logger.debug("[<--] Received | %s", repr(packet))

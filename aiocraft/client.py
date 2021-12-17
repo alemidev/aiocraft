@@ -27,10 +27,11 @@ LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class ClientOptions:
-	reconnect : bool
-	reconnect_delay : float
-	keep_alive : bool
-	poll_interval : float
+	reconnect : bool = True
+	reconnect_delay : float = 10.0
+	keep_alive : bool = True
+	poll_interval : float = 1.0
+	use_packet_whitelist : bool = True
 
 class ClientEvent(Enum):
 	CONNECTED = 0
@@ -61,22 +62,13 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		password:Optional[str] = None,
 		token:Optional[Token] = None,
 		online_mode:bool = True,
-		reconnect:bool = True,
-		reconnect_delay:float = 10.0,
-		keep_alive:bool = True,
-		poll_interval:float = 1.0,
-
+		**kwargs
 	):
 		super().__init__()
 		self.host = host
 		self.port = port
 
-		self.options = ClientOptions(
-			reconnect=reconnect,
-			reconnect_delay=reconnect_delay,
-			keep_alive=keep_alive,
-			poll_interval=poll_interval
-		)
+		self.options = ClientOptions(**kwargs)
 
 		self.token = token
 		self.username = username
@@ -186,7 +178,13 @@ class MinecraftClient(CallbacksHolder, Runnable):
 					self._logger.error(str(e))
 					break
 			try:
-				await self.dispatcher.connect(self.host, self.port)
+				packet_whitelist = self.callback_keys(filter=Packet) if self.options.use_packet_whitelist else set()
+				await self.dispatcher.connect(
+					self.host,
+					self.port,
+					queue_timeout=self.options.poll_interval,
+					packet_whitelist=packet_whitelist
+				)
 				await self._handshake()
 				if await self._login():
 					await self._play()

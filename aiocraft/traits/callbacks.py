@@ -2,7 +2,7 @@ import asyncio
 import uuid
 import logging
 
-from typing import Dict, List, Any, Callable
+from typing import Dict, List, Set, Any, Callable, Type
 
 class CallbacksHolder:
 
@@ -15,6 +15,9 @@ class CallbacksHolder:
 		super().__init__()
 		self._callbacks = {}
 		self._tasks = {}
+
+	def callback_keys(self, filter:Type = None) -> Set[Any]:
+		return set(x for x in self._callbacks.keys() if not filter or isinstance(x, filter))
 
 	def register(self, key:Any, callback:Callable):
 		if key not in self._callbacks:
