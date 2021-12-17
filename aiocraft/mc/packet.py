@@ -6,7 +6,7 @@ from typing import Tuple, Dict, Any
 from .types import Type, VarInt
 
 class Packet:
-	__slots__ = 'definition', '_processed', '_proto', '_state'
+	__slots__ = 'id', 'definition', '_processed', '_proto', '_state'
 
 	id : int
 	definition : Tuple[Tuple[str, Type]]
@@ -57,12 +57,12 @@ class Packet:
 				return False
 		return True
 
-
 	def __str__(self) -> str:
 		obj : Dict[str, Any] = {} # could be done with dict comp but the _ key gets put last :(
 		obj["_"] = self.__class__.__name__
 		obj["_proto"] = self._proto
 		obj["_state"] = self._state
+		obj["_id"] = f"0x{self.id:02x}"
 		for key, t in self.definition:
 			obj[key] = getattr(self, key, None)
 		return json.dumps(obj, indent=2, default=str)
