@@ -58,3 +58,17 @@ def parse_chat(msg:Union[dict,str], ansi_color:bool=False) -> str:
 		for elem in data["extra"]:
 			out += parse_chat(elem, ansi_color)
 	return out
+
+def format_item(item:dict, compact=False, nbt:bool=False) -> str:
+	if not item:
+		return "[   ]"
+	item_id = f"{item['id']:03d}"
+	item_count = f"x{item['count']}" if 'count' in item else ''
+	item_damage = f"|{item['damage']:03d}" if 'damage' in item else ''
+	nbt = item['nbt'].pretty() if 'nbt' in item else ''
+	if compact:
+		return f"[{item_id:03d}]"
+	if nbt:
+		return f"[{item_id}{item_count}{item_damage}]({nbt})"
+	return f"[{item_id}{item_count}{item_damage}]"
+
