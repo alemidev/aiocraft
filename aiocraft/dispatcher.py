@@ -100,7 +100,11 @@ class Dispatcher:
 		self._host = host or self._host or "localhost"
 		self._port = port or self._port or 25565
 		self._logger = LOGGER.getChild(f"on({self._host}:{self._port})")
-		self._packet_whitelist = packet_whitelist or set()
+		self._packet_whitelist = set(packet_whitelist) or set()
+		if self._packet_whitelist:
+			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKeepAlive)
+			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKickDisconnect)
+			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketSetCompression)
 
 		self.encryption = False
 		self.compression = None
@@ -108,7 +112,7 @@ class Dispatcher:
 		self.proto = 340 # TODO 
 
 		# This can only happen after we know the connection protocol
-		self._packet_id_whitelist = set((P(self.proto).id for P in packet_whitelist)) if packet_whitelist else set()
+		self._packet_id_whitelist = set((P(self.proto).id for P in self._packet_whitelist)) if self._packet_whitelist else set()
 
 		# Make new queues, do set a max size to sorta propagate back pressure
 		self._incoming = Queue(queue_size)
