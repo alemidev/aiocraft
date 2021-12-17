@@ -100,11 +100,10 @@ class Dispatcher:
 		self._host = host or self._host or "localhost"
 		self._port = port or self._port or 25565
 		self._logger = LOGGER.getChild(f"on({self._host}:{self._port})")
-		self._packet_whitelist = set(packet_whitelist) or set()
+		self._packet_whitelist = set(packet_whitelist) if packet_whitelist else set()
 		if self._packet_whitelist:
 			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKeepAlive)
 			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKickDisconnect)
-			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketSetCompression)
 
 		self.encryption = False
 		self.compression = None
