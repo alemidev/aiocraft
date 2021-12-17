@@ -65,10 +65,10 @@ def format_item(item:dict, compact=False, nbt:bool=False) -> str:
 	item_id = f"{item['id']:03d}"
 	item_count = f"x{item['count']}" if 'count' in item else ''
 	item_damage = f"|{item['damage']:03d}" if 'damage' in item else ''
-	nbt = item['nbt'].pretty() if 'nbt' in item else ''
+	item_nbt = item['nbt'].pretty() if 'nbt' in item else ''
 	if compact:
 		return f"[{item_id:03d}]"
 	if nbt:
-		return f"[{item_id}{item_count}{item_damage}]({nbt})"
+		return f"[{item_id}{item_count}{item_damage}]({item_nbt})"
 	return f"[{item_id}{item_count}{item_damage}]"
 
