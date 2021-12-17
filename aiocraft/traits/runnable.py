@@ -1,6 +1,8 @@
 import asyncio
 import logging
 
+from signal import signal, SIGINT, SIGTERM, SIGABRT
+
 class Runnable:
 
 	async def start(self):
@@ -9,27 +11,35 @@ class Runnable:
 	async def stop(self, force:bool=False):
 		raise NotImplementedError
 
+	async def _stop_wrapper(self):
+		done, pending = await asyncio.wait(self.stop(), FORCE_QUIT.wait(), return_when=asyncio.FIRST_COMPLETED)
+		if FORCE_QUIT.is_set(): # means previous stop() didn't finish and user sent another SIGINT
+			await self.stop(force=True)
+
 	def run(self):
+		logging.info("Starting process")
+
+		DONE = asyncio.Event()
+		FORCE_QUIT = asyncio.Event()
+		
+		def signal_handler():
+			if DONE.is_set():
+				logging.info("Received SIGINT, terminating")
+				FORCE_QUIT.set()
+			else:
+				logging.info("Received SIGINT, stopping gracefully...")
+				DONE.set()
+
+		signal(SIGINT, signal_handler)
+
 		loop = asyncio.get_event_loop()
 
-		logging.info("Starting")
+		async def main():
+			await self.start()
+			await DONE.wait()
+			await self._stop_wrapper()
 
-		loop.run_until_complete(self.start())
+		loop.run_until_complete(main())
 
-		async def idle():
-			never = asyncio.Event()
-			logging.info("Idling")
-			await never.wait()
-
-		try:
-			loop.run_until_complete(idle())
-		except KeyboardInterrupt:
-			logging.info("Received SIGINT, stopping...")
-			try:
-				loop.run_until_complete(self.stop())
-			except KeyboardInterrupt:
-				logging.info("Received SIGINT, stopping for real")
-				loop.run_until_complete(self.stop(force=True))
-
-		logging.info("Done")
+		logging.info("Process finished")
 
