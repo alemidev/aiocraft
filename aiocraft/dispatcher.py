@@ -228,7 +228,8 @@ class Dispatcher:
 						buffer = io.BytesIO(decompressed_data)
 
 				packet_id = VarInt.read(buffer)
-				if self._packet_id_whitelist and packet_id in self._packet_id_whitelist:
+				if self.state == ConnectionState.PLAY and self._packet_id_whitelist \
+				and packet_id not in self._packet_id_whitelist:
 					self._logger.debug("[<--] Received | Packet(0x%02x) (ignored)", packet_id)
 					continue # ignore this packet, we rarely need them all, should improve performance
 				cls = self._packet_type_from_registry(packet_id)
