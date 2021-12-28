@@ -153,6 +153,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			await self.start()
 
 	async def start(self):
+		await super().start()
 		if self.started:
 			return
 		self._processing = True
@@ -168,6 +169,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			self._logger.info("Minecraft client stopped")
 		if not force:
 			await self.join_callbacks()
+		await super().stop(force)
 
 	async def _client_worker(self):
 		while self._processing:
