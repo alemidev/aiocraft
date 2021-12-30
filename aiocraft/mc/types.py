@@ -308,7 +308,7 @@ class SlotType(Type):
 			Byte.write(data["count"], buffer)
 			if not new_way:
 				Short.write(data["damage"], buffer)
-			NBTTag.write(data["nbt"], buffer)
+			NBTTag.write(data["nbt"], buffer) # TODO handle None ?
 		else:
 			check_type.write(False if new_way else -1, buffer)
 

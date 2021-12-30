@@ -1,15 +1,15 @@
 from setuptools import setup, find_packages
 
-from compiler.proto import compile
-
-compile()
+# # This was done at install time, I did it once and pushed it until there's no documentation
+# from compiler.proto import compile
+# compile()
 
 with open("requirements.txt") as f:
 	requirements = f.read().split("\n")
 
 setup(
 	name='aiocraft',
-	version='0.0.6',
+	version='0.0.7',
 	description='asyncio-powered headless minecraft client library',
 	url='https://github.com/alemidev/aiocraft',
 	author='alemi',
