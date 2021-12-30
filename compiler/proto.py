@@ -276,7 +276,8 @@ def compile():
 	# First folder starting with PrismarineJS
 	folder_name = next(folder for folder in os.listdir(mc_path) if folder.startswith("PrismarineJS"))
 
-	shutil.rmtree(mc_path / 'proto')
+	if os.path.isdir(mc_path / 'proto'):
+		shutil.rmtree(mc_path / 'proto')
 
 	PACKETS = {
 		"handshaking": {
