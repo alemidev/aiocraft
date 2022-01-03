@@ -46,8 +46,6 @@ class UnimplementedDataType(Type):
 		return buffer.read()
 
 TrailingData = UnimplementedDataType()
-EntityMetadata = UnimplementedDataType()
-EntityMetadataItem = UnimplementedDataType()
 
 class PrimitiveType(Type):
 	size : int
@@ -329,6 +327,47 @@ class SlotType(Type):
 		return slot
 
 Slot = SlotType()
-# Slot = TrailingData
+
+_ENTITY_METADATA_TYPES = {
+	0 : Byte,
+	1 : VarInt,
+	2 : Float,
+	3 : String,
+	4 : Chat,
+	5 : OptionalType(Chat), # Chat is present if the Boolean is set to true
+	6 : Slot,
+	7 : Boolean,
+	8 : StructType(("x", Float), ("y", Float), ("z", Float)), # Rotation
+	9 : Position,
+	10 : OptionalType(Position),
+	11 : VarInt, # Direction (Down = 0, Up = 1, North = 2, South = 3, West = 4, East = 5)
+	12 : OptionalType(UUID),
+	13 : VarInt, # OptBlockID (VarInt) 0 for absent (implies air); otherwise, a block state ID as per the global palette
+	14 : NBTTag,
+	15 : TrailingData, # Particle, # TODO!
+	16 : StructType(("type", VarInt), ("profession", VarInt), ("level", VarInt)), # Villager Data
+	17 : OptionalType(VarInt), # Used for entity IDs.
+	18 : VarInt, # Pose 0: STANDING, 1: FALL_FLYING, 2: SLEEPING, 3: SWIMMING, 4: SPIN_ATTACK, 5: SNEAKING, 6: LONG_JUMPING, 7: DYING 
+}
+
+class EntityMetadataType(Type):
+	pytype : type = dict
+
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Dict[int, Any]:
+		out : Dict[int, Any] = {}
+
+		while True:
+			index = UnsignedByte.read(buffer, ctx)
+			logging.info("Read index byte : 0x%02x", index)
+			if index == 0xFF:
+				break
+			tp = VarInt.read(buffer, ctx)
+			logging.info("Read type : %d", tp)
+			out[index] = _ENTITY_METADATA_TYPES[tp].read(buffer, ctx)
+			logging.info("Read data : %s", str(out[index]))
+
+		return out
 
 
+# EntityMetadata = EntityMetadataType()
+EntityMetadata = UnimplementedDataType()
