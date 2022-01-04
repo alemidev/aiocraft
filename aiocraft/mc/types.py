@@ -10,7 +10,7 @@ from typing import List, Tuple, Dict, Any, Union, Optional, Type as Class
 
 
 class Type(object):
-	pytype : type
+	pytype : type = lambda x : x
 
 	def write(self, data:Any, buffer:io.BytesIO, ctx:object=None) -> None:
 		"""Write data to a packet buffer"""
@@ -88,7 +88,6 @@ class NBTType(Type):
 		return pynbt.NBTFile(io=buffer)
 
 NBTTag = NBTType()
-# NBTTag = TrailingData
 
 class VarLenPrimitive(Type):
 	pytype : type = int
@@ -98,7 +97,7 @@ class VarLenPrimitive(Type):
 		self.max_bytes = max_bytes
 
 	def write(self, data:int, buffer:io.BytesIO, ctx:object=None):
-		count = 0
+		count = 0 # TODO raise exceptions
 		while count < self.max_bytes:
 			byte = data & 0b01111111
 			data >>= 7
@@ -279,7 +278,7 @@ class SwitchType(Type):
 			return self.default.read(buffer, ctx=ctx)
 		return None
 
-class StructType(Type):
+class StructType(Type): # TODO sub objects
 	pytype : type = dict
 	fields : Tuple[Tuple[str, Type], ...]
 
@@ -292,7 +291,7 @@ class StructType(Type):
 
 	def read(self, buffer:io.BytesIO, ctx:object=None) -> Dict[str, Any]:
 		return { k : t.read(buffer, ctx=ctx) for k, t in self.fields }
-	
+
 class SlotType(Type):
 	pytype : type = dict
 
@@ -328,17 +327,35 @@ class SlotType(Type):
 
 Slot = SlotType()
 
+# wiki.vg does not document these anymore. Minecraft 1.12.2 has these as metadata types
 _ENTITY_METADATA_TYPES = {
-	0 : Byte,
-	1 : VarInt,
-	2 : Float,
-	3 : String,
-	4 : Chat,
-	5 : OptionalType(Chat), # Chat is present if the Boolean is set to true
-	6 : Slot,
-	7 : Boolean,
-	8 : StructType(("x", Float), ("y", Float), ("z", Float)), # Rotation
-	9 : Position,
+	0  : Byte,
+	1  : VarInt,
+	2  : Float,
+	3  : String,
+	4  : Chat,
+	5  : Slot,
+	6  : Boolean,
+	7  : StructType(("x", Float), ("y", Float), ("z", Float)), # Rotation
+	8  : Position,
+	9  : OptionalType(Position),
+	10 : VarInt, # Direction (Down = 0, Up = 1, North = 2, South = 3, West = 4, East = 5)
+	11 : OptionalType(UUID),
+	12 : VarInt, # OptBlockID (VarInt) 0 for absent (implies air); otherwise, a block state ID as per the global palette
+	13 : NBTTag,
+}
+
+_ENTITY_METADATA_TYPES_NEW = {
+	0  : Byte,
+	1  : VarInt,
+	2  : Float,
+	3  : String,
+	4  : Chat,
+	5  : OptionalType(Chat), # Chat is present if the Boolean is set to true
+	6  : Slot,
+	7  : Boolean,
+	8  : StructType(("x", Float), ("y", Float), ("z", Float)), # Rotation
+	9  : Position,
 	10 : OptionalType(Position),
 	11 : VarInt, # Direction (Down = 0, Up = 1, North = 2, South = 3, West = 4, East = 5)
 	12 : OptionalType(UUID),
@@ -353,21 +370,19 @@ _ENTITY_METADATA_TYPES = {
 class EntityMetadataType(Type):
 	pytype : type = dict
 
-	def read(self, buffer:io.BytesIO, ctx:object=None) -> Dict[int, Any]:
-		out : Dict[int, Any] = {}
+	def write(self, data:Dict[int, Any], buffer:io.BytesIO, ctx:object=None):
+		logging.error("Sending entity metadata isn't implemented yet") # TODO
+		buffer.write(0xFF)
 
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Dict[int, Any]:
+		types_map = _ENTITY_METADATA_TYPES_NEW if ctx._proto > 340 else _ENTITY_METADATA_TYPES
+		out : Dict[int, Any] = {}
 		while True:
 			index = UnsignedByte.read(buffer, ctx)
-			logging.info("Read index byte : 0x%02x", index)
 			if index == 0xFF:
 				break
 			tp = VarInt.read(buffer, ctx)
-			logging.info("Read type : %d", tp)
-			out[index] = _ENTITY_METADATA_TYPES[tp].read(buffer, ctx)
-			logging.info("Read data : %s", str(out[index]))
-
+			out[index] = types_map[tp].read(buffer, ctx)
 		return out
 
-
-# EntityMetadata = EntityMetadataType()
-EntityMetadata = UnimplementedDataType()
+EntityMetadata = EntityMetadataType()
