@@ -5,21 +5,21 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntity(Packet):
-	__slots__ = ( 'id', 'objectUUID', 'objectData', 'velocityX', 'entityUUID', 'x', 'yaw', 'entityId', 'y', 'z', 'type', 'pitch', 'velocityY', 'velocityZ' )
+	__slots__ = ( 'id', 'pitch', 'velocityX', 'type', 'x', 'objectUUID', 'velocityY', 'velocityZ', 'z', 'yaw', 'y', 'entityId', 'entityUUID', 'objectData' )
 	
-	objectUUID : str
-	objectData : Union[dict,int]
-	velocityX : int
-	entityUUID : str
-	x : Union[float,int]
-	yaw : int
-	entityId : int
-	y : Union[float,int]
-	z : Union[float,int]
-	type : int
 	pitch : int
+	velocityX : int
+	type : int
+	x : Union[int,float]
+	objectUUID : str
 	velocityY : int
 	velocityZ : int
+	z : Union[int,float]
+	yaw : int
+	y : Union[int,float]
+	entityId : int
+	entityUUID : str
+	objectData : Union[dict,int]
 
 	_state : int = 3
 

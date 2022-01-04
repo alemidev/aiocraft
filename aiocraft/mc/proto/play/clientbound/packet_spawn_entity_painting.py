@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntityPainting(Packet):
-	__slots__ = ( 'id', 'title', 'entityUUID', 'direction', 'entityId', 'location' )
+	__slots__ = ( 'id', 'direction', 'title', 'location', 'entityId', 'entityUUID' )
 	
-	title : Union[str,int]
-	entityUUID : str
 	direction : int
+	title : Union[str,int]
+	location : Union[bytes,tuple]
 	entityId : int
-	location : Union[tuple,bytes]
+	entityUUID : str
 
 	_state : int = 3
 

@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketExperience(Packet):
-	__slots__ = ( 'id', 'level', 'experienceBar', 'totalExperience' )
+	__slots__ = ( 'id', 'experienceBar', 'level', 'totalExperience' )
 	
-	level : int
 	experienceBar : float
+	level : int
 	totalExperience : int
 
 	_state : int = 3

@@ -5,15 +5,15 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityMoveLook(Packet):
-	__slots__ = ( 'id', 'dY', 'dX', 'onGround', 'dZ', 'yaw', 'entityId', 'pitch' )
+	__slots__ = ( 'id', 'dX', 'pitch', 'dY', 'yaw', 'entityId', 'onGround', 'dZ' )
 	
-	dY : int
 	dX : int
-	onGround : bool
-	dZ : int
+	pitch : int
+	dY : int
 	yaw : int
 	entityId : int
-	pitch : int
+	onGround : bool
+	dZ : int
 
 	_state : int = 3
 

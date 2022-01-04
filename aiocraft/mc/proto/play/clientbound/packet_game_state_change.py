@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketGameStateChange(Packet):
-	__slots__ = ( 'id', 'reason', 'gameMode' )
+	__slots__ = ( 'id', 'gameMode', 'reason' )
 	
-	reason : int
 	gameMode : float
+	reason : int
 
 	_state : int = 3
 

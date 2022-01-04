@@ -5,16 +5,16 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSoundEffect(Packet):
-	__slots__ = ( 'id', 'x', 'volume', 'y', 'z', 'soundId', 'pitch', 'parrottedEntityType', 'soundCategory' )
+	__slots__ = ( 'id', 'pitch', 'x', 'soundId', 'parrottedEntityType', 'z', 'y', 'soundCategory', 'volume' )
 	
+	pitch : Union[int,float]
 	x : int
-	volume : float
-	y : int
-	z : int
 	soundId : int
-	pitch : Union[float,int]
 	parrottedEntityType : str
+	z : int
+	y : int
 	soundCategory : int
+	volume : float
 
 	_state : int = 3
 

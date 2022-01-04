@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTileEntityData(Packet):
-	__slots__ = ( 'id', 'action', 'nbtData', 'location' )
+	__slots__ = ( 'id', 'action', 'location', 'nbtData' )
 	
 	action : int
+	location : Union[bytes,tuple]
 	nbtData : bytes
-	location : Union[tuple,bytes]
 
 	_state : int = 3
 
@@ -56,42 +56,42 @@ class PacketTileEntityData(Packet):
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		5 : [ ( 'location', TrailingData ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		47 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		76 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		107 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		108 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		109 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		110 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		201 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		210 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		304 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		315 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		321 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		327 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		331 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		335 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		338 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		340 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		351 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		393 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		401 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		402 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		403 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		404 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		477 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		480 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		490 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		498 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		573 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		575 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		578 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		709 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		734 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		735 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		736 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		751 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		755 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		756 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
-		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', TrailingData ) ],
-		1073741839 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ]
+		47 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		76 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		107 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		108 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		109 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		110 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		201 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		210 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		304 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		315 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		321 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		327 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		331 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		335 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		338 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		340 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		351 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		393 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		401 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		402 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		403 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		404 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		477 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		480 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		490 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		498 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		573 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		575 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		578 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		709 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		734 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		735 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		736 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		751 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		755 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		756 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		1073741839 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ]
 	}

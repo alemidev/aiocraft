@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTabComplete(Packet):
-	__slots__ = ( 'id', 'transactionId', 'assumeCommand', 'text', 'block', 'lookedAtBlock' )
+	__slots__ = ( 'id', 'block', 'assumeCommand', 'lookedAtBlock', 'transactionId', 'text' )
 	
-	transactionId : int
-	assumeCommand : bool
-	text : str
 	block : tuple
+	assumeCommand : bool
 	lookedAtBlock : tuple
+	transactionId : int
+	text : str
 
 	_state : int = 3
 

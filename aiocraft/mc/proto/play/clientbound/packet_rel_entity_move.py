@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketRelEntityMove(Packet):
-	__slots__ = ( 'id', 'dY', 'dX', 'onGround', 'dZ', 'entityId' )
+	__slots__ = ( 'id', 'dX', 'dY', 'entityId', 'onGround', 'dZ' )
 	
-	dY : int
 	dX : int
+	dY : int
+	entityId : int
 	onGround : bool
 	dZ : int
-	entityId : int
 
 	_state : int = 3
 

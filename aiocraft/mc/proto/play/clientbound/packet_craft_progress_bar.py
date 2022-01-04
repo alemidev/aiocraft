@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCraftProgressBar(Packet):
-	__slots__ = ( 'id', 'property', 'value', 'windowId' )
+	__slots__ = ( 'id', 'windowId', 'value', 'property' )
 	
-	property : int
-	value : int
 	windowId : int
+	value : int
+	property : int
 
 	_state : int = 3
 

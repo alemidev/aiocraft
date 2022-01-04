@@ -7,7 +7,7 @@ from ....types import *
 class PacketOpenSignEntity(Packet):
 	__slots__ = ( 'id', 'location' )
 	
-	location : Union[tuple,bytes]
+	location : Union[bytes,tuple]
 
 	_state : int = 3
 

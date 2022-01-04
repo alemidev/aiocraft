@@ -5,26 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketLogin(Packet):
-	__slots__ = ( 'id', 'maxPlayers', 'viewDistance', 'previousGameMode', 'reducedDebugInfo', 'simulationDistance', 'worldName', 'hashedSeed', 'gameMode', 'isDebug', 'isHardcore', 'dimension', 'enableRespawnScreen', 'entityId', 'levelType', 'dimensionCodec', 'isFlat', 'worldNames', 'difficulty' )
+	__slots__ = ( 'id', 'gameMode', 'worldName', 'dimensionCodec', 'isHardcore', 'viewDistance', 'simulationDistance', 'reducedDebugInfo', 'hashedSeed', 'maxPlayers', 'isDebug', 'previousGameMode', 'enableRespawnScreen', 'difficulty', 'entityId', 'isFlat', 'worldNames', 'levelType', 'dimension' )
 	
-	maxPlayers : int
-	viewDistance : int
-	previousGameMode : int
-	reducedDebugInfo : bool
-	simulationDistance : int
-	worldName : str
-	hashedSeed : int
 	gameMode : int
-	isDebug : bool
-	isHardcore : bool
-	dimension : Union[bytes,str,int]
-	enableRespawnScreen : bool
-	entityId : int
-	levelType : str
+	worldName : str
 	dimensionCodec : bytes
+	isHardcore : bool
+	viewDistance : int
+	simulationDistance : int
+	reducedDebugInfo : bool
+	hashedSeed : int
+	maxPlayers : int
+	isDebug : bool
+	previousGameMode : int
+	enableRespawnScreen : bool
+	difficulty : int
+	entityId : int
 	isFlat : bool
 	worldNames : list
-	difficulty : int
+	levelType : str
+	dimension : Union[str,int,bytes]
 
 	_state : int = 3
 

@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSetProtocol(Packet):
-	__slots__ = ( 'id', 'serverPort', 'serverHost', 'protocolVersion', 'nextState' )
+	__slots__ = ( 'id', 'serverHost', 'nextState', 'protocolVersion', 'serverPort' )
 	
-	serverPort : int
 	serverHost : str
-	protocolVersion : int
 	nextState : int
+	protocolVersion : int
+	serverPort : int
 
 	_state : int = 0
 

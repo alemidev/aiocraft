@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTitle(Packet):
-	__slots__ = ( 'id', 'fadeIn', 'action', 'text', 'stay', 'fadeOut' )
+	__slots__ = ( 'id', 'stay', 'fadeOut', 'action', 'fadeIn', 'text' )
 	
-	fadeIn : bytes
-	action : int
-	text : bytes
 	stay : bytes
 	fadeOut : bytes
+	action : int
+	fadeIn : bytes
+	text : bytes
 
 	_state : int = 3
 

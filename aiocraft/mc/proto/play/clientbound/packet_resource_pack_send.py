@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketResourcePackSend(Packet):
-	__slots__ = ( 'id', 'url', 'hash', 'forced', 'promptMessage' )
+	__slots__ = ( 'id', 'hash', 'forced', 'promptMessage', 'url' )
 	
-	url : str
 	hash : str
 	forced : bool
 	promptMessage : tuple
+	url : str
 
 	_state : int = 3
 

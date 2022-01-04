@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPlayerInfo(Packet):
-	__slots__ = ( 'id', 'online', 'action', 'data', 'playerName', 'ping' )
+	__slots__ = ( 'id', 'playerName', 'data', 'online', 'action', 'ping' )
 	
+	playerName : str
+	data : list
 	online : bool
 	action : int
-	data : list
-	playerName : str
 	ping : int
 
 	_state : int = 3

@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBed(Packet):
-	__slots__ = ( 'id', 'entityId', 'location' )
+	__slots__ = ( 'id', 'location', 'entityId' )
 	
+	location : Union[bytes,tuple]
 	entityId : int
-	location : Union[tuple,bytes]
 
 	_state : int = 3
 

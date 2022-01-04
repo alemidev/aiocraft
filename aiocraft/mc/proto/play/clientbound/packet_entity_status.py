@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityStatus(Packet):
-	__slots__ = ( 'id', 'entityStatus', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'entityStatus' )
 	
-	entityStatus : int
 	entityId : int
+	entityStatus : int
 
 	_state : int = 3
 

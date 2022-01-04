@@ -5,18 +5,18 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMap(Packet):
-	__slots__ = ( 'id', 'itemDamage', 'locked', 'scale', 'data', 'icons', 'x', 'trackingPosition', 'rows', 'y', 'columns' )
+	__slots__ = ( 'id', 'scale', 'x', 'trackingPosition', 'itemDamage', 'data', 'icons', 'y', 'columns', 'rows', 'locked' )
 	
-	itemDamage : int
-	locked : bool
 	scale : int
-	data : bytes
-	icons : Union[tuple,list]
 	x : bytes
 	trackingPosition : bool
-	rows : bytes
+	itemDamage : int
+	data : bytes
+	icons : Union[list,tuple]
 	y : bytes
 	columns : int
+	rows : bytes
+	locked : bool
 
 	_state : int = 3
 

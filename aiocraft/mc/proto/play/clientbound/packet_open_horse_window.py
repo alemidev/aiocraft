@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketOpenHorseWindow(Packet):
-	__slots__ = ( 'id', 'entityId', 'windowId', 'nbSlots' )
+	__slots__ = ( 'id', 'nbSlots', 'windowId', 'entityId' )
 	
-	entityId : int
-	windowId : int
 	nbSlots : int
+	windowId : int
+	entityId : int
 
 	_state : int = 3
 

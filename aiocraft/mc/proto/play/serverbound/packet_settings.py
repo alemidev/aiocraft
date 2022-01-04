@@ -5,19 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSettings(Packet):
-	__slots__ = ( 'id', 'viewDistance', 'enableTextFiltering', 'chatFlags', 'showCape', 'chatColors', 'enableServerListing', 'locale', 'mainHand', 'skinParts', 'disableTextFiltering', 'difficulty' )
+	__slots__ = ( 'id', 'chatColors', 'viewDistance', 'mainHand', 'enableTextFiltering', 'enableServerListing', 'showCape', 'disableTextFiltering', 'difficulty', 'locale', 'skinParts', 'chatFlags' )
 	
-	viewDistance : int
-	enableTextFiltering : bool
-	chatFlags : int
-	showCape : bool
 	chatColors : bool
-	enableServerListing : bool
-	locale : str
+	viewDistance : int
 	mainHand : int
-	skinParts : int
+	enableTextFiltering : bool
+	enableServerListing : bool
+	showCape : bool
 	disableTextFiltering : bool
 	difficulty : int
+	locale : str
+	skinParts : int
+	chatFlags : int
 
 	_state : int = 3
 

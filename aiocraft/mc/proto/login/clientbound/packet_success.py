@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSuccess(Packet):
-	__slots__ = ( 'id', 'uuid', 'username' )
+	__slots__ = ( 'id', 'username', 'uuid' )
 	
-	uuid : str
 	username : str
+	uuid : str
 
 	_state : int = 2
 

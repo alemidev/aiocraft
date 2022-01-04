@@ -5,15 +5,15 @@ from ....packet import Packet
 from ....types import *
 
 class PacketFacePlayer(Packet):
-	__slots__ = ( 'id', 'feet_eyes', 'x', 'entityId', 'y', 'z', 'isEntity', 'entity_feet_eyes' )
+	__slots__ = ( 'id', 'x', 'entity_feet_eyes', 'z', 'y', 'entityId', 'feet_eyes', 'isEntity' )
 	
-	feet_eyes : int
 	x : float
-	entityId : bytes
-	y : float
-	z : float
-	isEntity : bool
 	entity_feet_eyes : bytes
+	z : float
+	y : float
+	entityId : bytes
+	feet_eyes : int
+	isEntity : bool
 
 	_state : int = 3
 

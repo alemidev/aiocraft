@@ -10,7 +10,7 @@ class PacketScoreboardScore(Packet):
 	action : int
 	value : bytes
 	itemName : str
-	scoreName : Union[bytes,str]
+	scoreName : Union[str,bytes]
 
 	_state : int = 3
 

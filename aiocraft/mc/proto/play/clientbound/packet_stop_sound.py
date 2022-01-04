@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketStopSound(Packet):
-	__slots__ = ( 'id', 'sound', 'source', 'flags' )
+	__slots__ = ( 'id', 'sound', 'flags', 'source' )
 	
 	sound : bytes
-	source : bytes
 	flags : int
+	source : bytes
 
 	_state : int = 3
 

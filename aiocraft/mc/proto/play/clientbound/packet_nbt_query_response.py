@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketNbtQueryResponse(Packet):
-	__slots__ = ( 'id', 'transactionId', 'nbt' )
+	__slots__ = ( 'id', 'nbt', 'transactionId' )
 	
-	transactionId : int
 	nbt : bytes
+	transactionId : int
 
 	_state : int = 3
 
@@ -36,25 +36,25 @@ class PacketNbtQueryResponse(Packet):
 		1073741839 : 85
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		393 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		401 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		402 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		403 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		404 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		477 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		480 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		490 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		498 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		573 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		575 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		578 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		709 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		734 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		735 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		736 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		751 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		755 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		756 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ],
-		1073741839 : [ ( 'transactionId', VarInt ), ( 'nbt', TrailingData ) ]
+		393 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		401 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		402 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		403 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		404 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		477 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		480 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		490 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		498 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		573 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		575 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		578 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		709 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		734 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		735 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		736 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		751 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		755 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		756 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		757 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		1073741839 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ]
 	}

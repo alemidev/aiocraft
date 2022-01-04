@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldBorderLerpSize(Packet):
-	__slots__ = ( 'id', 'newDiameter', 'speed', 'oldDiameter' )
+	__slots__ = ( 'id', 'oldDiameter', 'speed', 'newDiameter' )
 	
-	newDiameter : float
-	speed : int
 	oldDiameter : float
+	speed : int
+	newDiameter : float
 
 	_state : int = 3
 

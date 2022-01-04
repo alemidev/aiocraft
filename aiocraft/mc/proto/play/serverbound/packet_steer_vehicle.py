@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSteerVehicle(Packet):
-	__slots__ = ( 'id', 'forward', 'jump', 'sideways', 'unmount' )
+	__slots__ = ( 'id', 'forward', 'jump', 'unmount', 'sideways' )
 	
 	forward : float
-	jump : Union[int,bool]
-	sideways : float
+	jump : Union[bool,int]
 	unmount : bool
+	sideways : float
 
 	_state : int = 3
 

@@ -5,16 +5,16 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWindowClick(Packet):
-	__slots__ = ( 'id', 'item', 'action', 'stateId', 'slot', 'mode', 'changedSlots', 'windowId', 'cursorItem', 'mouseButton' )
+	__slots__ = ( 'id', 'item', 'slot', 'changedSlots', 'cursorItem', 'windowId', 'action', 'mode', 'stateId', 'mouseButton' )
 	
 	item : dict
-	action : int
-	stateId : int
 	slot : int
-	mode : int
 	changedSlots : list
-	windowId : int
 	cursorItem : dict
+	windowId : int
+	action : int
+	mode : int
+	stateId : int
 	mouseButton : int
 
 	_state : int = 3

@@ -5,15 +5,15 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUseEntity(Packet):
-	__slots__ = ( 'id', 'sneaking', 'x', 'mouse', 'target', 'y', 'z', 'hand' )
+	__slots__ = ( 'id', 'hand', 'mouse', 'x', 'sneaking', 'z', 'y', 'target' )
 	
-	sneaking : bool
-	x : bytes
-	mouse : int
-	target : int
-	y : bytes
-	z : bytes
 	hand : bytes
+	mouse : int
+	x : bytes
+	sneaking : bool
+	z : bytes
+	y : bytes
+	target : int
 
 	_state : int = 3
 

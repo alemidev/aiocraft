@@ -5,15 +5,15 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMultiBlockChange(Packet):
-	__slots__ = ( 'id', 'chunkX', 'notTrustEdges', 'recordCount', 'chunkCoordinates', 'chunkZ', 'dataLength', 'records' )
+	__slots__ = ( 'id', 'chunkCoordinates', 'dataLength', 'notTrustEdges', 'recordCount', 'records', 'chunkX', 'chunkZ' )
 	
-	chunkX : int
+	chunkCoordinates : bytes
+	dataLength : int
 	notTrustEdges : bool
 	recordCount : bytes
-	chunkCoordinates : bytes
-	chunkZ : int
-	dataLength : int
 	records : list
+	chunkX : int
+	chunkZ : int
 
 	_state : int = 3
 

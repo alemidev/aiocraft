@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateSign(Packet):
-	__slots__ = ( 'id', 'text2', 'text1', 'text3', 'text4', 'location' )
+	__slots__ = ( 'id', 'text3', 'text1', 'text2', 'location', 'text4' )
 	
-	text2 : str
-	text1 : str
 	text3 : str
+	text1 : str
+	text2 : str
+	location : Union[bytes,tuple]
 	text4 : str
-	location : Union[tuple,bytes]
 
 	_state : int = 3
 

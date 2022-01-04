@@ -5,15 +5,15 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPositionLook(Packet):
-	__slots__ = ( 'id', 'stance', 'onGround', 'x', 'yaw', 'y', 'z', 'pitch' )
+	__slots__ = ( 'id', 'pitch', 'x', 'z', 'yaw', 'y', 'onGround', 'stance' )
 	
-	stance : float
-	onGround : bool
+	pitch : float
 	x : float
+	z : float
 	yaw : float
 	y : float
-	z : float
-	pitch : float
+	onGround : bool
+	stance : float
 
 	_state : int = 3
 

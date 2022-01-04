@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPlayerlistHeader(Packet):
-	__slots__ = ( 'id', 'header', 'footer' )
+	__slots__ = ( 'id', 'footer', 'header' )
 	
-	header : str
 	footer : str
+	header : str
 
 	_state : int = 3
 

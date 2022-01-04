@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAdvancements(Packet):
-	__slots__ = ( 'id', 'progressMapping', 'reset', 'identifiers', 'advancementMapping' )
+	__slots__ = ( 'id', 'advancementMapping', 'identifiers', 'reset', 'progressMapping' )
 	
-	progressMapping : list
-	reset : bool
-	identifiers : list
 	advancementMapping : list
+	identifiers : list
+	reset : bool
+	progressMapping : list
 
 	_state : int = 3
 

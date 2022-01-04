@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTransaction(Packet):
-	__slots__ = ( 'id', 'action', 'accepted', 'windowId' )
+	__slots__ = ( 'id', 'windowId', 'action', 'accepted' )
 	
+	windowId : int
 	action : int
 	accepted : bool
-	windowId : int
 
 	_state : int = 3
 

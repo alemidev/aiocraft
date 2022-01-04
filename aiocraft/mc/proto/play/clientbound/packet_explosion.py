@@ -5,16 +5,16 @@ from ....packet import Packet
 from ....types import *
 
 class PacketExplosion(Packet):
-	__slots__ = ( 'id', 'playerMotionZ', 'playerMotionY', 'radius', 'playerMotionX', 'x', 'y', 'z', 'affectedBlockOffsets' )
+	__slots__ = ( 'id', 'radius', 'x', 'affectedBlockOffsets', 'z', 'y', 'playerMotionY', 'playerMotionZ', 'playerMotionX' )
 	
-	playerMotionZ : float
-	playerMotionY : float
 	radius : float
-	playerMotionX : float
 	x : float
-	y : float
-	z : float
 	affectedBlockOffsets : list
+	z : float
+	y : float
+	playerMotionY : float
+	playerMotionZ : float
+	playerMotionX : float
 
 	_state : int = 3
 

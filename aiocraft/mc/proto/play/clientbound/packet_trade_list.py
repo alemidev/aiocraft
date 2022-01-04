@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTradeList(Packet):
-	__slots__ = ( 'id', 'experience', 'isRegularVillager', 'canRestock', 'windowId', 'trades', 'villagerLevel' )
+	__slots__ = ( 'id', 'isRegularVillager', 'trades', 'windowId', 'experience', 'canRestock', 'villagerLevel' )
 	
-	experience : int
 	isRegularVillager : bool
-	canRestock : bool
-	windowId : int
 	trades : list
+	windowId : int
+	experience : int
+	canRestock : bool
 	villagerLevel : int
 
 	_state : int = 3

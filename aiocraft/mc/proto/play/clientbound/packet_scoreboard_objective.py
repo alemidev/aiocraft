@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketScoreboardObjective(Packet):
-	__slots__ = ( 'id', 'name', 'type', 'displayText', 'action' )
+	__slots__ = ( 'id', 'name', 'action', 'type', 'displayText' )
 	
 	name : str
+	action : int
 	type : bytes
 	displayText : Union[bytes,str]
-	action : int
 
 	_state : int = 3
 

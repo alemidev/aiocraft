@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketDeathCombatEvent(Packet):
-	__slots__ = ( 'id', 'message', 'entityId', 'playerId' )
+	__slots__ = ( 'id', 'playerId', 'entityId', 'message' )
 	
-	message : str
-	entityId : int
 	playerId : int
+	entityId : int
+	message : str
 
 	_state : int = 3
 

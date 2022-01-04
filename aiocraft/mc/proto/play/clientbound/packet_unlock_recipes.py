@@ -5,21 +5,21 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUnlockRecipes(Packet):
-	__slots__ = ( 'id', 'filteringCraftable', 'action', 'filteringSmeltable', 'smeltingBookOpen', 'smokerBookOpen', 'notification', 'blastFurnaceOpen', 'recipes1', 'recipes2', 'filteringBlastFurnace', 'craftingBookOpen', 'recipes', 'filteringSmoker' )
+	__slots__ = ( 'id', 'filteringCraftable', 'blastFurnaceOpen', 'recipes1', 'recipes2', 'filteringSmoker', 'smokerBookOpen', 'filteringBlastFurnace', 'action', 'recipes', 'craftingBookOpen', 'filteringSmeltable', 'notification', 'smeltingBookOpen' )
 	
 	filteringCraftable : bool
-	action : int
-	filteringSmeltable : bool
-	smeltingBookOpen : bool
-	smokerBookOpen : bool
-	notification : bool
 	blastFurnaceOpen : bool
 	recipes1 : list
 	recipes2 : Union[bytes,list]
-	filteringBlastFurnace : bool
-	craftingBookOpen : bool
-	recipes : list
 	filteringSmoker : bool
+	smokerBookOpen : bool
+	filteringBlastFurnace : bool
+	action : int
+	recipes : list
+	craftingBookOpen : bool
+	filteringSmeltable : bool
+	notification : bool
+	smeltingBookOpen : bool
 
 	_state : int = 3
 

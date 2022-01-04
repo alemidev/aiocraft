@@ -5,15 +5,15 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBossBar(Packet):
-	__slots__ = ( 'id', 'dividers', 'action', 'title', 'flags', 'entityUUID', 'color', 'health' )
+	__slots__ = ( 'id', 'dividers', 'flags', 'health', 'title', 'color', 'action', 'entityUUID' )
 	
 	dividers : bytes
-	action : int
-	title : bytes
 	flags : bytes
-	entityUUID : str
-	color : bytes
 	health : bytes
+	title : bytes
+	color : bytes
+	action : int
+	entityUUID : str
 
 	_state : int = 3
 

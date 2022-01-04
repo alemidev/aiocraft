@@ -5,15 +5,15 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityTeleport(Packet):
-	__slots__ = ( 'id', 'onGround', 'x', 'yaw', 'entityId', 'y', 'z', 'pitch' )
+	__slots__ = ( 'id', 'pitch', 'x', 'yaw', 'z', 'y', 'entityId', 'onGround' )
 	
-	onGround : bool
-	x : Union[float,int]
-	yaw : int
-	entityId : int
-	y : Union[float,int]
-	z : Union[float,int]
 	pitch : int
+	x : Union[int,float]
+	yaw : int
+	z : Union[int,float]
+	y : Union[int,float]
+	entityId : int
+	onGround : bool
 
 	_state : int = 3
 

@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityVelocity(Packet):
-	__slots__ = ( 'id', 'velocityX', 'velocityZ', 'velocityY', 'entityId' )
+	__slots__ = ( 'id', 'velocityX', 'velocityY', 'entityId', 'velocityZ' )
 	
 	velocityX : int
-	velocityZ : int
 	velocityY : int
 	entityId : int
+	velocityZ : int
 
 	_state : int = 3
 

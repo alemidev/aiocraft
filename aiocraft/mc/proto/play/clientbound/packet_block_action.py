@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockAction(Packet):
-	__slots__ = ( 'id', 'blockId', 'byte2', 'byte1', 'location' )
+	__slots__ = ( 'id', 'location', 'byte2', 'byte1', 'blockId' )
 	
-	blockId : int
+	location : Union[bytes,tuple]
 	byte2 : int
 	byte1 : int
-	location : Union[tuple,bytes]
+	blockId : int
 
 	_state : int = 3
 

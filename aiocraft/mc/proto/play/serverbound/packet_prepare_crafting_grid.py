@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPrepareCraftingGrid(Packet):
-	__slots__ = ( 'id', 'returnEntry', 'actionNumber', 'prepareEntry', 'windowId' )
+	__slots__ = ( 'id', 'returnEntry', 'windowId', 'prepareEntry', 'actionNumber' )
 	
 	returnEntry : list
-	actionNumber : int
-	prepareEntry : list
 	windowId : int
+	prepareEntry : list
+	actionNumber : int
 
 	_state : int = 3
 

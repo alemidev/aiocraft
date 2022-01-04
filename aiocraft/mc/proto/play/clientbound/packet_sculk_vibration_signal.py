@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSculkVibrationSignal(Packet):
-	__slots__ = ( 'id', 'sourcePosition', 'destination', 'arrivalTicks', 'destinationIdentifier' )
+	__slots__ = ( 'id', 'destination', 'arrivalTicks', 'sourcePosition', 'destinationIdentifier' )
 	
-	sourcePosition : tuple
 	destination : bytes
 	arrivalTicks : int
+	sourcePosition : tuple
 	destinationIdentifier : str
 
 	_state : int = 3

@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateCommandBlock(Packet):
-	__slots__ = ( 'id', 'mode', 'flags', 'command', 'location' )
+	__slots__ = ( 'id', 'mode', 'flags', 'location', 'command' )
 	
 	mode : int
 	flags : int
-	command : str
 	location : tuple
+	command : str
 
 	_state : int = 3
 

@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityAction(Packet):
-	__slots__ = ( 'id', 'jumpBoost', 'actionId', 'entityId' )
+	__slots__ = ( 'id', 'jumpBoost', 'entityId', 'actionId' )
 	
 	jumpBoost : int
-	actionId : int
 	entityId : int
+	actionId : int
 
 	_state : int = 3
 

@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketDeclareCommands(Packet):
-	__slots__ = ( 'id', 'nodes', 'rootIndex' )
+	__slots__ = ( 'id', 'rootIndex', 'nodes' )
 	
-	nodes : list
 	rootIndex : int
+	nodes : list
 
 	_state : int = 3
 

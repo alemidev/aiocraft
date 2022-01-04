@@ -8,7 +8,7 @@ class PacketSpawnPosition(Packet):
 	__slots__ = ( 'id', 'angle', 'location' )
 	
 	angle : float
-	location : Union[tuple,bytes]
+	location : Union[bytes,tuple]
 
 	_state : int = 3
 

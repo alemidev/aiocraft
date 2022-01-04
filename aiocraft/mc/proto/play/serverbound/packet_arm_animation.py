@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketArmAnimation(Packet):
-	__slots__ = ( 'id', 'hand', 'animation', 'entityId' )
+	__slots__ = ( 'id', 'animation', 'hand', 'entityId' )
 	
-	hand : int
 	animation : int
+	hand : int
 	entityId : int
 
 	_state : int = 3

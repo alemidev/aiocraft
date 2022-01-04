@@ -5,27 +5,27 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMapChunk(Packet):
-	__slots__ = ( 'id', 'blockLight', 'skyLight', 'compressedChunkData', 'emptySkyLightMask', 'biomes', 'primaryBitMask', 'x', 'ignoreOldData', 'groundUp', 'trustEdges', 'z', 'heightmaps', 'blockLightMask', 'chunkData', 'addBitMap', 'emptyBlockLightMask', 'blockEntities', 'skyLightMask', 'bitMap' )
+	__slots__ = ( 'id', 'trustEdges', 'biomes', 'groundUp', 'chunkData', 'skyLight', 'ignoreOldData', 'emptySkyLightMask', 'blockEntities', 'skyLightMask', 'primaryBitMask', 'compressedChunkData', 'bitMap', 'addBitMap', 'emptyBlockLightMask', 'x', 'blockLight', 'blockLightMask', 'heightmaps', 'z' )
 	
-	blockLight : list
-	skyLight : list
-	compressedChunkData : bytes
-	emptySkyLightMask : list
-	biomes : Union[bytes,list]
-	primaryBitMask : list
-	x : int
-	ignoreOldData : bool
-	groundUp : bool
 	trustEdges : bool
-	z : int
-	heightmaps : bytes
-	blockLightMask : list
+	biomes : Union[bytes,list]
+	groundUp : bool
 	chunkData : bytes
-	addBitMap : int
-	emptyBlockLightMask : list
+	skyLight : list
+	ignoreOldData : bool
+	emptySkyLightMask : list
 	blockEntities : list
 	skyLightMask : list
-	bitMap : Union[int,list]
+	primaryBitMask : list
+	compressedChunkData : bytes
+	bitMap : Union[list,int]
+	addBitMap : int
+	emptyBlockLightMask : list
+	x : int
+	blockLight : list
+	blockLightMask : list
+	heightmaps : bytes
+	z : int
 
 	_state : int = 3
 

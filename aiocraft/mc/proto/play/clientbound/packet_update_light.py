@@ -5,18 +5,18 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateLight(Packet):
-	__slots__ = ( 'id', 'chunkX', 'blockLight', 'skyLight', 'data', 'emptyBlockLightMask', 'emptySkyLightMask', 'trustEdges', 'blockLightMask', 'chunkZ', 'skyLightMask' )
+	__slots__ = ( 'id', 'trustEdges', 'skyLightMask', 'data', 'blockLightMask', 'skyLight', 'chunkX', 'emptySkyLightMask', 'blockLight', 'emptyBlockLightMask', 'chunkZ' )
 	
-	chunkX : int
-	blockLight : list
-	skyLight : list
-	data : bytes
-	emptyBlockLightMask : Union[int,list]
-	emptySkyLightMask : Union[int,list]
 	trustEdges : bool
-	blockLightMask : Union[int,list]
+	skyLightMask : Union[list,int]
+	data : bytes
+	blockLightMask : Union[list,int]
+	skyLight : list
+	chunkX : int
+	emptySkyLightMask : Union[list,int]
+	blockLight : list
+	emptyBlockLightMask : Union[list,int]
 	chunkZ : int
-	skyLightMask : Union[int,list]
 
 	_state : int = 3
 

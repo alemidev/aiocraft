@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntitySoundEffect(Packet):
-	__slots__ = ( 'id', 'volume', 'entityId', 'soundId', 'pitch', 'soundCategory' )
+	__slots__ = ( 'id', 'pitch', 'soundId', 'soundCategory', 'entityId', 'volume' )
 	
-	volume : float
-	entityId : int
-	soundId : int
 	pitch : float
+	soundId : int
 	soundCategory : int
+	entityId : int
+	volume : float
 
 	_state : int = 3
 

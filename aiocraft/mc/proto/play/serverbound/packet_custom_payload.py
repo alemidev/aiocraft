@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCustomPayload(Packet):
-	__slots__ = ( 'id', 'data', 'channel' )
+	__slots__ = ( 'id', 'channel', 'data' )
 	
-	data : bytes
 	channel : str
+	data : bytes
 
 	_state : int = 3
 

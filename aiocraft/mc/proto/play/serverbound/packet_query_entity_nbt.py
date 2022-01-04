@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketQueryEntityNbt(Packet):
-	__slots__ = ( 'id', 'transactionId', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'transactionId' )
 	
-	transactionId : int
 	entityId : int
+	transactionId : int
 
 	_state : int = 3
 

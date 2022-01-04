@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSetSlot(Packet):
-	__slots__ = ( 'id', 'stateId', 'item', 'slot', 'windowId' )
+	__slots__ = ( 'id', 'item', 'windowId', 'slot', 'stateId' )
 	
-	stateId : int
 	item : dict
-	slot : int
 	windowId : int
+	slot : int
+	stateId : int
 
 	_state : int = 3
 
