@@ -6,11 +6,11 @@ import uuid
 import logging
 import pynbt
 
-from typing import List, Tuple, Dict, Any, Union, Optional, Type as Class
+from typing import List, Tuple, Dict, Any, Union, Optional, Callable, Type as Class
 
 
 class Type(object):
-	pytype : type = lambda x : x
+	pytype : Union[type, Callable] = lambda x : x
 
 	def write(self, data:Any, buffer:io.BytesIO, ctx:object=None) -> None:
 		"""Write data to a packet buffer"""
@@ -25,7 +25,6 @@ class Type(object):
 		return True
 
 class VoidType(Type):
-	pytype : type = type(None)
 
 	def write(self, v:None, buffer:io.BytesIO, ctx:object=None):
 		pass
@@ -75,17 +74,30 @@ Float = PrimitiveType(float, ">f", 4)
 Double = PrimitiveType(float, ">d", 8)
 Angle = PrimitiveType(int, ">b", 1)
 
+def nbt_to_py(item:pynbt.BaseTag) -> Any:
+	if isinstance(item, pynbt.TAG_Compound):
+		return { k: nbt_to_py(v) for k,v in dict(item).items() }
+	if isinstance(item, pynbt.TAG_List):
+		return [ nbt_to_py(v) for v in list(item) ]
+	if isinstance(item, pynbt.BaseTag):
+		return item.value
+	return item
+
 class NBTType(Type):
+	pytype : type = dict
 
-	def write(self, data:pynbt.NBTFile, buffer:io.BytesIO, ctx:object=None):
-		data.save(buffer)
+	def write(self, data:Optional[dict], buffer:io.BytesIO, ctx:object=None):
+		if data is None:
+			buffer.write(b'\x00')
+		else:
+			pynbt.NBTFile(value=data).save(buffer)
 
-	def read(self, buffer:io.BytesIO, ctx:object=None) -> Optional[pynbt.NBTFile]:
+	def read(self, buffer:io.BytesIO, ctx:object=None) -> Optional[dict]:
 		head = Byte.read(buffer)
 		if head == 0x0:
 			return None
 		buffer.seek(-1,1) # go back 1 byte
-		return pynbt.NBTFile(io=buffer)
+		return nbt_to_py(pynbt.NBTFile(io=buffer))
 
 NBTTag = NBTType()
 
