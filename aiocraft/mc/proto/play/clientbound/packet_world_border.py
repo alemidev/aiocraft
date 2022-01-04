@@ -5,18 +5,18 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldBorder(Packet):
-	__slots__ = ( 'id', 'radius', 'x', 'new_radius', 'portalBoundary', 'warning_time', 'old_radius', 'z', 'action', 'speed', 'warning_blocks' )
+	__slots__ = ( 'id', 'z', 'portalBoundary', 'warning_blocks', 'x', 'old_radius', 'action', 'radius', 'speed', 'warning_time', 'new_radius' )
 	
-	radius : bytes
-	x : bytes
-	new_radius : bytes
-	portalBoundary : bytes
-	warning_time : bytes
-	old_radius : bytes
 	z : bytes
-	action : int
-	speed : bytes
+	portalBoundary : bytes
 	warning_blocks : bytes
+	x : bytes
+	old_radius : bytes
+	action : int
+	radius : bytes
+	speed : bytes
+	warning_time : bytes
+	new_radius : bytes
 
 	_state : int = 3
 

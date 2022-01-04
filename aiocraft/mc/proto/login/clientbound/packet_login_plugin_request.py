@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketLoginPluginRequest(Packet):
-	__slots__ = ( 'id', 'messageId', 'channel', 'data' )
+	__slots__ = ( 'id', 'channel', 'messageId', 'data' )
 	
-	messageId : int
 	channel : str
+	messageId : int
 	data : bytes
 
 	_state : int = 2

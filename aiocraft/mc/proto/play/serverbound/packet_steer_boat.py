@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSteerBoat(Packet):
-	__slots__ = ( 'id', 'rightPaddle', 'leftPaddle' )
+	__slots__ = ( 'id', 'leftPaddle', 'rightPaddle' )
 	
-	rightPaddle : bool
 	leftPaddle : bool
+	rightPaddle : bool
 
 	_state : int = 3
 

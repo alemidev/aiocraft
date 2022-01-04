@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityEquipment(Packet):
-	__slots__ = ( 'id', 'item', 'slot', 'entityId', 'equipments' )
+	__slots__ = ( 'id', 'equipments', 'item', 'entityId', 'slot' )
 	
-	item : dict
-	slot : int
-	entityId : int
 	equipments : bytes
+	item : dict
+	entityId : int
+	slot : int
 
 	_state : int = 3
 

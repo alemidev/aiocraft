@@ -5,14 +5,14 @@ from ....packet import Packet
 from ....types import *
 
 class PacketOpenWindow(Packet):
-	__slots__ = ( 'id', 'useProvidedTitle', 'windowId', 'inventoryType', 'slotCount', 'windowTitle', 'entityId' )
+	__slots__ = ( 'id', 'slotCount', 'windowTitle', 'entityId', 'inventoryType', 'windowId', 'useProvidedTitle' )
 	
-	useProvidedTitle : bool
-	windowId : int
-	inventoryType : Union[str,int]
 	slotCount : int
 	windowTitle : str
 	entityId : bytes
+	inventoryType : Union[str,int]
+	windowId : int
+	useProvidedTitle : bool
 
 	_state : int = 3
 

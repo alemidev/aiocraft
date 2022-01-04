@@ -5,16 +5,16 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateJigsawBlock(Packet):
-	__slots__ = ( 'id', 'targetPool', 'location', 'jointType', 'name', 'target', 'pool', 'attachmentType', 'finalState' )
+	__slots__ = ( 'id', 'name', 'jointType', 'target', 'pool', 'finalState', 'targetPool', 'location', 'attachmentType' )
 	
-	targetPool : str
-	location : tuple
-	jointType : str
 	name : str
+	jointType : str
 	target : str
 	pool : str
-	attachmentType : str
 	finalState : str
+	targetPool : str
+	location : tuple
+	attachmentType : str
 
 	_state : int = 3
 

@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityMetadata(Packet):
-	__slots__ = ( 'id', 'metadata', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'metadata' )
 	
-	metadata : bytes
 	entityId : int
+	metadata : dict
 
 	_state : int = 3
 

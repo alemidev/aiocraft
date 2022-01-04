@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnPosition(Packet):
-	__slots__ = ( 'id', 'angle', 'location' )
+	__slots__ = ( 'id', 'location', 'angle' )
 	
-	angle : float
 	location : Union[bytes,tuple]
+	angle : float
 
 	_state : int = 3
 

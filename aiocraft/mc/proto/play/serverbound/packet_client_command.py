@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketClientCommand(Packet):
-	__slots__ = ( 'id', 'payload', 'actionId' )
+	__slots__ = ( 'id', 'actionId', 'payload' )
 	
-	payload : int
 	actionId : int
+	payload : int
 
 	_state : int = 3
 

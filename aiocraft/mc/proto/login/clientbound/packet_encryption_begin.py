@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEncryptionBegin(Packet):
-	__slots__ = ( 'id', 'verifyToken', 'publicKey', 'serverId' )
+	__slots__ = ( 'id', 'publicKey', 'serverId', 'verifyToken' )
 	
-	verifyToken : bytes
 	publicKey : bytes
 	serverId : str
+	verifyToken : bytes
 
 	_state : int = 2
 

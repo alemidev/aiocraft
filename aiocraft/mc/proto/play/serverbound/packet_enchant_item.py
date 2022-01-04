@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEnchantItem(Packet):
-	__slots__ = ( 'id', 'windowId', 'enchantment' )
+	__slots__ = ( 'id', 'enchantment', 'windowId' )
 	
-	windowId : int
 	enchantment : int
+	windowId : int
 
 	_state : int = 3
 

@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPosition(Packet):
-	__slots__ = ( 'id', 'x', 'z', 'y', 'onGround', 'stance' )
+	__slots__ = ( 'id', 'onGround', 'z', 'x', 'stance', 'y' )
 	
-	x : float
-	z : float
-	y : float
 	onGround : bool
+	z : float
+	x : float
 	stance : float
+	y : float
 
 	_state : int = 3
 

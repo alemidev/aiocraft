@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityLook(Packet):
-	__slots__ = ( 'id', 'yaw', 'pitch', 'entityId', 'onGround' )
+	__slots__ = ( 'id', 'onGround', 'entityId', 'yaw', 'pitch' )
 	
+	onGround : bool
+	entityId : int
 	yaw : int
 	pitch : int
-	entityId : int
-	onGround : bool
 
 	_state : int = 3
 

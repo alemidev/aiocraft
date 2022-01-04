@@ -5,24 +5,24 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateStructureBlock(Packet):
-	__slots__ = ( 'id', 'rotation', 'integrity', 'size_y', 'seed', 'mirror', 'location', 'name', 'offset_y', 'action', 'size_x', 'mode', 'offset_x', 'offset_z', 'size_z', 'flags', 'metadata' )
+	__slots__ = ( 'id', 'name', 'size_x', 'size_z', 'offset_z', 'rotation', 'offset_y', 'size_y', 'flags', 'offset_x', 'mirror', 'seed', 'action', 'metadata', 'integrity', 'location', 'mode' )
 	
-	rotation : int
-	integrity : float
-	size_y : int
-	seed : int
-	mirror : int
-	location : tuple
 	name : str
-	offset_y : int
-	action : int
 	size_x : int
-	mode : int
-	offset_x : int
-	offset_z : int
 	size_z : int
+	offset_z : int
+	rotation : int
+	offset_y : int
+	size_y : int
 	flags : int
+	offset_x : int
+	mirror : int
+	seed : int
+	action : int
 	metadata : str
+	integrity : float
+	location : tuple
+	mode : int
 
 	_state : int = 3
 

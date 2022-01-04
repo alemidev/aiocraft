@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketGenerateStructure(Packet):
-	__slots__ = ( 'id', 'keepJigsaws', 'location', 'levels' )
+	__slots__ = ( 'id', 'location', 'levels', 'keepJigsaws' )
 	
-	keepJigsaws : bool
 	location : tuple
 	levels : int
+	keepJigsaws : bool
 
 	_state : int = 3
 

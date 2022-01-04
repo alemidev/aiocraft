@@ -8,7 +8,7 @@ class PacketSteerVehicle(Packet):
 	__slots__ = ( 'id', 'forward', 'jump', 'unmount', 'sideways' )
 	
 	forward : float
-	jump : Union[bool,int]
+	jump : Union[int,bool]
 	unmount : bool
 	sideways : float
 

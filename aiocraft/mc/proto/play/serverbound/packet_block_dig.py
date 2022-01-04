@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockDig(Packet):
-	__slots__ = ( 'id', 'location', 'status', 'face' )
+	__slots__ = ( 'id', 'location', 'face', 'status' )
 	
 	location : Union[bytes,tuple]
-	status : int
 	face : int
+	status : int
 
 	_state : int = 3
 

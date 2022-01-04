@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketQueryBlockNbt(Packet):
-	__slots__ = ( 'id', 'location', 'transactionId' )
+	__slots__ = ( 'id', 'transactionId', 'location' )
 	
-	location : tuple
 	transactionId : int
+	location : tuple
 
 	_state : int = 3
 

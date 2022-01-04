@@ -5,19 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTeams(Packet):
-	__slots__ = ( 'id', 'suffix', 'players', 'prefix', 'nameTagVisibility', 'color', 'name', 'collisionRule', 'formatting', 'mode', 'team', 'friendlyFire' )
+	__slots__ = ( 'id', 'name', 'friendlyFire', 'players', 'formatting', 'prefix', 'suffix', 'nameTagVisibility', 'collisionRule', 'team', 'mode', 'color' )
 	
-	suffix : bytes
-	players : bytes
-	prefix : bytes
-	nameTagVisibility : bytes
-	color : bytes
 	name : bytes
-	collisionRule : bytes
-	formatting : bytes
-	mode : int
-	team : str
 	friendlyFire : bytes
+	players : bytes
+	formatting : bytes
+	prefix : bytes
+	suffix : bytes
+	nameTagVisibility : bytes
+	collisionRule : bytes
+	team : str
+	mode : int
+	color : bytes
 
 	_state : int = 3
 

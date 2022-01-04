@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTags(Packet):
-	__slots__ = ( 'id', 'itemTags', 'fluidTags', 'entityTags', 'tags', 'blockTags' )
+	__slots__ = ( 'id', 'tags', 'blockTags', 'fluidTags', 'itemTags', 'entityTags' )
 	
-	itemTags : bytes
-	fluidTags : bytes
-	entityTags : bytes
 	tags : list
 	blockTags : bytes
+	fluidTags : bytes
+	itemTags : bytes
+	entityTags : bytes
 
 	_state : int = 3
 

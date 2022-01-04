@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockChange(Packet):
-	__slots__ = ( 'id', 'metadata', 'location', 'type' )
+	__slots__ = ( 'id', 'location', 'type', 'metadata' )
 	
-	metadata : int
 	location : Union[bytes,tuple]
 	type : int
+	metadata : int
 
 	_state : int = 3
 

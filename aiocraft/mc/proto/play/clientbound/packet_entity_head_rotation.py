@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityHeadRotation(Packet):
-	__slots__ = ( 'id', 'headYaw', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'headYaw' )
 	
-	headYaw : int
 	entityId : int
+	headYaw : int
 
 	_state : int = 3
 

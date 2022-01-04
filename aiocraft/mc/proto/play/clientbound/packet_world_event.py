@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldEvent(Packet):
-	__slots__ = ( 'id', 'is_global', 'location', 'data', 'effectId' )
+	__slots__ = ( 'id', 'location', 'effectId', 'data', 'is_global' )
 	
-	is_global : bool
 	location : Union[bytes,tuple]
-	data : int
 	effectId : int
+	data : int
+	is_global : bool
 
 	_state : int = 3
 

@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntityExperienceOrb(Packet):
-	__slots__ = ( 'id', 'x', 'count', 'z', 'y', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'z', 'count', 'x', 'y' )
 	
-	x : Union[int,float]
-	count : int
-	z : Union[int,float]
-	y : Union[int,float]
 	entityId : int
+	z : Union[int,float]
+	count : int
+	x : Union[int,float]
+	y : Union[int,float]
 
 	_state : int = 3
 

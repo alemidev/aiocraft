@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAdvancementTab(Packet):
-	__slots__ = ( 'id', 'action', 'tabId' )
+	__slots__ = ( 'id', 'tabId', 'action' )
 	
-	action : int
 	tabId : bytes
+	action : int
 
 	_state : int = 3
 

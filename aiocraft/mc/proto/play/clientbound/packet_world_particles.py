@@ -5,20 +5,20 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldParticles(Packet):
-	__slots__ = ( 'id', 'x', 'longDistance', 'data', 'offsetZ', 'z', 'offsetX', 'offsetY', 'y', 'particleId', 'particleData', 'particleName', 'particles' )
+	__slots__ = ( 'id', 'particleData', 'particleName', 'offsetZ', 'z', 'particles', 'particleId', 'x', 'longDistance', 'offsetX', 'offsetY', 'y', 'data' )
 	
-	x : float
-	longDistance : bool
-	data : bytes
+	particleData : float
+	particleName : str
 	offsetZ : float
 	z : float
+	particles : int
+	particleId : int
+	x : float
+	longDistance : bool
 	offsetX : float
 	offsetY : float
 	y : float
-	particleId : int
-	particleData : float
-	particleName : str
-	particles : int
+	data : bytes
 
 	_state : int = 3
 

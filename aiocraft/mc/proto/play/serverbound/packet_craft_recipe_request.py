@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCraftRecipeRequest(Packet):
-	__slots__ = ( 'id', 'windowId', 'recipe', 'makeAll' )
+	__slots__ = ( 'id', 'makeAll', 'windowId', 'recipe' )
 	
+	makeAll : bool
 	windowId : int
 	recipe : Union[str,int]
-	makeAll : bool
 
 	_state : int = 3
 

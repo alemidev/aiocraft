@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketDifficulty(Packet):
-	__slots__ = ( 'id', 'difficulty', 'difficultyLocked' )
+	__slots__ = ( 'id', 'difficultyLocked', 'difficulty' )
 	
-	difficulty : int
 	difficultyLocked : bool
+	difficulty : int
 
 	_state : int = 3
 

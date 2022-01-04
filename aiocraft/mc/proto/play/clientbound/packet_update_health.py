@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateHealth(Packet):
-	__slots__ = ( 'id', 'health', 'foodSaturation', 'food' )
+	__slots__ = ( 'id', 'health', 'food', 'foodSaturation' )
 	
 	health : float
-	foodSaturation : float
 	food : int
+	foodSaturation : float
 
 	_state : int = 3
 

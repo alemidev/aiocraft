@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketScoreboardScore(Packet):
-	__slots__ = ( 'id', 'action', 'value', 'itemName', 'scoreName' )
+	__slots__ = ( 'id', 'value', 'action', 'itemName', 'scoreName' )
 	
-	action : int
 	value : bytes
+	action : int
 	itemName : str
 	scoreName : Union[str,bytes]
 

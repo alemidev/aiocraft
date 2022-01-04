@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAbilities(Packet):
-	__slots__ = ( 'id', 'flags', 'walkingSpeed', 'flyingSpeed' )
+	__slots__ = ( 'id', 'flyingSpeed', 'flags', 'walkingSpeed' )
 	
+	flyingSpeed : float
 	flags : int
 	walkingSpeed : float
-	flyingSpeed : float
 
 	_state : int = 3
 

@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketChat(Packet):
-	__slots__ = ( 'id', 'position', 'sender', 'message' )
+	__slots__ = ( 'id', 'message', 'sender', 'position' )
 	
-	position : int
-	sender : str
 	message : str
+	sender : str
+	position : int
 
 	_state : int = 3
 

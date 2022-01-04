@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTileEntityData(Packet):
-	__slots__ = ( 'id', 'action', 'location', 'nbtData' )
+	__slots__ = ( 'id', 'location', 'nbtData', 'action' )
 	
-	action : int
 	location : Union[bytes,tuple]
 	nbtData : bytes
+	action : int
 
 	_state : int = 3
 

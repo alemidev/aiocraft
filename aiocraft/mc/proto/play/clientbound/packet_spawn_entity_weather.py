@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntityWeather(Packet):
-	__slots__ = ( 'id', 'type', 'x', 'z', 'y', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'z', 'x', 'y', 'type' )
 	
-	type : int
-	x : Union[int,float]
-	z : Union[int,float]
-	y : Union[int,float]
 	entityId : int
+	z : Union[int,float]
+	x : Union[int,float]
+	y : Union[int,float]
+	type : int
 
 	_state : int = 3
 

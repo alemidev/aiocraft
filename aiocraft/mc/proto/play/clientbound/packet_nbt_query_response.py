@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketNbtQueryResponse(Packet):
-	__slots__ = ( 'id', 'nbt', 'transactionId' )
+	__slots__ = ( 'id', 'transactionId', 'nbt' )
 	
-	nbt : bytes
 	transactionId : int
+	nbt : bytes
 
 	_state : int = 3
 

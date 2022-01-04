@@ -5,14 +5,14 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMapChunkBulk(Packet):
-	__slots__ = ( 'id', 'data', 'meta', 'dataLength', 'compressedChunkData', 'chunkColumnCount', 'skyLightSent' )
+	__slots__ = ( 'id', 'meta', 'skyLightSent', 'dataLength', 'chunkColumnCount', 'compressedChunkData', 'data' )
 	
-	data : bytes
 	meta : list
-	dataLength : bytes
-	compressedChunkData : bytes
-	chunkColumnCount : bytes
 	skyLightSent : bool
+	dataLength : bytes
+	chunkColumnCount : bytes
+	compressedChunkData : bytes
+	data : bytes
 
 	_state : int = 3
 

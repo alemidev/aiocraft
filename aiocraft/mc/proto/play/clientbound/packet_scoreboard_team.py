@@ -5,18 +5,18 @@ from ....packet import Packet
 from ....types import *
 
 class PacketScoreboardTeam(Packet):
-	__slots__ = ( 'id', 'suffix', 'players', 'prefix', 'nameTagVisibility', 'color', 'name', 'collisionRule', 'mode', 'team', 'friendlyFire' )
+	__slots__ = ( 'id', 'collisionRule', 'name', 'friendlyFire', 'players', 'prefix', 'suffix', 'nameTagVisibility', 'color', 'team', 'mode' )
 	
-	suffix : bytes
+	collisionRule : bytes
+	name : bytes
+	friendlyFire : bytes
 	players : bytes
 	prefix : bytes
+	suffix : bytes
 	nameTagVisibility : bytes
 	color : bytes
-	name : bytes
-	collisionRule : bytes
-	mode : int
 	team : str
-	friendlyFire : bytes
+	mode : int
 
 	_state : int = 3
 

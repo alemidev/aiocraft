@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketVehicleMove(Packet):
-	__slots__ = ( 'id', 'pitch', 'x', 'z', 'yaw', 'y' )
+	__slots__ = ( 'id', 'z', 'yaw', 'x', 'pitch', 'y' )
 	
-	pitch : float
-	x : float
 	z : float
 	yaw : float
+	x : float
+	pitch : float
 	y : float
 
 	_state : int = 3

@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSetCooldown(Packet):
-	__slots__ = ( 'id', 'cooldownTicks', 'itemID' )
+	__slots__ = ( 'id', 'itemID', 'cooldownTicks' )
 	
-	cooldownTicks : int
 	itemID : int
+	cooldownTicks : int
 
 	_state : int = 3
 

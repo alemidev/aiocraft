@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAttachEntity(Packet):
-	__slots__ = ( 'id', 'leash', 'vehicleId', 'entityId' )
+	__slots__ = ( 'id', 'vehicleId', 'entityId', 'leash' )
 	
-	leash : bool
 	vehicleId : int
 	entityId : int
+	leash : bool
 
 	_state : int = 3
 

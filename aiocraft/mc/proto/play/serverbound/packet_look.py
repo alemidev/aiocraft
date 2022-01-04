@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketLook(Packet):
-	__slots__ = ( 'id', 'yaw', 'pitch', 'onGround' )
+	__slots__ = ( 'id', 'onGround', 'yaw', 'pitch' )
 	
+	onGround : bool
 	yaw : float
 	pitch : float
-	onGround : bool
 
 	_state : int = 3
 

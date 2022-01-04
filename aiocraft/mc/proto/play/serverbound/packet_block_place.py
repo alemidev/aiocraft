@@ -5,16 +5,16 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockPlace(Packet):
-	__slots__ = ( 'id', 'direction', 'hand', 'heldItem', 'location', 'cursorY', 'cursorX', 'cursorZ', 'insideBlock' )
+	__slots__ = ( 'id', 'insideBlock', 'hand', 'heldItem', 'cursorY', 'cursorX', 'direction', 'cursorZ', 'location' )
 	
-	direction : int
+	insideBlock : bool
 	hand : int
 	heldItem : dict
-	location : Union[bytes,tuple]
 	cursorY : Union[int,float]
 	cursorX : Union[int,float]
+	direction : int
 	cursorZ : Union[int,float]
-	insideBlock : bool
+	location : Union[bytes,tuple]
 
 	_state : int = 3
 

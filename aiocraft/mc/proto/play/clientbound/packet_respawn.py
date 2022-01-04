@@ -5,18 +5,18 @@ from ....packet import Packet
 from ....types import *
 
 class PacketRespawn(Packet):
-	__slots__ = ( 'id', 'worldName', 'gamemode', 'hashedSeed', 'previousGamemode', 'isDebug', 'copyMetadata', 'difficulty', 'isFlat', 'levelType', 'dimension' )
+	__slots__ = ( 'id', 'copyMetadata', 'isFlat', 'isDebug', 'hashedSeed', 'dimension', 'gamemode', 'difficulty', 'levelType', 'previousGamemode', 'worldName' )
 	
-	worldName : str
-	gamemode : int
-	hashedSeed : int
-	previousGamemode : int
-	isDebug : bool
 	copyMetadata : bool
-	difficulty : int
 	isFlat : bool
+	isDebug : bool
+	hashedSeed : int
+	dimension : Union[int,bytes,str]
+	gamemode : int
+	difficulty : int
 	levelType : str
-	dimension : Union[bytes,str,int]
+	previousGamemode : int
+	worldName : str
 
 	_state : int = 3
 

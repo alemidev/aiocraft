@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateViewPosition(Packet):
-	__slots__ = ( 'id', 'chunkZ', 'chunkX' )
+	__slots__ = ( 'id', 'chunkX', 'chunkZ' )
 	
-	chunkZ : int
 	chunkX : int
+	chunkZ : int
 
 	_state : int = 3
 

@@ -5,17 +5,17 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPosition(Packet):
-	__slots__ = ( 'id', 'pitch', 'x', 'dismountVehicle', 'z', 'yaw', 'y', 'onGround', 'flags', 'teleportId' )
+	__slots__ = ( 'id', 'flags', 'onGround', 'z', 'yaw', 'x', 'pitch', 'dismountVehicle', 'teleportId', 'y' )
 	
-	pitch : float
-	x : float
-	dismountVehicle : bool
+	flags : int
+	onGround : bool
 	z : float
 	yaw : float
-	y : float
-	onGround : bool
-	flags : int
+	x : float
+	pitch : float
+	dismountVehicle : bool
 	teleportId : int
+	y : float
 
 	_state : int = 3
 

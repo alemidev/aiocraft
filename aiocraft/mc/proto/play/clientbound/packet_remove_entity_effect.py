@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketRemoveEntityEffect(Packet):
-	__slots__ = ( 'id', 'entityId', 'effectId' )
+	__slots__ = ( 'id', 'effectId', 'entityId' )
 	
-	entityId : int
 	effectId : int
+	entityId : int
 
 	_state : int = 3
 

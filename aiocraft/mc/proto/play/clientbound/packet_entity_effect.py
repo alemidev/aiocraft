@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityEffect(Packet):
-	__slots__ = ( 'id', 'entityId', 'amplifier', 'hideParticles', 'duration', 'effectId' )
+	__slots__ = ( 'id', 'amplifier', 'entityId', 'effectId', 'duration', 'hideParticles' )
 	
-	entityId : int
 	amplifier : int
-	hideParticles : Union[bool,int]
-	duration : int
+	entityId : int
 	effectId : int
+	duration : int
+	hideParticles : Union[int,bool]
 
 	_state : int = 3
 

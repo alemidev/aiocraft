@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockBreakAnimation(Packet):
-	__slots__ = ( 'id', 'location', 'entityId', 'destroyStage' )
+	__slots__ = ( 'id', 'location', 'destroyStage', 'entityId' )
 	
 	location : Union[bytes,tuple]
-	entityId : int
 	destroyStage : int
+	entityId : int
 
 	_state : int = 3
 

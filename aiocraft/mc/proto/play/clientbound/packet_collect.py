@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCollect(Packet):
-	__slots__ = ( 'id', 'collectedEntityId', 'pickupItemCount', 'collectorEntityId' )
+	__slots__ = ( 'id', 'collectedEntityId', 'collectorEntityId', 'pickupItemCount' )
 	
 	collectedEntityId : int
-	pickupItemCount : int
 	collectorEntityId : int
+	pickupItemCount : int
 
 	_state : int = 3
 

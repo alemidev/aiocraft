@@ -5,13 +5,13 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEditBook(Packet):
-	__slots__ = ( 'id', 'signing', 'hand', 'pages', 'title', 'new_book' )
+	__slots__ = ( 'id', 'pages', 'hand', 'new_book', 'signing', 'title' )
 	
-	signing : bool
-	hand : int
 	pages : list
-	title : tuple
+	hand : int
 	new_book : dict
+	signing : bool
+	title : tuple
 
 	_state : int = 3
 

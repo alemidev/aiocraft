@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketRecipeBook(Packet):
-	__slots__ = ( 'id', 'filterActive', 'bookId', 'bookOpen' )
+	__slots__ = ( 'id', 'bookOpen', 'filterActive', 'bookId' )
 	
+	bookOpen : bool
 	filterActive : bool
 	bookId : int
-	bookOpen : bool
 
 	_state : int = 3
 

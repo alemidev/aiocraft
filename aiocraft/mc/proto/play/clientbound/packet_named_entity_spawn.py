@@ -5,19 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketNamedEntitySpawn(Packet):
-	__slots__ = ( 'id', 'pitch', 'playerName', 'x', 'data', 'z', 'yaw', 'y', 'entityId', 'currentItem', 'playerUUID', 'metadata' )
+	__slots__ = ( 'id', 'currentItem', 'entityId', 'z', 'playerName', 'x', 'yaw', 'pitch', 'playerUUID', 'metadata', 'y', 'data' )
 	
-	pitch : int
+	currentItem : int
+	entityId : int
+	z : Union[int,float]
 	playerName : str
 	x : Union[int,float]
-	data : list
-	z : Union[int,float]
 	yaw : int
-	y : Union[int,float]
-	entityId : int
-	currentItem : int
+	pitch : int
 	playerUUID : str
-	metadata : bytes
+	metadata : dict
+	y : Union[int,float]
+	data : list
 
 	_state : int = 3
 

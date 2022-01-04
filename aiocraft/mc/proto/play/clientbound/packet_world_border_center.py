@@ -5,10 +5,10 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldBorderCenter(Packet):
-	__slots__ = ( 'id', 'z', 'x' )
+	__slots__ = ( 'id', 'x', 'z' )
 	
-	z : float
 	x : float
+	z : float
 
 	_state : int = 3
 

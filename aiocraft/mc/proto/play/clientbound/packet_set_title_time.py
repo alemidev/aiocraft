@@ -5,11 +5,11 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSetTitleTime(Packet):
-	__slots__ = ( 'id', 'fadeIn', 'fadeOut', 'stay' )
+	__slots__ = ( 'id', 'fadeOut', 'stay', 'fadeIn' )
 	
-	fadeIn : int
 	fadeOut : int
 	stay : int
+	fadeIn : int
 
 	_state : int = 3
 

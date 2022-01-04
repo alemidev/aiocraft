@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAcknowledgePlayerDigging(Packet):
-	__slots__ = ( 'id', 'block', 'location', 'status', 'successful' )
+	__slots__ = ( 'id', 'location', 'status', 'successful', 'block' )
 	
-	block : int
 	location : tuple
 	status : int
 	successful : bool
+	block : int
 
 	_state : int = 3
 

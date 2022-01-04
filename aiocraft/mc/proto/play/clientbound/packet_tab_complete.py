@@ -5,12 +5,12 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTabComplete(Packet):
-	__slots__ = ( 'id', 'transactionId', 'length', 'start', 'matches' )
+	__slots__ = ( 'id', 'matches', 'length', 'transactionId', 'start' )
 	
-	transactionId : int
-	length : int
-	start : int
 	matches : list
+	length : int
+	transactionId : int
+	start : int
 
 	_state : int = 3
 
