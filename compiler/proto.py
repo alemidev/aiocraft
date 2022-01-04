@@ -68,6 +68,7 @@ TYPE_MAP = {
 	"UUID": Ref('UUID'),
 	"string": Ref('String'),
 	"nbt": Ref('NBTTag'),
+	"optionalNbt": Ref('OptionalType(NBTTag)'),
 	"slot": Ref('Slot'),
 	"position": Ref('Position'),
 	"entityMetadataItem": Ref('EntityMetadataItem'),
@@ -93,8 +94,7 @@ HINT_MAP = {
 	"nbt": 'bytes',
 	"slot": 'dict',
 	"position": 'tuple',
-	"entityMetadataItem": 'bytes',
-	"entityMetadata": 'bytes',
+	"entityMetadata": 'dict',
 }
 
 def _format_line(i, depth:int=0) -> str:
