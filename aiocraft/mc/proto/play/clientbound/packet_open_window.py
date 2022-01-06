@@ -5,19 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketOpenWindow(Packet):
-	__slots__ = ( 'id', 'slotCount', 'windowTitle', 'entityId', 'inventoryType', 'windowId', 'useProvidedTitle' )
+	__slots__ = ( 'id', 'entityId', 'inventoryType', 'slotCount', 'windowId', 'windowTitle' )
 	
-	slotCount : int
-	windowTitle : str
 	entityId : bytes
-	inventoryType : Union[str,int]
+	inventoryType : Union[int,str]
+	slotCount : int
 	windowId : int
-	useProvidedTitle : bool
+	windowTitle : str
+
+	def __init__(self, proto:int,
+		entityId:bytes=None,
+		inventoryType:Union[int,str]=None,
+		slotCount:int=None,
+		windowId:int=None,
+		windowTitle:str=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			inventoryType=inventoryType,
+			slotCount=slotCount,
+			windowId=windowId,
+			windowTitle=windowTitle
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 45,
 		47 : 45,
 		76 : 19,
 		107 : 19,
@@ -54,11 +67,9 @@ class PacketOpenWindow(Packet):
 		751 : 45,
 		755 : 46,
 		756 : 46,
-		757 : 46,
-		1073741839 : 46
+		757 : 46
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'windowId', Byte ), ( 'inventoryType', Byte ), ( 'windowTitle', String ), ( 'slotCount', Byte ), ( 'useProvidedTitle', Boolean ), ( 'entityId', SwitchType('inventoryType', { 11 : Int }, None, ) ) ],
 		47 : [ ( 'windowId', Byte ), ( 'inventoryType', String ), ( 'windowTitle', String ), ( 'slotCount', Byte ), ( 'entityId', SwitchType('inventoryType', { 'EntityHorse' : Int }, None, ) ) ],
 		76 : [ ( 'windowId', Byte ), ( 'inventoryType', String ), ( 'windowTitle', String ), ( 'slotCount', Byte ), ( 'entityId', SwitchType('inventoryType', { 'EntityHorse' : Int }, None, ) ) ],
 		107 : [ ( 'windowId', Byte ), ( 'inventoryType', String ), ( 'windowTitle', String ), ( 'slotCount', Byte ), ( 'entityId', SwitchType('inventoryType', { 'EntityHorse' : Int }, None, ) ) ],
@@ -95,6 +106,5 @@ class PacketOpenWindow(Packet):
 		751 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
 		755 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
 		756 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
-		757 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
-		1073741839 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ]
+		757 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ]
 	}

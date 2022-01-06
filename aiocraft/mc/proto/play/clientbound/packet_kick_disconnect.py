@@ -9,10 +9,16 @@ class PacketKickDisconnect(Packet):
 	
 	reason : str
 
+	def __init__(self, proto:int,
+		reason:str=None
+	):
+		super().__init__(proto,
+			reason=reason
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 64,
 		47 : 64,
 		76 : 25,
 		107 : 26,
@@ -49,11 +55,9 @@ class PacketKickDisconnect(Packet):
 		751 : 25,
 		755 : 26,
 		756 : 26,
-		757 : 26,
-		1073741839 : 26
+		757 : 26
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'reason', String ) ],
 		47 : [ ( 'reason', String ) ],
 		76 : [ ( 'reason', String ) ],
 		107 : [ ( 'reason', String ) ],
@@ -90,6 +94,5 @@ class PacketKickDisconnect(Packet):
 		751 : [ ( 'reason', String ) ],
 		755 : [ ( 'reason', String ) ],
 		756 : [ ( 'reason', String ) ],
-		757 : [ ( 'reason', String ) ],
-		1073741839 : [ ( 'reason', String ) ]
+		757 : [ ( 'reason', String ) ]
 	}

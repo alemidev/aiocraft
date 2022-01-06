@@ -5,16 +5,37 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateJigsawBlock(Packet):
-	__slots__ = ( 'id', 'name', 'jointType', 'target', 'pool', 'finalState', 'targetPool', 'location', 'attachmentType' )
+	__slots__ = ( 'id', 'attachmentType', 'finalState', 'jointType', 'location', 'name', 'pool', 'target', 'targetPool' )
 	
-	name : str
-	jointType : str
-	target : str
-	pool : str
-	finalState : str
-	targetPool : str
-	location : tuple
 	attachmentType : str
+	finalState : str
+	jointType : str
+	location : tuple
+	name : str
+	pool : str
+	target : str
+	targetPool : str
+
+	def __init__(self, proto:int,
+		attachmentType:str=None,
+		finalState:str=None,
+		jointType:str=None,
+		location:tuple=None,
+		name:str=None,
+		pool:str=None,
+		target:str=None,
+		targetPool:str=None
+	):
+		super().__init__(proto,
+			attachmentType=attachmentType,
+			finalState=finalState,
+			jointType=jointType,
+			location=location,
+			name=name,
+			pool=pool,
+			target=target,
+			targetPool=targetPool
+		)
 
 	_state : int = 3
 
@@ -33,8 +54,7 @@ class PacketUpdateJigsawBlock(Packet):
 		751 : 41,
 		755 : 41,
 		756 : 41,
-		757 : 41,
-		1073741839 : 41
+		757 : 41
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'location', Position ), ( 'attachmentType', String ), ( 'targetPool', String ), ( 'finalState', String ) ],
@@ -51,6 +71,5 @@ class PacketUpdateJigsawBlock(Packet):
 		751 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
 		755 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
 		756 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
-		757 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
-		1073741839 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ]
+		757 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ]
 	}

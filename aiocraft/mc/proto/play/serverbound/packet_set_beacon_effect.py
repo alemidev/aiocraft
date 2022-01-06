@@ -10,6 +10,15 @@ class PacketSetBeaconEffect(Packet):
 	primary_effect : int
 	secondary_effect : int
 
+	def __init__(self, proto:int,
+		primary_effect:int=None,
+		secondary_effect:int=None
+	):
+		super().__init__(proto,
+			primary_effect=primary_effect,
+			secondary_effect=secondary_effect
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -32,8 +41,7 @@ class PacketSetBeaconEffect(Packet):
 		751 : 36,
 		755 : 36,
 		756 : 36,
-		757 : 36,
-		1073741839 : 36
+		757 : 36
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
@@ -55,6 +63,5 @@ class PacketSetBeaconEffect(Packet):
 		751 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
 		755 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
 		756 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
-		757 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
-		1073741839 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ]
+		757 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ]
 	}

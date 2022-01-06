@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTransaction(Packet):
-	__slots__ = ( 'id', 'windowId', 'action', 'accepted' )
+	__slots__ = ( 'id', 'accepted', 'action', 'windowId' )
 	
-	windowId : int
-	action : int
 	accepted : bool
+	action : int
+	windowId : int
+
+	def __init__(self, proto:int,
+		accepted:bool=None,
+		action:int=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			accepted=accepted,
+			action=action,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 15,
 		47 : 15,
 		76 : 4,
 		107 : 5,
@@ -48,11 +58,9 @@ class PacketTransaction(Packet):
 		734 : 7,
 		735 : 7,
 		736 : 7,
-		751 : 7,
-		1073741839 : 7
+		751 : 7
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
 		47 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
 		76 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
 		107 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
@@ -86,6 +94,5 @@ class PacketTransaction(Packet):
 		734 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
 		735 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
 		736 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
-		751 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ]
+		751 : [ ( 'windowId', Byte ), ( 'action', Short ), ( 'accepted', Boolean ) ]
 	}

@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketQueryBlockNbt(Packet):
-	__slots__ = ( 'id', 'transactionId', 'location' )
+	__slots__ = ( 'id', 'location', 'transactionId' )
 	
-	transactionId : int
 	location : tuple
+	transactionId : int
+
+	def __init__(self, proto:int,
+		location:tuple=None,
+		transactionId:int=None
+	):
+		super().__init__(proto,
+			location=location,
+			transactionId=transactionId
+		)
 
 	_state : int = 3
 
@@ -32,8 +41,7 @@ class PacketQueryBlockNbt(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1,
-		1073741839 : 1
+		757 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
@@ -55,6 +63,5 @@ class PacketQueryBlockNbt(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
-		1073741839 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ]
 	}

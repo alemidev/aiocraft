@@ -10,6 +10,15 @@ class PacketWorldBorderCenter(Packet):
 	x : float
 	z : float
 
+	def __init__(self, proto:int,
+		x:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			x=x,
+			z=z
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

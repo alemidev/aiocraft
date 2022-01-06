@@ -5,15 +5,23 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnPosition(Packet):
-	__slots__ = ( 'id', 'location', 'angle' )
+	__slots__ = ( 'id', 'angle', 'location' )
 	
-	location : Union[bytes,tuple]
 	angle : float
+	location : tuple
+
+	def __init__(self, proto:int,
+		angle:float=None,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			angle=angle,
+			location=location
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 5,
 		47 : 5,
 		76 : 66,
 		107 : 67,
@@ -50,11 +58,9 @@ class PacketSpawnPosition(Packet):
 		751 : 66,
 		755 : 75,
 		756 : 75,
-		757 : 75,
-		1073741839 : 67
+		757 : 75
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'location', TrailingData ) ],
 		47 : [ ( 'location', Position ) ],
 		76 : [ ( 'location', Position ) ],
 		107 : [ ( 'location', Position ) ],
@@ -91,6 +97,5 @@ class PacketSpawnPosition(Packet):
 		751 : [ ( 'location', Position ) ],
 		755 : [ ( 'location', Position ), ( 'angle', Float ) ],
 		756 : [ ( 'location', Position ), ( 'angle', Float ) ],
-		757 : [ ( 'location', Position ), ( 'angle', Float ) ],
-		1073741839 : [ ( 'location', Position ) ]
+		757 : [ ( 'location', Position ), ( 'angle', Float ) ]
 	}

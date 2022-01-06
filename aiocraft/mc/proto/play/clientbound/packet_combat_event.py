@@ -5,13 +5,28 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCombatEvent(Packet):
-	__slots__ = ( 'id', 'entityId', 'event', 'message', 'playerId', 'duration' )
+	__slots__ = ( 'id', 'duration', 'entityId', 'event', 'message', 'playerId' )
 	
+	duration : bytes
 	entityId : bytes
 	event : int
 	message : bytes
 	playerId : bytes
-	duration : bytes
+
+	def __init__(self, proto:int,
+		duration:bytes=None,
+		entityId:bytes=None,
+		event:int=None,
+		message:bytes=None,
+		playerId:bytes=None
+	):
+		super().__init__(proto,
+			duration=duration,
+			entityId=entityId,
+			event=event,
+			message=message,
+			playerId=playerId
+		)
 
 	_state : int = 3
 
@@ -49,8 +64,7 @@ class PacketCombatEvent(Packet):
 		734 : 50,
 		735 : 50,
 		736 : 50,
-		751 : 49,
-		1073741839 : 50
+		751 : 49
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'event', VarInt ), ( 'duration', SwitchType('event', { 1 : VarInt }, None, ) ), ( 'playerId', SwitchType('event', { 2 : VarInt }, None, ) ), ( 'entityId', SwitchType('event', { 1 : Int, 2 : Int }, None, ) ), ( 'message', SwitchType('event', { 2 : String }, None, ) ) ],
@@ -86,6 +100,5 @@ class PacketCombatEvent(Packet):
 		734 : [ ( 'event', VarInt ), ( 'duration', SwitchType('event', { 1 : VarInt }, None, ) ), ( 'playerId', SwitchType('event', { 2 : VarInt }, None, ) ), ( 'entityId', SwitchType('event', { 1 : Int, 2 : Int }, None, ) ), ( 'message', SwitchType('event', { 2 : String }, None, ) ) ],
 		735 : [ ( 'event', VarInt ), ( 'duration', SwitchType('event', { 1 : VarInt }, None, ) ), ( 'playerId', SwitchType('event', { 2 : VarInt }, None, ) ), ( 'entityId', SwitchType('event', { 1 : Int, 2 : Int }, None, ) ), ( 'message', SwitchType('event', { 2 : String }, None, ) ) ],
 		736 : [ ( 'event', VarInt ), ( 'duration', SwitchType('event', { 1 : VarInt }, None, ) ), ( 'playerId', SwitchType('event', { 2 : VarInt }, None, ) ), ( 'entityId', SwitchType('event', { 1 : Int, 2 : Int }, None, ) ), ( 'message', SwitchType('event', { 2 : String }, None, ) ) ],
-		751 : [ ( 'event', VarInt ), ( 'duration', SwitchType('event', { 1 : VarInt }, None, ) ), ( 'playerId', SwitchType('event', { 2 : VarInt }, None, ) ), ( 'entityId', SwitchType('event', { 1 : Int, 2 : Int }, None, ) ), ( 'message', SwitchType('event', { 2 : String }, None, ) ) ],
-		1073741839 : [ ( 'event', VarInt ), ( 'duration', SwitchType('event', { 1 : VarInt }, None, ) ), ( 'playerId', SwitchType('event', { 2 : VarInt }, None, ) ), ( 'entityId', SwitchType('event', { 1 : Int, 2 : Int }, None, ) ), ( 'message', SwitchType('event', { 2 : String }, None, ) ) ]
+		751 : [ ( 'event', VarInt ), ( 'duration', SwitchType('event', { 1 : VarInt }, None, ) ), ( 'playerId', SwitchType('event', { 2 : VarInt }, None, ) ), ( 'entityId', SwitchType('event', { 1 : Int, 2 : Int }, None, ) ), ( 'message', SwitchType('event', { 2 : String }, None, ) ) ]
 	}

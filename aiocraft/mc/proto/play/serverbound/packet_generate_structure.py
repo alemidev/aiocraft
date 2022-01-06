@@ -5,11 +5,22 @@ from ....packet import Packet
 from ....types import *
 
 class PacketGenerateStructure(Packet):
-	__slots__ = ( 'id', 'location', 'levels', 'keepJigsaws' )
+	__slots__ = ( 'id', 'keepJigsaws', 'levels', 'location' )
 	
-	location : tuple
-	levels : int
 	keepJigsaws : bool
+	levels : int
+	location : tuple
+
+	def __init__(self, proto:int,
+		keepJigsaws:bool=None,
+		levels:int=None,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			keepJigsaws=keepJigsaws,
+			levels=levels,
+			location=location
+		)
 
 	_state : int = 3
 
@@ -20,8 +31,7 @@ class PacketGenerateStructure(Packet):
 		751 : 15,
 		755 : 14,
 		756 : 14,
-		757 : 14,
-		1073741839 : 15
+		757 : 14
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		734 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
@@ -30,6 +40,5 @@ class PacketGenerateStructure(Packet):
 		751 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
 		755 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
 		756 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
-		757 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
-		1073741839 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ]
+		757 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ]
 	}

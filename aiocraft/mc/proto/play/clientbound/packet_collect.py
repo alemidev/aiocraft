@@ -11,10 +11,20 @@ class PacketCollect(Packet):
 	collectorEntityId : int
 	pickupItemCount : int
 
+	def __init__(self, proto:int,
+		collectedEntityId:int=None,
+		collectorEntityId:int=None,
+		pickupItemCount:int=None
+	):
+		super().__init__(proto,
+			collectedEntityId=collectedEntityId,
+			collectorEntityId=collectorEntityId,
+			pickupItemCount=pickupItemCount
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 13,
 		47 : 13,
 		76 : 71,
 		107 : 73,
@@ -51,11 +61,9 @@ class PacketCollect(Packet):
 		751 : 85,
 		755 : 96,
 		756 : 96,
-		757 : 97,
-		1073741839 : 86
+		757 : 97
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'collectedEntityId', Int ), ( 'collectorEntityId', Int ) ],
 		47 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ) ],
 		76 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ) ],
 		107 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ) ],
@@ -92,6 +100,5 @@ class PacketCollect(Packet):
 		751 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
 		755 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
 		756 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
-		757 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
-		1073741839 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ]
+		757 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ]
 	}

@@ -9,10 +9,16 @@ class PacketLoginStart(Packet):
 	
 	username : str
 
+	def __init__(self, proto:int,
+		username:str=None
+	):
+		super().__init__(proto,
+			username=username
+		)
+
 	_state : int = 2
 
 	_ids : Dict[int, int] = {
-		5 : 0,
 		47 : 0,
 		76 : 0,
 		107 : 0,
@@ -49,11 +55,9 @@ class PacketLoginStart(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0,
-		1073741839 : 0
+		757 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'username', String ) ],
 		47 : [ ( 'username', String ) ],
 		76 : [ ( 'username', String ) ],
 		107 : [ ( 'username', String ) ],
@@ -90,6 +94,5 @@ class PacketLoginStart(Packet):
 		751 : [ ( 'username', String ) ],
 		755 : [ ( 'username', String ) ],
 		756 : [ ( 'username', String ) ],
-		757 : [ ( 'username', String ) ],
-		1073741839 : [ ( 'username', String ) ]
+		757 : [ ( 'username', String ) ]
 	}

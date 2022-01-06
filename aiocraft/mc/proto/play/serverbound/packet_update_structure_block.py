@@ -5,24 +5,61 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateStructureBlock(Packet):
-	__slots__ = ( 'id', 'name', 'size_x', 'size_z', 'offset_z', 'rotation', 'offset_y', 'size_y', 'flags', 'offset_x', 'mirror', 'seed', 'action', 'metadata', 'integrity', 'location', 'mode' )
+	__slots__ = ( 'id', 'action', 'flags', 'integrity', 'location', 'metadata', 'mirror', 'mode', 'name', 'offset_x', 'offset_y', 'offset_z', 'rotation', 'seed', 'size_x', 'size_y', 'size_z' )
 	
-	name : str
-	size_x : int
-	size_z : int
-	offset_z : int
-	rotation : int
-	offset_y : int
-	size_y : int
-	flags : int
-	offset_x : int
-	mirror : int
-	seed : int
 	action : int
-	metadata : str
+	flags : int
 	integrity : float
 	location : tuple
+	metadata : str
+	mirror : int
 	mode : int
+	name : str
+	offset_x : int
+	offset_y : int
+	offset_z : int
+	rotation : int
+	seed : int
+	size_x : int
+	size_y : int
+	size_z : int
+
+	def __init__(self, proto:int,
+		action:int=None,
+		flags:int=None,
+		integrity:float=None,
+		location:tuple=None,
+		metadata:str=None,
+		mirror:int=None,
+		mode:int=None,
+		name:str=None,
+		offset_x:int=None,
+		offset_y:int=None,
+		offset_z:int=None,
+		rotation:int=None,
+		seed:int=None,
+		size_x:int=None,
+		size_y:int=None,
+		size_z:int=None
+	):
+		super().__init__(proto,
+			action=action,
+			flags=flags,
+			integrity=integrity,
+			location=location,
+			metadata=metadata,
+			mirror=mirror,
+			mode=mode,
+			name=name,
+			offset_x=offset_x,
+			offset_y=offset_y,
+			offset_z=offset_z,
+			rotation=rotation,
+			seed=seed,
+			size_x=size_x,
+			size_y=size_y,
+			size_z=size_z
+		)
 
 	_state : int = 3
 
@@ -46,8 +83,7 @@ class PacketUpdateStructureBlock(Packet):
 		751 : 42,
 		755 : 42,
 		756 : 42,
-		757 : 42,
-		1073741839 : 42
+		757 : 42
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'mode', VarInt ), ( 'name', String ), ( 'offset_x', Byte ), ( 'offset_y', Byte ), ( 'offset_z', Byte ), ( 'size_x', Byte ), ( 'size_y', Byte ), ( 'size_z', Byte ), ( 'mirror', VarInt ), ( 'rotation', VarInt ), ( 'metadata', String ), ( 'integrity', Float ), ( 'seed', VarInt ), ( 'flags', Byte ) ],
@@ -69,6 +105,5 @@ class PacketUpdateStructureBlock(Packet):
 		751 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'mode', VarInt ), ( 'name', String ), ( 'offset_x', Byte ), ( 'offset_y', Byte ), ( 'offset_z', Byte ), ( 'size_x', Byte ), ( 'size_y', Byte ), ( 'size_z', Byte ), ( 'mirror', VarInt ), ( 'rotation', VarInt ), ( 'metadata', String ), ( 'integrity', Float ), ( 'seed', VarInt ), ( 'flags', Byte ) ],
 		755 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'mode', VarInt ), ( 'name', String ), ( 'offset_x', Byte ), ( 'offset_y', Byte ), ( 'offset_z', Byte ), ( 'size_x', Byte ), ( 'size_y', Byte ), ( 'size_z', Byte ), ( 'mirror', VarInt ), ( 'rotation', VarInt ), ( 'metadata', String ), ( 'integrity', Float ), ( 'seed', VarInt ), ( 'flags', Byte ) ],
 		756 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'mode', VarInt ), ( 'name', String ), ( 'offset_x', Byte ), ( 'offset_y', Byte ), ( 'offset_z', Byte ), ( 'size_x', Byte ), ( 'size_y', Byte ), ( 'size_z', Byte ), ( 'mirror', VarInt ), ( 'rotation', VarInt ), ( 'metadata', String ), ( 'integrity', Float ), ( 'seed', VarInt ), ( 'flags', Byte ) ],
-		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'mode', VarInt ), ( 'name', String ), ( 'offset_x', Byte ), ( 'offset_y', Byte ), ( 'offset_z', Byte ), ( 'size_x', Byte ), ( 'size_y', Byte ), ( 'size_z', Byte ), ( 'mirror', VarInt ), ( 'rotation', VarInt ), ( 'metadata', String ), ( 'integrity', Float ), ( 'seed', VarInt ), ( 'flags', Byte ) ],
-		1073741839 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'mode', VarInt ), ( 'name', String ), ( 'offset_x', Byte ), ( 'offset_y', Byte ), ( 'offset_z', Byte ), ( 'size_x', Byte ), ( 'size_y', Byte ), ( 'size_z', Byte ), ( 'mirror', VarInt ), ( 'rotation', VarInt ), ( 'metadata', String ), ( 'integrity', Float ), ( 'seed', VarInt ), ( 'flags', Byte ) ]
+		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'mode', VarInt ), ( 'name', String ), ( 'offset_x', Byte ), ( 'offset_y', Byte ), ( 'offset_z', Byte ), ( 'size_x', Byte ), ( 'size_y', Byte ), ( 'size_z', Byte ), ( 'mirror', VarInt ), ( 'rotation', VarInt ), ( 'metadata', String ), ( 'integrity', Float ), ( 'seed', VarInt ), ( 'flags', Byte ) ]
 	}

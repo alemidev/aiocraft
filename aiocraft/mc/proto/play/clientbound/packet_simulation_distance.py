@@ -9,6 +9,13 @@ class PacketSimulationDistance(Packet):
 	
 	distance : int
 
+	def __init__(self, proto:int,
+		distance:int=None
+	):
+		super().__init__(proto,
+			distance=distance
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateHealth(Packet):
-	__slots__ = ( 'id', 'health', 'food', 'foodSaturation' )
+	__slots__ = ( 'id', 'food', 'foodSaturation', 'health' )
 	
-	health : float
 	food : int
 	foodSaturation : float
+	health : float
+
+	def __init__(self, proto:int,
+		food:int=None,
+		foodSaturation:float=None,
+		health:float=None
+	):
+		super().__init__(proto,
+			food=food,
+			foodSaturation=foodSaturation,
+			health=health
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 6,
 		47 : 6,
 		76 : 62,
 		107 : 62,
@@ -51,11 +61,9 @@ class PacketUpdateHealth(Packet):
 		751 : 73,
 		755 : 82,
 		756 : 82,
-		757 : 82,
-		1073741839 : 74
+		757 : 82
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'health', Float ), ( 'food', Short ), ( 'foodSaturation', Float ) ],
 		47 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
 		76 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
 		107 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
@@ -92,6 +100,5 @@ class PacketUpdateHealth(Packet):
 		751 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
 		755 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
 		756 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
-		757 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
-		1073741839 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ]
+		757 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ]
 	}

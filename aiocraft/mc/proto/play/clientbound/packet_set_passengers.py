@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSetPassengers(Packet):
-	__slots__ = ( 'id', 'passengers', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'passengers' )
 	
-	passengers : list
 	entityId : int
+	passengers : list
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		passengers:list=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			passengers=passengers
+		)
 
 	_state : int = 3
 
@@ -47,8 +56,7 @@ class PacketSetPassengers(Packet):
 		751 : 75,
 		755 : 84,
 		756 : 84,
-		757 : 84,
-		1073741839 : 76
+		757 : 84
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
@@ -85,6 +93,5 @@ class PacketSetPassengers(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ]
 	}

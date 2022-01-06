@@ -5,19 +5,46 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTeams(Packet):
-	__slots__ = ( 'id', 'name', 'friendlyFire', 'players', 'formatting', 'prefix', 'suffix', 'nameTagVisibility', 'collisionRule', 'team', 'mode', 'color' )
+	__slots__ = ( 'id', 'collisionRule', 'color', 'formatting', 'friendlyFire', 'mode', 'name', 'nameTagVisibility', 'players', 'prefix', 'suffix', 'team' )
 	
-	name : bytes
-	friendlyFire : bytes
-	players : bytes
+	collisionRule : bytes
+	color : bytes
 	formatting : bytes
+	friendlyFire : bytes
+	mode : int
+	name : bytes
+	nameTagVisibility : bytes
+	players : bytes
 	prefix : bytes
 	suffix : bytes
-	nameTagVisibility : bytes
-	collisionRule : bytes
 	team : str
-	mode : int
-	color : bytes
+
+	def __init__(self, proto:int,
+		collisionRule:bytes=None,
+		color:bytes=None,
+		formatting:bytes=None,
+		friendlyFire:bytes=None,
+		mode:int=None,
+		name:bytes=None,
+		nameTagVisibility:bytes=None,
+		players:bytes=None,
+		prefix:bytes=None,
+		suffix:bytes=None,
+		team:str=None
+	):
+		super().__init__(proto,
+			collisionRule=collisionRule,
+			color=color,
+			formatting=formatting,
+			friendlyFire=friendlyFire,
+			mode=mode,
+			name=name,
+			nameTagVisibility=nameTagVisibility,
+			players=players,
+			prefix=prefix,
+			suffix=suffix,
+			team=team
+		)
 
 	_state : int = 3
 
@@ -56,8 +83,7 @@ class PacketTeams(Packet):
 		751 : 76,
 		755 : 85,
 		756 : 85,
-		757 : 85,
-		1073741839 : 77
+		757 : 85
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'color', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ],
@@ -94,6 +120,5 @@ class PacketTeams(Packet):
 		751 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'formatting', SwitchType('mode', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ],
 		755 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'formatting', SwitchType('mode', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ],
 		756 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'formatting', SwitchType('mode', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ],
-		757 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'formatting', SwitchType('mode', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ],
-		1073741839 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'formatting', SwitchType('mode', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ]
+		757 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'formatting', SwitchType('mode', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ]
 	}

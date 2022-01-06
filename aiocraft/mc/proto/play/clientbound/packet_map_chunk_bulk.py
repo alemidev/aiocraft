@@ -5,22 +5,28 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMapChunkBulk(Packet):
-	__slots__ = ( 'id', 'meta', 'skyLightSent', 'dataLength', 'chunkColumnCount', 'compressedChunkData', 'data' )
+	__slots__ = ( 'id', 'data', 'meta', 'skyLightSent' )
 	
+	data : bytes
 	meta : list
 	skyLightSent : bool
-	dataLength : bytes
-	chunkColumnCount : bytes
-	compressedChunkData : bytes
-	data : bytes
+
+	def __init__(self, proto:int,
+		data:bytes=None,
+		meta:list=None,
+		skyLightSent:bool=None
+	):
+		super().__init__(proto,
+			data=data,
+			meta=meta,
+			skyLightSent=skyLightSent
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 38,
 		47 : 38
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'chunkColumnCount', TrailingData ), ( 'dataLength', TrailingData ), ( 'skyLightSent', Boolean ), ( 'compressedChunkData', ByteArray ), ( 'meta', ArrayType(StructType(( 'x', Int ), ( 'z', Int ), ( 'bitMap', UnsignedShort ), ( 'addBitMap', UnsignedShort ), ), 'chunkColumnCount', ) ) ],
 		47 : [ ( 'skyLightSent', Boolean ), ( 'meta', ArrayType(StructType(( 'x', Int ), ( 'z', Int ), ( 'bitMap', UnsignedShort ), ), VarInt, ) ), ( 'data', TrailingData ) ]
 	}

@@ -9,6 +9,13 @@ class PacketUseItem(Packet):
 	
 	hand : int
 
+	def __init__(self, proto:int,
+		hand:int=None
+	):
+		super().__init__(proto,
+			hand=hand
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -47,8 +54,7 @@ class PacketUseItem(Packet):
 		751 : 47,
 		755 : 47,
 		756 : 47,
-		757 : 47,
-		1073741839 : 47
+		757 : 47
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		76 : [ ( 'hand', VarInt ) ],
@@ -86,6 +92,5 @@ class PacketUseItem(Packet):
 		751 : [ ( 'hand', VarInt ) ],
 		755 : [ ( 'hand', VarInt ) ],
 		756 : [ ( 'hand', VarInt ) ],
-		757 : [ ( 'hand', VarInt ) ],
-		1073741839 : [ ( 'hand', VarInt ) ]
+		757 : [ ( 'hand', VarInt ) ]
 	}

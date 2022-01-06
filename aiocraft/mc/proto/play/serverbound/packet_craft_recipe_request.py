@@ -5,11 +5,22 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCraftRecipeRequest(Packet):
-	__slots__ = ( 'id', 'makeAll', 'windowId', 'recipe' )
+	__slots__ = ( 'id', 'makeAll', 'recipe', 'windowId' )
 	
 	makeAll : bool
+	recipe : Union[int,str]
 	windowId : int
-	recipe : Union[str,int]
+
+	def __init__(self, proto:int,
+		makeAll:bool=None,
+		recipe:Union[int,str]=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			makeAll=makeAll,
+			recipe=recipe,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
@@ -36,8 +47,7 @@ class PacketCraftRecipeRequest(Packet):
 		751 : 25,
 		755 : 24,
 		756 : 24,
-		757 : 24,
-		1073741839 : 25
+		757 : 24
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		338 : [ ( 'windowId', Byte ), ( 'recipe', VarInt ), ( 'makeAll', Boolean ) ],
@@ -62,6 +72,5 @@ class PacketCraftRecipeRequest(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
 		755 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
 		756 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
-		757 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ]
+		757 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ]
 	}

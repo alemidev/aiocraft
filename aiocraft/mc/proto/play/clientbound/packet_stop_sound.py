@@ -5,11 +5,22 @@ from ....packet import Packet
 from ....types import *
 
 class PacketStopSound(Packet):
-	__slots__ = ( 'id', 'source', 'flags', 'sound' )
+	__slots__ = ( 'id', 'flags', 'sound', 'source' )
 	
-	source : bytes
 	flags : int
 	sound : bytes
+	source : bytes
+
+	def __init__(self, proto:int,
+		flags:int=None,
+		sound:bytes=None,
+		source:bytes=None
+	):
+		super().__init__(proto,
+			flags=flags,
+			sound=sound,
+			source=source
+		)
 
 	_state : int = 3
 
@@ -34,8 +45,7 @@ class PacketStopSound(Packet):
 		751 : 82,
 		755 : 93,
 		756 : 93,
-		757 : 94,
-		1073741839 : 83
+		757 : 94
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		351 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
@@ -58,6 +68,5 @@ class PacketStopSound(Packet):
 		751 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
 		755 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
 		756 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
-		757 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
-		1073741839 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ]
+		757 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ]
 	}

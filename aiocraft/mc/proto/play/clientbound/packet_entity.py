@@ -9,10 +9,16 @@ class PacketEntity(Packet):
 	
 	entityId : int
 
+	def __init__(self, proto:int,
+		entityId:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 20,
 		47 : 20,
 		76 : 41,
 		107 : 40,
@@ -46,11 +52,9 @@ class PacketEntity(Packet):
 		734 : 43,
 		735 : 43,
 		736 : 43,
-		751 : 42,
-		1073741839 : 43
+		751 : 42
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ) ],
 		47 : [ ( 'entityId', VarInt ) ],
 		76 : [ ( 'entityId', VarInt ) ],
 		107 : [ ( 'entityId', VarInt ) ],
@@ -84,6 +88,5 @@ class PacketEntity(Packet):
 		734 : [ ( 'entityId', VarInt ) ],
 		735 : [ ( 'entityId', VarInt ) ],
 		736 : [ ( 'entityId', VarInt ) ],
-		751 : [ ( 'entityId', VarInt ) ],
-		1073741839 : [ ( 'entityId', VarInt ) ]
+		751 : [ ( 'entityId', VarInt ) ]
 	}

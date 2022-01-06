@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketDifficulty(Packet):
-	__slots__ = ( 'id', 'difficultyLocked', 'difficulty' )
+	__slots__ = ( 'id', 'difficulty', 'difficultyLocked' )
 	
-	difficultyLocked : bool
 	difficulty : int
+	difficultyLocked : bool
+
+	def __init__(self, proto:int,
+		difficulty:int=None,
+		difficultyLocked:bool=None
+	):
+		super().__init__(proto,
+			difficulty=difficulty,
+			difficultyLocked=difficultyLocked
+		)
 
 	_state : int = 3
 
@@ -49,8 +58,7 @@ class PacketDifficulty(Packet):
 		751 : 13,
 		755 : 14,
 		756 : 14,
-		757 : 14,
-		1073741839 : 14
+		757 : 14
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'difficulty', Byte ) ],
@@ -89,6 +97,5 @@ class PacketDifficulty(Packet):
 		751 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
 		755 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
 		756 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
-		757 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
-		1073741839 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ]
+		757 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ]
 	}

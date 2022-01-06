@@ -9,6 +9,13 @@ class PacketPong(Packet):
 	
 	id : int
 
+	def __init__(self, proto:int,
+		id:int=None
+	):
+		super().__init__(proto,
+			id=id
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

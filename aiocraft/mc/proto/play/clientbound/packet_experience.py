@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketExperience(Packet):
-	__slots__ = ( 'id', 'level', 'experienceBar', 'totalExperience' )
+	__slots__ = ( 'id', 'experienceBar', 'level', 'totalExperience' )
 	
-	level : int
 	experienceBar : float
+	level : int
 	totalExperience : int
+
+	def __init__(self, proto:int,
+		experienceBar:float=None,
+		level:int=None,
+		totalExperience:int=None
+	):
+		super().__init__(proto,
+			experienceBar=experienceBar,
+			level=level,
+			totalExperience=totalExperience
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 31,
 		47 : 31,
 		76 : 61,
 		107 : 61,
@@ -51,11 +61,9 @@ class PacketExperience(Packet):
 		751 : 72,
 		755 : 81,
 		756 : 81,
-		757 : 81,
-		1073741839 : 73
+		757 : 81
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'experienceBar', Float ), ( 'level', Short ), ( 'totalExperience', Short ) ],
 		47 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
 		76 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
 		107 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
@@ -92,6 +100,5 @@ class PacketExperience(Packet):
 		751 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
 		755 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
 		756 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
-		757 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
-		1073741839 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ]
+		757 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ]
 	}

@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketScoreboardScore(Packet):
-	__slots__ = ( 'id', 'value', 'action', 'itemName', 'scoreName' )
+	__slots__ = ( 'id', 'action', 'itemName', 'scoreName', 'value' )
 	
-	value : bytes
 	action : int
 	itemName : str
-	scoreName : Union[str,bytes]
+	scoreName : str
+	value : bytes
+
+	def __init__(self, proto:int,
+		action:int=None,
+		itemName:str=None,
+		scoreName:str=None,
+		value:bytes=None
+	):
+		super().__init__(proto,
+			action=action,
+			itemName=itemName,
+			scoreName=scoreName,
+			value=value
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 60,
 		47 : 60,
 		76 : 65,
 		107 : 66,
@@ -52,11 +64,9 @@ class PacketScoreboardScore(Packet):
 		751 : 77,
 		755 : 86,
 		756 : 86,
-		757 : 86,
-		1073741839 : 78
+		757 : 86
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', SwitchType('action', { 1 : Void }, String, ) ), ( 'value', SwitchType('action', { 1 : Void }, Int, ) ) ],
 		47 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ],
 		76 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ],
 		107 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ],
@@ -93,6 +103,5 @@ class PacketScoreboardScore(Packet):
 		751 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ],
 		755 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ],
 		756 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ],
-		757 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ],
-		1073741839 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ]
+		757 : [ ( 'itemName', String ), ( 'action', Byte ), ( 'scoreName', String ), ( 'value', SwitchType('action', { 1 : Void }, VarInt, ) ) ]
 	}

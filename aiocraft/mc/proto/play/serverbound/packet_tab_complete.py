@@ -5,18 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTabComplete(Packet):
-	__slots__ = ( 'id', 'transactionId', 'lookedAtBlock', 'block', 'text', 'assumeCommand' )
+	__slots__ = ( 'id', 'assumeCommand', 'block', 'lookedAtBlock', 'text', 'transactionId' )
 	
-	transactionId : int
-	lookedAtBlock : tuple
-	block : tuple
-	text : str
 	assumeCommand : bool
+	block : tuple
+	lookedAtBlock : tuple
+	text : str
+	transactionId : int
+
+	def __init__(self, proto:int,
+		assumeCommand:bool=None,
+		block:tuple=None,
+		lookedAtBlock:tuple=None,
+		text:str=None,
+		transactionId:int=None
+	):
+		super().__init__(proto,
+			assumeCommand=assumeCommand,
+			block=block,
+			lookedAtBlock=lookedAtBlock,
+			text=text,
+			transactionId=transactionId
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 20,
 		47 : 20,
 		76 : 0,
 		107 : 1,
@@ -53,11 +67,9 @@ class PacketTabComplete(Packet):
 		751 : 6,
 		755 : 6,
 		756 : 6,
-		757 : 6,
-		1073741839 : 6
+		757 : 6
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'text', String ) ],
 		47 : [ ( 'text', String ), ( 'block', OptionalType(Position, ) ) ],
 		76 : [ ( 'text', String ), ( 'block', OptionalType(Position, ) ) ],
 		107 : [ ( 'text', String ), ( 'assumeCommand', Boolean ), ( 'lookedAtBlock', OptionalType(Position, ) ) ],
@@ -94,6 +106,5 @@ class PacketTabComplete(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
-		1073741839 : [ ( 'transactionId', VarInt ), ( 'text', String ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'text', String ) ]
 	}

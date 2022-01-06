@@ -5,11 +5,22 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateCommandBlockMinecart(Packet):
-	__slots__ = ( 'id', 'track_output', 'command', 'entityId' )
+	__slots__ = ( 'id', 'command', 'entityId', 'track_output' )
 	
-	track_output : bool
 	command : str
 	entityId : int
+	track_output : bool
+
+	def __init__(self, proto:int,
+		command:str=None,
+		entityId:int=None,
+		track_output:bool=None
+	):
+		super().__init__(proto,
+			command=command,
+			entityId=entityId,
+			track_output=track_output
+		)
 
 	_state : int = 3
 
@@ -33,8 +44,7 @@ class PacketUpdateCommandBlockMinecart(Packet):
 		751 : 39,
 		755 : 39,
 		756 : 39,
-		757 : 39,
-		1073741839 : 39
+		757 : 39
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
@@ -56,6 +66,5 @@ class PacketUpdateCommandBlockMinecart(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ]
 	}

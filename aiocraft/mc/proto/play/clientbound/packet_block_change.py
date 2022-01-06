@@ -5,16 +5,23 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockChange(Packet):
-	__slots__ = ( 'id', 'location', 'type', 'metadata' )
+	__slots__ = ( 'id', 'location', 'type' )
 	
-	location : Union[bytes,tuple]
+	location : tuple
 	type : int
-	metadata : int
+
+	def __init__(self, proto:int,
+		location:tuple=None,
+		type:int=None
+	):
+		super().__init__(proto,
+			location=location,
+			type=type
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 35,
 		47 : 35,
 		76 : 11,
 		107 : 11,
@@ -51,11 +58,9 @@ class PacketBlockChange(Packet):
 		751 : 11,
 		755 : 12,
 		756 : 12,
-		757 : 12,
-		1073741839 : 12
+		757 : 12
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'location', TrailingData ), ( 'type', VarInt ), ( 'metadata', Byte ) ],
 		47 : [ ( 'location', Position ), ( 'type', VarInt ) ],
 		76 : [ ( 'location', Position ), ( 'type', VarInt ) ],
 		107 : [ ( 'location', Position ), ( 'type', VarInt ) ],
@@ -92,6 +97,5 @@ class PacketBlockChange(Packet):
 		751 : [ ( 'location', Position ), ( 'type', VarInt ) ],
 		755 : [ ( 'location', Position ), ( 'type', VarInt ) ],
 		756 : [ ( 'location', Position ), ( 'type', VarInt ) ],
-		757 : [ ( 'location', Position ), ( 'type', VarInt ) ],
-		1073741839 : [ ( 'location', Position ), ( 'type', VarInt ) ]
+		757 : [ ( 'location', Position ), ( 'type', VarInt ) ]
 	}

@@ -5,28 +5,51 @@ from ....packet import Packet
 from ....types import *
 
 class PacketScoreboardTeam(Packet):
-	__slots__ = ( 'id', 'collisionRule', 'name', 'friendlyFire', 'players', 'prefix', 'suffix', 'nameTagVisibility', 'color', 'team', 'mode' )
+	__slots__ = ( 'id', 'collisionRule', 'color', 'friendlyFire', 'mode', 'name', 'nameTagVisibility', 'players', 'prefix', 'suffix', 'team' )
 	
 	collisionRule : bytes
-	name : bytes
+	color : bytes
 	friendlyFire : bytes
+	mode : int
+	name : bytes
+	nameTagVisibility : bytes
 	players : bytes
 	prefix : bytes
 	suffix : bytes
-	nameTagVisibility : bytes
-	color : bytes
 	team : str
-	mode : int
+
+	def __init__(self, proto:int,
+		collisionRule:bytes=None,
+		color:bytes=None,
+		friendlyFire:bytes=None,
+		mode:int=None,
+		name:bytes=None,
+		nameTagVisibility:bytes=None,
+		players:bytes=None,
+		prefix:bytes=None,
+		suffix:bytes=None,
+		team:str=None
+	):
+		super().__init__(proto,
+			collisionRule=collisionRule,
+			color=color,
+			friendlyFire=friendlyFire,
+			mode=mode,
+			name=name,
+			nameTagVisibility=nameTagVisibility,
+			players=players,
+			prefix=prefix,
+			suffix=suffix,
+			team=team
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 62,
 		47 : 62,
 		76 : 64
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, Short, ), 3 : ArrayType(String, Short, ), 4 : ArrayType(String, Short, ) }, None, ) ) ],
 		47 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'color', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ],
 		76 : [ ( 'team', String ), ( 'mode', Byte ), ( 'name', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'prefix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'suffix', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'friendlyFire', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'nameTagVisibility', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'collisionRule', SwitchType('mode', { 0 : String, 2 : String }, None, ) ), ( 'color', SwitchType('mode', { 0 : Byte, 2 : Byte }, None, ) ), ( 'players', SwitchType('mode', { 0 : ArrayType(String, VarInt, ), 3 : ArrayType(String, VarInt, ), 4 : ArrayType(String, VarInt, ) }, None, ) ) ]
 	}

@@ -5,18 +5,23 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPlayerInfo(Packet):
-	__slots__ = ( 'id', 'online', 'ping', 'playerName', 'action', 'data' )
+	__slots__ = ( 'id', 'action', 'data' )
 	
-	online : bool
-	ping : int
-	playerName : str
 	action : int
 	data : list
+
+	def __init__(self, proto:int,
+		action:int=None,
+		data:list=None
+	):
+		super().__init__(proto,
+			action=action,
+			data=data
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 56,
 		47 : 56,
 		76 : 45,
 		107 : 45,
@@ -53,11 +58,9 @@ class PacketPlayerInfo(Packet):
 		751 : 50,
 		755 : 54,
 		756 : 54,
-		757 : 54,
-		1073741839 : 51
+		757 : 54
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'playerName', String ), ( 'online', Boolean ), ( 'ping', Short ) ],
 		47 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ],
 		76 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ],
 		107 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ],
@@ -94,6 +97,5 @@ class PacketPlayerInfo(Packet):
 		751 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ],
 		755 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ],
 		756 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ],
-		757 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ],
-		1073741839 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ]
+		757 : [ ( 'action', VarInt ), ( 'data', ArrayType(StructType(( 'UUID', UUID ), ( 'name', SwitchType('action', { 0 : String }, None, ) ), ( 'properties', SwitchType('action', { 0 : ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) }, None, ) ), ( 'gamemode', SwitchType('action', { 0 : VarInt, 1 : VarInt }, None, ) ), ( 'ping', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'displayName', SwitchType('action', { 0 : OptionalType(String, ), 3 : OptionalType(String, ) }, None, ) ), ), VarInt, ) ) ]
 	}

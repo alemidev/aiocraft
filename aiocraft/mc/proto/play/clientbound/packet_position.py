@@ -5,22 +5,41 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPosition(Packet):
-	__slots__ = ( 'id', 'flags', 'onGround', 'z', 'yaw', 'x', 'pitch', 'dismountVehicle', 'teleportId', 'y' )
+	__slots__ = ( 'id', 'dismountVehicle', 'flags', 'pitch', 'teleportId', 'x', 'y', 'yaw', 'z' )
 	
-	flags : int
-	onGround : bool
-	z : float
-	yaw : float
-	x : float
-	pitch : float
 	dismountVehicle : bool
+	flags : int
+	pitch : float
 	teleportId : int
+	x : float
 	y : float
+	yaw : float
+	z : float
+
+	def __init__(self, proto:int,
+		dismountVehicle:bool=None,
+		flags:int=None,
+		pitch:float=None,
+		teleportId:int=None,
+		x:float=None,
+		y:float=None,
+		yaw:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			dismountVehicle=dismountVehicle,
+			flags=flags,
+			pitch=pitch,
+			teleportId=teleportId,
+			x=x,
+			y=y,
+			yaw=yaw,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 8,
 		47 : 8,
 		76 : 46,
 		107 : 46,
@@ -57,11 +76,9 @@ class PacketPosition(Packet):
 		751 : 52,
 		755 : 56,
 		756 : 56,
-		757 : 56,
-		1073741839 : 53
+		757 : 56
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		47 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ) ],
 		76 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ) ],
 		107 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ) ],
@@ -98,6 +115,5 @@ class PacketPosition(Packet):
 		751 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ) ],
 		755 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
 		756 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
-		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
-		1073741839 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ]
+		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ]
 	}

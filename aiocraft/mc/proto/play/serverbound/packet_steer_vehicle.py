@@ -5,17 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSteerVehicle(Packet):
-	__slots__ = ( 'id', 'forward', 'jump', 'unmount', 'sideways' )
+	__slots__ = ( 'id', 'forward', 'jump', 'sideways' )
 	
 	forward : float
-	jump : Union[int,bool]
-	unmount : bool
+	jump : int
 	sideways : float
+
+	def __init__(self, proto:int,
+		forward:float=None,
+		jump:int=None,
+		sideways:float=None
+	):
+		super().__init__(proto,
+			forward=forward,
+			jump=jump,
+			sideways=sideways
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 12,
 		47 : 12,
 		76 : 18,
 		107 : 21,
@@ -52,11 +61,9 @@ class PacketSteerVehicle(Packet):
 		751 : 29,
 		755 : 28,
 		756 : 28,
-		757 : 28,
-		1073741839 : 29
+		757 : 28
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Boolean ), ( 'unmount', Boolean ) ],
 		47 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
 		76 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
 		107 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
@@ -93,6 +100,5 @@ class PacketSteerVehicle(Packet):
 		751 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
 		755 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
 		756 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
-		757 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
-		1073741839 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ]
+		757 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ]
 	}

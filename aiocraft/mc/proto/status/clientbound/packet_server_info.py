@@ -9,10 +9,16 @@ class PacketServerInfo(Packet):
 	
 	response : str
 
+	def __init__(self, proto:int,
+		response:str=None
+	):
+		super().__init__(proto,
+			response=response
+		)
+
 	_state : int = 1
 
 	_ids : Dict[int, int] = {
-		5 : 0,
 		47 : 0,
 		76 : 0,
 		107 : 0,
@@ -49,11 +55,9 @@ class PacketServerInfo(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0,
-		1073741839 : 0
+		757 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'response', String ) ],
 		47 : [ ( 'response', String ) ],
 		76 : [ ( 'response', String ) ],
 		107 : [ ( 'response', String ) ],
@@ -90,6 +94,5 @@ class PacketServerInfo(Packet):
 		751 : [ ( 'response', String ) ],
 		755 : [ ( 'response', String ) ],
 		756 : [ ( 'response', String ) ],
-		757 : [ ( 'response', String ) ],
-		1073741839 : [ ( 'response', String ) ]
+		757 : [ ( 'response', String ) ]
 	}

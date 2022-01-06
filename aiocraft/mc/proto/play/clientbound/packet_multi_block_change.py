@@ -5,20 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMultiBlockChange(Packet):
-	__slots__ = ( 'id', 'chunkX', 'recordCount', 'records', 'dataLength', 'notTrustEdges', 'chunkZ', 'chunkCoordinates' )
+	__slots__ = ( 'id', 'chunkCoordinates', 'chunkX', 'chunkZ', 'notTrustEdges', 'records' )
 	
-	chunkX : int
-	recordCount : bytes
-	records : list
-	dataLength : int
-	notTrustEdges : bool
-	chunkZ : int
 	chunkCoordinates : bytes
+	chunkX : int
+	chunkZ : int
+	notTrustEdges : bool
+	records : list
+
+	def __init__(self, proto:int,
+		chunkCoordinates:bytes=None,
+		chunkX:int=None,
+		chunkZ:int=None,
+		notTrustEdges:bool=None,
+		records:list=None
+	):
+		super().__init__(proto,
+			chunkCoordinates=chunkCoordinates,
+			chunkX=chunkX,
+			chunkZ=chunkZ,
+			notTrustEdges=notTrustEdges,
+			records=records
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 34,
 		47 : 34,
 		76 : 16,
 		107 : 16,
@@ -55,11 +67,9 @@ class PacketMultiBlockChange(Packet):
 		751 : 59,
 		755 : 63,
 		756 : 63,
-		757 : 63,
-		1073741839 : 60
+		757 : 63
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'recordCount', TrailingData ), ( 'dataLength', Int ), ( 'records', ArrayType(StructType(( 'y', Byte ), ), 'recordCount', ) ) ],
 		47 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
 		76 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
 		107 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
@@ -96,6 +106,5 @@ class PacketMultiBlockChange(Packet):
 		751 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
 		755 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
 		756 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
-		757 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
-		1073741839 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ]
+		757 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ]
 	}

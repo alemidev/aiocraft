@@ -5,13 +5,28 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTitle(Packet):
-	__slots__ = ( 'id', 'fadeOut', 'stay', 'fadeIn', 'action', 'text' )
+	__slots__ = ( 'id', 'action', 'fadeIn', 'fadeOut', 'stay', 'text' )
 	
+	action : int
+	fadeIn : bytes
 	fadeOut : bytes
 	stay : bytes
-	fadeIn : bytes
-	action : int
 	text : bytes
+
+	def __init__(self, proto:int,
+		action:int=None,
+		fadeIn:bytes=None,
+		fadeOut:bytes=None,
+		stay:bytes=None,
+		text:bytes=None
+	):
+		super().__init__(proto,
+			action=action,
+			fadeIn=fadeIn,
+			fadeOut=fadeOut,
+			stay=stay,
+			text=text
+		)
 
 	_state : int = 3
 
@@ -49,8 +64,7 @@ class PacketTitle(Packet):
 		734 : 79,
 		735 : 79,
 		736 : 79,
-		751 : 79,
-		1073741839 : 80
+		751 : 79
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'action', VarInt ), ( 'text', SwitchType('action', { 0 : String, 1 : String }, None, ) ), ( 'fadeIn', SwitchType('action', { 2 : Int }, None, ) ), ( 'stay', SwitchType('action', { 2 : Int }, None, ) ), ( 'fadeOut', SwitchType('action', { 2 : Int }, None, ) ) ],
@@ -86,6 +100,5 @@ class PacketTitle(Packet):
 		734 : [ ( 'action', VarInt ), ( 'text', SwitchType('action', { 0 : String, 1 : String, 2 : String }, None, ) ), ( 'fadeIn', SwitchType('action', { 3 : Int }, None, ) ), ( 'stay', SwitchType('action', { 3 : Int }, None, ) ), ( 'fadeOut', SwitchType('action', { 3 : Int }, None, ) ) ],
 		735 : [ ( 'action', VarInt ), ( 'text', SwitchType('action', { 0 : String, 1 : String, 2 : String }, None, ) ), ( 'fadeIn', SwitchType('action', { 3 : Int }, None, ) ), ( 'stay', SwitchType('action', { 3 : Int }, None, ) ), ( 'fadeOut', SwitchType('action', { 3 : Int }, None, ) ) ],
 		736 : [ ( 'action', VarInt ), ( 'text', SwitchType('action', { 0 : String, 1 : String, 2 : String }, None, ) ), ( 'fadeIn', SwitchType('action', { 3 : Int }, None, ) ), ( 'stay', SwitchType('action', { 3 : Int }, None, ) ), ( 'fadeOut', SwitchType('action', { 3 : Int }, None, ) ) ],
-		751 : [ ( 'action', VarInt ), ( 'text', SwitchType('action', { 0 : String, 1 : String, 2 : String }, None, ) ), ( 'fadeIn', SwitchType('action', { 3 : Int }, None, ) ), ( 'stay', SwitchType('action', { 3 : Int }, None, ) ), ( 'fadeOut', SwitchType('action', { 3 : Int }, None, ) ) ],
-		1073741839 : [ ( 'action', VarInt ), ( 'text', SwitchType('action', { 0 : String, 1 : String, 2 : String }, None, ) ), ( 'fadeIn', SwitchType('action', { 3 : Int }, None, ) ), ( 'stay', SwitchType('action', { 3 : Int }, None, ) ), ( 'fadeOut', SwitchType('action', { 3 : Int }, None, ) ) ]
+		751 : [ ( 'action', VarInt ), ( 'text', SwitchType('action', { 0 : String, 1 : String, 2 : String }, None, ) ), ( 'fadeIn', SwitchType('action', { 3 : Int }, None, ) ), ( 'stay', SwitchType('action', { 3 : Int }, None, ) ), ( 'fadeOut', SwitchType('action', { 3 : Int }, None, ) ) ]
 	}

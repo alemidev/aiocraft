@@ -7,12 +7,18 @@ from ....types import *
 class PacketOpenSignEntity(Packet):
 	__slots__ = ( 'id', 'location' )
 	
-	location : Union[bytes,tuple]
+	location : tuple
+
+	def __init__(self, proto:int,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			location=location
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 54,
 		47 : 54,
 		76 : 42,
 		107 : 42,
@@ -49,11 +55,9 @@ class PacketOpenSignEntity(Packet):
 		751 : 46,
 		755 : 47,
 		756 : 47,
-		757 : 47,
-		1073741839 : 47
+		757 : 47
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'location', TrailingData ) ],
 		47 : [ ( 'location', Position ) ],
 		76 : [ ( 'location', Position ) ],
 		107 : [ ( 'location', Position ) ],
@@ -90,6 +94,5 @@ class PacketOpenSignEntity(Packet):
 		751 : [ ( 'location', Position ) ],
 		755 : [ ( 'location', Position ) ],
 		756 : [ ( 'location', Position ) ],
-		757 : [ ( 'location', Position ) ],
-		1073741839 : [ ( 'location', Position ) ]
+		757 : [ ( 'location', Position ) ]
 	}

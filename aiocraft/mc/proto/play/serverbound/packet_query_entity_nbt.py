@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketQueryEntityNbt(Packet):
-	__slots__ = ( 'id', 'transactionId', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'transactionId' )
 	
-	transactionId : int
 	entityId : int
+	transactionId : int
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		transactionId:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			transactionId=transactionId
+		)
 
 	_state : int = 3
 
@@ -32,8 +41,7 @@ class PacketQueryEntityNbt(Packet):
 		751 : 13,
 		755 : 12,
 		756 : 12,
-		757 : 12,
-		1073741839 : 13
+		757 : 12
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
@@ -55,6 +63,5 @@ class PacketQueryEntityNbt(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
-		1073741839 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ]
 	}

@@ -9,6 +9,13 @@ class PacketClearTitles(Packet):
 	
 	reset : bool
 
+	def __init__(self, proto:int,
+		reset:bool=None
+	):
+		super().__init__(proto,
+			reset=reset
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

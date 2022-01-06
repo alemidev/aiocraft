@@ -5,16 +5,37 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSoundEffect(Packet):
-	__slots__ = ( 'id', 'z', 'soundCategory', 'volume', 'x', 'pitch', 'soundId', 'parrottedEntityType', 'y' )
+	__slots__ = ( 'id', 'parrottedEntityType', 'pitch', 'soundCategory', 'soundId', 'volume', 'x', 'y', 'z' )
 	
-	z : int
+	parrottedEntityType : str
+	pitch : Union[float,int]
 	soundCategory : int
+	soundId : int
 	volume : float
 	x : int
-	pitch : Union[int,float]
-	soundId : int
-	parrottedEntityType : str
 	y : int
+	z : int
+
+	def __init__(self, proto:int,
+		parrottedEntityType:str=None,
+		pitch:Union[float,int]=None,
+		soundCategory:int=None,
+		soundId:int=None,
+		volume:float=None,
+		x:int=None,
+		y:int=None,
+		z:int=None
+	):
+		super().__init__(proto,
+			parrottedEntityType=parrottedEntityType,
+			pitch=pitch,
+			soundCategory=soundCategory,
+			soundId=soundId,
+			volume=volume,
+			x=x,
+			y=y,
+			z=z
+		)
 
 	_state : int = 3
 
@@ -53,8 +74,7 @@ class PacketSoundEffect(Packet):
 		751 : 81,
 		755 : 92,
 		756 : 92,
-		757 : 93,
-		1073741839 : 82
+		757 : 93
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Byte ) ],
@@ -91,6 +111,5 @@ class PacketSoundEffect(Packet):
 		751 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		755 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		756 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
-		757 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
-		1073741839 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ]
+		757 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ]
 	}

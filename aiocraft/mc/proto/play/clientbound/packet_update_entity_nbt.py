@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateEntityNbt(Packet):
-	__slots__ = ( 'id', 'tag', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'tag' )
 	
-	tag : bytes
 	entityId : int
+	tag : bytes
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		tag:bytes=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			tag=tag
+		)
 
 	_state : int = 3
 

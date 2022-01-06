@@ -10,10 +10,18 @@ class PacketEntityMetadata(Packet):
 	entityId : int
 	metadata : dict
 
+	def __init__(self, proto:int,
+		entityId:int=None,
+		metadata:dict=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			metadata=metadata
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 28,
 		47 : 28,
 		76 : 57,
 		107 : 57,
@@ -50,11 +58,9 @@ class PacketEntityMetadata(Packet):
 		751 : 68,
 		755 : 77,
 		756 : 77,
-		757 : 77,
-		1073741839 : 69
+		757 : 77
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'metadata', EntityMetadata ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
@@ -91,6 +97,5 @@ class PacketEntityMetadata(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ]
 	}

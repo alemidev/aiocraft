@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSetCooldown(Packet):
-	__slots__ = ( 'id', 'itemID', 'cooldownTicks' )
+	__slots__ = ( 'id', 'cooldownTicks', 'itemID' )
 	
-	itemID : int
 	cooldownTicks : int
+	itemID : int
+
+	def __init__(self, proto:int,
+		cooldownTicks:int=None,
+		itemID:int=None
+	):
+		super().__init__(proto,
+			cooldownTicks=cooldownTicks,
+			itemID=itemID
+		)
 
 	_state : int = 3
 
@@ -48,8 +57,7 @@ class PacketSetCooldown(Packet):
 		751 : 22,
 		755 : 23,
 		756 : 23,
-		757 : 23,
-		1073741839 : 23
+		757 : 23
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		76 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
@@ -87,6 +95,5 @@ class PacketSetCooldown(Packet):
 		751 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
 		755 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
 		756 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
-		757 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
-		1073741839 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ]
+		757 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ]
 	}

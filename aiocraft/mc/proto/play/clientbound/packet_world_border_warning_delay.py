@@ -9,6 +9,13 @@ class PacketWorldBorderWarningDelay(Packet):
 	
 	warningTime : int
 
+	def __init__(self, proto:int,
+		warningTime:int=None
+	):
+		super().__init__(proto,
+			warningTime=warningTime
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

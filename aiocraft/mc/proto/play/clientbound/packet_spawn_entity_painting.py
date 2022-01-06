@@ -5,18 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntityPainting(Packet):
-	__slots__ = ( 'id', 'entityId', 'entityUUID', 'direction', 'location', 'title' )
+	__slots__ = ( 'id', 'direction', 'entityId', 'entityUUID', 'location', 'title' )
 	
+	direction : int
 	entityId : int
 	entityUUID : str
-	direction : int
-	location : Union[bytes,tuple]
+	location : tuple
 	title : Union[int,str]
+
+	def __init__(self, proto:int,
+		direction:int=None,
+		entityId:int=None,
+		entityUUID:str=None,
+		location:tuple=None,
+		title:Union[int,str]=None
+	):
+		super().__init__(proto,
+			direction=direction,
+			entityId=entityId,
+			entityUUID=entityUUID,
+			location=location,
+			title=title
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 16,
 		47 : 16,
 		76 : 4,
 		107 : 4,
@@ -53,11 +67,9 @@ class PacketSpawnEntityPainting(Packet):
 		751 : 3,
 		755 : 3,
 		756 : 3,
-		757 : 3,
-		1073741839 : 3
+		757 : 3
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'title', String ), ( 'location', TrailingData ), ( 'direction', Int ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'title', String ), ( 'location', Position ), ( 'direction', Byte ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'title', String ), ( 'location', Position ), ( 'direction', Byte ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', String ), ( 'location', Position ), ( 'direction', Byte ) ],
@@ -94,6 +106,5 @@ class PacketSpawnEntityPainting(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ]
 	}

@@ -10,6 +10,15 @@ class PacketUnloadChunk(Packet):
 	chunkX : int
 	chunkZ : int
 
+	def __init__(self, proto:int,
+		chunkX:int=None,
+		chunkZ:int=None
+	):
+		super().__init__(proto,
+			chunkX=chunkX,
+			chunkZ=chunkZ
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -48,8 +57,7 @@ class PacketUnloadChunk(Packet):
 		751 : 28,
 		755 : 29,
 		756 : 29,
-		757 : 29,
-		1073741839 : 29
+		757 : 29
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		76 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
@@ -87,6 +95,5 @@ class PacketUnloadChunk(Packet):
 		751 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
 		755 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
 		756 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
-		757 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
-		1073741839 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ]
+		757 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ]
 	}

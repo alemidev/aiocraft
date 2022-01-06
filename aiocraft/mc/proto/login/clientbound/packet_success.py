@@ -5,15 +5,23 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSuccess(Packet):
-	__slots__ = ( 'id', 'uuid', 'username' )
+	__slots__ = ( 'id', 'username', 'uuid' )
 	
-	uuid : str
 	username : str
+	uuid : str
+
+	def __init__(self, proto:int,
+		username:str=None,
+		uuid:str=None
+	):
+		super().__init__(proto,
+			username=username,
+			uuid=uuid
+		)
 
 	_state : int = 2
 
 	_ids : Dict[int, int] = {
-		5 : 2,
 		47 : 2,
 		76 : 2,
 		107 : 2,
@@ -50,11 +58,9 @@ class PacketSuccess(Packet):
 		751 : 2,
 		755 : 2,
 		756 : 2,
-		757 : 2,
-		1073741839 : 2
+		757 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'uuid', String ), ( 'username', String ) ],
 		47 : [ ( 'uuid', String ), ( 'username', String ) ],
 		76 : [ ( 'uuid', String ), ( 'username', String ) ],
 		107 : [ ( 'uuid', String ), ( 'username', String ) ],
@@ -91,6 +97,5 @@ class PacketSuccess(Packet):
 		751 : [ ( 'uuid', UUID ), ( 'username', String ) ],
 		755 : [ ( 'uuid', UUID ), ( 'username', String ) ],
 		756 : [ ( 'uuid', UUID ), ( 'username', String ) ],
-		757 : [ ( 'uuid', UUID ), ( 'username', String ) ],
-		1073741839 : [ ( 'uuid', UUID ), ( 'username', String ) ]
+		757 : [ ( 'uuid', UUID ), ( 'username', String ) ]
 	}

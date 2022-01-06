@@ -9,6 +9,13 @@ class PacketSelectAdvancementTab(Packet):
 	
 	id : tuple
 
+	def __init__(self, proto:int,
+		id:tuple=None
+	):
+		super().__init__(proto,
+			id=id
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -35,8 +42,7 @@ class PacketSelectAdvancementTab(Packet):
 		751 : 60,
 		755 : 64,
 		756 : 64,
-		757 : 64,
-		1073741839 : 61
+		757 : 64
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		335 : [ ( 'id', OptionalType(String, ) ) ],
@@ -62,6 +68,5 @@ class PacketSelectAdvancementTab(Packet):
 		751 : [ ( 'id', OptionalType(String, ) ) ],
 		755 : [ ( 'id', OptionalType(String, ) ) ],
 		756 : [ ( 'id', OptionalType(String, ) ) ],
-		757 : [ ( 'id', OptionalType(String, ) ) ],
-		1073741839 : [ ( 'id', OptionalType(String, ) ) ]
+		757 : [ ( 'id', OptionalType(String, ) ) ]
 	}

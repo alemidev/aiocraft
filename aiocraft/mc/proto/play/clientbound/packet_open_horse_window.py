@@ -5,11 +5,22 @@ from ....packet import Packet
 from ....types import *
 
 class PacketOpenHorseWindow(Packet):
-	__slots__ = ( 'id', 'nbSlots', 'windowId', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'nbSlots', 'windowId' )
 	
+	entityId : int
 	nbSlots : int
 	windowId : int
-	entityId : int
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		nbSlots:int=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			nbSlots=nbSlots,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
@@ -28,8 +39,7 @@ class PacketOpenHorseWindow(Packet):
 		751 : 30,
 		755 : 31,
 		756 : 31,
-		757 : 31,
-		1073741839 : 31
+		757 : 31
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
@@ -46,6 +56,5 @@ class PacketOpenHorseWindow(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
 		755 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
 		756 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
-		757 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ]
+		757 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ]
 	}

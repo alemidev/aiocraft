@@ -5,18 +5,43 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateLight(Packet):
-	__slots__ = ( 'id', 'chunkX', 'skyLightMask', 'blockLight', 'blockLightMask', 'emptyBlockLightMask', 'emptySkyLightMask', 'trustEdges', 'skyLight', 'data', 'chunkZ' )
+	__slots__ = ( 'id', 'blockLight', 'blockLightMask', 'chunkX', 'chunkZ', 'data', 'emptyBlockLightMask', 'emptySkyLightMask', 'skyLight', 'skyLightMask', 'trustEdges' )
 	
-	chunkX : int
-	skyLightMask : Union[int,list]
 	blockLight : list
 	blockLightMask : Union[int,list]
+	chunkX : int
+	chunkZ : int
+	data : bytes
 	emptyBlockLightMask : Union[int,list]
 	emptySkyLightMask : Union[int,list]
-	trustEdges : bool
 	skyLight : list
-	data : bytes
-	chunkZ : int
+	skyLightMask : Union[int,list]
+	trustEdges : bool
+
+	def __init__(self, proto:int,
+		blockLight:list=None,
+		blockLightMask:Union[int,list]=None,
+		chunkX:int=None,
+		chunkZ:int=None,
+		data:bytes=None,
+		emptyBlockLightMask:Union[int,list]=None,
+		emptySkyLightMask:Union[int,list]=None,
+		skyLight:list=None,
+		skyLightMask:Union[int,list]=None,
+		trustEdges:bool=None
+	):
+		super().__init__(proto,
+			blockLight=blockLight,
+			blockLightMask=blockLightMask,
+			chunkX=chunkX,
+			chunkZ=chunkZ,
+			data=data,
+			emptyBlockLightMask=emptyBlockLightMask,
+			emptySkyLightMask=emptySkyLightMask,
+			skyLight=skyLight,
+			skyLightMask=skyLightMask,
+			trustEdges=trustEdges
+		)
 
 	_state : int = 3
 
@@ -35,8 +60,7 @@ class PacketUpdateLight(Packet):
 		751 : 35,
 		755 : 37,
 		756 : 37,
-		757 : 37,
-		1073741839 : 36
+		757 : 37
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ), ( 'skyLightMask', VarInt ), ( 'blockLightMask', VarInt ), ( 'emptySkyLightMask', VarInt ), ( 'emptyBlockLightMask', VarInt ), ( 'data', TrailingData ) ],
@@ -53,6 +77,5 @@ class PacketUpdateLight(Packet):
 		751 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ), ( 'trustEdges', Boolean ), ( 'skyLightMask', VarInt ), ( 'blockLightMask', VarInt ), ( 'emptySkyLightMask', VarInt ), ( 'emptyBlockLightMask', VarInt ), ( 'data', TrailingData ) ],
 		755 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
 		756 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
-		757 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
-		1073741839 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'data', TrailingData ) ]
+		757 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ]
 	}

@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketLoginPluginResponse(Packet):
-	__slots__ = ( 'id', 'messageId', 'data' )
+	__slots__ = ( 'id', 'data', 'messageId' )
 	
-	messageId : int
 	data : tuple
+	messageId : int
+
+	def __init__(self, proto:int,
+		data:tuple=None,
+		messageId:int=None
+	):
+		super().__init__(proto,
+			data=data,
+			messageId=messageId
+		)
 
 	_state : int = 2
 
@@ -32,8 +41,7 @@ class PacketLoginPluginResponse(Packet):
 		751 : 2,
 		755 : 2,
 		756 : 2,
-		757 : 2,
-		1073741839 : 2
+		757 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'messageId', VarInt ), ( 'data', OptionalType(TrailingData, ) ) ],
@@ -55,6 +63,5 @@ class PacketLoginPluginResponse(Packet):
 		751 : [ ( 'messageId', VarInt ), ( 'data', OptionalType(TrailingData, ) ) ],
 		755 : [ ( 'messageId', VarInt ), ( 'data', OptionalType(TrailingData, ) ) ],
 		756 : [ ( 'messageId', VarInt ), ( 'data', OptionalType(TrailingData, ) ) ],
-		757 : [ ( 'messageId', VarInt ), ( 'data', OptionalType(TrailingData, ) ) ],
-		1073741839 : [ ( 'messageId', VarInt ), ( 'data', OptionalType(TrailingData, ) ) ]
+		757 : [ ( 'messageId', VarInt ), ( 'data', OptionalType(TrailingData, ) ) ]
 	}

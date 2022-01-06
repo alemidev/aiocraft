@@ -10,6 +10,15 @@ class PacketResourcePackReceive(Packet):
 	hash : str
 	result : int
 
+	def __init__(self, proto:int,
+		hash:str=None,
+		result:int=None
+	):
+		super().__init__(proto,
+			hash=hash,
+			result=result
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -49,8 +58,7 @@ class PacketResourcePackReceive(Packet):
 		751 : 33,
 		755 : 33,
 		756 : 33,
-		757 : 33,
-		1073741839 : 33
+		757 : 33
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'hash', String ), ( 'result', VarInt ) ],
@@ -89,6 +97,5 @@ class PacketResourcePackReceive(Packet):
 		751 : [ ( 'result', VarInt ) ],
 		755 : [ ( 'result', VarInt ) ],
 		756 : [ ( 'result', VarInt ) ],
-		757 : [ ( 'result', VarInt ) ],
-		1073741839 : [ ( 'result', VarInt ) ]
+		757 : [ ( 'result', VarInt ) ]
 	}

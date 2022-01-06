@@ -5,12 +5,25 @@ from ....packet import Packet
 from ....types import *
 
 class PacketResourcePackSend(Packet):
-	__slots__ = ( 'id', 'forced', 'promptMessage', 'hash', 'url' )
+	__slots__ = ( 'id', 'forced', 'hash', 'promptMessage', 'url' )
 	
 	forced : bool
-	promptMessage : tuple
 	hash : str
+	promptMessage : tuple
 	url : str
+
+	def __init__(self, proto:int,
+		forced:bool=None,
+		hash:str=None,
+		promptMessage:tuple=None,
+		url:str=None
+	):
+		super().__init__(proto,
+			forced=forced,
+			hash=hash,
+			promptMessage=promptMessage,
+			url=url
+		)
 
 	_state : int = 3
 
@@ -51,8 +64,7 @@ class PacketResourcePackSend(Packet):
 		751 : 56,
 		755 : 60,
 		756 : 60,
-		757 : 60,
-		1073741839 : 57
+		757 : 60
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'url', String ), ( 'hash', String ) ],
@@ -91,6 +103,5 @@ class PacketResourcePackSend(Packet):
 		751 : [ ( 'url', String ), ( 'hash', String ) ],
 		755 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
 		756 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
-		757 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
-		1073741839 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ) ]
+		757 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ]
 	}

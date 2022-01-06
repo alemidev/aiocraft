@@ -9,10 +9,16 @@ class PacketLegacyServerListPing(Packet):
 	
 	payload : int
 
+	def __init__(self, proto:int,
+		payload:int=None
+	):
+		super().__init__(proto,
+			payload=payload
+		)
+
 	_state : int = 0
 
 	_ids : Dict[int, int] = {
-		5 : 254,
 		47 : 254,
 		76 : 254,
 		107 : 254,
@@ -49,11 +55,9 @@ class PacketLegacyServerListPing(Packet):
 		751 : 254,
 		755 : 254,
 		756 : 254,
-		757 : 254,
-		1073741839 : 254
+		757 : 254
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'payload', Byte ) ],
 		47 : [ ( 'payload', Byte ) ],
 		76 : [ ( 'payload', Byte ) ],
 		107 : [ ( 'payload', Byte ) ],
@@ -90,6 +94,5 @@ class PacketLegacyServerListPing(Packet):
 		751 : [ ( 'payload', Byte ) ],
 		755 : [ ( 'payload', Byte ) ],
 		756 : [ ( 'payload', Byte ) ],
-		757 : [ ( 'payload', Byte ) ],
-		1073741839 : [ ( 'payload', Byte ) ]
+		757 : [ ( 'payload', Byte ) ]
 	}

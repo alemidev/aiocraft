@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityVelocity(Packet):
-	__slots__ = ( 'id', 'velocityX', 'velocityZ', 'entityId', 'velocityY' )
+	__slots__ = ( 'id', 'entityId', 'velocityX', 'velocityY', 'velocityZ' )
 	
-	velocityX : int
-	velocityZ : int
 	entityId : int
+	velocityX : int
 	velocityY : int
+	velocityZ : int
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		velocityX:int=None,
+		velocityY:int=None,
+		velocityZ:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			velocityX=velocityX,
+			velocityY=velocityY,
+			velocityZ=velocityZ
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 18,
 		47 : 18,
 		76 : 59,
 		107 : 59,
@@ -52,11 +64,9 @@ class PacketEntityVelocity(Packet):
 		751 : 70,
 		755 : 79,
 		756 : 79,
-		757 : 79,
-		1073741839 : 71
+		757 : 79
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
@@ -93,6 +103,5 @@ class PacketEntityVelocity(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
 	}

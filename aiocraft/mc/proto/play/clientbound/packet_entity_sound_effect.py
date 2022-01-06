@@ -5,13 +5,28 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntitySoundEffect(Packet):
-	__slots__ = ( 'id', 'entityId', 'soundCategory', 'volume', 'pitch', 'soundId' )
+	__slots__ = ( 'id', 'entityId', 'pitch', 'soundCategory', 'soundId', 'volume' )
 	
 	entityId : int
-	soundCategory : int
-	volume : float
 	pitch : float
+	soundCategory : int
 	soundId : int
+	volume : float
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		pitch:float=None,
+		soundCategory:int=None,
+		soundId:int=None,
+		volume:float=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			pitch=pitch,
+			soundCategory=soundCategory,
+			soundId=soundId,
+			volume=volume
+		)
 
 	_state : int = 3
 
@@ -30,8 +45,7 @@ class PacketEntitySoundEffect(Packet):
 		751 : 80,
 		755 : 91,
 		756 : 91,
-		757 : 92,
-		1073741839 : 81
+		757 : 92
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'entityId', VarInt ), ( 'volume', Float ), ( 'pitch', Float ) ],
@@ -48,6 +62,5 @@ class PacketEntitySoundEffect(Packet):
 		751 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'entityId', VarInt ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		755 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'entityId', VarInt ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		756 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'entityId', VarInt ), ( 'volume', Float ), ( 'pitch', Float ) ],
-		757 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'entityId', VarInt ), ( 'volume', Float ), ( 'pitch', Float ) ],
-		1073741839 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'entityId', VarInt ), ( 'volume', Float ), ( 'pitch', Float ) ]
+		757 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'entityId', VarInt ), ( 'volume', Float ), ( 'pitch', Float ) ]
 	}

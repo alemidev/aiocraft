@@ -9,6 +9,13 @@ class PacketCamera(Packet):
 	
 	cameraId : int
 
+	def __init__(self, proto:int,
+		cameraId:int=None
+	):
+		super().__init__(proto,
+			cameraId=cameraId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -48,8 +55,7 @@ class PacketCamera(Packet):
 		751 : 62,
 		755 : 71,
 		756 : 71,
-		757 : 71,
-		1073741839 : 63
+		757 : 71
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'cameraId', VarInt ) ],
@@ -88,6 +94,5 @@ class PacketCamera(Packet):
 		751 : [ ( 'cameraId', VarInt ) ],
 		755 : [ ( 'cameraId', VarInt ) ],
 		756 : [ ( 'cameraId', VarInt ) ],
-		757 : [ ( 'cameraId', VarInt ) ],
-		1073741839 : [ ( 'cameraId', VarInt ) ]
+		757 : [ ( 'cameraId', VarInt ) ]
 	}

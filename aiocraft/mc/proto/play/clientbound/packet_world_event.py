@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldEvent(Packet):
-	__slots__ = ( 'id', 'location', 'effectId', 'data', 'is_global' )
+	__slots__ = ( 'id', 'data', 'effectId', 'is_global', 'location' )
 	
-	location : Union[bytes,tuple]
-	effectId : int
 	data : int
+	effectId : int
 	is_global : bool
+	location : tuple
+
+	def __init__(self, proto:int,
+		data:int=None,
+		effectId:int=None,
+		is_global:bool=None,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			data=data,
+			effectId=effectId,
+			is_global=is_global,
+			location=location
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 40,
 		47 : 40,
 		76 : 33,
 		107 : 33,
@@ -52,11 +64,9 @@ class PacketWorldEvent(Packet):
 		751 : 33,
 		755 : 35,
 		756 : 35,
-		757 : 35,
-		1073741839 : 34
+		757 : 35
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'effectId', Int ), ( 'location', TrailingData ), ( 'data', Int ), ( 'is_global', Boolean ) ],
 		47 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
 		76 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
 		107 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
@@ -93,6 +103,5 @@ class PacketWorldEvent(Packet):
 		751 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
 		755 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
 		756 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
-		757 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
-		1073741839 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ]
+		757 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ]
 	}

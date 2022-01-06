@@ -9,10 +9,16 @@ class PacketChat(Packet):
 	
 	message : str
 
+	def __init__(self, proto:int,
+		message:str=None
+	):
+		super().__init__(proto,
+			message=message
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 1,
 		47 : 1,
 		76 : 1,
 		107 : 2,
@@ -49,11 +55,9 @@ class PacketChat(Packet):
 		751 : 3,
 		755 : 3,
 		756 : 3,
-		757 : 3,
-		1073741839 : 3
+		757 : 3
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'message', String ) ],
 		47 : [ ( 'message', String ) ],
 		76 : [ ( 'message', String ) ],
 		107 : [ ( 'message', String ) ],
@@ -90,6 +94,5 @@ class PacketChat(Packet):
 		751 : [ ( 'message', String ) ],
 		755 : [ ( 'message', String ) ],
 		756 : [ ( 'message', String ) ],
-		757 : [ ( 'message', String ) ],
-		1073741839 : [ ( 'message', String ) ]
+		757 : [ ( 'message', String ) ]
 	}

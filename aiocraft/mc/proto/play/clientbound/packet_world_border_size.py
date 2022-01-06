@@ -9,6 +9,13 @@ class PacketWorldBorderSize(Packet):
 	
 	diameter : float
 
+	def __init__(self, proto:int,
+		diameter:float=None
+	):
+		super().__init__(proto,
+			diameter=diameter
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

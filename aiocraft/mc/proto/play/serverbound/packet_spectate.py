@@ -9,6 +9,13 @@ class PacketSpectate(Packet):
 	
 	target : str
 
+	def __init__(self, proto:int,
+		target:str=None
+	):
+		super().__init__(proto,
+			target=target
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -48,8 +55,7 @@ class PacketSpectate(Packet):
 		751 : 45,
 		755 : 45,
 		756 : 45,
-		757 : 45,
-		1073741839 : 45
+		757 : 45
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'target', UUID ) ],
@@ -88,6 +94,5 @@ class PacketSpectate(Packet):
 		751 : [ ( 'target', UUID ) ],
 		755 : [ ( 'target', UUID ) ],
 		756 : [ ( 'target', UUID ) ],
-		757 : [ ( 'target', UUID ) ],
-		1073741839 : [ ( 'target', UUID ) ]
+		757 : [ ( 'target', UUID ) ]
 	}

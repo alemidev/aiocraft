@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityAction(Packet):
-	__slots__ = ( 'id', 'actionId', 'jumpBoost', 'entityId' )
+	__slots__ = ( 'id', 'actionId', 'entityId', 'jumpBoost' )
 	
 	actionId : int
-	jumpBoost : int
 	entityId : int
+	jumpBoost : int
+
+	def __init__(self, proto:int,
+		actionId:int=None,
+		entityId:int=None,
+		jumpBoost:int=None
+	):
+		super().__init__(proto,
+			actionId=actionId,
+			entityId=entityId,
+			jumpBoost=jumpBoost
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 11,
 		47 : 11,
 		76 : 17,
 		107 : 20,
@@ -51,11 +61,9 @@ class PacketEntityAction(Packet):
 		751 : 28,
 		755 : 27,
 		756 : 27,
-		757 : 27,
-		1073741839 : 28
+		757 : 27
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'actionId', Byte ), ( 'jumpBoost', Int ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
@@ -92,6 +100,5 @@ class PacketEntityAction(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ]
 	}

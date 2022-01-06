@@ -9,6 +9,13 @@ class PacketOpenBook(Packet):
 	
 	hand : int
 
+	def __init__(self, proto:int,
+		hand:int=None
+	):
+		super().__init__(proto,
+			hand=hand
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -26,8 +33,7 @@ class PacketOpenBook(Packet):
 		751 : 44,
 		755 : 45,
 		756 : 45,
-		757 : 45,
-		1073741839 : 45
+		757 : 45
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'hand', VarInt ) ],
@@ -44,6 +50,5 @@ class PacketOpenBook(Packet):
 		751 : [ ( 'hand', VarInt ) ],
 		755 : [ ( 'hand', VarInt ) ],
 		756 : [ ( 'hand', VarInt ) ],
-		757 : [ ( 'hand', VarInt ) ],
-		1073741839 : [ ( 'hand', VarInt ) ]
+		757 : [ ( 'hand', VarInt ) ]
 	}

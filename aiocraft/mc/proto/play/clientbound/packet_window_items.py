@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWindowItems(Packet):
-	__slots__ = ( 'id', 'carriedItem', 'windowId', 'items', 'stateId' )
+	__slots__ = ( 'id', 'carriedItem', 'items', 'stateId', 'windowId' )
 	
 	carriedItem : dict
-	windowId : int
 	items : list
 	stateId : int
+	windowId : int
+
+	def __init__(self, proto:int,
+		carriedItem:dict=None,
+		items:list=None,
+		stateId:int=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			carriedItem=carriedItem,
+			items=items,
+			stateId=stateId,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 48,
 		47 : 48,
 		76 : 20,
 		107 : 20,
@@ -52,11 +64,9 @@ class PacketWindowItems(Packet):
 		751 : 19,
 		755 : 20,
 		756 : 20,
-		757 : 20,
-		1073741839 : 20
+		757 : 20
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
 		47 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
 		76 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
 		107 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
@@ -93,6 +103,5 @@ class PacketWindowItems(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
 		755 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
 		756 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ],
-		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ]
+		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ]
 	}

@@ -9,6 +9,13 @@ class PacketLockDifficulty(Packet):
 	
 	locked : bool
 
+	def __init__(self, proto:int,
+		locked:bool=None
+	):
+		super().__init__(proto,
+			locked=locked
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -26,8 +33,7 @@ class PacketLockDifficulty(Packet):
 		751 : 17,
 		755 : 16,
 		756 : 16,
-		757 : 16,
-		1073741839 : 17
+		757 : 16
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'locked', Boolean ) ],
@@ -44,6 +50,5 @@ class PacketLockDifficulty(Packet):
 		751 : [ ( 'locked', Boolean ) ],
 		755 : [ ( 'locked', Boolean ) ],
 		756 : [ ( 'locked', Boolean ) ],
-		757 : [ ( 'locked', Boolean ) ],
-		1073741839 : [ ( 'locked', Boolean ) ]
+		757 : [ ( 'locked', Boolean ) ]
 	}

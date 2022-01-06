@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketScoreboardObjective(Packet):
-	__slots__ = ( 'id', 'name', 'type', 'action', 'displayText' )
+	__slots__ = ( 'id', 'action', 'displayText', 'name', 'type' )
 	
+	action : int
+	displayText : bytes
 	name : str
 	type : bytes
-	action : int
-	displayText : Union[str,bytes]
+
+	def __init__(self, proto:int,
+		action:int=None,
+		displayText:bytes=None,
+		name:str=None,
+		type:bytes=None
+	):
+		super().__init__(proto,
+			action=action,
+			displayText=displayText,
+			name=name,
+			type=type
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 59,
 		47 : 59,
 		76 : 63,
 		107 : 63,
@@ -52,11 +64,9 @@ class PacketScoreboardObjective(Packet):
 		751 : 74,
 		755 : 83,
 		756 : 83,
-		757 : 83,
-		1073741839 : 75
+		757 : 83
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'name', String ), ( 'displayText', String ), ( 'action', Byte ) ],
 		47 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : String, 2 : String }, None, ) ) ],
 		76 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : String, 2 : String }, None, ) ) ],
 		107 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : String, 2 : String }, None, ) ) ],
@@ -93,6 +103,5 @@ class PacketScoreboardObjective(Packet):
 		751 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
 		755 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
 		756 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
-		757 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
-		1073741839 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ]
+		757 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ]
 	}

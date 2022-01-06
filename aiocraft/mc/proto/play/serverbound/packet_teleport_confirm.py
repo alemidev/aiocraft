@@ -9,6 +9,13 @@ class PacketTeleportConfirm(Packet):
 	
 	teleportId : int
 
+	def __init__(self, proto:int,
+		teleportId:int=None
+	):
+		super().__init__(proto,
+			teleportId=teleportId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -46,8 +53,7 @@ class PacketTeleportConfirm(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0,
-		1073741839 : 0
+		757 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'teleportId', VarInt ) ],
@@ -84,6 +90,5 @@ class PacketTeleportConfirm(Packet):
 		751 : [ ( 'teleportId', VarInt ) ],
 		755 : [ ( 'teleportId', VarInt ) ],
 		756 : [ ( 'teleportId', VarInt ) ],
-		757 : [ ( 'teleportId', VarInt ) ],
-		1073741839 : [ ( 'teleportId', VarInt ) ]
+		757 : [ ( 'teleportId', VarInt ) ]
 	}

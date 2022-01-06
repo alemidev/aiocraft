@@ -5,26 +5,56 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntity(Packet):
-	__slots__ = ( 'id', 'velocityZ', 'entityId', 'objectData', 'velocityY', 'z', 'velocityX', 'objectUUID', 'entityUUID', 'x', 'pitch', 'yaw', 'y', 'type' )
+	__slots__ = ( 'id', 'entityId', 'entityUUID', 'objectData', 'objectUUID', 'pitch', 'type', 'velocityX', 'velocityY', 'velocityZ', 'x', 'y', 'yaw', 'z' )
 	
-	velocityZ : int
 	entityId : int
-	objectData : Union[int,dict]
-	velocityY : int
-	z : Union[int,float]
-	velocityX : int
-	objectUUID : str
 	entityUUID : str
-	x : Union[int,float]
+	objectData : Union[int,dict]
+	objectUUID : str
 	pitch : int
-	yaw : int
-	y : Union[int,float]
 	type : int
+	velocityX : int
+	velocityY : int
+	velocityZ : int
+	x : Union[float,int]
+	y : Union[float,int]
+	yaw : int
+	z : Union[float,int]
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		entityUUID:str=None,
+		objectData:Union[int,dict]=None,
+		objectUUID:str=None,
+		pitch:int=None,
+		type:int=None,
+		velocityX:int=None,
+		velocityY:int=None,
+		velocityZ:int=None,
+		x:Union[float,int]=None,
+		y:Union[float,int]=None,
+		yaw:int=None,
+		z:Union[float,int]=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			entityUUID=entityUUID,
+			objectData=objectData,
+			objectUUID=objectUUID,
+			pitch=pitch,
+			type=type,
+			velocityX=velocityX,
+			velocityY=velocityY,
+			velocityZ=velocityZ,
+			x=x,
+			y=y,
+			yaw=yaw,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 14,
 		47 : 14,
 		76 : 0,
 		107 : 0,
@@ -61,11 +91,9 @@ class PacketSpawnEntity(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0,
-		1073741839 : 0
+		757 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', StructType(( 'intField', Int ), ( 'velocityX', SwitchType('intField', { 0 : Void }, Short, ) ), ( 'velocityY', SwitchType('intField', { 0 : Void }, Short, ) ), ( 'velocityZ', SwitchType('intField', { 0 : Void }, Short, ) ), ) ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', StructType(( 'intField', Int ), ( 'velocityX', SwitchType('intField', { 0 : Void }, Short, ) ), ( 'velocityY', SwitchType('intField', { 0 : Void }, Short, ) ), ( 'velocityZ', SwitchType('intField', { 0 : Void }, Short, ) ), ) ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', Byte ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
@@ -102,6 +130,5 @@ class PacketSpawnEntity(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
 	}

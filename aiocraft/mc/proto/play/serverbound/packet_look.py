@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketLook(Packet):
-	__slots__ = ( 'id', 'onGround', 'yaw', 'pitch' )
+	__slots__ = ( 'id', 'onGround', 'pitch', 'yaw' )
 	
 	onGround : bool
-	yaw : float
 	pitch : float
+	yaw : float
+
+	def __init__(self, proto:int,
+		onGround:bool=None,
+		pitch:float=None,
+		yaw:float=None
+	):
+		super().__init__(proto,
+			onGround=onGround,
+			pitch=pitch,
+			yaw=yaw
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 5,
 		47 : 5,
 		76 : 13,
 		107 : 14,
@@ -51,11 +61,9 @@ class PacketLook(Packet):
 		751 : 20,
 		755 : 19,
 		756 : 19,
-		757 : 19,
-		1073741839 : 20
+		757 : 19
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		47 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		76 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		107 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
@@ -92,6 +100,5 @@ class PacketLook(Packet):
 		751 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
-		1073741839 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
 	}
