@@ -9,10 +9,16 @@ class PacketFlying(Packet):
 	
 	onGround : bool
 
+	def __init__(self, proto:int,
+		onGround:bool=None
+	):
+		super().__init__(proto,
+			onGround=onGround
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 3,
 		47 : 3,
 		76 : 14,
 		107 : 15,
@@ -49,11 +55,9 @@ class PacketFlying(Packet):
 		751 : 21,
 		755 : 20,
 		756 : 20,
-		757 : 20,
-		1073741839 : 21
+		757 : 20
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'onGround', Boolean ) ],
 		47 : [ ( 'onGround', Boolean ) ],
 		76 : [ ( 'onGround', Boolean ) ],
 		107 : [ ( 'onGround', Boolean ) ],
@@ -90,6 +94,5 @@ class PacketFlying(Packet):
 		751 : [ ( 'onGround', Boolean ) ],
 		755 : [ ( 'onGround', Boolean ) ],
 		756 : [ ( 'onGround', Boolean ) ],
-		757 : [ ( 'onGround', Boolean ) ],
-		1073741839 : [ ( 'onGround', Boolean ) ]
+		757 : [ ( 'onGround', Boolean ) ]
 	}

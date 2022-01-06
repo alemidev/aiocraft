@@ -5,24 +5,44 @@ from ....packet import Packet
 from ....types import *
 
 class PacketNamedEntitySpawn(Packet):
-	__slots__ = ( 'id', 'currentItem', 'entityId', 'z', 'playerName', 'x', 'yaw', 'pitch', 'playerUUID', 'metadata', 'y', 'data' )
+	__slots__ = ( 'id', 'currentItem', 'entityId', 'metadata', 'pitch', 'playerUUID', 'x', 'y', 'yaw', 'z' )
 	
 	currentItem : int
 	entityId : int
-	z : Union[int,float]
-	playerName : str
-	x : Union[int,float]
-	yaw : int
+	metadata : dict
 	pitch : int
 	playerUUID : str
-	metadata : dict
-	y : Union[int,float]
-	data : list
+	x : Union[float,int]
+	y : Union[float,int]
+	yaw : int
+	z : Union[float,int]
+
+	def __init__(self, proto:int,
+		currentItem:int=None,
+		entityId:int=None,
+		metadata:dict=None,
+		pitch:int=None,
+		playerUUID:str=None,
+		x:Union[float,int]=None,
+		y:Union[float,int]=None,
+		yaw:int=None,
+		z:Union[float,int]=None
+	):
+		super().__init__(proto,
+			currentItem=currentItem,
+			entityId=entityId,
+			metadata=metadata,
+			pitch=pitch,
+			playerUUID=playerUUID,
+			x=x,
+			y=y,
+			yaw=yaw,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 12,
 		47 : 12,
 		76 : 5,
 		107 : 5,
@@ -59,11 +79,9 @@ class PacketNamedEntitySpawn(Packet):
 		751 : 4,
 		755 : 4,
 		756 : 4,
-		757 : 4,
-		1073741839 : 4
+		757 : 4
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'playerUUID', String ), ( 'playerName', String ), ( 'data', ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', String ), ), VarInt, ) ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'currentItem', Short ), ( 'metadata', EntityMetadata ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'currentItem', Short ), ( 'metadata', EntityMetadata ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'metadata', EntityMetadata ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'metadata', EntityMetadata ) ],
@@ -100,6 +118,5 @@ class PacketNamedEntitySpawn(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ]
 	}

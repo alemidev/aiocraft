@@ -5,12 +5,25 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateCommandBlock(Packet):
-	__slots__ = ( 'id', 'location', 'command', 'flags', 'mode' )
+	__slots__ = ( 'id', 'command', 'flags', 'location', 'mode' )
 	
-	location : tuple
 	command : str
 	flags : int
+	location : tuple
 	mode : int
+
+	def __init__(self, proto:int,
+		command:str=None,
+		flags:int=None,
+		location:tuple=None,
+		mode:int=None
+	):
+		super().__init__(proto,
+			command=command,
+			flags=flags,
+			location=location,
+			mode=mode
+		)
 
 	_state : int = 3
 
@@ -34,8 +47,7 @@ class PacketUpdateCommandBlock(Packet):
 		751 : 38,
 		755 : 38,
 		756 : 38,
-		757 : 38,
-		1073741839 : 38
+		757 : 38
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
@@ -57,6 +69,5 @@ class PacketUpdateCommandBlock(Packet):
 		751 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
 		755 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
 		756 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
-		757 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
-		1073741839 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ]
+		757 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ]
 	}

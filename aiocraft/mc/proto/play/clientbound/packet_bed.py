@@ -5,15 +5,23 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBed(Packet):
-	__slots__ = ( 'id', 'location', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'location' )
 	
-	location : Union[bytes,tuple]
 	entityId : int
+	location : tuple
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			location=location
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 10,
 		47 : 10,
 		76 : 47,
 		107 : 47,
@@ -38,7 +46,6 @@ class PacketBed(Packet):
 		404 : 51
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'location', TrailingData ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'location', Position ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'location', Position ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'location', Position ) ],

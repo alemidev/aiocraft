@@ -10,10 +10,18 @@ class PacketEnchantItem(Packet):
 	enchantment : int
 	windowId : int
 
+	def __init__(self, proto:int,
+		enchantment:int=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			enchantment=enchantment,
+			windowId=windowId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 17,
 		47 : 17,
 		76 : 5,
 		107 : 6,
@@ -50,11 +58,9 @@ class PacketEnchantItem(Packet):
 		751 : 8,
 		755 : 7,
 		756 : 7,
-		757 : 7,
-		1073741839 : 8
+		757 : 7
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
 		47 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
 		76 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
 		107 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
@@ -91,6 +97,5 @@ class PacketEnchantItem(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
 		755 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
 		756 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
-		757 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ]
+		757 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ]
 	}

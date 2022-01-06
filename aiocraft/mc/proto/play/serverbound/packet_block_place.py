@@ -5,21 +5,41 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockPlace(Packet):
-	__slots__ = ( 'id', 'insideBlock', 'hand', 'heldItem', 'cursorY', 'cursorX', 'direction', 'cursorZ', 'location' )
+	__slots__ = ( 'id', 'cursorX', 'cursorY', 'cursorZ', 'direction', 'hand', 'heldItem', 'insideBlock', 'location' )
 	
-	insideBlock : bool
+	cursorX : Union[float,int]
+	cursorY : Union[float,int]
+	cursorZ : Union[float,int]
+	direction : int
 	hand : int
 	heldItem : dict
-	cursorY : Union[int,float]
-	cursorX : Union[int,float]
-	direction : int
-	cursorZ : Union[int,float]
-	location : Union[bytes,tuple]
+	insideBlock : bool
+	location : tuple
+
+	def __init__(self, proto:int,
+		cursorX:Union[float,int]=None,
+		cursorY:Union[float,int]=None,
+		cursorZ:Union[float,int]=None,
+		direction:int=None,
+		hand:int=None,
+		heldItem:dict=None,
+		insideBlock:bool=None,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			cursorX=cursorX,
+			cursorY=cursorY,
+			cursorZ=cursorZ,
+			direction=direction,
+			hand=hand,
+			heldItem=heldItem,
+			insideBlock=insideBlock,
+			location=location
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 8,
 		47 : 8,
 		76 : 25,
 		107 : 28,
@@ -56,11 +76,9 @@ class PacketBlockPlace(Packet):
 		751 : 46,
 		755 : 46,
 		756 : 46,
-		757 : 46,
-		1073741839 : 46
+		757 : 46
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'location', TrailingData ), ( 'direction', Byte ), ( 'heldItem', Slot ), ( 'cursorX', Byte ), ( 'cursorY', Byte ), ( 'cursorZ', Byte ) ],
 		47 : [ ( 'location', Position ), ( 'direction', Byte ), ( 'heldItem', Slot ), ( 'cursorX', Byte ), ( 'cursorY', Byte ), ( 'cursorZ', Byte ) ],
 		76 : [ ( 'location', Position ), ( 'direction', VarInt ), ( 'hand', VarInt ), ( 'cursorX', Byte ), ( 'cursorY', Byte ), ( 'cursorZ', Byte ) ],
 		107 : [ ( 'location', Position ), ( 'direction', VarInt ), ( 'hand', VarInt ), ( 'cursorX', Byte ), ( 'cursorY', Byte ), ( 'cursorZ', Byte ) ],
@@ -97,6 +115,5 @@ class PacketBlockPlace(Packet):
 		751 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
 		755 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
 		756 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
-		757 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
-		1073741839 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ]
+		757 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ]
 	}

@@ -9,10 +9,16 @@ class PacketKeepAlive(Packet):
 	
 	keepAliveId : int
 
+	def __init__(self, proto:int,
+		keepAliveId:int=None
+	):
+		super().__init__(proto,
+			keepAliveId=keepAliveId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 0,
 		47 : 0,
 		76 : 10,
 		107 : 11,
@@ -49,11 +55,9 @@ class PacketKeepAlive(Packet):
 		751 : 16,
 		755 : 15,
 		756 : 15,
-		757 : 15,
-		1073741839 : 16
+		757 : 15
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'keepAliveId', Int ) ],
 		47 : [ ( 'keepAliveId', VarInt ) ],
 		76 : [ ( 'keepAliveId', VarInt ) ],
 		107 : [ ( 'keepAliveId', VarInt ) ],
@@ -90,6 +94,5 @@ class PacketKeepAlive(Packet):
 		751 : [ ( 'keepAliveId', Long ) ],
 		755 : [ ( 'keepAliveId', Long ) ],
 		756 : [ ( 'keepAliveId', Long ) ],
-		757 : [ ( 'keepAliveId', Long ) ],
-		1073741839 : [ ( 'keepAliveId', Long ) ]
+		757 : [ ( 'keepAliveId', Long ) ]
 	}

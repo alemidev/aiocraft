@@ -5,15 +5,23 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityStatus(Packet):
-	__slots__ = ( 'id', 'entityStatus', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'entityStatus' )
 	
-	entityStatus : int
 	entityId : int
+	entityStatus : int
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		entityStatus:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			entityStatus=entityStatus
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 26,
 		47 : 26,
 		76 : 26,
 		107 : 27,
@@ -50,11 +58,9 @@ class PacketEntityStatus(Packet):
 		751 : 26,
 		755 : 27,
 		756 : 27,
-		757 : 27,
-		1073741839 : 27
+		757 : 27
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
 		47 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
 		76 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
 		107 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
@@ -91,6 +97,5 @@ class PacketEntityStatus(Packet):
 		751 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
 		755 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
 		756 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
-		757 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
-		1073741839 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ]
+		757 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ]
 	}

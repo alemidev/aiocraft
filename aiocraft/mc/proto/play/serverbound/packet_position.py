@@ -5,18 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPosition(Packet):
-	__slots__ = ( 'id', 'onGround', 'z', 'x', 'stance', 'y' )
+	__slots__ = ( 'id', 'onGround', 'x', 'y', 'z' )
 	
 	onGround : bool
-	z : float
 	x : float
-	stance : float
 	y : float
+	z : float
+
+	def __init__(self, proto:int,
+		onGround:bool=None,
+		x:float=None,
+		y:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			onGround=onGround,
+			x=x,
+			y=y,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 4,
 		47 : 4,
 		76 : 11,
 		107 : 12,
@@ -53,11 +64,9 @@ class PacketPosition(Packet):
 		751 : 18,
 		755 : 17,
 		756 : 17,
-		757 : 17,
-		1073741839 : 18
+		757 : 17
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'x', Double ), ( 'stance', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
 		47 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
 		76 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
 		107 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
@@ -94,6 +103,5 @@ class PacketPosition(Packet):
 		751 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
-		1073741839 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ]
 	}

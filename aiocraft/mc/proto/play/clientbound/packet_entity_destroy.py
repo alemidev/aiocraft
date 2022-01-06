@@ -9,10 +9,16 @@ class PacketEntityDestroy(Packet):
 	
 	entityIds : list
 
+	def __init__(self, proto:int,
+		entityIds:list=None
+	):
+		super().__init__(proto,
+			entityIds=entityIds
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 19,
 		47 : 19,
 		76 : 48,
 		107 : 48,
@@ -48,11 +54,9 @@ class PacketEntityDestroy(Packet):
 		736 : 55,
 		751 : 54,
 		756 : 58,
-		757 : 58,
-		1073741839 : 55
+		757 : 58
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityIds', ArrayType(Int, Byte, ) ) ],
 		47 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
 		76 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
 		107 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
@@ -88,6 +92,5 @@ class PacketEntityDestroy(Packet):
 		736 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
 		751 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
 		756 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
-		757 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
-		1073741839 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ]
+		757 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ]
 	}

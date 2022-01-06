@@ -9,10 +9,16 @@ class PacketCloseWindow(Packet):
 	
 	windowId : int
 
+	def __init__(self, proto:int,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			windowId=windowId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 46,
 		47 : 46,
 		76 : 18,
 		107 : 18,
@@ -49,11 +55,9 @@ class PacketCloseWindow(Packet):
 		751 : 18,
 		755 : 19,
 		756 : 19,
-		757 : 19,
-		1073741839 : 19
+		757 : 19
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'windowId', Byte ) ],
 		47 : [ ( 'windowId', Byte ) ],
 		76 : [ ( 'windowId', Byte ) ],
 		107 : [ ( 'windowId', Byte ) ],
@@ -90,6 +94,5 @@ class PacketCloseWindow(Packet):
 		751 : [ ( 'windowId', Byte ) ],
 		755 : [ ( 'windowId', Byte ) ],
 		756 : [ ( 'windowId', Byte ) ],
-		757 : [ ( 'windowId', Byte ) ],
-		1073741839 : [ ( 'windowId', Byte ) ]
+		757 : [ ( 'windowId', Byte ) ]
 	}

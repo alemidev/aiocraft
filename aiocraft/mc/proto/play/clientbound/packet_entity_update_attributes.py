@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityUpdateAttributes(Packet):
-	__slots__ = ( 'id', 'properties', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'properties' )
 	
-	properties : list
 	entityId : int
+	properties : list
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		properties:list=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			properties=properties
+		)
 
 	_state : int = 3
 
@@ -47,8 +56,7 @@ class PacketEntityUpdateAttributes(Packet):
 		751 : 88,
 		755 : 99,
 		756 : 99,
-		757 : 100,
-		1073741839 : 89
+		757 : 100
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'uuid', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), Int, ) ) ],
@@ -85,6 +93,5 @@ class PacketEntityUpdateAttributes(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'uuid', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), Int, ) ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'uuid', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), VarInt, ) ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'uuid', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), VarInt, ) ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'uuid', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), VarInt, ) ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'uuid', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), Int, ) ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'uuid', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), VarInt, ) ) ]
 	}

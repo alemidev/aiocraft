@@ -5,16 +5,20 @@ from ....packet import Packet
 from ....types import *
 
 class PacketArmAnimation(Packet):
-	__slots__ = ( 'id', 'animation', 'hand', 'entityId' )
+	__slots__ = ( 'id', 'hand' )
 	
-	animation : int
 	hand : int
-	entityId : int
+
+	def __init__(self, proto:int,
+		hand:int=None
+	):
+		super().__init__(proto,
+			hand=hand
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 10,
 		47 : 10,
 		76 : 23,
 		107 : 26,
@@ -51,11 +55,9 @@ class PacketArmAnimation(Packet):
 		751 : 44,
 		755 : 44,
 		756 : 44,
-		757 : 44,
-		1073741839 : 44
+		757 : 44
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'animation', Byte ) ],
 		47 : [  ],
 		76 : [ ( 'hand', VarInt ) ],
 		107 : [ ( 'hand', VarInt ) ],
@@ -92,6 +94,5 @@ class PacketArmAnimation(Packet):
 		751 : [ ( 'hand', VarInt ) ],
 		755 : [ ( 'hand', VarInt ) ],
 		756 : [ ( 'hand', VarInt ) ],
-		757 : [ ( 'hand', VarInt ) ],
-		1073741839 : [ ( 'hand', VarInt ) ]
+		757 : [ ( 'hand', VarInt ) ]
 	}

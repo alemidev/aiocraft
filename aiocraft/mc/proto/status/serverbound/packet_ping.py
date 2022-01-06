@@ -9,10 +9,16 @@ class PacketPing(Packet):
 	
 	time : int
 
+	def __init__(self, proto:int,
+		time:int=None
+	):
+		super().__init__(proto,
+			time=time
+		)
+
 	_state : int = 1
 
 	_ids : Dict[int, int] = {
-		5 : 1,
 		47 : 1,
 		76 : 1,
 		107 : 1,
@@ -49,11 +55,9 @@ class PacketPing(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1,
-		1073741839 : 1
+		757 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'time', Long ) ],
 		47 : [ ( 'time', Long ) ],
 		76 : [ ( 'time', Long ) ],
 		107 : [ ( 'time', Long ) ],
@@ -90,6 +94,5 @@ class PacketPing(Packet):
 		751 : [ ( 'time', Long ) ],
 		755 : [ ( 'time', Long ) ],
 		756 : [ ( 'time', Long ) ],
-		757 : [ ( 'time', Long ) ],
-		1073741839 : [ ( 'time', Long ) ]
+		757 : [ ( 'time', Long ) ]
 	}

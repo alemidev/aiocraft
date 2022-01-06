@@ -9,6 +9,13 @@ class PacketSetDifficulty(Packet):
 	
 	newDifficulty : int
 
+	def __init__(self, proto:int,
+		newDifficulty:int=None
+	):
+		super().__init__(proto,
+			newDifficulty=newDifficulty
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -26,8 +33,7 @@ class PacketSetDifficulty(Packet):
 		751 : 2,
 		755 : 2,
 		756 : 2,
-		757 : 2,
-		1073741839 : 2
+		757 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'newDifficulty', Byte ) ],
@@ -44,6 +50,5 @@ class PacketSetDifficulty(Packet):
 		751 : [ ( 'newDifficulty', Byte ) ],
 		755 : [ ( 'newDifficulty', Byte ) ],
 		756 : [ ( 'newDifficulty', Byte ) ],
-		757 : [ ( 'newDifficulty', Byte ) ],
-		1073741839 : [ ( 'newDifficulty', Byte ) ]
+		757 : [ ( 'newDifficulty', Byte ) ]
 	}

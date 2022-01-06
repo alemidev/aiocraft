@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockAction(Packet):
-	__slots__ = ( 'id', 'location', 'byte2', 'blockId', 'byte1' )
+	__slots__ = ( 'id', 'blockId', 'byte1', 'byte2', 'location' )
 	
-	location : Union[bytes,tuple]
-	byte2 : int
 	blockId : int
 	byte1 : int
+	byte2 : int
+	location : tuple
+
+	def __init__(self, proto:int,
+		blockId:int=None,
+		byte1:int=None,
+		byte2:int=None,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			blockId=blockId,
+			byte1=byte1,
+			byte2=byte2,
+			location=location
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 36,
 		47 : 36,
 		76 : 10,
 		107 : 10,
@@ -52,11 +64,9 @@ class PacketBlockAction(Packet):
 		751 : 10,
 		755 : 11,
 		756 : 11,
-		757 : 11,
-		1073741839 : 11
+		757 : 11
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'location', TrailingData ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
 		47 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
 		76 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
 		107 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
@@ -93,6 +103,5 @@ class PacketBlockAction(Packet):
 		751 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
 		755 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
 		756 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
-		757 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
-		1073741839 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ]
+		757 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ]
 	}

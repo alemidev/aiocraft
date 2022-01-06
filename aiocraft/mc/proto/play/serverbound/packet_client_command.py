@@ -10,10 +10,18 @@ class PacketClientCommand(Packet):
 	actionId : int
 	payload : int
 
+	def __init__(self, proto:int,
+		actionId:int=None,
+		payload:int=None
+	):
+		super().__init__(proto,
+			actionId=actionId,
+			payload=payload
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 22,
 		47 : 22,
 		76 : 2,
 		107 : 3,
@@ -50,11 +58,9 @@ class PacketClientCommand(Packet):
 		751 : 4,
 		755 : 4,
 		756 : 4,
-		757 : 4,
-		1073741839 : 4
+		757 : 4
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'payload', Byte ) ],
 		47 : [ ( 'payload', VarInt ) ],
 		76 : [ ( 'payload', VarInt ) ],
 		107 : [ ( 'actionId', VarInt ) ],
@@ -91,6 +97,5 @@ class PacketClientCommand(Packet):
 		751 : [ ( 'actionId', VarInt ) ],
 		755 : [ ( 'actionId', VarInt ) ],
 		756 : [ ( 'actionId', VarInt ) ],
-		757 : [ ( 'actionId', VarInt ) ],
-		1073741839 : [ ( 'actionId', VarInt ) ]
+		757 : [ ( 'actionId', VarInt ) ]
 	}

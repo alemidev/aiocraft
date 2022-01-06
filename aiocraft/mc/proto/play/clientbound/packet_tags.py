@@ -5,13 +5,28 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTags(Packet):
-	__slots__ = ( 'id', 'tags', 'blockTags', 'fluidTags', 'itemTags', 'entityTags' )
+	__slots__ = ( 'id', 'blockTags', 'entityTags', 'fluidTags', 'itemTags', 'tags' )
 	
-	tags : list
 	blockTags : bytes
+	entityTags : bytes
 	fluidTags : bytes
 	itemTags : bytes
-	entityTags : bytes
+	tags : list
+
+	def __init__(self, proto:int,
+		blockTags:bytes=None,
+		entityTags:bytes=None,
+		fluidTags:bytes=None,
+		itemTags:bytes=None,
+		tags:list=None
+	):
+		super().__init__(proto,
+			blockTags=blockTags,
+			entityTags=entityTags,
+			fluidTags=fluidTags,
+			itemTags=itemTags,
+			tags=tags
+		)
 
 	_state : int = 3
 
@@ -36,8 +51,7 @@ class PacketTags(Packet):
 		751 : 91,
 		755 : 102,
 		756 : 102,
-		757 : 103,
-		1073741839 : 92
+		757 : 103
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		351 : [ ( 'blockTags', TrailingData ), ( 'itemTags', TrailingData ) ],
@@ -60,6 +74,5 @@ class PacketTags(Packet):
 		751 : [ ( 'blockTags', TrailingData ), ( 'itemTags', TrailingData ), ( 'fluidTags', TrailingData ), ( 'entityTags', TrailingData ) ],
 		755 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
 		756 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
-		757 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
-		1073741839 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ]
+		757 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ]
 	}

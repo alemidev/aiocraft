@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCraftProgressBar(Packet):
-	__slots__ = ( 'id', 'value', 'windowId', 'property' )
+	__slots__ = ( 'id', 'property', 'value', 'windowId' )
 	
+	property : int
 	value : int
 	windowId : int
-	property : int
+
+	def __init__(self, proto:int,
+		property:int=None,
+		value:int=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			property=property,
+			value=value,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 49,
 		47 : 49,
 		76 : 21,
 		107 : 21,
@@ -51,11 +61,9 @@ class PacketCraftProgressBar(Packet):
 		751 : 20,
 		755 : 21,
 		756 : 21,
-		757 : 21,
-		1073741839 : 21
+		757 : 21
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
 		47 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
 		76 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
 		107 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
@@ -92,6 +100,5 @@ class PacketCraftProgressBar(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
 		755 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
 		756 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
-		757 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ]
+		757 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ]
 	}

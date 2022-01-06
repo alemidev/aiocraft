@@ -5,25 +5,50 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldParticles(Packet):
-	__slots__ = ( 'id', 'particleData', 'particleName', 'offsetZ', 'z', 'particles', 'particleId', 'x', 'longDistance', 'offsetX', 'offsetY', 'y', 'data' )
+	__slots__ = ( 'id', 'data', 'longDistance', 'offsetX', 'offsetY', 'offsetZ', 'particleData', 'particleId', 'particles', 'x', 'y', 'z' )
 	
-	particleData : float
-	particleName : str
-	offsetZ : float
-	z : float
-	particles : int
-	particleId : int
-	x : float
+	data : bytes
 	longDistance : bool
 	offsetX : float
 	offsetY : float
+	offsetZ : float
+	particleData : float
+	particleId : int
+	particles : int
+	x : float
 	y : float
-	data : bytes
+	z : float
+
+	def __init__(self, proto:int,
+		data:bytes=None,
+		longDistance:bool=None,
+		offsetX:float=None,
+		offsetY:float=None,
+		offsetZ:float=None,
+		particleData:float=None,
+		particleId:int=None,
+		particles:int=None,
+		x:float=None,
+		y:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			data=data,
+			longDistance=longDistance,
+			offsetX=offsetX,
+			offsetY=offsetY,
+			offsetZ=offsetZ,
+			particleData=particleData,
+			particleId=particleId,
+			particles=particles,
+			x=x,
+			y=y,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 42,
 		47 : 42,
 		76 : 34,
 		107 : 34,
@@ -60,11 +85,9 @@ class PacketWorldParticles(Packet):
 		751 : 34,
 		755 : 36,
 		756 : 36,
-		757 : 36,
-		1073741839 : 35
+		757 : 36
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'particleName', String ), ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ) ],
 		47 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', SwitchType('particleId', { 36 : ArrayType(VarInt, 2, ), 37 : ArrayType(VarInt, 1, ), 38 : ArrayType(VarInt, 1, ) }, None, ) ) ],
 		76 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', SwitchType('particleId', { 36 : ArrayType(VarInt, 2, ), 37 : ArrayType(VarInt, 1, ), 38 : ArrayType(VarInt, 1, ) }, None, ) ) ],
 		107 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', SwitchType('particleId', { 36 : ArrayType(VarInt, 2, ), 37 : ArrayType(VarInt, 1, ), 38 : ArrayType(VarInt, 1, ) }, None, ) ) ],
@@ -101,6 +124,5 @@ class PacketWorldParticles(Packet):
 		751 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', TrailingData ) ],
 		755 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', TrailingData ) ],
 		756 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', TrailingData ) ],
-		757 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', TrailingData ) ],
-		1073741839 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', TrailingData ) ]
+		757 : [ ( 'particleId', Int ), ( 'longDistance', Boolean ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'offsetX', Float ), ( 'offsetY', Float ), ( 'offsetZ', Float ), ( 'particleData', Float ), ( 'particles', Int ), ( 'data', TrailingData ) ]
 	}

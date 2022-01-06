@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEndCombatEvent(Packet):
-	__slots__ = ( 'id', 'entityId', 'duration' )
+	__slots__ = ( 'id', 'duration', 'entityId' )
 	
-	entityId : int
 	duration : int
+	entityId : int
+
+	def __init__(self, proto:int,
+		duration:int=None,
+		entityId:int=None
+	):
+		super().__init__(proto,
+			duration=duration,
+			entityId=entityId
+		)
 
 	_state : int = 3
 

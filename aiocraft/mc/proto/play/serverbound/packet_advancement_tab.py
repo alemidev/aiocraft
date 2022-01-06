@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAdvancementTab(Packet):
-	__slots__ = ( 'id', 'tabId', 'action' )
+	__slots__ = ( 'id', 'action', 'tabId' )
 	
-	tabId : bytes
 	action : int
+	tabId : bytes
+
+	def __init__(self, proto:int,
+		action:int=None,
+		tabId:bytes=None
+	):
+		super().__init__(proto,
+			action=action,
+			tabId=tabId
+		)
 
 	_state : int = 3
 
@@ -37,8 +46,7 @@ class PacketAdvancementTab(Packet):
 		751 : 34,
 		755 : 34,
 		756 : 34,
-		757 : 34,
-		1073741839 : 34
+		757 : 34
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		331 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
@@ -65,6 +73,5 @@ class PacketAdvancementTab(Packet):
 		751 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
 		755 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
 		756 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
-		757 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
-		1073741839 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ]
+		757 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ]
 	}

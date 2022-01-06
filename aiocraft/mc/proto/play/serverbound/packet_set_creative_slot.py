@@ -10,10 +10,18 @@ class PacketSetCreativeSlot(Packet):
 	item : dict
 	slot : int
 
+	def __init__(self, proto:int,
+		item:dict=None,
+		slot:int=None
+	):
+		super().__init__(proto,
+			item=item,
+			slot=slot
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 16,
 		47 : 16,
 		76 : 21,
 		107 : 24,
@@ -50,11 +58,9 @@ class PacketSetCreativeSlot(Packet):
 		751 : 40,
 		755 : 40,
 		756 : 40,
-		757 : 40,
-		1073741839 : 40
+		757 : 40
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'slot', Short ), ( 'item', Slot ) ],
 		47 : [ ( 'slot', Short ), ( 'item', Slot ) ],
 		76 : [ ( 'slot', Short ), ( 'item', Slot ) ],
 		107 : [ ( 'slot', Short ), ( 'item', Slot ) ],
@@ -91,6 +97,5 @@ class PacketSetCreativeSlot(Packet):
 		751 : [ ( 'slot', Short ), ( 'item', Slot ) ],
 		755 : [ ( 'slot', Short ), ( 'item', Slot ) ],
 		756 : [ ( 'slot', Short ), ( 'item', Slot ) ],
-		757 : [ ( 'slot', Short ), ( 'item', Slot ) ],
-		1073741839 : [ ( 'slot', Short ), ( 'item', Slot ) ]
+		757 : [ ( 'slot', Short ), ( 'item', Slot ) ]
 	}

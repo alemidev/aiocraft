@@ -9,6 +9,13 @@ class PacketEnterCombatEvent(Packet):
 	
 	
 
+	def __init__(self, proto:int,
+		
+	):
+		super().__init__(proto,
+			
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

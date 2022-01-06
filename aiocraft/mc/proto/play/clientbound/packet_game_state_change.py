@@ -5,15 +5,23 @@ from ....packet import Packet
 from ....types import *
 
 class PacketGameStateChange(Packet):
-	__slots__ = ( 'id', 'reason', 'gameMode' )
+	__slots__ = ( 'id', 'gameMode', 'reason' )
 	
-	reason : int
 	gameMode : float
+	reason : int
+
+	def __init__(self, proto:int,
+		gameMode:float=None,
+		reason:int=None
+	):
+		super().__init__(proto,
+			gameMode=gameMode,
+			reason=reason
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 43,
 		47 : 43,
 		76 : 30,
 		107 : 30,
@@ -50,11 +58,9 @@ class PacketGameStateChange(Packet):
 		751 : 29,
 		755 : 30,
 		756 : 30,
-		757 : 30,
-		1073741839 : 30
+		757 : 30
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
 		47 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
 		76 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
 		107 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
@@ -91,6 +97,5 @@ class PacketGameStateChange(Packet):
 		751 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
 		755 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
 		756 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
-		757 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
-		1073741839 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ]
+		757 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ]
 	}

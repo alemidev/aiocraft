@@ -10,10 +10,18 @@ class PacketScoreboardDisplayObjective(Packet):
 	name : str
 	position : int
 
+	def __init__(self, proto:int,
+		name:str=None,
+		position:int=None
+	):
+		super().__init__(proto,
+			name=name,
+			position=position
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 61,
 		47 : 61,
 		76 : 56,
 		107 : 56,
@@ -50,11 +58,9 @@ class PacketScoreboardDisplayObjective(Packet):
 		751 : 67,
 		755 : 76,
 		756 : 76,
-		757 : 76,
-		1073741839 : 68
+		757 : 76
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'position', Byte ), ( 'name', String ) ],
 		47 : [ ( 'position', Byte ), ( 'name', String ) ],
 		76 : [ ( 'position', Byte ), ( 'name', String ) ],
 		107 : [ ( 'position', Byte ), ( 'name', String ) ],
@@ -91,6 +97,5 @@ class PacketScoreboardDisplayObjective(Packet):
 		751 : [ ( 'position', Byte ), ( 'name', String ) ],
 		755 : [ ( 'position', Byte ), ( 'name', String ) ],
 		756 : [ ( 'position', Byte ), ( 'name', String ) ],
-		757 : [ ( 'position', Byte ), ( 'name', String ) ],
-		1073741839 : [ ( 'position', Byte ), ( 'name', String ) ]
+		757 : [ ( 'position', Byte ), ( 'name', String ) ]
 	}

@@ -5,20 +5,35 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPositionLook(Packet):
-	__slots__ = ( 'id', 'onGround', 'z', 'yaw', 'x', 'pitch', 'stance', 'y' )
+	__slots__ = ( 'id', 'onGround', 'pitch', 'x', 'y', 'yaw', 'z' )
 	
 	onGround : bool
-	z : float
-	yaw : float
-	x : float
 	pitch : float
-	stance : float
+	x : float
 	y : float
+	yaw : float
+	z : float
+
+	def __init__(self, proto:int,
+		onGround:bool=None,
+		pitch:float=None,
+		x:float=None,
+		y:float=None,
+		yaw:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			onGround=onGround,
+			pitch=pitch,
+			x=x,
+			y=y,
+			yaw=yaw,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 6,
 		47 : 6,
 		76 : 12,
 		107 : 13,
@@ -55,11 +70,9 @@ class PacketPositionLook(Packet):
 		751 : 19,
 		755 : 18,
 		756 : 18,
-		757 : 18,
-		1073741839 : 19
+		757 : 18
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'x', Double ), ( 'stance', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		47 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		76 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		107 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
@@ -96,6 +109,5 @@ class PacketPositionLook(Packet):
 		751 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
-		1073741839 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
 	}

@@ -5,18 +5,43 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWorldBorder(Packet):
-	__slots__ = ( 'id', 'z', 'portalBoundary', 'warning_blocks', 'x', 'old_radius', 'action', 'radius', 'speed', 'warning_time', 'new_radius' )
+	__slots__ = ( 'id', 'action', 'new_radius', 'old_radius', 'portalBoundary', 'radius', 'speed', 'warning_blocks', 'warning_time', 'x', 'z' )
 	
-	z : bytes
-	portalBoundary : bytes
-	warning_blocks : bytes
-	x : bytes
-	old_radius : bytes
 	action : int
+	new_radius : bytes
+	old_radius : bytes
+	portalBoundary : bytes
 	radius : bytes
 	speed : bytes
+	warning_blocks : bytes
 	warning_time : bytes
-	new_radius : bytes
+	x : bytes
+	z : bytes
+
+	def __init__(self, proto:int,
+		action:int=None,
+		new_radius:bytes=None,
+		old_radius:bytes=None,
+		portalBoundary:bytes=None,
+		radius:bytes=None,
+		speed:bytes=None,
+		warning_blocks:bytes=None,
+		warning_time:bytes=None,
+		x:bytes=None,
+		z:bytes=None
+	):
+		super().__init__(proto,
+			action=action,
+			new_radius=new_radius,
+			old_radius=old_radius,
+			portalBoundary=portalBoundary,
+			radius=radius,
+			speed=speed,
+			warning_blocks=warning_blocks,
+			warning_time=warning_time,
+			x=x,
+			z=z
+		)
 
 	_state : int = 3
 
@@ -54,8 +79,7 @@ class PacketWorldBorder(Packet):
 		734 : 61,
 		735 : 61,
 		736 : 61,
-		751 : 61,
-		1073741839 : 62
+		751 : 61
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'action', VarInt ), ( 'radius', SwitchType('action', { 0 : Double }, None, ) ), ( 'x', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'z', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'old_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'new_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'speed', SwitchType('action', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'portalBoundary', SwitchType('action', { 3 : VarInt }, None, ) ), ( 'warning_time', SwitchType('action', { 3 : VarInt, 4 : VarInt }, None, ) ), ( 'warning_blocks', SwitchType('action', { 3 : VarInt, 5 : VarInt }, None, ) ) ],
@@ -91,6 +115,5 @@ class PacketWorldBorder(Packet):
 		734 : [ ( 'action', VarInt ), ( 'radius', SwitchType('action', { 0 : Double }, None, ) ), ( 'x', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'z', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'old_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'new_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'speed', SwitchType('action', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'portalBoundary', SwitchType('action', { 3 : VarInt }, None, ) ), ( 'warning_time', SwitchType('action', { 3 : VarInt, 4 : VarInt }, None, ) ), ( 'warning_blocks', SwitchType('action', { 3 : VarInt, 5 : VarInt }, None, ) ) ],
 		735 : [ ( 'action', VarInt ), ( 'radius', SwitchType('action', { 0 : Double }, None, ) ), ( 'x', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'z', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'old_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'new_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'speed', SwitchType('action', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'portalBoundary', SwitchType('action', { 3 : VarInt }, None, ) ), ( 'warning_time', SwitchType('action', { 3 : VarInt, 4 : VarInt }, None, ) ), ( 'warning_blocks', SwitchType('action', { 3 : VarInt, 5 : VarInt }, None, ) ) ],
 		736 : [ ( 'action', VarInt ), ( 'radius', SwitchType('action', { 0 : Double }, None, ) ), ( 'x', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'z', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'old_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'new_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'speed', SwitchType('action', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'portalBoundary', SwitchType('action', { 3 : VarInt }, None, ) ), ( 'warning_time', SwitchType('action', { 3 : VarInt, 4 : VarInt }, None, ) ), ( 'warning_blocks', SwitchType('action', { 3 : VarInt, 5 : VarInt }, None, ) ) ],
-		751 : [ ( 'action', VarInt ), ( 'radius', SwitchType('action', { 0 : Double }, None, ) ), ( 'x', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'z', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'old_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'new_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'speed', SwitchType('action', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'portalBoundary', SwitchType('action', { 3 : VarInt }, None, ) ), ( 'warning_time', SwitchType('action', { 3 : VarInt, 4 : VarInt }, None, ) ), ( 'warning_blocks', SwitchType('action', { 3 : VarInt, 5 : VarInt }, None, ) ) ],
-		1073741839 : [ ( 'action', VarInt ), ( 'radius', SwitchType('action', { 0 : Double }, None, ) ), ( 'x', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'z', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'old_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'new_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'speed', SwitchType('action', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'portalBoundary', SwitchType('action', { 3 : VarInt }, None, ) ), ( 'warning_time', SwitchType('action', { 3 : VarInt, 4 : VarInt }, None, ) ), ( 'warning_blocks', SwitchType('action', { 3 : VarInt, 5 : VarInt }, None, ) ) ]
+		751 : [ ( 'action', VarInt ), ( 'radius', SwitchType('action', { 0 : Double }, None, ) ), ( 'x', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'z', SwitchType('action', { 2 : Double, 3 : Double }, None, ) ), ( 'old_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'new_radius', SwitchType('action', { 1 : Double, 3 : Double }, None, ) ), ( 'speed', SwitchType('action', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'portalBoundary', SwitchType('action', { 3 : VarInt }, None, ) ), ( 'warning_time', SwitchType('action', { 3 : VarInt, 4 : VarInt }, None, ) ), ( 'warning_blocks', SwitchType('action', { 3 : VarInt, 5 : VarInt }, None, ) ) ]
 	}

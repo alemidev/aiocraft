@@ -24,6 +24,9 @@ class {name}(Packet):
 	__slots__ = {slots}
 	{fields}
 
+	def __init__(self, proto:int,{constructor}):
+		super().__init__(proto,{constructed})
+
 	_state : int = {state}
 
 	_ids : Dict[int, int] = {ids}
@@ -34,14 +37,26 @@ class Ref:
 	name : str
 	args : tuple
 
-	def __equals__(self, other) -> bool:
+	def __eq__(self, other) -> bool:
 		if self.args:
 			return self.name == other.name and self.args == other.args
 		return self.name == other.name
 
+	def __hash__(self) -> int:
+		return hash(repr(self))
+
+	def __ge__(self, other):
+		return repr(self) >= repr(other)
+
+	def __gt__(self, other):
+		return repr(self) > repr(other)
+
 	def __init__(self, name:str, *args):
 		self.name = name or "anon"
 		self.args = args
+
+	def __str__(self) -> str:
+		return repr(self)
 
 	def __repr__(self) -> str:
 		if self.args:
@@ -231,9 +246,11 @@ class PacketClassWriter:
 				name=self.name, 
 				ids=format_dict(self.ids, depth=2), 
 				definitions=format_dict({ k : Ref(format_list(Ref(format_tuple(x)) for x in v)) for k,v in self.definitions.items() }, depth=2),
-				slots=format_tuple(["id"] + list(self.attrs), depth=0), # TODO jank fix when no slots
-				fields="\n\t" + "\n\t".join(f"{a} : {pytype(self.hints[a])}" for a in self.attrs),
+				slots=format_tuple(["id"] + sorted(self.attrs), depth=0), # TODO jank fix when no slots
+				fields="\n\t" + "\n\t".join(f"{a} : {pytype(sorted(self.hints[a]))}" for a in sorted(self.attrs)),
 				state=self.state,
+				constructor=_format_line((Ref(f"{field}:{pytype(sorted(self.hints[field]))}=None") for field in sorted(self.attrs)), depth=2),
+				constructed=_format_line((Ref(f"{field}={field}") for field in sorted(self.attrs)), depth=3),
 			)
 
 class RegistryClassWriter:
@@ -311,6 +328,10 @@ def compile():
 			continue
 		with open(mc_path / f'{folder_name}/data/pc/{v}/version.json') as f:
 			proto_version = json.load(f)['version']
+
+		if proto_version < 47 or proto_version > 1000:
+			continue # avoid versions before 1.8
+
 		all_proto_numbers.append(proto_version)
 
 		with open(mc_path / f'{folder_name}/data/pc/{v}/protocol.json') as f:

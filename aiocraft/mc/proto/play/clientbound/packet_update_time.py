@@ -10,10 +10,18 @@ class PacketUpdateTime(Packet):
 	age : int
 	time : int
 
+	def __init__(self, proto:int,
+		age:int=None,
+		time:int=None
+	):
+		super().__init__(proto,
+			age=age,
+			time=time
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 3,
 		47 : 3,
 		76 : 67,
 		107 : 68,
@@ -50,11 +58,9 @@ class PacketUpdateTime(Packet):
 		751 : 78,
 		755 : 88,
 		756 : 88,
-		757 : 89,
-		1073741839 : 79
+		757 : 89
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'age', Long ), ( 'time', Long ) ],
 		47 : [ ( 'age', Long ), ( 'time', Long ) ],
 		76 : [ ( 'age', Long ), ( 'time', Long ) ],
 		107 : [ ( 'age', Long ), ( 'time', Long ) ],
@@ -91,6 +97,5 @@ class PacketUpdateTime(Packet):
 		751 : [ ( 'age', Long ), ( 'time', Long ) ],
 		755 : [ ( 'age', Long ), ( 'time', Long ) ],
 		756 : [ ( 'age', Long ), ( 'time', Long ) ],
-		757 : [ ( 'age', Long ), ( 'time', Long ) ],
-		1073741839 : [ ( 'age', Long ), ( 'time', Long ) ]
+		757 : [ ( 'age', Long ), ( 'time', Long ) ]
 	}

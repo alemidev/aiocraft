@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketChat(Packet):
-	__slots__ = ( 'id', 'message', 'sender', 'position' )
+	__slots__ = ( 'id', 'message', 'position', 'sender' )
 	
 	message : str
-	sender : str
 	position : int
+	sender : str
+
+	def __init__(self, proto:int,
+		message:str=None,
+		position:int=None,
+		sender:str=None
+	):
+		super().__init__(proto,
+			message=message,
+			position=position,
+			sender=sender
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 2,
 		47 : 2,
 		76 : 15,
 		107 : 15,
@@ -51,11 +61,9 @@ class PacketChat(Packet):
 		751 : 14,
 		755 : 15,
 		756 : 15,
-		757 : 15,
-		1073741839 : 15
+		757 : 15
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'message', String ) ],
 		47 : [ ( 'message', String ), ( 'position', Byte ) ],
 		76 : [ ( 'message', String ), ( 'position', Byte ) ],
 		107 : [ ( 'message', String ), ( 'position', Byte ) ],
@@ -92,6 +100,5 @@ class PacketChat(Packet):
 		751 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
 		755 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
 		756 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
-		757 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
-		1073741839 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ]
+		757 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ]
 	}

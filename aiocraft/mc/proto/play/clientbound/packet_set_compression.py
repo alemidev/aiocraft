@@ -9,6 +9,13 @@ class PacketSetCompression(Packet):
 	
 	threshold : int
 
+	def __init__(self, proto:int,
+		threshold:int=None
+	):
+		super().__init__(proto,
+			threshold=threshold
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

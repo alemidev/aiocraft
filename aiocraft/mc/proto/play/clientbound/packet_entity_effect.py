@@ -5,18 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityEffect(Packet):
-	__slots__ = ( 'id', 'amplifier', 'entityId', 'effectId', 'duration', 'hideParticles' )
+	__slots__ = ( 'id', 'amplifier', 'duration', 'effectId', 'entityId', 'hideParticles' )
 	
 	amplifier : int
-	entityId : int
-	effectId : int
 	duration : int
+	effectId : int
+	entityId : int
 	hideParticles : Union[int,bool]
+
+	def __init__(self, proto:int,
+		amplifier:int=None,
+		duration:int=None,
+		effectId:int=None,
+		entityId:int=None,
+		hideParticles:Union[int,bool]=None
+	):
+		super().__init__(proto,
+			amplifier=amplifier,
+			duration=duration,
+			effectId=effectId,
+			entityId=entityId,
+			hideParticles=hideParticles
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 29,
 		47 : 29,
 		76 : 74,
 		107 : 76,
@@ -53,11 +67,9 @@ class PacketEntityEffect(Packet):
 		751 : 89,
 		755 : 100,
 		756 : 100,
-		757 : 101,
-		1073741839 : 90
+		757 : 101
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', Short ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Boolean ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Boolean ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
@@ -94,6 +106,5 @@ class PacketEntityEffect(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ]
 	}

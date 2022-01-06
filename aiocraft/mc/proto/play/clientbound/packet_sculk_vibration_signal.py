@@ -5,24 +5,35 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSculkVibrationSignal(Packet):
-	__slots__ = ( 'id', 'destination', 'arrivalTicks', 'destinationIdentifier', 'sourcePosition' )
+	__slots__ = ( 'id', 'arrivalTicks', 'destination', 'destinationIdentifier', 'sourcePosition' )
 	
-	destination : bytes
 	arrivalTicks : int
+	destination : bytes
 	destinationIdentifier : str
 	sourcePosition : tuple
+
+	def __init__(self, proto:int,
+		arrivalTicks:int=None,
+		destination:bytes=None,
+		destinationIdentifier:str=None,
+		sourcePosition:tuple=None
+	):
+		super().__init__(proto,
+			arrivalTicks=arrivalTicks,
+			destination=destination,
+			destinationIdentifier=destinationIdentifier,
+			sourcePosition=sourcePosition
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
 		755 : 5,
 		756 : 5,
-		757 : 5,
-		1073741839 : 5
+		757 : 5
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ],
 		756 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ],
-		757 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ],
-		1073741839 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ]
+		757 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ]
 	}

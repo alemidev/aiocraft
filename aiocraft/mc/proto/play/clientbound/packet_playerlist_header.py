@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPlayerlistHeader(Packet):
-	__slots__ = ( 'id', 'header', 'footer' )
+	__slots__ = ( 'id', 'footer', 'header' )
 	
-	header : str
 	footer : str
+	header : str
+
+	def __init__(self, proto:int,
+		footer:str=None,
+		header:str=None
+	):
+		super().__init__(proto,
+			footer=footer,
+			header=header
+		)
 
 	_state : int = 3
 
@@ -49,8 +58,7 @@ class PacketPlayerlistHeader(Packet):
 		751 : 83,
 		755 : 94,
 		756 : 94,
-		757 : 95,
-		1073741839 : 84
+		757 : 95
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'header', String ), ( 'footer', String ) ],
@@ -89,6 +97,5 @@ class PacketPlayerlistHeader(Packet):
 		751 : [ ( 'header', String ), ( 'footer', String ) ],
 		755 : [ ( 'header', String ), ( 'footer', String ) ],
 		756 : [ ( 'header', String ), ( 'footer', String ) ],
-		757 : [ ( 'header', String ), ( 'footer', String ) ],
-		1073741839 : [ ( 'header', String ), ( 'footer', String ) ]
+		757 : [ ( 'header', String ), ( 'footer', String ) ]
 	}

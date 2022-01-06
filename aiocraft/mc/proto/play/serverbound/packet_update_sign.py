@@ -5,18 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateSign(Packet):
-	__slots__ = ( 'id', 'text2', 'text3', 'text1', 'location', 'text4' )
+	__slots__ = ( 'id', 'location', 'text1', 'text2', 'text3', 'text4' )
 	
+	location : tuple
+	text1 : str
 	text2 : str
 	text3 : str
-	text1 : str
-	location : Union[bytes,tuple]
 	text4 : str
+
+	def __init__(self, proto:int,
+		location:tuple=None,
+		text1:str=None,
+		text2:str=None,
+		text3:str=None,
+		text4:str=None
+	):
+		super().__init__(proto,
+			location=location,
+			text1=text1,
+			text2=text2,
+			text3=text3,
+			text4=text4
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 18,
 		47 : 18,
 		76 : 22,
 		107 : 25,
@@ -53,11 +67,9 @@ class PacketUpdateSign(Packet):
 		751 : 43,
 		755 : 43,
 		756 : 43,
-		757 : 43,
-		1073741839 : 43
+		757 : 43
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'location', TrailingData ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
 		47 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
 		76 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
 		107 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
@@ -94,6 +106,5 @@ class PacketUpdateSign(Packet):
 		751 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
 		755 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
 		756 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
-		757 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
-		1073741839 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ]
+		757 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ]
 	}

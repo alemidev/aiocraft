@@ -5,13 +5,28 @@ from ....packet import Packet
 from ....types import *
 
 class PacketVehicleMove(Packet):
-	__slots__ = ( 'id', 'z', 'yaw', 'x', 'pitch', 'y' )
+	__slots__ = ( 'id', 'pitch', 'x', 'y', 'yaw', 'z' )
 	
-	z : float
-	yaw : float
-	x : float
 	pitch : float
+	x : float
 	y : float
+	yaw : float
+	z : float
+
+	def __init__(self, proto:int,
+		pitch:float=None,
+		x:float=None,
+		y:float=None,
+		yaw:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			pitch=pitch,
+			x=x,
+			y=y,
+			yaw=yaw,
+			z=z
+		)
 
 	_state : int = 3
 
@@ -50,8 +65,7 @@ class PacketVehicleMove(Packet):
 		751 : 22,
 		755 : 21,
 		756 : 21,
-		757 : 21,
-		1073741839 : 22
+		757 : 21
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ) ],
@@ -88,6 +102,5 @@ class PacketVehicleMove(Packet):
 		751 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ) ],
 		755 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ) ],
 		756 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ) ],
-		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ) ],
-		1073741839 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ) ]
+		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ) ]
 	}

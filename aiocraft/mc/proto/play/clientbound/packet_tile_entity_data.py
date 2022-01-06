@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTileEntityData(Packet):
-	__slots__ = ( 'id', 'location', 'nbtData', 'action' )
+	__slots__ = ( 'id', 'action', 'location', 'nbtData' )
 	
-	location : Union[bytes,tuple]
-	nbtData : bytes
 	action : int
+	location : tuple
+	nbtData : bytes
+
+	def __init__(self, proto:int,
+		action:int=None,
+		location:tuple=None,
+		nbtData:bytes=None
+	):
+		super().__init__(proto,
+			action=action,
+			location=location,
+			nbtData=nbtData
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 53,
 		47 : 53,
 		76 : 9,
 		107 : 9,
@@ -51,11 +61,9 @@ class PacketTileEntityData(Packet):
 		751 : 9,
 		755 : 10,
 		756 : 10,
-		757 : 10,
-		1073741839 : 10
+		757 : 10
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'location', TrailingData ), ( 'action', Byte ), ( 'nbtData', TrailingData ) ],
 		47 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
 		76 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
 		107 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
@@ -92,6 +100,5 @@ class PacketTileEntityData(Packet):
 		751 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
 		755 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
 		756 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
-		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ],
-		1073741839 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ]
+		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ]
 	}

@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityEquipment(Packet):
-	__slots__ = ( 'id', 'equipments', 'item', 'entityId', 'slot' )
+	__slots__ = ( 'id', 'entityId', 'equipments', 'item', 'slot' )
 	
+	entityId : int
 	equipments : bytes
 	item : dict
-	entityId : int
 	slot : int
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		equipments:bytes=None,
+		item:dict=None,
+		slot:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			equipments=equipments,
+			item=item,
+			slot=slot
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 4,
 		47 : 4,
 		76 : 60,
 		107 : 60,
@@ -52,11 +64,9 @@ class PacketEntityEquipment(Packet):
 		751 : 71,
 		755 : 80,
 		756 : 80,
-		757 : 80,
-		1073741839 : 72
+		757 : 80
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'slot', Short ), ( 'item', Slot ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'slot', VarInt ), ( 'item', Slot ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'slot', VarInt ), ( 'item', Slot ) ],
@@ -93,6 +103,5 @@ class PacketEntityEquipment(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ]
 	}

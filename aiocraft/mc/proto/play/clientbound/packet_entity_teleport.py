@@ -5,20 +5,38 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityTeleport(Packet):
-	__slots__ = ( 'id', 'entityId', 'onGround', 'z', 'yaw', 'x', 'pitch', 'y' )
+	__slots__ = ( 'id', 'entityId', 'onGround', 'pitch', 'x', 'y', 'yaw', 'z' )
 	
 	entityId : int
 	onGround : bool
-	z : Union[int,float]
-	yaw : int
-	x : Union[int,float]
 	pitch : int
-	y : Union[int,float]
+	x : Union[float,int]
+	y : Union[float,int]
+	yaw : int
+	z : Union[float,int]
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		onGround:bool=None,
+		pitch:int=None,
+		x:Union[float,int]=None,
+		y:Union[float,int]=None,
+		yaw:int=None,
+		z:Union[float,int]=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			onGround=onGround,
+			pitch=pitch,
+			x=x,
+			y=y,
+			yaw=yaw,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 24,
 		47 : 24,
 		76 : 72,
 		107 : 74,
@@ -55,11 +73,9 @@ class PacketEntityTeleport(Packet):
 		751 : 86,
 		755 : 97,
 		756 : 97,
-		757 : 98,
-		1073741839 : 87
+		757 : 98
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
@@ -96,6 +112,5 @@ class PacketEntityTeleport(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ]
 	}

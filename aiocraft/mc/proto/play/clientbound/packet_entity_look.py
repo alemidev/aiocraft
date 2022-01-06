@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketEntityLook(Packet):
-	__slots__ = ( 'id', 'onGround', 'entityId', 'yaw', 'pitch' )
+	__slots__ = ( 'id', 'entityId', 'onGround', 'pitch', 'yaw' )
 	
-	onGround : bool
 	entityId : int
-	yaw : int
+	onGround : bool
 	pitch : int
+	yaw : int
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		onGround:bool=None,
+		pitch:int=None,
+		yaw:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			onGround=onGround,
+			pitch=pitch,
+			yaw=yaw
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 22,
 		47 : 22,
 		76 : 40,
 		107 : 39,
@@ -52,11 +64,9 @@ class PacketEntityLook(Packet):
 		751 : 41,
 		755 : 43,
 		756 : 43,
-		757 : 43,
-		1073741839 : 42
+		757 : 43
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
@@ -93,6 +103,5 @@ class PacketEntityLook(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ]
 	}

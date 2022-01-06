@@ -5,24 +5,44 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSettings(Packet):
-	__slots__ = ( 'id', 'chatFlags', 'viewDistance', 'enableTextFiltering', 'chatColors', 'locale', 'showCape', 'disableTextFiltering', 'enableServerListing', 'difficulty', 'mainHand', 'skinParts' )
+	__slots__ = ( 'id', 'chatColors', 'chatFlags', 'disableTextFiltering', 'enableServerListing', 'enableTextFiltering', 'locale', 'mainHand', 'skinParts', 'viewDistance' )
 	
-	chatFlags : int
-	viewDistance : int
-	enableTextFiltering : bool
 	chatColors : bool
-	locale : str
-	showCape : bool
+	chatFlags : int
 	disableTextFiltering : bool
 	enableServerListing : bool
-	difficulty : int
+	enableTextFiltering : bool
+	locale : str
 	mainHand : int
 	skinParts : int
+	viewDistance : int
+
+	def __init__(self, proto:int,
+		chatColors:bool=None,
+		chatFlags:int=None,
+		disableTextFiltering:bool=None,
+		enableServerListing:bool=None,
+		enableTextFiltering:bool=None,
+		locale:str=None,
+		mainHand:int=None,
+		skinParts:int=None,
+		viewDistance:int=None
+	):
+		super().__init__(proto,
+			chatColors=chatColors,
+			chatFlags=chatFlags,
+			disableTextFiltering=disableTextFiltering,
+			enableServerListing=enableServerListing,
+			enableTextFiltering=enableTextFiltering,
+			locale=locale,
+			mainHand=mainHand,
+			skinParts=skinParts,
+			viewDistance=viewDistance
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 21,
 		47 : 21,
 		76 : 3,
 		107 : 4,
@@ -59,11 +79,9 @@ class PacketSettings(Packet):
 		751 : 5,
 		755 : 5,
 		756 : 5,
-		757 : 5,
-		1073741839 : 5
+		757 : 5
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', Byte ), ( 'chatColors', Boolean ), ( 'difficulty', Byte ), ( 'showCape', Boolean ) ],
 		47 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', Byte ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ) ],
 		76 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ) ],
 		107 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ) ],
@@ -100,6 +118,5 @@ class PacketSettings(Packet):
 		751 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ) ],
 		755 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'disableTextFiltering', Boolean ) ],
 		756 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'disableTextFiltering', Boolean ) ],
-		757 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ],
-		1073741839 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'disableTextFiltering', Boolean ) ]
+		757 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ]
 	}

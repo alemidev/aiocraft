@@ -10,6 +10,15 @@ class PacketSteerBoat(Packet):
 	leftPaddle : bool
 	rightPaddle : bool
 
+	def __init__(self, proto:int,
+		leftPaddle:bool=None,
+		rightPaddle:bool=None
+	):
+		super().__init__(proto,
+			leftPaddle=leftPaddle,
+			rightPaddle=rightPaddle
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -47,8 +56,7 @@ class PacketSteerBoat(Packet):
 		751 : 23,
 		755 : 22,
 		756 : 22,
-		757 : 22,
-		1073741839 : 23
+		757 : 22
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
@@ -85,6 +93,5 @@ class PacketSteerBoat(Packet):
 		751 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
 		755 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
 		756 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
-		757 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
-		1073741839 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ]
+		757 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ]
 	}

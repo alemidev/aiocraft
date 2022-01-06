@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketNbtQueryResponse(Packet):
-	__slots__ = ( 'id', 'transactionId', 'nbt' )
+	__slots__ = ( 'id', 'nbt', 'transactionId' )
 	
-	transactionId : int
 	nbt : bytes
+	transactionId : int
+
+	def __init__(self, proto:int,
+		nbt:bytes=None,
+		transactionId:int=None
+	):
+		super().__init__(proto,
+			nbt=nbt,
+			transactionId=transactionId
+		)
 
 	_state : int = 3
 
@@ -32,8 +41,7 @@ class PacketNbtQueryResponse(Packet):
 		751 : 84,
 		755 : 95,
 		756 : 95,
-		757 : 96,
-		1073741839 : 85
+		757 : 96
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
@@ -55,6 +63,5 @@ class PacketNbtQueryResponse(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
-		1073741839 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ]
 	}

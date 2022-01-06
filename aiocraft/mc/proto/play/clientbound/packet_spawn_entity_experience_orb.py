@@ -5,18 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntityExperienceOrb(Packet):
-	__slots__ = ( 'id', 'entityId', 'z', 'count', 'x', 'y' )
+	__slots__ = ( 'id', 'count', 'entityId', 'x', 'y', 'z' )
 	
-	entityId : int
-	z : Union[int,float]
 	count : int
-	x : Union[int,float]
-	y : Union[int,float]
+	entityId : int
+	x : Union[float,int]
+	y : Union[float,int]
+	z : Union[float,int]
+
+	def __init__(self, proto:int,
+		count:int=None,
+		entityId:int=None,
+		x:Union[float,int]=None,
+		y:Union[float,int]=None,
+		z:Union[float,int]=None
+	):
+		super().__init__(proto,
+			count=count,
+			entityId=entityId,
+			x=x,
+			y=y,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 17,
 		47 : 17,
 		76 : 1,
 		107 : 1,
@@ -53,11 +67,9 @@ class PacketSpawnEntityExperienceOrb(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1,
-		1073741839 : 1
+		757 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'count', Short ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'count', Short ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'count', Short ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
@@ -94,6 +106,5 @@ class PacketSpawnEntityExperienceOrb(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ]
 	}

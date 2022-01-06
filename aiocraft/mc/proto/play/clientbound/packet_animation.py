@@ -10,10 +10,18 @@ class PacketAnimation(Packet):
 	animation : int
 	entityId : int
 
+	def __init__(self, proto:int,
+		animation:int=None,
+		entityId:int=None
+	):
+		super().__init__(proto,
+			animation=animation,
+			entityId=entityId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 11,
 		47 : 11,
 		76 : 6,
 		107 : 6,
@@ -50,11 +58,9 @@ class PacketAnimation(Packet):
 		751 : 5,
 		755 : 6,
 		756 : 6,
-		757 : 6,
-		1073741839 : 6
+		757 : 6
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
@@ -91,6 +97,5 @@ class PacketAnimation(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ]
 	}

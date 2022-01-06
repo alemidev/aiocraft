@@ -5,20 +5,27 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUpdateAttributes(Packet):
-	__slots__ = ( 'id', 'properties', 'entityId' )
+	__slots__ = ( 'id', 'entityId', 'properties' )
 	
-	properties : list
 	entityId : int
+	properties : list
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		properties:list=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			properties=properties
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 32,
 		47 : 32,
 		76 : 73
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'UUID', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), Short, ) ), ), Int, ) ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'UUID', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), Int, ) ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'properties', ArrayType(StructType(( 'key', String ), ( 'value', Double ), ( 'modifiers', ArrayType(StructType(( 'UUID', UUID ), ( 'amount', Double ), ( 'operation', Byte ), ), VarInt, ) ), ), Int, ) ) ]
 	}

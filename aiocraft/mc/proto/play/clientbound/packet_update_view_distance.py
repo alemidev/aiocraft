@@ -9,6 +9,13 @@ class PacketUpdateViewDistance(Packet):
 	
 	viewDistance : int
 
+	def __init__(self, proto:int,
+		viewDistance:int=None
+	):
+		super().__init__(proto,
+			viewDistance=viewDistance
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -26,8 +33,7 @@ class PacketUpdateViewDistance(Packet):
 		751 : 65,
 		755 : 74,
 		756 : 74,
-		757 : 74,
-		1073741839 : 66
+		757 : 74
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'viewDistance', VarInt ) ],
@@ -44,6 +50,5 @@ class PacketUpdateViewDistance(Packet):
 		751 : [ ( 'viewDistance', VarInt ) ],
 		755 : [ ( 'viewDistance', VarInt ) ],
 		756 : [ ( 'viewDistance', VarInt ) ],
-		757 : [ ( 'viewDistance', VarInt ) ],
-		1073741839 : [ ( 'viewDistance', VarInt ) ]
+		757 : [ ( 'viewDistance', VarInt ) ]
 	}

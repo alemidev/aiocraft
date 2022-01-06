@@ -9,6 +9,13 @@ class PacketCompress(Packet):
 	
 	threshold : int
 
+	def __init__(self, proto:int,
+		threshold:int=None
+	):
+		super().__init__(proto,
+			threshold=threshold
+		)
+
 	_state : int = 2
 
 	_ids : Dict[int, int] = {
@@ -48,8 +55,7 @@ class PacketCompress(Packet):
 		751 : 3,
 		755 : 3,
 		756 : 3,
-		757 : 3,
-		1073741839 : 3
+		757 : 3
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'threshold', VarInt ) ],
@@ -88,6 +94,5 @@ class PacketCompress(Packet):
 		751 : [ ( 'threshold', VarInt ) ],
 		755 : [ ( 'threshold', VarInt ) ],
 		756 : [ ( 'threshold', VarInt ) ],
-		757 : [ ( 'threshold', VarInt ) ],
-		1073741839 : [ ( 'threshold', VarInt ) ]
+		757 : [ ( 'threshold', VarInt ) ]
 	}

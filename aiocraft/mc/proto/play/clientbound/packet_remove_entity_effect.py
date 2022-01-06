@@ -10,10 +10,18 @@ class PacketRemoveEntityEffect(Packet):
 	effectId : int
 	entityId : int
 
+	def __init__(self, proto:int,
+		effectId:int=None,
+		entityId:int=None
+	):
+		super().__init__(proto,
+			effectId=effectId,
+			entityId=entityId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 30,
 		47 : 30,
 		76 : 49,
 		107 : 49,
@@ -50,11 +58,9 @@ class PacketRemoveEntityEffect(Packet):
 		751 : 55,
 		755 : 59,
 		756 : 59,
-		757 : 59,
-		1073741839 : 56
+		757 : 59
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'effectId', Byte ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
@@ -91,6 +97,5 @@ class PacketRemoveEntityEffect(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ]
 	}

@@ -9,10 +9,16 @@ class PacketHeldItemSlot(Packet):
 	
 	slotId : int
 
+	def __init__(self, proto:int,
+		slotId:int=None
+	):
+		super().__init__(proto,
+			slotId=slotId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 9,
 		47 : 9,
 		76 : 20,
 		107 : 23,
@@ -49,11 +55,9 @@ class PacketHeldItemSlot(Packet):
 		751 : 37,
 		755 : 37,
 		756 : 37,
-		757 : 37,
-		1073741839 : 37
+		757 : 37
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'slotId', Short ) ],
 		47 : [ ( 'slotId', Short ) ],
 		76 : [ ( 'slotId', Short ) ],
 		107 : [ ( 'slotId', Short ) ],
@@ -90,6 +94,5 @@ class PacketHeldItemSlot(Packet):
 		751 : [ ( 'slotId', Short ) ],
 		755 : [ ( 'slotId', Short ) ],
 		756 : [ ( 'slotId', Short ) ],
-		757 : [ ( 'slotId', Short ) ],
-		1073741839 : [ ( 'slotId', Short ) ]
+		757 : [ ( 'slotId', Short ) ]
 	}

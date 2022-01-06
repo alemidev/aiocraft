@@ -5,16 +5,37 @@ from ....packet import Packet
 from ....types import *
 
 class PacketInitializeWorldBorder(Packet):
-	__slots__ = ( 'id', 'warningTime', 'z', 'oldDiameter', 'x', 'portalTeleportBoundary', 'warningBlocks', 'speed', 'newDiameter' )
+	__slots__ = ( 'id', 'newDiameter', 'oldDiameter', 'portalTeleportBoundary', 'speed', 'warningBlocks', 'warningTime', 'x', 'z' )
 	
-	warningTime : int
-	z : float
-	oldDiameter : float
-	x : float
-	portalTeleportBoundary : int
-	warningBlocks : int
-	speed : int
 	newDiameter : float
+	oldDiameter : float
+	portalTeleportBoundary : int
+	speed : int
+	warningBlocks : int
+	warningTime : int
+	x : float
+	z : float
+
+	def __init__(self, proto:int,
+		newDiameter:float=None,
+		oldDiameter:float=None,
+		portalTeleportBoundary:int=None,
+		speed:int=None,
+		warningBlocks:int=None,
+		warningTime:int=None,
+		x:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			newDiameter=newDiameter,
+			oldDiameter=oldDiameter,
+			portalTeleportBoundary=portalTeleportBoundary,
+			speed=speed,
+			warningBlocks=warningBlocks,
+			warningTime=warningTime,
+			x=x,
+			z=z
+		)
 
 	_state : int = 3
 

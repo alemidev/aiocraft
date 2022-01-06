@@ -9,6 +9,13 @@ class PacketDestroyEntity(Packet):
 	
 	entityId : int
 
+	def __init__(self, proto:int,
+		entityId:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

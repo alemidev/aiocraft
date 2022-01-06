@@ -10,10 +10,18 @@ class PacketEntityHeadRotation(Packet):
 	entityId : int
 	headYaw : int
 
+	def __init__(self, proto:int,
+		entityId:int=None,
+		headYaw:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			headYaw=headYaw
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 25,
 		47 : 25,
 		76 : 52,
 		107 : 52,
@@ -50,11 +58,9 @@ class PacketEntityHeadRotation(Packet):
 		751 : 58,
 		755 : 62,
 		756 : 62,
-		757 : 62,
-		1073741839 : 59
+		757 : 62
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'headYaw', Byte ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
@@ -91,6 +97,5 @@ class PacketEntityHeadRotation(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ]
 	}

@@ -9,6 +9,13 @@ class PacketNameItem(Packet):
 	
 	name : str
 
+	def __init__(self, proto:int,
+		name:str=None
+	):
+		super().__init__(proto,
+			name=name
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -31,8 +38,7 @@ class PacketNameItem(Packet):
 		751 : 32,
 		755 : 32,
 		756 : 32,
-		757 : 32,
-		1073741839 : 32
+		757 : 32
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'name', String ) ],
@@ -54,6 +60,5 @@ class PacketNameItem(Packet):
 		751 : [ ( 'name', String ) ],
 		755 : [ ( 'name', String ) ],
 		756 : [ ( 'name', String ) ],
-		757 : [ ( 'name', String ) ],
-		1073741839 : [ ( 'name', String ) ]
+		757 : [ ( 'name', String ) ]
 	}

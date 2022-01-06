@@ -9,6 +9,13 @@ class PacketWorldBorderWarningReach(Packet):
 	
 	warningBlocks : int
 
+	def __init__(self, proto:int,
+		warningBlocks:int=None
+	):
+		super().__init__(proto,
+			warningBlocks=warningBlocks
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

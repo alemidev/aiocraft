@@ -10,10 +10,18 @@ class PacketCustomPayload(Packet):
 	channel : str
 	data : bytes
 
+	def __init__(self, proto:int,
+		channel:str=None,
+		data:bytes=None
+	):
+		super().__init__(proto,
+			channel=channel,
+			data=data
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 23,
 		47 : 23,
 		76 : 8,
 		107 : 9,
@@ -50,11 +58,9 @@ class PacketCustomPayload(Packet):
 		751 : 11,
 		755 : 10,
 		756 : 10,
-		757 : 10,
-		1073741839 : 11
+		757 : 10
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'channel', String ), ( 'data', ByteArray ) ],
 		47 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
 		76 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
 		107 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
@@ -91,6 +97,5 @@ class PacketCustomPayload(Packet):
 		751 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
 		755 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
 		756 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
-		757 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
-		1073741839 : [ ( 'channel', String ), ( 'data', TrailingData ) ]
+		757 : [ ( 'channel', String ), ( 'data', TrailingData ) ]
 	}

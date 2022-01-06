@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAttachEntity(Packet):
-	__slots__ = ( 'id', 'vehicleId', 'entityId', 'leash' )
+	__slots__ = ( 'id', 'entityId', 'leash', 'vehicleId' )
 	
-	vehicleId : int
 	entityId : int
 	leash : bool
+	vehicleId : int
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		leash:bool=None,
+		vehicleId:int=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			leash=leash,
+			vehicleId=vehicleId
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 27,
 		47 : 27,
 		76 : 58,
 		107 : 58,
@@ -51,11 +61,9 @@ class PacketAttachEntity(Packet):
 		751 : 69,
 		755 : 78,
 		756 : 78,
-		757 : 78,
-		1073741839 : 70
+		757 : 78
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'vehicleId', Int ), ( 'leash', Boolean ) ],
 		47 : [ ( 'entityId', Int ), ( 'vehicleId', Int ), ( 'leash', Boolean ) ],
 		76 : [ ( 'entityId', Int ), ( 'vehicleId', Int ), ( 'leash', Boolean ) ],
 		107 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
@@ -92,6 +100,5 @@ class PacketAttachEntity(Packet):
 		751 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
 		755 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
 		756 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
-		757 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
-		1073741839 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ]
+		757 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ]
 	}

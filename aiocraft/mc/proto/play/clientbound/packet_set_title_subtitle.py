@@ -9,6 +9,13 @@ class PacketSetTitleSubtitle(Packet):
 	
 	text : str
 
+	def __init__(self, proto:int,
+		text:str=None
+	):
+		super().__init__(proto,
+			text=text
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

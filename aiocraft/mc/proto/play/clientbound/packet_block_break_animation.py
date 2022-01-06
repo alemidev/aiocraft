@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockBreakAnimation(Packet):
-	__slots__ = ( 'id', 'location', 'destroyStage', 'entityId' )
+	__slots__ = ( 'id', 'destroyStage', 'entityId', 'location' )
 	
-	location : Union[bytes,tuple]
 	destroyStage : int
 	entityId : int
+	location : tuple
+
+	def __init__(self, proto:int,
+		destroyStage:int=None,
+		entityId:int=None,
+		location:tuple=None
+	):
+		super().__init__(proto,
+			destroyStage=destroyStage,
+			entityId=entityId,
+			location=location
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 37,
 		47 : 37,
 		76 : 8,
 		107 : 8,
@@ -51,11 +61,9 @@ class PacketBlockBreakAnimation(Packet):
 		751 : 8,
 		755 : 9,
 		756 : 9,
-		757 : 9,
-		1073741839 : 9
+		757 : 9
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'location', TrailingData ), ( 'destroyStage', Byte ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
@@ -92,6 +100,5 @@ class PacketBlockBreakAnimation(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ]
 	}

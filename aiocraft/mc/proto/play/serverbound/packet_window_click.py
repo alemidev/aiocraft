@@ -5,22 +5,44 @@ from ....packet import Packet
 from ....types import *
 
 class PacketWindowClick(Packet):
-	__slots__ = ( 'id', 'changedSlots', 'windowId', 'item', 'stateId', 'cursorItem', 'action', 'mouseButton', 'mode', 'slot' )
+	__slots__ = ( 'id', 'action', 'changedSlots', 'cursorItem', 'item', 'mode', 'mouseButton', 'slot', 'stateId', 'windowId' )
 	
-	changedSlots : list
-	windowId : int
-	item : dict
-	stateId : int
-	cursorItem : dict
 	action : int
-	mouseButton : int
+	changedSlots : list
+	cursorItem : dict
+	item : dict
 	mode : int
+	mouseButton : int
 	slot : int
+	stateId : int
+	windowId : int
+
+	def __init__(self, proto:int,
+		action:int=None,
+		changedSlots:list=None,
+		cursorItem:dict=None,
+		item:dict=None,
+		mode:int=None,
+		mouseButton:int=None,
+		slot:int=None,
+		stateId:int=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			action=action,
+			changedSlots=changedSlots,
+			cursorItem=cursorItem,
+			item=item,
+			mode=mode,
+			mouseButton=mouseButton,
+			slot=slot,
+			stateId=stateId,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 14,
 		47 : 14,
 		76 : 6,
 		107 : 7,
@@ -57,11 +79,9 @@ class PacketWindowClick(Packet):
 		751 : 9,
 		755 : 8,
 		756 : 8,
-		757 : 8,
-		1073741839 : 9
+		757 : 8
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ],
 		47 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ],
 		76 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ],
 		107 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ],
@@ -98,6 +118,5 @@ class PacketWindowClick(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ],
 		755 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', Byte ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
 		756 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
-		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ]
+		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ]
 	}

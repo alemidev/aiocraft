@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketBlockDig(Packet):
-	__slots__ = ( 'id', 'location', 'face', 'status' )
+	__slots__ = ( 'id', 'face', 'location', 'status' )
 	
-	location : Union[bytes,tuple]
 	face : int
+	location : tuple
 	status : int
+
+	def __init__(self, proto:int,
+		face:int=None,
+		location:tuple=None,
+		status:int=None
+	):
+		super().__init__(proto,
+			face=face,
+			location=location,
+			status=status
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 7,
 		47 : 7,
 		76 : 16,
 		107 : 19,
@@ -51,11 +61,9 @@ class PacketBlockDig(Packet):
 		751 : 27,
 		755 : 26,
 		756 : 26,
-		757 : 26,
-		1073741839 : 27
+		757 : 26
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'status', Byte ), ( 'location', TrailingData ), ( 'face', Byte ) ],
 		47 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
 		76 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
 		107 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
@@ -92,6 +100,5 @@ class PacketBlockDig(Packet):
 		751 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
 		755 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
 		756 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		757 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		1073741839 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ]
+		757 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ]
 	}

@@ -5,26 +5,56 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntityLiving(Packet):
-	__slots__ = ( 'id', 'velocityZ', 'entityId', 'velocityY', 'z', 'velocityX', 'headPitch', 'entityUUID', 'x', 'yaw', 'pitch', 'metadata', 'y', 'type' )
+	__slots__ = ( 'id', 'entityId', 'entityUUID', 'headPitch', 'metadata', 'pitch', 'type', 'velocityX', 'velocityY', 'velocityZ', 'x', 'y', 'yaw', 'z' )
 	
-	velocityZ : int
 	entityId : int
-	velocityY : int
-	z : Union[int,float]
-	velocityX : int
-	headPitch : int
 	entityUUID : str
-	x : Union[int,float]
-	yaw : int
-	pitch : int
+	headPitch : int
 	metadata : dict
-	y : Union[int,float]
+	pitch : int
 	type : int
+	velocityX : int
+	velocityY : int
+	velocityZ : int
+	x : Union[float,int]
+	y : Union[float,int]
+	yaw : int
+	z : Union[float,int]
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		entityUUID:str=None,
+		headPitch:int=None,
+		metadata:dict=None,
+		pitch:int=None,
+		type:int=None,
+		velocityX:int=None,
+		velocityY:int=None,
+		velocityZ:int=None,
+		x:Union[float,int]=None,
+		y:Union[float,int]=None,
+		yaw:int=None,
+		z:Union[float,int]=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			entityUUID=entityUUID,
+			headPitch=headPitch,
+			metadata=metadata,
+			pitch=pitch,
+			type=type,
+			velocityX=velocityX,
+			velocityY=velocityY,
+			velocityZ=velocityZ,
+			x=x,
+			y=y,
+			yaw=yaw,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 15,
 		47 : 15,
 		76 : 3,
 		107 : 3,
@@ -61,11 +91,9 @@ class PacketSpawnEntityLiving(Packet):
 		751 : 2,
 		755 : 2,
 		756 : 2,
-		757 : 2,
-		1073741839 : 2
+		757 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ), ( 'metadata', EntityMetadata ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ), ( 'metadata', EntityMetadata ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ), ( 'metadata', EntityMetadata ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', Byte ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ), ( 'metadata', EntityMetadata ) ],
@@ -102,6 +130,5 @@ class PacketSpawnEntityLiving(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
 	}

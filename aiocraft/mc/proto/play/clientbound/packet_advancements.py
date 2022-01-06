@@ -5,12 +5,25 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAdvancements(Packet):
-	__slots__ = ( 'id', 'reset', 'progressMapping', 'advancementMapping', 'identifiers' )
+	__slots__ = ( 'id', 'advancementMapping', 'identifiers', 'progressMapping', 'reset' )
 	
-	reset : bool
-	progressMapping : list
 	advancementMapping : list
 	identifiers : list
+	progressMapping : list
+	reset : bool
+
+	def __init__(self, proto:int,
+		advancementMapping:list=None,
+		identifiers:list=None,
+		progressMapping:list=None,
+		reset:bool=None
+	):
+		super().__init__(proto,
+			advancementMapping=advancementMapping,
+			identifiers=identifiers,
+			progressMapping=progressMapping,
+			reset=reset
+		)
 
 	_state : int = 3
 
@@ -41,8 +54,7 @@ class PacketAdvancements(Packet):
 		751 : 87,
 		755 : 98,
 		756 : 98,
-		757 : 99,
-		1073741839 : 88
+		757 : 99
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		321 : [ ( 'reset', Boolean ), ( 'advancementMapping', ArrayType(StructType(( 'key', String ), ( 'value', StructType(( 'parentId', OptionalType(String, ) ), ( 'displayData', OptionalType(StructType(( 'title', String ), ( 'description', String ), ( 'icon', VarInt ), ( 'frameType', VarInt ), ( 'backgroundTexture', OptionalType(String, ) ), ( 'xCord', VarInt ), ( 'yCord', VarInt ), ), ) ), ( 'criteria', ArrayType(StructType(( 'key', String ), ( 'value', Void ), ), VarInt, ) ), ( 'requirements', ArrayType(ArrayType(String, VarInt, ), VarInt, ) ), ) ), ), VarInt, ) ), ( 'identifiers', ArrayType(String, VarInt, ) ), ( 'progressMapping', ArrayType(StructType(( 'key', String ), ( 'value', ArrayType(StructType(( 'criterionIdentifier', String ), ( 'criterionProgress', OptionalType(Long, ) ), ), VarInt, ) ), ), VarInt, ) ) ],
@@ -71,6 +83,5 @@ class PacketAdvancements(Packet):
 		751 : [ ( 'reset', Boolean ), ( 'advancementMapping', ArrayType(StructType(( 'key', String ), ( 'value', StructType(( 'parentId', OptionalType(String, ) ), ( 'displayData', OptionalType(StructType(( 'title', String ), ( 'description', String ), ( 'icon', Slot ), ( 'frameType', VarInt ), ( 'flags', Int ), ( 'backgroundTexture', SwitchType('has_background_texture', { 1 : String }, None, ) ), ( 'xCord', Float ), ( 'yCord', Float ), ), ) ), ( 'criteria', ArrayType(StructType(( 'key', String ), ( 'value', Void ), ), VarInt, ) ), ( 'requirements', ArrayType(ArrayType(String, VarInt, ), VarInt, ) ), ) ), ), VarInt, ) ), ( 'identifiers', ArrayType(String, VarInt, ) ), ( 'progressMapping', ArrayType(StructType(( 'key', String ), ( 'value', ArrayType(StructType(( 'criterionIdentifier', String ), ( 'criterionProgress', OptionalType(Long, ) ), ), VarInt, ) ), ), VarInt, ) ) ],
 		755 : [ ( 'reset', Boolean ), ( 'advancementMapping', ArrayType(StructType(( 'key', String ), ( 'value', StructType(( 'parentId', OptionalType(String, ) ), ( 'displayData', OptionalType(StructType(( 'title', String ), ( 'description', String ), ( 'icon', Slot ), ( 'frameType', VarInt ), ( 'flags', Int ), ( 'backgroundTexture', SwitchType('has_background_texture', { 1 : String }, None, ) ), ( 'xCord', Float ), ( 'yCord', Float ), ), ) ), ( 'criteria', ArrayType(StructType(( 'key', String ), ( 'value', Void ), ), VarInt, ) ), ( 'requirements', ArrayType(ArrayType(String, VarInt, ), VarInt, ) ), ) ), ), VarInt, ) ), ( 'identifiers', ArrayType(String, VarInt, ) ), ( 'progressMapping', ArrayType(StructType(( 'key', String ), ( 'value', ArrayType(StructType(( 'criterionIdentifier', String ), ( 'criterionProgress', OptionalType(Long, ) ), ), VarInt, ) ), ), VarInt, ) ) ],
 		756 : [ ( 'reset', Boolean ), ( 'advancementMapping', ArrayType(StructType(( 'key', String ), ( 'value', StructType(( 'parentId', OptionalType(String, ) ), ( 'displayData', OptionalType(StructType(( 'title', String ), ( 'description', String ), ( 'icon', Slot ), ( 'frameType', VarInt ), ( 'flags', Int ), ( 'backgroundTexture', SwitchType('has_background_texture', { 1 : String }, None, ) ), ( 'xCord', Float ), ( 'yCord', Float ), ), ) ), ( 'criteria', ArrayType(StructType(( 'key', String ), ( 'value', Void ), ), VarInt, ) ), ( 'requirements', ArrayType(ArrayType(String, VarInt, ), VarInt, ) ), ) ), ), VarInt, ) ), ( 'identifiers', ArrayType(String, VarInt, ) ), ( 'progressMapping', ArrayType(StructType(( 'key', String ), ( 'value', ArrayType(StructType(( 'criterionIdentifier', String ), ( 'criterionProgress', OptionalType(Long, ) ), ), VarInt, ) ), ), VarInt, ) ) ],
-		757 : [ ( 'reset', Boolean ), ( 'advancementMapping', ArrayType(StructType(( 'key', String ), ( 'value', StructType(( 'parentId', OptionalType(String, ) ), ( 'displayData', OptionalType(StructType(( 'title', String ), ( 'description', String ), ( 'icon', Slot ), ( 'frameType', VarInt ), ( 'flags', Int ), ( 'backgroundTexture', SwitchType('has_background_texture', { 1 : String }, None, ) ), ( 'xCord', Float ), ( 'yCord', Float ), ), ) ), ( 'criteria', ArrayType(StructType(( 'key', String ), ( 'value', Void ), ), VarInt, ) ), ( 'requirements', ArrayType(ArrayType(String, VarInt, ), VarInt, ) ), ) ), ), VarInt, ) ), ( 'identifiers', ArrayType(String, VarInt, ) ), ( 'progressMapping', ArrayType(StructType(( 'key', String ), ( 'value', ArrayType(StructType(( 'criterionIdentifier', String ), ( 'criterionProgress', OptionalType(Long, ) ), ), VarInt, ) ), ), VarInt, ) ) ],
-		1073741839 : [ ( 'reset', Boolean ), ( 'advancementMapping', ArrayType(StructType(( 'key', String ), ( 'value', StructType(( 'parentId', OptionalType(String, ) ), ( 'displayData', OptionalType(StructType(( 'title', String ), ( 'description', String ), ( 'icon', Slot ), ( 'frameType', VarInt ), ( 'flags', Int ), ( 'backgroundTexture', SwitchType('has_background_texture', { 1 : String }, None, ) ), ( 'xCord', Float ), ( 'yCord', Float ), ), ) ), ( 'criteria', ArrayType(StructType(( 'key', String ), ( 'value', Void ), ), VarInt, ) ), ( 'requirements', ArrayType(ArrayType(String, VarInt, ), VarInt, ) ), ) ), ), VarInt, ) ), ( 'identifiers', ArrayType(String, VarInt, ) ), ( 'progressMapping', ArrayType(StructType(( 'key', String ), ( 'value', ArrayType(StructType(( 'criterionIdentifier', String ), ( 'criterionProgress', OptionalType(Long, ) ), ), VarInt, ) ), ), VarInt, ) ) ]
+		757 : [ ( 'reset', Boolean ), ( 'advancementMapping', ArrayType(StructType(( 'key', String ), ( 'value', StructType(( 'parentId', OptionalType(String, ) ), ( 'displayData', OptionalType(StructType(( 'title', String ), ( 'description', String ), ( 'icon', Slot ), ( 'frameType', VarInt ), ( 'flags', Int ), ( 'backgroundTexture', SwitchType('has_background_texture', { 1 : String }, None, ) ), ( 'xCord', Float ), ( 'yCord', Float ), ), ) ), ( 'criteria', ArrayType(StructType(( 'key', String ), ( 'value', Void ), ), VarInt, ) ), ( 'requirements', ArrayType(ArrayType(String, VarInt, ), VarInt, ) ), ) ), ), VarInt, ) ), ( 'identifiers', ArrayType(String, VarInt, ) ), ( 'progressMapping', ArrayType(StructType(( 'key', String ), ( 'value', ArrayType(StructType(( 'criterionIdentifier', String ), ( 'criterionProgress', OptionalType(Long, ) ), ), VarInt, ) ), ), VarInt, ) ) ]
 	}

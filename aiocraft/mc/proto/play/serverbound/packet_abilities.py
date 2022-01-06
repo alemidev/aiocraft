@@ -5,16 +5,26 @@ from ....packet import Packet
 from ....types import *
 
 class PacketAbilities(Packet):
-	__slots__ = ( 'id', 'flyingSpeed', 'flags', 'walkingSpeed' )
+	__slots__ = ( 'id', 'flags', 'flyingSpeed', 'walkingSpeed' )
 	
-	flyingSpeed : float
 	flags : int
+	flyingSpeed : float
 	walkingSpeed : float
+
+	def __init__(self, proto:int,
+		flags:int=None,
+		flyingSpeed:float=None,
+		walkingSpeed:float=None
+	):
+		super().__init__(proto,
+			flags=flags,
+			flyingSpeed=flyingSpeed,
+			walkingSpeed=walkingSpeed
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 19,
 		47 : 19,
 		76 : 15,
 		107 : 18,
@@ -51,11 +61,9 @@ class PacketAbilities(Packet):
 		751 : 26,
 		755 : 25,
 		756 : 25,
-		757 : 25,
-		1073741839 : 26
+		757 : 25
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'flags', Byte ), ( 'flyingSpeed', Float ), ( 'walkingSpeed', Float ) ],
 		47 : [ ( 'flags', Byte ), ( 'flyingSpeed', Float ), ( 'walkingSpeed', Float ) ],
 		76 : [ ( 'flags', Byte ), ( 'flyingSpeed', Float ), ( 'walkingSpeed', Float ) ],
 		107 : [ ( 'flags', Byte ), ( 'flyingSpeed', Float ), ( 'walkingSpeed', Float ) ],
@@ -92,6 +100,5 @@ class PacketAbilities(Packet):
 		751 : [ ( 'flags', Byte ) ],
 		755 : [ ( 'flags', Byte ) ],
 		756 : [ ( 'flags', Byte ) ],
-		757 : [ ( 'flags', Byte ) ],
-		1073741839 : [ ( 'flags', Byte ) ]
+		757 : [ ( 'flags', Byte ) ]
 	}

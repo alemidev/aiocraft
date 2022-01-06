@@ -5,32 +5,65 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMapChunk(Packet):
-	__slots__ = ( 'id', 'skyLightMask', 'z', 'blockLight', 'emptySkyLightMask', 'x', 'compressedChunkData', 'primaryBitMask', 'blockEntities', 'chunkData', 'groundUp', 'emptyBlockLightMask', 'bitMap', 'addBitMap', 'ignoreOldData', 'skyLight', 'biomes', 'blockLightMask', 'trustEdges', 'heightmaps' )
+	__slots__ = ( 'id', 'biomes', 'bitMap', 'blockEntities', 'blockLight', 'blockLightMask', 'chunkData', 'emptyBlockLightMask', 'emptySkyLightMask', 'groundUp', 'heightmaps', 'ignoreOldData', 'skyLight', 'skyLightMask', 'trustEdges', 'x', 'z' )
 	
-	skyLightMask : list
-	z : int
-	blockLight : list
-	emptySkyLightMask : list
-	x : int
-	compressedChunkData : bytes
-	primaryBitMask : list
-	blockEntities : list
-	chunkData : bytes
-	groundUp : bool
-	emptyBlockLightMask : list
+	biomes : Union[bytes,list]
 	bitMap : Union[int,list]
-	addBitMap : int
+	blockEntities : list
+	blockLight : list
+	blockLightMask : list
+	chunkData : bytes
+	emptyBlockLightMask : list
+	emptySkyLightMask : list
+	groundUp : bool
+	heightmaps : bytes
 	ignoreOldData : bool
 	skyLight : list
-	biomes : Union[bytes,list]
-	blockLightMask : list
+	skyLightMask : list
 	trustEdges : bool
-	heightmaps : bytes
+	x : int
+	z : int
+
+	def __init__(self, proto:int,
+		biomes:Union[bytes,list]=None,
+		bitMap:Union[int,list]=None,
+		blockEntities:list=None,
+		blockLight:list=None,
+		blockLightMask:list=None,
+		chunkData:bytes=None,
+		emptyBlockLightMask:list=None,
+		emptySkyLightMask:list=None,
+		groundUp:bool=None,
+		heightmaps:bytes=None,
+		ignoreOldData:bool=None,
+		skyLight:list=None,
+		skyLightMask:list=None,
+		trustEdges:bool=None,
+		x:int=None,
+		z:int=None
+	):
+		super().__init__(proto,
+			biomes=biomes,
+			bitMap=bitMap,
+			blockEntities=blockEntities,
+			blockLight=blockLight,
+			blockLightMask=blockLightMask,
+			chunkData=chunkData,
+			emptyBlockLightMask=emptyBlockLightMask,
+			emptySkyLightMask=emptySkyLightMask,
+			groundUp=groundUp,
+			heightmaps=heightmaps,
+			ignoreOldData=ignoreOldData,
+			skyLight=skyLight,
+			skyLightMask=skyLightMask,
+			trustEdges=trustEdges,
+			x=x,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 33,
 		47 : 33,
 		76 : 32,
 		107 : 32,
@@ -67,11 +100,9 @@ class PacketMapChunk(Packet):
 		751 : 32,
 		755 : 34,
 		756 : 34,
-		757 : 34,
-		1073741839 : 33
+		757 : 34
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'x', Int ), ( 'z', Int ), ( 'groundUp', Boolean ), ( 'bitMap', UnsignedShort ), ( 'addBitMap', UnsignedShort ), ( 'compressedChunkData', ByteArray ) ],
 		47 : [ ( 'x', Int ), ( 'z', Int ), ( 'groundUp', Boolean ), ( 'bitMap', UnsignedShort ), ( 'chunkData', ByteArray ) ],
 		76 : [ ( 'x', Int ), ( 'z', Int ), ( 'groundUp', Boolean ), ( 'bitMap', VarInt ), ( 'chunkData', ByteArray ) ],
 		107 : [ ( 'x', Int ), ( 'z', Int ), ( 'groundUp', Boolean ), ( 'bitMap', VarInt ), ( 'chunkData', ByteArray ) ],
@@ -108,6 +139,5 @@ class PacketMapChunk(Packet):
 		751 : [ ( 'x', Int ), ( 'z', Int ), ( 'groundUp', Boolean ), ( 'bitMap', VarInt ), ( 'heightmaps', NBTTag ), ( 'biomes', SwitchType('groundUp', { 'false' : Void, 'true' : ArrayType(VarInt, VarInt, ) }, None, ) ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(NBTTag, VarInt, ) ) ],
 		755 : [ ( 'x', Int ), ( 'z', Int ), ( 'bitMap', ArrayType(Long, VarInt, ) ), ( 'heightmaps', NBTTag ), ( 'biomes', ArrayType(VarInt, VarInt, ) ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(NBTTag, VarInt, ) ) ],
 		756 : [ ( 'x', Int ), ( 'z', Int ), ( 'bitMap', ArrayType(Long, VarInt, ) ), ( 'heightmaps', NBTTag ), ( 'biomes', ArrayType(VarInt, VarInt, ) ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(NBTTag, VarInt, ) ) ],
-		757 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
-		1073741839 : [ ( 'x', Int ), ( 'z', Int ), ( 'primaryBitMask', ArrayType(Long, VarInt, ) ), ( 'heightmaps', NBTTag ), ( 'biomes', ArrayType(VarInt, VarInt, ) ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(NBTTag, VarInt, ) ) ]
+		757 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ]
 	}

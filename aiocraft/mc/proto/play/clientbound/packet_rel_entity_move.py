@@ -5,18 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketRelEntityMove(Packet):
-	__slots__ = ( 'id', 'entityId', 'onGround', 'dZ', 'dX', 'dY' )
+	__slots__ = ( 'id', 'dX', 'dY', 'dZ', 'entityId', 'onGround' )
 	
-	entityId : int
-	onGround : bool
-	dZ : int
 	dX : int
 	dY : int
+	dZ : int
+	entityId : int
+	onGround : bool
+
+	def __init__(self, proto:int,
+		dX:int=None,
+		dY:int=None,
+		dZ:int=None,
+		entityId:int=None,
+		onGround:bool=None
+	):
+		super().__init__(proto,
+			dX=dX,
+			dY=dY,
+			dZ=dZ,
+			entityId=entityId,
+			onGround=onGround
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 21,
 		47 : 21,
 		76 : 38,
 		107 : 37,
@@ -53,11 +67,9 @@ class PacketRelEntityMove(Packet):
 		751 : 39,
 		755 : 41,
 		756 : 41,
-		757 : 41,
-		1073741839 : 40
+		757 : 41
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', Int ), ( 'dX', Byte ), ( 'dY', Byte ), ( 'dZ', Byte ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'dX', Byte ), ( 'dY', Byte ), ( 'dZ', Byte ), ( 'onGround', Boolean ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'dX', Byte ), ( 'dY', Byte ), ( 'dZ', Byte ), ( 'onGround', Boolean ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
@@ -94,6 +106,5 @@ class PacketRelEntityMove(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
-		1073741839 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ]
 	}

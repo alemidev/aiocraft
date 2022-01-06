@@ -5,23 +5,47 @@ from ....packet import Packet
 from ....types import *
 
 class PacketMap(Packet):
-	__slots__ = ( 'id', 'rows', 'itemDamage', 'columns', 'scale', 'x', 'locked', 'trackingPosition', 'y', 'data', 'icons' )
+	__slots__ = ( 'id', 'columns', 'data', 'icons', 'itemDamage', 'locked', 'rows', 'scale', 'trackingPosition', 'x', 'y' )
 	
-	rows : bytes
-	itemDamage : int
 	columns : int
-	scale : int
-	x : bytes
-	locked : bool
-	trackingPosition : bool
-	y : bytes
 	data : bytes
-	icons : Union[list,tuple]
+	icons : Union[tuple,list]
+	itemDamage : int
+	locked : bool
+	rows : bytes
+	scale : int
+	trackingPosition : bool
+	x : bytes
+	y : bytes
+
+	def __init__(self, proto:int,
+		columns:int=None,
+		data:bytes=None,
+		icons:Union[tuple,list]=None,
+		itemDamage:int=None,
+		locked:bool=None,
+		rows:bytes=None,
+		scale:int=None,
+		trackingPosition:bool=None,
+		x:bytes=None,
+		y:bytes=None
+	):
+		super().__init__(proto,
+			columns=columns,
+			data=data,
+			icons=icons,
+			itemDamage=itemDamage,
+			locked=locked,
+			rows=rows,
+			scale=scale,
+			trackingPosition=trackingPosition,
+			x=x,
+			y=y
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 52,
 		47 : 52,
 		76 : 37,
 		107 : 36,
@@ -58,11 +82,9 @@ class PacketMap(Packet):
 		751 : 37,
 		755 : 39,
 		756 : 39,
-		757 : 39,
-		1073741839 : 38
+		757 : 39
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'itemDamage', VarInt ), ( 'data', ByteArray ) ],
 		47 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'icons', ArrayType(StructType(( 'directionAndType', Byte ), ( 'x', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ],
 		76 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'trackingPosition', Boolean ), ( 'icons', ArrayType(StructType(( 'directionAndType', Byte ), ( 'x', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ],
 		107 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'trackingPosition', Boolean ), ( 'icons', ArrayType(StructType(( 'directionAndType', Byte ), ( 'x', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ],
@@ -99,6 +121,5 @@ class PacketMap(Packet):
 		751 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'trackingPosition', Boolean ), ( 'locked', Boolean ), ( 'icons', ArrayType(StructType(( 'type', VarInt ), ( 'x', Byte ), ( 'z', Byte ), ( 'direction', Byte ), ( 'displayName', OptionalType(String, ) ), ), VarInt, ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ],
 		755 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'locked', Boolean ), ( 'icons', OptionalType(ArrayType(StructType(( 'type', VarInt ), ( 'x', Byte ), ( 'z', Byte ), ( 'direction', Byte ), ( 'displayName', OptionalType(String, ) ), ), VarInt, ), ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ],
 		756 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'locked', Boolean ), ( 'icons', OptionalType(ArrayType(StructType(( 'type', VarInt ), ( 'x', Byte ), ( 'z', Byte ), ( 'direction', Byte ), ( 'displayName', OptionalType(String, ) ), ), VarInt, ), ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ],
-		757 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'locked', Boolean ), ( 'icons', OptionalType(ArrayType(StructType(( 'type', VarInt ), ( 'x', Byte ), ( 'z', Byte ), ( 'direction', Byte ), ( 'displayName', OptionalType(String, ) ), ), VarInt, ), ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ],
-		1073741839 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'trackingPosition', Boolean ), ( 'locked', Boolean ), ( 'icons', ArrayType(StructType(( 'type', VarInt ), ( 'x', Byte ), ( 'z', Byte ), ( 'direction', Byte ), ( 'displayName', OptionalType(String, ) ), ), VarInt, ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ]
+		757 : [ ( 'itemDamage', VarInt ), ( 'scale', Byte ), ( 'locked', Boolean ), ( 'icons', OptionalType(ArrayType(StructType(( 'type', VarInt ), ( 'x', Byte ), ( 'z', Byte ), ( 'direction', Byte ), ( 'displayName', OptionalType(String, ) ), ), VarInt, ), ) ), ( 'columns', Byte ), ( 'rows', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'x', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'y', SwitchType('columns', { 0 : Void }, Byte, ) ), ( 'data', SwitchType('columns', { 0 : Void }, ByteArray, ) ) ]
 	}

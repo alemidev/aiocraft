@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTabComplete(Packet):
-	__slots__ = ( 'id', 'matches', 'length', 'transactionId', 'start' )
+	__slots__ = ( 'id', 'length', 'matches', 'start', 'transactionId' )
 	
-	matches : list
 	length : int
-	transactionId : int
+	matches : list
 	start : int
+	transactionId : int
+
+	def __init__(self, proto:int,
+		length:int=None,
+		matches:list=None,
+		start:int=None,
+		transactionId:int=None
+	):
+		super().__init__(proto,
+			length=length,
+			matches=matches,
+			start=start,
+			transactionId=transactionId
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 58,
 		47 : 58,
 		76 : 14,
 		107 : 14,
@@ -52,11 +64,9 @@ class PacketTabComplete(Packet):
 		751 : 15,
 		755 : 17,
 		756 : 17,
-		757 : 17,
-		1073741839 : 16
+		757 : 17
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'matches', ArrayType(String, VarInt, ) ) ],
 		47 : [ ( 'matches', ArrayType(String, VarInt, ) ) ],
 		76 : [ ( 'matches', ArrayType(String, VarInt, ) ) ],
 		107 : [ ( 'matches', ArrayType(String, VarInt, ) ) ],
@@ -93,6 +103,5 @@ class PacketTabComplete(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
-		1073741839 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ]
 	}

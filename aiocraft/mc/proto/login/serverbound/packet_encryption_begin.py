@@ -10,10 +10,18 @@ class PacketEncryptionBegin(Packet):
 	sharedSecret : bytes
 	verifyToken : bytes
 
+	def __init__(self, proto:int,
+		sharedSecret:bytes=None,
+		verifyToken:bytes=None
+	):
+		super().__init__(proto,
+			sharedSecret=sharedSecret,
+			verifyToken=verifyToken
+		)
+
 	_state : int = 2
 
 	_ids : Dict[int, int] = {
-		5 : 1,
 		47 : 1,
 		76 : 1,
 		107 : 1,
@@ -50,11 +58,9 @@ class PacketEncryptionBegin(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1,
-		1073741839 : 1
+		757 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
 		47 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
 		76 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
 		107 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
@@ -91,6 +97,5 @@ class PacketEncryptionBegin(Packet):
 		751 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
 		755 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
 		756 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
-		757 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ],
-		1073741839 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ]
+		757 : [ ( 'sharedSecret', ByteArray ), ( 'verifyToken', ByteArray ) ]
 	}

@@ -5,12 +5,25 @@ from ....packet import Packet
 from ....types import *
 
 class PacketPrepareCraftingGrid(Packet):
-	__slots__ = ( 'id', 'actionNumber', 'windowId', 'returnEntry', 'prepareEntry' )
+	__slots__ = ( 'id', 'actionNumber', 'prepareEntry', 'returnEntry', 'windowId' )
 	
 	actionNumber : int
-	windowId : int
-	returnEntry : list
 	prepareEntry : list
+	returnEntry : list
+	windowId : int
+
+	def __init__(self, proto:int,
+		actionNumber:int=None,
+		prepareEntry:list=None,
+		returnEntry:list=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			actionNumber=actionNumber,
+			prepareEntry=prepareEntry,
+			returnEntry=returnEntry,
+			windowId=windowId
+		)
 
 	_state : int = 3
 

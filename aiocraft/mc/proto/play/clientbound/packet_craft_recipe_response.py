@@ -5,10 +5,19 @@ from ....packet import Packet
 from ....types import *
 
 class PacketCraftRecipeResponse(Packet):
-	__slots__ = ( 'id', 'windowId', 'recipe' )
+	__slots__ = ( 'id', 'recipe', 'windowId' )
 	
+	recipe : Union[int,str]
 	windowId : int
-	recipe : Union[str,int]
+
+	def __init__(self, proto:int,
+		recipe:Union[int,str]=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			recipe=recipe,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
@@ -35,8 +44,7 @@ class PacketCraftRecipeResponse(Packet):
 		751 : 47,
 		755 : 49,
 		756 : 49,
-		757 : 49,
-		1073741839 : 48
+		757 : 49
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		338 : [ ( 'windowId', Byte ), ( 'recipe', VarInt ) ],
@@ -61,6 +69,5 @@ class PacketCraftRecipeResponse(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
 		755 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
 		756 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
-		757 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
-		1073741839 : [ ( 'windowId', Byte ), ( 'recipe', String ) ]
+		757 : [ ( 'windowId', Byte ), ( 'recipe', String ) ]
 	}

@@ -10,6 +10,15 @@ class PacketUpdateViewPosition(Packet):
 	chunkX : int
 	chunkZ : int
 
+	def __init__(self, proto:int,
+		chunkX:int=None,
+		chunkZ:int=None
+	):
+		super().__init__(proto,
+			chunkX=chunkX,
+			chunkZ=chunkZ
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
@@ -27,8 +36,7 @@ class PacketUpdateViewPosition(Packet):
 		751 : 64,
 		755 : 73,
 		756 : 73,
-		757 : 73,
-		1073741839 : 65
+		757 : 73
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
@@ -45,6 +53,5 @@ class PacketUpdateViewPosition(Packet):
 		751 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
 		755 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
 		756 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
-		757 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
-		1073741839 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ]
+		757 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ]
 	}

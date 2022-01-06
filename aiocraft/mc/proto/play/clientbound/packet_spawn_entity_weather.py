@@ -5,18 +5,32 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSpawnEntityWeather(Packet):
-	__slots__ = ( 'id', 'entityId', 'z', 'x', 'y', 'type' )
+	__slots__ = ( 'id', 'entityId', 'type', 'x', 'y', 'z' )
 	
 	entityId : int
-	z : Union[int,float]
-	x : Union[int,float]
-	y : Union[int,float]
 	type : int
+	x : Union[float,int]
+	y : Union[float,int]
+	z : Union[float,int]
+
+	def __init__(self, proto:int,
+		entityId:int=None,
+		type:int=None,
+		x:Union[float,int]=None,
+		y:Union[float,int]=None,
+		z:Union[float,int]=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			type=type,
+			x=x,
+			y=y,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 44,
 		47 : 44,
 		76 : 2,
 		107 : 2,
@@ -49,7 +63,6 @@ class PacketSpawnEntityWeather(Packet):
 		709 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ) ],
 		47 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ) ],
 		76 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ) ],
 		107 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ) ],

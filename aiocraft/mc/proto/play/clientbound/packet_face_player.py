@@ -5,15 +5,34 @@ from ....packet import Packet
 from ....types import *
 
 class PacketFacePlayer(Packet):
-	__slots__ = ( 'id', 'entityId', 'isEntity', 'z', 'feet_eyes', 'x', 'entity_feet_eyes', 'y' )
+	__slots__ = ( 'id', 'entityId', 'entity_feet_eyes', 'feet_eyes', 'isEntity', 'x', 'y', 'z' )
 	
 	entityId : bytes
-	isEntity : bool
-	z : float
-	feet_eyes : int
-	x : float
 	entity_feet_eyes : bytes
+	feet_eyes : int
+	isEntity : bool
+	x : float
 	y : float
+	z : float
+
+	def __init__(self, proto:int,
+		entityId:bytes=None,
+		entity_feet_eyes:bytes=None,
+		feet_eyes:int=None,
+		isEntity:bool=None,
+		x:float=None,
+		y:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			entityId=entityId,
+			entity_feet_eyes=entity_feet_eyes,
+			feet_eyes=feet_eyes,
+			isEntity=isEntity,
+			x=x,
+			y=y,
+			z=z
+		)
 
 	_state : int = 3
 
@@ -37,8 +56,7 @@ class PacketFacePlayer(Packet):
 		751 : 51,
 		755 : 55,
 		756 : 55,
-		757 : 55,
-		1073741839 : 52
+		757 : 55
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
@@ -60,6 +78,5 @@ class PacketFacePlayer(Packet):
 		751 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
 		755 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
 		756 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
-		757 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
-		1073741839 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ]
+		757 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ]
 	}

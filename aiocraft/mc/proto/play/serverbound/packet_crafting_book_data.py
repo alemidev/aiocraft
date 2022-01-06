@@ -9,6 +9,13 @@ class PacketCraftingBookData(Packet):
 	
 	type : int
 
+	def __init__(self, proto:int,
+		type:int=None
+	):
+		super().__init__(proto,
+			type=type
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

@@ -5,11 +5,22 @@ from ....packet import Packet
 from ....types import *
 
 class PacketLoginPluginRequest(Packet):
-	__slots__ = ( 'id', 'channel', 'messageId', 'data' )
+	__slots__ = ( 'id', 'channel', 'data', 'messageId' )
 	
 	channel : str
-	messageId : int
 	data : bytes
+	messageId : int
+
+	def __init__(self, proto:int,
+		channel:str=None,
+		data:bytes=None,
+		messageId:int=None
+	):
+		super().__init__(proto,
+			channel=channel,
+			data=data,
+			messageId=messageId
+		)
 
 	_state : int = 2
 
@@ -33,8 +44,7 @@ class PacketLoginPluginRequest(Packet):
 		751 : 4,
 		755 : 4,
 		756 : 4,
-		757 : 4,
-		1073741839 : 4
+		757 : 4
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
@@ -56,6 +66,5 @@ class PacketLoginPluginRequest(Packet):
 		751 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
 		755 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
 		756 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
-		757 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
-		1073741839 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ]
+		757 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ]
 	}

@@ -5,14 +5,31 @@ from ....packet import Packet
 from ....types import *
 
 class PacketTradeList(Packet):
-	__slots__ = ( 'id', 'trades', 'windowId', 'villagerLevel', 'canRestock', 'isRegularVillager', 'experience' )
+	__slots__ = ( 'id', 'canRestock', 'experience', 'isRegularVillager', 'trades', 'villagerLevel', 'windowId' )
 	
-	trades : list
-	windowId : int
-	villagerLevel : int
 	canRestock : bool
-	isRegularVillager : bool
 	experience : int
+	isRegularVillager : bool
+	trades : list
+	villagerLevel : int
+	windowId : int
+
+	def __init__(self, proto:int,
+		canRestock:bool=None,
+		experience:int=None,
+		isRegularVillager:bool=None,
+		trades:list=None,
+		villagerLevel:int=None,
+		windowId:int=None
+	):
+		super().__init__(proto,
+			canRestock=canRestock,
+			experience=experience,
+			isRegularVillager=isRegularVillager,
+			trades=trades,
+			villagerLevel=villagerLevel,
+			windowId=windowId
+		)
 
 	_state : int = 3
 
@@ -31,8 +48,7 @@ class PacketTradeList(Packet):
 		751 : 38,
 		755 : 40,
 		756 : 40,
-		757 : 40,
-		1073741839 : 39
+		757 : 40
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'windowId', VarInt ), ( 'trades', ArrayType(StructType(( 'inputItem1', Slot ), ( 'outputItem', Slot ), ( 'inputItem2', OptionalType(Slot, ) ), ( 'tradeDisabled', Boolean ), ( 'nbTradeUses', Int ), ( 'maximumNbTradeUses', Int ), ( 'xp', Int ), ( 'specialPrice', Int ), ( 'priceMultiplier', Float ), ), Byte, ) ), ( 'villagerLevel', VarInt ), ( 'experience', VarInt ), ( 'isRegularVillager', Boolean ) ],
@@ -49,6 +65,5 @@ class PacketTradeList(Packet):
 		751 : [ ( 'windowId', VarInt ), ( 'trades', ArrayType(StructType(( 'inputItem1', Slot ), ( 'outputItem', Slot ), ( 'inputItem2', OptionalType(Slot, ) ), ( 'tradeDisabled', Boolean ), ( 'nbTradeUses', Int ), ( 'maximumNbTradeUses', Int ), ( 'xp', Int ), ( 'specialPrice', Int ), ( 'priceMultiplier', Float ), ( 'demand', Int ), ), Byte, ) ), ( 'villagerLevel', VarInt ), ( 'experience', VarInt ), ( 'isRegularVillager', Boolean ), ( 'canRestock', Boolean ) ],
 		755 : [ ( 'windowId', VarInt ), ( 'trades', ArrayType(StructType(( 'inputItem1', Slot ), ( 'outputItem', Slot ), ( 'inputItem2', OptionalType(Slot, ) ), ( 'tradeDisabled', Boolean ), ( 'nbTradeUses', Int ), ( 'maximumNbTradeUses', Int ), ( 'xp', Int ), ( 'specialPrice', Int ), ( 'priceMultiplier', Float ), ( 'demand', Int ), ), Byte, ) ), ( 'villagerLevel', VarInt ), ( 'experience', VarInt ), ( 'isRegularVillager', Boolean ), ( 'canRestock', Boolean ) ],
 		756 : [ ( 'windowId', VarInt ), ( 'trades', ArrayType(StructType(( 'inputItem1', Slot ), ( 'outputItem', Slot ), ( 'inputItem2', OptionalType(Slot, ) ), ( 'tradeDisabled', Boolean ), ( 'nbTradeUses', Int ), ( 'maximumNbTradeUses', Int ), ( 'xp', Int ), ( 'specialPrice', Int ), ( 'priceMultiplier', Float ), ( 'demand', Int ), ), Byte, ) ), ( 'villagerLevel', VarInt ), ( 'experience', VarInt ), ( 'isRegularVillager', Boolean ), ( 'canRestock', Boolean ) ],
-		757 : [ ( 'windowId', VarInt ), ( 'trades', ArrayType(StructType(( 'inputItem1', Slot ), ( 'outputItem', Slot ), ( 'inputItem2', OptionalType(Slot, ) ), ( 'tradeDisabled', Boolean ), ( 'nbTradeUses', Int ), ( 'maximumNbTradeUses', Int ), ( 'xp', Int ), ( 'specialPrice', Int ), ( 'priceMultiplier', Float ), ( 'demand', Int ), ), Byte, ) ), ( 'villagerLevel', VarInt ), ( 'experience', VarInt ), ( 'isRegularVillager', Boolean ), ( 'canRestock', Boolean ) ],
-		1073741839 : [ ( 'windowId', VarInt ), ( 'trades', ArrayType(StructType(( 'inputItem1', Slot ), ( 'outputItem', Slot ), ( 'inputItem2', OptionalType(Slot, ) ), ( 'tradeDisabled', Boolean ), ( 'nbTradeUses', Int ), ( 'maximumNbTradeUses', Int ), ( 'xp', Int ), ( 'specialPrice', Int ), ( 'priceMultiplier', Float ), ( 'demand', Int ), ), Byte, ) ), ( 'villagerLevel', VarInt ), ( 'experience', VarInt ), ( 'isRegularVillager', Boolean ), ( 'canRestock', Boolean ) ]
+		757 : [ ( 'windowId', VarInt ), ( 'trades', ArrayType(StructType(( 'inputItem1', Slot ), ( 'outputItem', Slot ), ( 'inputItem2', OptionalType(Slot, ) ), ( 'tradeDisabled', Boolean ), ( 'nbTradeUses', Int ), ( 'maximumNbTradeUses', Int ), ( 'xp', Int ), ( 'specialPrice', Int ), ( 'priceMultiplier', Float ), ( 'demand', Int ), ), Byte, ) ), ( 'villagerLevel', VarInt ), ( 'experience', VarInt ), ( 'isRegularVillager', Boolean ), ( 'canRestock', Boolean ) ]
 	}

@@ -9,6 +9,13 @@ class PacketAdvancementProgress(Packet):
 	
 	id : tuple
 
+	def __init__(self, proto:int,
+		id:tuple=None
+	):
+		super().__init__(proto,
+			id=id
+		)
+
 	_state : int = 3
 
 	_ids : Dict[int, int] = {

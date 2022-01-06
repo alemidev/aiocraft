@@ -5,21 +5,41 @@ from ....packet import Packet
 from ....types import *
 
 class PacketExplosion(Packet):
-	__slots__ = ( 'id', 'affectedBlockOffsets', 'z', 'x', 'radius', 'playerMotionX', 'y', 'playerMotionZ', 'playerMotionY' )
+	__slots__ = ( 'id', 'affectedBlockOffsets', 'playerMotionX', 'playerMotionY', 'playerMotionZ', 'radius', 'x', 'y', 'z' )
 	
 	affectedBlockOffsets : list
-	z : float
-	x : float
-	radius : float
 	playerMotionX : float
-	y : float
-	playerMotionZ : float
 	playerMotionY : float
+	playerMotionZ : float
+	radius : float
+	x : float
+	y : float
+	z : float
+
+	def __init__(self, proto:int,
+		affectedBlockOffsets:list=None,
+		playerMotionX:float=None,
+		playerMotionY:float=None,
+		playerMotionZ:float=None,
+		radius:float=None,
+		x:float=None,
+		y:float=None,
+		z:float=None
+	):
+		super().__init__(proto,
+			affectedBlockOffsets=affectedBlockOffsets,
+			playerMotionX=playerMotionX,
+			playerMotionY=playerMotionY,
+			playerMotionZ=playerMotionZ,
+			radius=radius,
+			x=x,
+			y=y,
+			z=z
+		)
 
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		5 : 39,
 		47 : 39,
 		76 : 27,
 		107 : 28,
@@ -56,11 +76,9 @@ class PacketExplosion(Packet):
 		751 : 27,
 		755 : 28,
 		756 : 28,
-		757 : 28,
-		1073741839 : 28
+		757 : 28
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
 		47 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
 		76 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
 		107 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
@@ -97,6 +115,5 @@ class PacketExplosion(Packet):
 		751 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
 		755 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
 		756 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
-		757 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
-		1073741839 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ]
+		757 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ]
 	}

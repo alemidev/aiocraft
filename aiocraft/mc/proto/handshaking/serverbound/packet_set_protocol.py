@@ -5,17 +5,29 @@ from ....packet import Packet
 from ....types import *
 
 class PacketSetProtocol(Packet):
-	__slots__ = ( 'id', 'nextState', 'serverPort', 'protocolVersion', 'serverHost' )
+	__slots__ = ( 'id', 'nextState', 'protocolVersion', 'serverHost', 'serverPort' )
 	
 	nextState : int
-	serverPort : int
 	protocolVersion : int
 	serverHost : str
+	serverPort : int
+
+	def __init__(self, proto:int,
+		nextState:int=None,
+		protocolVersion:int=None,
+		serverHost:str=None,
+		serverPort:int=None
+	):
+		super().__init__(proto,
+			nextState=nextState,
+			protocolVersion=protocolVersion,
+			serverHost=serverHost,
+			serverPort=serverPort
+		)
 
 	_state : int = 0
 
 	_ids : Dict[int, int] = {
-		5 : 0,
 		47 : 0,
 		76 : 0,
 		107 : 0,
@@ -52,11 +64,9 @@ class PacketSetProtocol(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0,
-		1073741839 : 0
+		757 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		5 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
 		47 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
 		76 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
 		107 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
@@ -93,6 +103,5 @@ class PacketSetProtocol(Packet):
 		751 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
 		755 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
 		756 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
-		757 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
-		1073741839 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ]
+		757 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ]
 	}

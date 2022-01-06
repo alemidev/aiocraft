@@ -5,11 +5,22 @@ from ....packet import Packet
 from ....types import *
 
 class PacketRecipeBook(Packet):
-	__slots__ = ( 'id', 'bookOpen', 'filterActive', 'bookId' )
+	__slots__ = ( 'id', 'bookId', 'bookOpen', 'filterActive' )
 	
+	bookId : int
 	bookOpen : bool
 	filterActive : bool
-	bookId : int
+
+	def __init__(self, proto:int,
+		bookId:int=None,
+		bookOpen:bool=None,
+		filterActive:bool=None
+	):
+		super().__init__(proto,
+			bookId=bookId,
+			bookOpen=bookOpen,
+			filterActive=filterActive
+		)
 
 	_state : int = 3
 
@@ -17,13 +28,11 @@ class PacketRecipeBook(Packet):
 		751 : 30,
 		755 : 30,
 		756 : 30,
-		757 : 30,
-		1073741839 : 31
+		757 : 30
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		751 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
 		755 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
 		756 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
-		757 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
-		1073741839 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ]
+		757 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ]
 	}

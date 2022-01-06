@@ -5,21 +5,52 @@ from ....packet import Packet
 from ....types import *
 
 class PacketUnlockRecipes(Packet):
-	__slots__ = ( 'id', 'blastFurnaceOpen', 'filteringSmeltable', 'craftingBookOpen', 'smokerBookOpen', 'recipes2', 'recipes', 'action', 'filteringSmoker', 'filteringCraftable', 'notification', 'smeltingBookOpen', 'filteringBlastFurnace', 'recipes1' )
+	__slots__ = ( 'id', 'action', 'blastFurnaceOpen', 'craftingBookOpen', 'filteringBlastFurnace', 'filteringCraftable', 'filteringSmeltable', 'filteringSmoker', 'notification', 'recipes', 'recipes1', 'recipes2', 'smeltingBookOpen', 'smokerBookOpen' )
 	
-	blastFurnaceOpen : bool
-	filteringSmeltable : bool
-	craftingBookOpen : bool
-	smokerBookOpen : bool
-	recipes2 : Union[bytes,list]
-	recipes : list
 	action : int
-	filteringSmoker : bool
-	filteringCraftable : bool
-	notification : bool
-	smeltingBookOpen : bool
+	blastFurnaceOpen : bool
+	craftingBookOpen : bool
 	filteringBlastFurnace : bool
+	filteringCraftable : bool
+	filteringSmeltable : bool
+	filteringSmoker : bool
+	notification : bool
+	recipes : list
 	recipes1 : list
+	recipes2 : Union[bytes,list]
+	smeltingBookOpen : bool
+	smokerBookOpen : bool
+
+	def __init__(self, proto:int,
+		action:int=None,
+		blastFurnaceOpen:bool=None,
+		craftingBookOpen:bool=None,
+		filteringBlastFurnace:bool=None,
+		filteringCraftable:bool=None,
+		filteringSmeltable:bool=None,
+		filteringSmoker:bool=None,
+		notification:bool=None,
+		recipes:list=None,
+		recipes1:list=None,
+		recipes2:Union[bytes,list]=None,
+		smeltingBookOpen:bool=None,
+		smokerBookOpen:bool=None
+	):
+		super().__init__(proto,
+			action=action,
+			blastFurnaceOpen=blastFurnaceOpen,
+			craftingBookOpen=craftingBookOpen,
+			filteringBlastFurnace=filteringBlastFurnace,
+			filteringCraftable=filteringCraftable,
+			filteringSmeltable=filteringSmeltable,
+			filteringSmoker=filteringSmoker,
+			notification=notification,
+			recipes=recipes,
+			recipes1=recipes1,
+			recipes2=recipes2,
+			smeltingBookOpen=smeltingBookOpen,
+			smokerBookOpen=smokerBookOpen
+		)
 
 	_state : int = 3
 
@@ -50,8 +81,7 @@ class PacketUnlockRecipes(Packet):
 		751 : 53,
 		755 : 57,
 		756 : 57,
-		757 : 57,
-		1073741839 : 54
+		757 : 57
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		321 : [ ( 'notification', Boolean ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'recipes', ArrayType(StructType(( 'identifier', String ), ( 'isUnlocked', Boolean ), ( 'hasBeenDisplayed', Boolean ), ), VarInt, ) ) ],
@@ -80,6 +110,5 @@ class PacketUnlockRecipes(Packet):
 		751 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
 		755 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
 		756 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
-		757 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
-		1073741839 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ]
+		757 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ]
 	}
