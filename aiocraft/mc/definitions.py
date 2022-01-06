@@ -39,6 +39,27 @@ class BlockPos:
 			( self.z - p.z ) ** 2
 		)
 
+class Item:
+	id : int
+	count : int
+	nbt : dict
+	damage : int # This got removed past 1.12.2
+
+	def __init__(self, item:Item = None):
+		if item:
+			self.id = item.id
+			self.count = item.count
+			self.nbt = item.nbt
+			self.damage = item.damage
+
+	def __getitem__(self, key:str): # backwards compatibility
+		return getattr(self, key)
+
+	@property
+	def durability(self) -> int:
+		# TODO make a map of durability for each item and subtract damage?
+		return self.damage
+
 class Dimension(Enum):
 	NETHER = -1
 	OVERWORLD = 0

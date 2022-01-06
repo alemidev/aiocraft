@@ -8,6 +8,7 @@ import pynbt
 
 from typing import List, Tuple, Dict, Any, Union, Optional, Callable, Type as Class
 
+from .definitions import Item
 
 class Type(object):
 	pytype : Union[type, Callable] = lambda x : x
@@ -305,24 +306,24 @@ class StructType(Type): # TODO sub objects
 		return { k : t.read(buffer, ctx=ctx) for k, t in self.fields }
 
 class SlotType(Type):
-	pytype : type = dict
+	pytype : type = Item
 
-	def write(self, data:Any, buffer:io.BytesIO, ctx:object=None):
+	def write(self, data:Item, buffer:io.BytesIO, ctx:object=None):
 		new_way = ctx._proto > 340
 		check_type = Boolean if new_way else Short
 		if data:
-			check_type.write(True if new_way else data["id"], buffer)
+			check_type.write(True if new_way else data.id, buffer)
 			if new_way:
-				VarInt.write(data["id"], buffer)
-			Byte.write(data["count"], buffer)
+				VarInt.write(data.id, buffer)
+			Byte.write(data.count, buffer)
 			if not new_way:
-				Short.write(data["damage"], buffer)
-			NBTTag.write(data["nbt"], buffer) # TODO handle None ?
+				Short.write(data.damage, buffer)
+			NBTTag.write(data.nbt, buffer) # TODO handle None maybe?
 		else:
 			check_type.write(False if new_way else -1, buffer)
 
 	def read(self, buffer:io.BytesIO, ctx:object=None) -> Any:
-		slot = {}
+		slot : Dict[Any, Any] = {}
 		new_way = ctx._proto > 340
 		check_type = Boolean if new_way else Short
 		val = check_type.read(buffer)
@@ -335,7 +336,7 @@ class SlotType(Type):
 			if not new_way:
 				slot["damage"] = Short.read(buffer)
 			slot["nbt"] = NBTTag.read(buffer)
-		return slot
+		return Item(**slot)
 
 Slot = SlotType()
 
