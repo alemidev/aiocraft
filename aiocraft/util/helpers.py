@@ -25,6 +25,7 @@ _EQUIVALENTS = {
 
 def _parse_formatted_block(msg:dict) -> str:
 	attr = []
+	txt = msg["text"] if "text" in msg else msg["translate"] if "translate" in msg else "N/A"
 	if "bold" in msg and msg["bold"]:
 		attr.append("bold")
 	if "underlined" in msg and msg["underlined"]:
@@ -32,9 +33,9 @@ def _parse_formatted_block(msg:dict) -> str:
 	if "obfuscated" in msg and msg["obfuscated"]:
 		attr.append("blink")
 	if "color" in msg:
-		return colored(msg["text"], _EQUIVALENTS[msg["color"]], attrs=attr)
+		return colored(txt, _EQUIVALENTS[msg["color"]], attrs=attr)
 	else:
-		return colored(msg["text"], "white", attrs=attr)
+		return colored(txt, "white", attrs=attr)
 
 def parse_chat(msg:Union[dict,str], ansi_color:bool=False) -> str:
 	"""Recursive function to parse minecraft chat json, with optional colors"""
@@ -46,11 +47,13 @@ def parse_chat(msg:Union[dict,str], ansi_color:bool=False) -> str:
 	else:
 		data = msg
 	out = ""
-	if "text" in data:
+	if "text" in data or "translate" in data:
 		if ansi_color:
 			out += _parse_formatted_block(data)
-		else:
+		else if "text" in data:
 			out += data["text"]
+		else if "translate" in data:
+			out += data["translate"]
 	if "with" in data:
 		for elem in data["with"]:
 			out += parse_chat(elem, ansi_color)
