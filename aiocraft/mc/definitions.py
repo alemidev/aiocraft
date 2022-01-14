@@ -101,7 +101,11 @@ class Item:
 	nbt : dict
 	damage : int # This got removed past 1.12.2
 
-	def __init__(self, item : 'Item' = None):
+	def __init__(self, item:'Item' = None, id:int=0, count:int=0, nbt:dict=None, damage:int=0):
+		self.id = id
+		self.count = count
+		self.nbt = nbt or {}
+		self.damage = damage
 		if item:
 			self.id = item.id
 			self.count = item.count
