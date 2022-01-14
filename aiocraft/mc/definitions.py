@@ -3,6 +3,62 @@ from enum import Enum
 from dataclasses import dataclass
 from typing import Tuple
 
+class ConnectionState(Enum):
+	NONE = -1
+	HANDSHAKING = 0
+	STATUS = 1
+	LOGIN = 2
+	PLAY = 3
+
+class Dimension(Enum):
+	NETHER = -1
+	OVERWORLD = 0
+	END = 1
+
+class Difficulty(Enum):
+	PEACEFUL = 0
+	EASY = 1
+	NORMAL = 2
+	HARD = 3
+
+class Gamemode(Enum):
+	SURVIVAL = 0
+	CREATIVE = 1
+	ADVENTURE = 2
+	SPECTATOR = 3
+
+class EnchantmentType(Enum):
+	protection            = 0
+	fire_protection       = 1
+	feather_falling       = 2
+	blast_protection      = 3
+	projectile_protection = 4
+	respiration           = 5
+	aqua_affinity         = 6
+	thorns                = 7
+	depth_strider         = 8
+	frost_walker          = 9
+	binding_curse         = 10
+	sharpness             = 16
+	smite                 = 17
+	bane_of_arthropods    = 18
+	knockback             = 19
+	fire_aspect           = 20
+	looting               = 21
+	sweeping              = 22
+	efficiency            = 32
+	silk_touch            = 33
+	unbreaking            = 34
+	fortune               = 35
+	power                 = 48
+	punch                 = 49
+	flame                 = 50
+	infinity              = 51
+	luck_of_the_sea       = 61
+	lure                  = 62
+	mending               = 70
+	vanishing_curse       = 71
+
 @dataclass # TODO use the one from types
 class BlockPos:
 	x : float
@@ -45,7 +101,7 @@ class Item:
 	nbt : dict
 	damage : int # This got removed past 1.12.2
 
-	def __init__(self, item:Item = None):
+	def __init__(self, item : 'Item' = None):
 		if item:
 			self.id = item.id
 			self.count = item.count
@@ -60,58 +116,20 @@ class Item:
 		# TODO make a map of durability for each item and subtract damage?
 		return self.damage
 
-class Dimension(Enum):
-	NETHER = -1
-	OVERWORLD = 0
-	END = 1
+class Enchantment:
+	eid : int
+	type : EnchantmentType
+	level : int
 
-class Difficulty(Enum):
-	PEACEFUL = 0
-	EASY = 1
-	NORMAL = 2
-	HARD = 3
+	def __init__(self, type:EnchantmentType=None, eid:int=None, level:int=1):
+		if not type and not eid:
+			raise ValueError("No enchantment type or enchantment id provided")
+		self.type = type or EnchantmentType(eid)
+		self.eid = self.type.value
+		self.level = level
 
-class Gamemode(Enum):
-	SURVIVAL = 0
-	CREATIVE = 1
-	ADVENTURE = 2
-	SPECTATOR = 3
+	def repr(self) -> str:
+		return f"<Enchantment({str(self)})>"
 
-class Enchantments(Enum):
-	PROTECTION            = 0
-	FIRE_PROTECTION       = 1
-	FEATHER_FALLING       = 2
-	BLAST_PROTECTION      = 3
-	PROJECTILE_PROTECTION = 4
-	RESPIRATION           = 5
-	AQUA_AFFINITY         = 6
-	THORNS                = 7
-	DEPTH_STRIDER         = 8
-	FROST_WALKER          = 9
-	BINDING_CURSE         = 10
-	SHARPNESS             = 16
-	SMITE                 = 17
-	BANE_OF_ARTHROPODS    = 18
-	KNOCKBACK             = 19
-	FIRE_ASPECT           = 20
-	LOOTING               = 21
-	SWEEPING              = 22
-	EFFICIENCY            = 32
-	SILK_TOUCH            = 33
-	UNBREAKING            = 34
-	FORTUNE               = 35
-	POWER                 = 48
-	PUNCH                 = 49
-	FLAME                 = 50
-	INFINITY              = 51
-	LUCK_OF_THE_SEA       = 61
-	LURE                  = 62
-	MENDING               = 70
-	VANISHING_CURSE       = 71
-
-class ConnectionState(Enum):
-	NONE = -1
-	HANDSHAKING = 0
-	STATUS = 1
-	LOGIN = 2
-	PLAY = 3
+	def __str__(self) -> str:
+		return f"{self.type.name}" + (f" {self.level}" if self.level > 1 else "")
