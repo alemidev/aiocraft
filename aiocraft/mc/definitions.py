@@ -125,12 +125,12 @@ class Enchantment:
 	type : EnchantmentType
 	level : int
 
-	def __init__(self, type:EnchantmentType=None, id:int=None, level:int=1):
+	def __init__(self, type:EnchantmentType=None, id:int=None, lvl:int=1):
 		if not type and not id:
 			raise ValueError("No enchantment type or enchantment id provided")
 		self.type = type or EnchantmentType(id)
 		self.eid = self.type.value
-		self.level = level
+		self.level = lvl
 
 	def repr(self) -> str:
 		return f"<Enchantment({str(self)})>"
