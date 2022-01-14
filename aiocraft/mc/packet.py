@@ -23,7 +23,8 @@ class Packet:
 		self.definition = self._definitions[proto]
 		self.id = self._ids[proto]
 		for name, t in self.definition:
-			setattr(self, name, t.pytype(kwargs[name]) if name in kwargs else None)
+			if name in kwargs and kwargs[name] is not None:
+				setattr(self, name, t.pytype(kwargs[name]))
 
 	@property
 	def processed(self) -> Event:
