@@ -10,7 +10,7 @@ from typing import List, Dict, Set, Optional, AsyncIterator, Type
 from cryptography.hazmat.primitives.ciphers import CipherContext
 
 from .mc import proto as minecraft_protocol
-from .mc.types import VarInt
+from .mc.types import VarInt, Context
 from .mc.packet import Packet
 from .mc.definitions import ConnectionState
 from .util import encryption
@@ -222,7 +222,7 @@ class Dispatcher:
 				buffer = io.BytesIO(data)
 
 				if self.compression is not None:
-					decompressed_size = VarInt.read(buffer)
+					decompressed_size = VarInt.read(buffer, Context())
 					if decompressed_size > 0:
 						decompressor = zlib.decompressobj()
 						decompressed_data = decompressor.decompress(buffer.read())
@@ -230,7 +230,7 @@ class Dispatcher:
 							raise ValueError(f"Failed decompressing packet: expected size is {decompressed_size}, but actual size is {len(decompressed_data)}")
 						buffer = io.BytesIO(decompressed_data)
 
-				packet_id = VarInt.read(buffer)
+				packet_id = VarInt.read(buffer, Context())
 				if self.state == ConnectionState.PLAY and self._packet_id_whitelist \
 				and packet_id not in self._packet_id_whitelist:
 					self._logger.debug("[<--] Received | Packet(0x%02x) (ignored)", packet_id)
