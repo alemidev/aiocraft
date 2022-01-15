@@ -40,7 +40,8 @@ class PacketUpdateStructureBlock(Packet):
 		seed:int=None,
 		size_x:int=None,
 		size_y:int=None,
-		size_z:int=None
+		size_z:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

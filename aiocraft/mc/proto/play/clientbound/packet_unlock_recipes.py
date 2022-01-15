@@ -17,7 +17,7 @@ class PacketUnlockRecipes(Packet):
 	notification : bool
 	recipes : list
 	recipes1 : list
-	recipes2 : Union[Union[None, list],list]
+	recipes2 : Union[Union[list, None],list]
 	smeltingBookOpen : bool
 	smokerBookOpen : bool
 
@@ -32,9 +32,10 @@ class PacketUnlockRecipes(Packet):
 		notification:bool=None,
 		recipes:list=None,
 		recipes1:list=None,
-		recipes2:Union[Union[None, list],list]=None,
+		recipes2:Union[Union[list, None],list]=None,
 		smeltingBookOpen:bool=None,
-		smokerBookOpen:bool=None
+		smokerBookOpen:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

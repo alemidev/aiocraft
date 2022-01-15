@@ -7,7 +7,7 @@ from ....types import *
 class PacketMapChunk(Packet):
 	__slots__ = ( 'id', 'biomes', 'bitMap', 'blockEntities', 'blockLight', 'blockLightMask', 'chunkData', 'emptyBlockLightMask', 'emptySkyLightMask', 'groundUp', 'heightmaps', 'ignoreOldData', 'skyLight', 'skyLightMask', 'trustEdges', 'x', 'z' )
 	
-	biomes : Union[Union[None, list],list]
+	biomes : Union[Union[list, None],list]
 	bitMap : Union[int,list]
 	blockEntities : list
 	blockLight : list
@@ -25,7 +25,7 @@ class PacketMapChunk(Packet):
 	z : int
 
 	def __init__(self, proto:int,
-		biomes:Union[Union[None, list],list]=None,
+		biomes:Union[Union[list, None],list]=None,
 		bitMap:Union[int,list]=None,
 		blockEntities:list=None,
 		blockLight:list=None,
@@ -40,7 +40,8 @@ class PacketMapChunk(Packet):
 		skyLightMask:list=None,
 		trustEdges:bool=None,
 		x:int=None,
-		z:int=None
+		z:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			biomes=biomes,

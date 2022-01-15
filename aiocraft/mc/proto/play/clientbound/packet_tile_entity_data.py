@@ -14,7 +14,8 @@ class PacketTileEntityData(Packet):
 	def __init__(self, proto:int,
 		action:int=None,
 		location:tuple=None,
-		nbtData:Optional[dict]=None
+		nbtData:Optional[dict]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

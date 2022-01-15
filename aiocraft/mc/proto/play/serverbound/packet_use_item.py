@@ -10,7 +10,8 @@ class PacketUseItem(Packet):
 	hand : int
 
 	def __init__(self, proto:int,
-		hand:int=None
+		hand:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			hand=hand

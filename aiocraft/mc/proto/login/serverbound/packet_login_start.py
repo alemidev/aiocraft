@@ -10,7 +10,8 @@ class PacketLoginStart(Packet):
 	username : str
 
 	def __init__(self, proto:int,
-		username:str=None
+		username:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			username=username

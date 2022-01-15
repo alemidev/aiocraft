@@ -10,7 +10,8 @@ class PacketLockDifficulty(Packet):
 	locked : bool
 
 	def __init__(self, proto:int,
-		locked:bool=None
+		locked:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			locked=locked

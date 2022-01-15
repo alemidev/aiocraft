@@ -10,7 +10,8 @@ class PacketLegacyServerListPing(Packet):
 	payload : int
 
 	def __init__(self, proto:int,
-		payload:int=None
+		payload:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			payload=payload

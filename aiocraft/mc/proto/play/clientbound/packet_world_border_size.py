@@ -10,7 +10,8 @@ class PacketWorldBorderSize(Packet):
 	diameter : float
 
 	def __init__(self, proto:int,
-		diameter:float=None
+		diameter:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			diameter=diameter

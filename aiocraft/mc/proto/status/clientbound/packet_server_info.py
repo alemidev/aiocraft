@@ -10,7 +10,8 @@ class PacketServerInfo(Packet):
 	response : str
 
 	def __init__(self, proto:int,
-		response:str=None
+		response:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			response=response

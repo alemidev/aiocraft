@@ -10,7 +10,8 @@ class PacketSetDifficulty(Packet):
 	newDifficulty : int
 
 	def __init__(self, proto:int,
-		newDifficulty:int=None
+		newDifficulty:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			newDifficulty=newDifficulty

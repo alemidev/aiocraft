@@ -12,7 +12,8 @@ class PacketPlayerInfo(Packet):
 
 	def __init__(self, proto:int,
 		action:int=None,
-		data:list=None
+		data:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

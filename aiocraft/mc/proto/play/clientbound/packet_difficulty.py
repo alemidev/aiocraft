@@ -12,7 +12,8 @@ class PacketDifficulty(Packet):
 
 	def __init__(self, proto:int,
 		difficulty:int=None,
-		difficultyLocked:bool=None
+		difficultyLocked:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			difficulty=difficulty,

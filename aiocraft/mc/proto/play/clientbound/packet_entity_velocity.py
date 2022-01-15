@@ -16,7 +16,8 @@ class PacketEntityVelocity(Packet):
 		entityId:int=None,
 		velocityX:int=None,
 		velocityY:int=None,
-		velocityZ:int=None
+		velocityZ:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

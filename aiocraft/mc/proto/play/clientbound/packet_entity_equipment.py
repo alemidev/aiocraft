@@ -16,7 +16,8 @@ class PacketEntityEquipment(Packet):
 		entityId:int=None,
 		equipments:bytes=None,
 		item:dict=None,
-		slot:int=None
+		slot:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

@@ -12,7 +12,8 @@ class PacketCustomPayload(Packet):
 
 	def __init__(self, proto:int,
 		channel:str=None,
-		data:bytes=None
+		data:bytes=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			channel=channel,

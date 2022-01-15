@@ -12,7 +12,8 @@ class PacketSuccess(Packet):
 
 	def __init__(self, proto:int,
 		username:str=None,
-		uuid:str=None
+		uuid:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			username=username,

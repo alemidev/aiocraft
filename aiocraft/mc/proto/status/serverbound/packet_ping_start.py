@@ -10,7 +10,7 @@ class PacketPingStart(Packet):
 	
 
 	def __init__(self, proto:int,
-		
+		**kwargs
 	):
 		super().__init__(proto,
 			

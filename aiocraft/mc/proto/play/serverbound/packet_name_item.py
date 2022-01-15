@@ -10,7 +10,8 @@ class PacketNameItem(Packet):
 	name : str
 
 	def __init__(self, proto:int,
-		name:str=None
+		name:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			name=name

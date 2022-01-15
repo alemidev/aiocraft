@@ -10,7 +10,8 @@ class PacketWorldBorderWarningDelay(Packet):
 	warningTime : int
 
 	def __init__(self, proto:int,
-		warningTime:int=None
+		warningTime:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			warningTime=warningTime

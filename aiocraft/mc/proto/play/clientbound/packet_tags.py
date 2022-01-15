@@ -18,7 +18,8 @@ class PacketTags(Packet):
 		entityTags:list=None,
 		fluidTags:list=None,
 		itemTags:list=None,
-		tags:list=None
+		tags:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			blockTags=blockTags,

@@ -10,7 +10,8 @@ class PacketSimulationDistance(Packet):
 	distance : int
 
 	def __init__(self, proto:int,
-		distance:int=None
+		distance:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			distance=distance

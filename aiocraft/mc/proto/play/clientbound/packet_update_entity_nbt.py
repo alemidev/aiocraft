@@ -12,7 +12,8 @@ class PacketUpdateEntityNbt(Packet):
 
 	def __init__(self, proto:int,
 		entityId:int=None,
-		tag:dict=None
+		tag:dict=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

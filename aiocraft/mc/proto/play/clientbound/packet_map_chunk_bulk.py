@@ -14,7 +14,8 @@ class PacketMapChunkBulk(Packet):
 	def __init__(self, proto:int,
 		data:bytes=None,
 		meta:list=None,
-		skyLightSent:bool=None
+		skyLightSent:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			data=data,

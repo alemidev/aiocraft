@@ -10,7 +10,8 @@ class PacketStatistics(Packet):
 	entries : list
 
 	def __init__(self, proto:int,
-		entries:list=None
+		entries:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entries=entries

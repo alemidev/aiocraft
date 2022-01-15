@@ -14,7 +14,8 @@ class PacketSetTitleTime(Packet):
 	def __init__(self, proto:int,
 		fadeIn:int=None,
 		fadeOut:int=None,
-		stay:int=None
+		stay:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			fadeIn=fadeIn,

@@ -9,26 +9,27 @@ class PacketMap(Packet):
 	
 	columns : int
 	data : Union[None, bytes]
-	icons : Union[tuple,list]
+	icons : Union[list,tuple]
 	itemDamage : int
 	locked : bool
-	rows : Union[None, int]
+	rows : Union[int, None]
 	scale : int
 	trackingPosition : bool
-	x : Union[None, int]
-	y : Union[None, int]
+	x : Union[int, None]
+	y : Union[int, None]
 
 	def __init__(self, proto:int,
 		columns:int=None,
 		data:Union[None, bytes]=None,
-		icons:Union[tuple,list]=None,
+		icons:Union[list,tuple]=None,
 		itemDamage:int=None,
 		locked:bool=None,
-		rows:Union[None, int]=None,
+		rows:Union[int, None]=None,
 		scale:int=None,
 		trackingPosition:bool=None,
-		x:Union[None, int]=None,
-		y:Union[None, int]=None
+		x:Union[int, None]=None,
+		y:Union[int, None]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			columns=columns,

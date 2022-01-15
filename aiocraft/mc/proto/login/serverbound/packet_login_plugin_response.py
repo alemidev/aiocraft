@@ -12,7 +12,8 @@ class PacketLoginPluginResponse(Packet):
 
 	def __init__(self, proto:int,
 		data:tuple=None,
-		messageId:int=None
+		messageId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			data=data,

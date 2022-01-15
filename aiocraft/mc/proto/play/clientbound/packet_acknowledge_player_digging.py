@@ -16,7 +16,8 @@ class PacketAcknowledgePlayerDigging(Packet):
 		block:int=None,
 		location:tuple=None,
 		status:int=None,
-		successful:bool=None
+		successful:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			block=block,

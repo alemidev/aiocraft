@@ -18,7 +18,8 @@ class PacketEntitySoundEffect(Packet):
 		pitch:float=None,
 		soundCategory:int=None,
 		soundId:int=None,
-		volume:float=None
+		volume:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

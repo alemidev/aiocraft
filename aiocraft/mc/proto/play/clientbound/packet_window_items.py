@@ -16,7 +16,8 @@ class PacketWindowItems(Packet):
 		carriedItem:dict=None,
 		items:list=None,
 		stateId:int=None,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			carriedItem=carriedItem,

@@ -10,7 +10,8 @@ class PacketKeepAlive(Packet):
 	keepAliveId : int
 
 	def __init__(self, proto:int,
-		keepAliveId:int=None
+		keepAliveId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			keepAliveId=keepAliveId

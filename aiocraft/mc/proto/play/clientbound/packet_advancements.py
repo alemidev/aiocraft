@@ -16,7 +16,8 @@ class PacketAdvancements(Packet):
 		advancementMapping:list=None,
 		identifiers:list=None,
 		progressMapping:list=None,
-		reset:bool=None
+		reset:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			advancementMapping=advancementMapping,

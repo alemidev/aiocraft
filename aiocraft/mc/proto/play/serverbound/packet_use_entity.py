@@ -7,22 +7,23 @@ from ....types import *
 class PacketUseEntity(Packet):
 	__slots__ = ( 'id', 'hand', 'mouse', 'sneaking', 'target', 'x', 'y', 'z' )
 	
-	hand : Union[None, int]
+	hand : Union[int, None]
 	mouse : int
 	sneaking : bool
 	target : int
-	x : Union[float, None]
-	y : Union[float, None]
-	z : Union[float, None]
+	x : Union[None, float]
+	y : Union[None, float]
+	z : Union[None, float]
 
 	def __init__(self, proto:int,
-		hand:Union[None, int]=None,
+		hand:Union[int, None]=None,
 		mouse:int=None,
 		sneaking:bool=None,
 		target:int=None,
-		x:Union[float, None]=None,
-		y:Union[float, None]=None,
-		z:Union[float, None]=None
+		x:Union[None, float]=None,
+		y:Union[None, float]=None,
+		z:Union[None, float]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			hand=hand,

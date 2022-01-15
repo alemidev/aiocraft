@@ -14,7 +14,8 @@ class PacketBlockBreakAnimation(Packet):
 	def __init__(self, proto:int,
 		destroyStage:int=None,
 		entityId:int=None,
-		location:tuple=None
+		location:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			destroyStage=destroyStage,

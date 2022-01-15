@@ -22,7 +22,8 @@ class PacketEntityMoveLook(Packet):
 		entityId:int=None,
 		onGround:bool=None,
 		pitch:int=None,
-		yaw:int=None
+		yaw:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			dX=dX,

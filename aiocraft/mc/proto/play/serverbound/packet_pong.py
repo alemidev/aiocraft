@@ -10,7 +10,8 @@ class PacketPong(Packet):
 	id : int
 
 	def __init__(self, proto:int,
-		id:int=None
+		id:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			id=id

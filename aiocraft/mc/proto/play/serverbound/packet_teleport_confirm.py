@@ -10,7 +10,8 @@ class PacketTeleportConfirm(Packet):
 	teleportId : int
 
 	def __init__(self, proto:int,
-		teleportId:int=None
+		teleportId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			teleportId=teleportId

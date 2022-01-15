@@ -28,7 +28,8 @@ class PacketUpdateLight(Packet):
 		emptySkyLightMask:Union[int,list]=None,
 		skyLight:list=None,
 		skyLightMask:Union[int,list]=None,
-		trustEdges:bool=None
+		trustEdges:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			blockLight=blockLight,

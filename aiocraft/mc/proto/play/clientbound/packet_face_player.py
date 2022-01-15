@@ -7,7 +7,7 @@ from ....types import *
 class PacketFacePlayer(Packet):
 	__slots__ = ( 'id', 'entityId', 'entity_feet_eyes', 'feet_eyes', 'isEntity', 'x', 'y', 'z' )
 	
-	entityId : Union[None, int]
+	entityId : Union[int, None]
 	entity_feet_eyes : Union[str, None]
 	feet_eyes : int
 	isEntity : bool
@@ -16,13 +16,14 @@ class PacketFacePlayer(Packet):
 	z : float
 
 	def __init__(self, proto:int,
-		entityId:Union[None, int]=None,
+		entityId:Union[int, None]=None,
 		entity_feet_eyes:Union[str, None]=None,
 		feet_eyes:int=None,
 		isEntity:bool=None,
 		x:float=None,
 		y:float=None,
-		z:float=None
+		z:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

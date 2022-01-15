@@ -10,7 +10,8 @@ class PacketCamera(Packet):
 	cameraId : int
 
 	def __init__(self, proto:int,
-		cameraId:int=None
+		cameraId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			cameraId=cameraId

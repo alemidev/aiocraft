@@ -12,7 +12,8 @@ class PacketGameStateChange(Packet):
 
 	def __init__(self, proto:int,
 		gameMode:float=None,
-		reason:int=None
+		reason:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			gameMode=gameMode,

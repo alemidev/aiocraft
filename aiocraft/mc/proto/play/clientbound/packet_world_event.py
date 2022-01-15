@@ -16,7 +16,8 @@ class PacketWorldEvent(Packet):
 		data:int=None,
 		effectId:int=None,
 		is_global:bool=None,
-		location:tuple=None
+		location:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			data=data,

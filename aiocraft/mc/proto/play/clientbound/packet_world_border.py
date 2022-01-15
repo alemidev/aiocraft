@@ -8,27 +8,28 @@ class PacketWorldBorder(Packet):
 	__slots__ = ( 'id', 'action', 'new_radius', 'old_radius', 'portalBoundary', 'radius', 'speed', 'warning_blocks', 'warning_time', 'x', 'z' )
 	
 	action : int
-	new_radius : Union[float, None]
-	old_radius : Union[float, None]
-	portalBoundary : Union[None, int]
-	radius : Union[float, None]
-	speed : Union[None, int]
-	warning_blocks : Union[None, int]
-	warning_time : Union[None, int]
-	x : Union[float, None]
-	z : Union[float, None]
+	new_radius : Union[None, float]
+	old_radius : Union[None, float]
+	portalBoundary : Union[int, None]
+	radius : Union[None, float]
+	speed : Union[int, None]
+	warning_blocks : Union[int, None]
+	warning_time : Union[int, None]
+	x : Union[None, float]
+	z : Union[None, float]
 
 	def __init__(self, proto:int,
 		action:int=None,
-		new_radius:Union[float, None]=None,
-		old_radius:Union[float, None]=None,
-		portalBoundary:Union[None, int]=None,
-		radius:Union[float, None]=None,
-		speed:Union[None, int]=None,
-		warning_blocks:Union[None, int]=None,
-		warning_time:Union[None, int]=None,
-		x:Union[float, None]=None,
-		z:Union[float, None]=None
+		new_radius:Union[None, float]=None,
+		old_radius:Union[None, float]=None,
+		portalBoundary:Union[int, None]=None,
+		radius:Union[None, float]=None,
+		speed:Union[int, None]=None,
+		warning_blocks:Union[int, None]=None,
+		warning_time:Union[int, None]=None,
+		x:Union[None, float]=None,
+		z:Union[None, float]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

@@ -10,7 +10,8 @@ class PacketSelectTrade(Packet):
 	slot : int
 
 	def __init__(self, proto:int,
-		slot:int=None
+		slot:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			slot=slot

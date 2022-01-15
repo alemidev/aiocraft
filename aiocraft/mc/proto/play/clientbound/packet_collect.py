@@ -14,7 +14,8 @@ class PacketCollect(Packet):
 	def __init__(self, proto:int,
 		collectedEntityId:int=None,
 		collectorEntityId:int=None,
-		pickupItemCount:int=None
+		pickupItemCount:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			collectedEntityId=collectedEntityId,

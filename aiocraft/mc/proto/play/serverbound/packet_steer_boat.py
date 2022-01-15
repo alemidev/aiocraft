@@ -12,7 +12,8 @@ class PacketSteerBoat(Packet):
 
 	def __init__(self, proto:int,
 		leftPaddle:bool=None,
-		rightPaddle:bool=None
+		rightPaddle:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			leftPaddle=leftPaddle,

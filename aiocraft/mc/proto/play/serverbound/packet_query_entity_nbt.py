@@ -12,7 +12,8 @@ class PacketQueryEntityNbt(Packet):
 
 	def __init__(self, proto:int,
 		entityId:int=None,
-		transactionId:int=None
+		transactionId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

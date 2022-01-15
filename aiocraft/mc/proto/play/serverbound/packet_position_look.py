@@ -20,7 +20,8 @@ class PacketPositionLook(Packet):
 		x:float=None,
 		y:float=None,
 		yaw:float=None,
-		z:float=None
+		z:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			onGround=onGround,

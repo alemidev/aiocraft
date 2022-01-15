@@ -11,14 +11,15 @@ class PacketSpawnEntityPainting(Packet):
 	entityId : int
 	entityUUID : str
 	location : tuple
-	title : Union[str,int]
+	title : Union[int,str]
 
 	def __init__(self, proto:int,
 		direction:int=None,
 		entityId:int=None,
 		entityUUID:str=None,
 		location:tuple=None,
-		title:Union[str,int]=None
+		title:Union[int,str]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			direction=direction,

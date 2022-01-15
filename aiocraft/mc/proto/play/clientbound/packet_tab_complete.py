@@ -16,7 +16,8 @@ class PacketTabComplete(Packet):
 		length:int=None,
 		matches:list=None,
 		start:int=None,
-		transactionId:int=None
+		transactionId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			length=length,

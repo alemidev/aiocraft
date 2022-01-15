@@ -10,7 +10,8 @@ class PacketFlying(Packet):
 	onGround : bool
 
 	def __init__(self, proto:int,
-		onGround:bool=None
+		onGround:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			onGround=onGround

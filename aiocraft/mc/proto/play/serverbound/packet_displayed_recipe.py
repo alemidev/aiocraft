@@ -10,7 +10,8 @@ class PacketDisplayedRecipe(Packet):
 	recipeId : str
 
 	def __init__(self, proto:int,
-		recipeId:str=None
+		recipeId:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			recipeId=recipeId

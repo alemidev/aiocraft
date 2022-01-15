@@ -14,7 +14,8 @@ class PacketDeathCombatEvent(Packet):
 	def __init__(self, proto:int,
 		entityId:int=None,
 		message:str=None,
-		playerId:int=None
+		playerId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

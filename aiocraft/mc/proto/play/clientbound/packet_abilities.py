@@ -14,7 +14,8 @@ class PacketAbilities(Packet):
 	def __init__(self, proto:int,
 		flags:int=None,
 		flyingSpeed:float=None,
-		walkingSpeed:float=None
+		walkingSpeed:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			flags=flags,

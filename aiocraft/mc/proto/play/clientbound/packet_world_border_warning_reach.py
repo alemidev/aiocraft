@@ -10,7 +10,8 @@ class PacketWorldBorderWarningReach(Packet):
 	warningBlocks : int
 
 	def __init__(self, proto:int,
-		warningBlocks:int=None
+		warningBlocks:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			warningBlocks=warningBlocks

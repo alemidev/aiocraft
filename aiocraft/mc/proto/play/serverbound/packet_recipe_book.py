@@ -14,7 +14,8 @@ class PacketRecipeBook(Packet):
 	def __init__(self, proto:int,
 		bookId:int=None,
 		bookOpen:bool=None,
-		filterActive:bool=None
+		filterActive:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			bookId=bookId,

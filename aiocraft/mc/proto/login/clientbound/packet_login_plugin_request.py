@@ -14,7 +14,8 @@ class PacketLoginPluginRequest(Packet):
 	def __init__(self, proto:int,
 		channel:str=None,
 		data:bytes=None,
-		messageId:int=None
+		messageId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			channel=channel,

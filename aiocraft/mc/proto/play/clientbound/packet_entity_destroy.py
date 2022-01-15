@@ -10,7 +10,8 @@ class PacketEntityDestroy(Packet):
 	entityIds : list
 
 	def __init__(self, proto:int,
-		entityIds:list=None
+		entityIds:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityIds=entityIds

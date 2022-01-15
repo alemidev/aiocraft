@@ -10,7 +10,8 @@ class PacketPing(Packet):
 	time : int
 
 	def __init__(self, proto:int,
-		time:int=None
+		time:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			time=time

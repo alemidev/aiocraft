@@ -18,7 +18,8 @@ class PacketTabComplete(Packet):
 		block:tuple=None,
 		lookedAtBlock:tuple=None,
 		text:str=None,
-		transactionId:int=None
+		transactionId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			assumeCommand=assumeCommand,

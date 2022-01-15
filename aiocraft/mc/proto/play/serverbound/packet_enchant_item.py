@@ -12,7 +12,8 @@ class PacketEnchantItem(Packet):
 
 	def __init__(self, proto:int,
 		enchantment:int=None,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			enchantment=enchantment,

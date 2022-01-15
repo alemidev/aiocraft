@@ -9,12 +9,13 @@ class PacketStopSound(Packet):
 	
 	flags : int
 	sound : Union[str, None]
-	source : Union[None, int]
+	source : Union[int, None]
 
 	def __init__(self, proto:int,
 		flags:int=None,
 		sound:Union[str, None]=None,
-		source:Union[None, int]=None
+		source:Union[int, None]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			flags=flags,

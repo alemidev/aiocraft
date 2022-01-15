@@ -12,7 +12,8 @@ class PacketScoreboardDisplayObjective(Packet):
 
 	def __init__(self, proto:int,
 		name:str=None,
-		position:int=None
+		position:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			name=name,

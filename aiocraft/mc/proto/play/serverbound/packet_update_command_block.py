@@ -16,7 +16,8 @@ class PacketUpdateCommandBlock(Packet):
 		command:str=None,
 		flags:int=None,
 		location:tuple=None,
-		mode:int=None
+		mode:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			command=command,

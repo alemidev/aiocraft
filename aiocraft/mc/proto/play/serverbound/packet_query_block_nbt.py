@@ -12,7 +12,8 @@ class PacketQueryBlockNbt(Packet):
 
 	def __init__(self, proto:int,
 		location:tuple=None,
-		transactionId:int=None
+		transactionId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			location=location,

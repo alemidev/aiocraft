@@ -12,7 +12,8 @@ class PacketWorldBorderCenter(Packet):
 
 	def __init__(self, proto:int,
 		x:float=None,
-		z:float=None
+		z:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			x=x,

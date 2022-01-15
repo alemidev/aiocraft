@@ -14,7 +14,8 @@ class PacketUpdateHealth(Packet):
 	def __init__(self, proto:int,
 		food:int=None,
 		foodSaturation:float=None,
-		health:float=None
+		health:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			food=food,

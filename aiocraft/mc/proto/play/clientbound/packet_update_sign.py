@@ -18,7 +18,8 @@ class PacketUpdateSign(Packet):
 		text1:str=None,
 		text2:str=None,
 		text3:str=None,
-		text4:str=None
+		text4:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			location=location,

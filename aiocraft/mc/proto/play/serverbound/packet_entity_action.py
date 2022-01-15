@@ -14,7 +14,8 @@ class PacketEntityAction(Packet):
 	def __init__(self, proto:int,
 		actionId:int=None,
 		entityId:int=None,
-		jumpBoost:int=None
+		jumpBoost:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			actionId=actionId,

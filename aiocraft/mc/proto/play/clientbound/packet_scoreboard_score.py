@@ -10,13 +10,14 @@ class PacketScoreboardScore(Packet):
 	action : int
 	itemName : str
 	scoreName : str
-	value : Union[None, int]
+	value : Union[int, None]
 
 	def __init__(self, proto:int,
 		action:int=None,
 		itemName:str=None,
 		scoreName:str=None,
-		value:Union[None, int]=None
+		value:Union[int, None]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

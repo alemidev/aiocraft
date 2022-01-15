@@ -16,7 +16,8 @@ class PacketResourcePackSend(Packet):
 		forced:bool=None,
 		hash:str=None,
 		promptMessage:tuple=None,
-		url:str=None
+		url:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			forced=forced,

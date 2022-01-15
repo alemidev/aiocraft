@@ -12,7 +12,8 @@ class PacketEncryptionBegin(Packet):
 
 	def __init__(self, proto:int,
 		sharedSecret:bytes=None,
-		verifyToken:bytes=None
+		verifyToken:bytes=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			sharedSecret=sharedSecret,

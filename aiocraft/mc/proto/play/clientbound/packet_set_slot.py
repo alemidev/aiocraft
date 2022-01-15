@@ -16,7 +16,8 @@ class PacketSetSlot(Packet):
 		item:dict=None,
 		slot:int=None,
 		stateId:int=None,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			item=item,

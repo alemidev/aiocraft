@@ -10,7 +10,8 @@ class PacketSetTitleSubtitle(Packet):
 	text : str
 
 	def __init__(self, proto:int,
-		text:str=None
+		text:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			text=text

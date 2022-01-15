@@ -7,12 +7,13 @@ from ....types import *
 class PacketCraftRecipeResponse(Packet):
 	__slots__ = ( 'id', 'recipe', 'windowId' )
 	
-	recipe : Union[str,int]
+	recipe : Union[int,str]
 	windowId : int
 
 	def __init__(self, proto:int,
-		recipe:Union[str,int]=None,
-		windowId:int=None
+		recipe:Union[int,str]=None,
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			recipe=recipe,

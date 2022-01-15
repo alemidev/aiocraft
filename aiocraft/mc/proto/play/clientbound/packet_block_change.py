@@ -12,7 +12,8 @@ class PacketBlockChange(Packet):
 
 	def __init__(self, proto:int,
 		location:tuple=None,
-		type:int=None
+		type:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			location=location,

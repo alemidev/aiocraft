@@ -12,7 +12,8 @@ class PacketResourcePackReceive(Packet):
 
 	def __init__(self, proto:int,
 		hash:str=None,
-		result:int=None
+		result:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			hash=hash,

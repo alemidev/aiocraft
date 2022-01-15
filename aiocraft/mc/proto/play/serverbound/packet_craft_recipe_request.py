@@ -8,13 +8,14 @@ class PacketCraftRecipeRequest(Packet):
 	__slots__ = ( 'id', 'makeAll', 'recipe', 'windowId' )
 	
 	makeAll : bool
-	recipe : Union[str,int]
+	recipe : Union[int,str]
 	windowId : int
 
 	def __init__(self, proto:int,
 		makeAll:bool=None,
-		recipe:Union[str,int]=None,
-		windowId:int=None
+		recipe:Union[int,str]=None,
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			makeAll=makeAll,

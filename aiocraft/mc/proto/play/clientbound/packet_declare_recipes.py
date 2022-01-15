@@ -10,7 +10,8 @@ class PacketDeclareRecipes(Packet):
 	recipes : list
 
 	def __init__(self, proto:int,
-		recipes:list=None
+		recipes:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			recipes=recipes

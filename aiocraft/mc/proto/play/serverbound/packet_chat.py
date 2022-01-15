@@ -10,7 +10,8 @@ class PacketChat(Packet):
 	message : str
 
 	def __init__(self, proto:int,
-		message:str=None
+		message:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			message=message

@@ -12,7 +12,8 @@ class PacketEndCombatEvent(Packet):
 
 	def __init__(self, proto:int,
 		duration:int=None,
-		entityId:int=None
+		entityId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			duration=duration,

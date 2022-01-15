@@ -24,7 +24,8 @@ class PacketExplosion(Packet):
 		radius:float=None,
 		x:float=None,
 		y:float=None,
-		z:float=None
+		z:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			affectedBlockOffsets=affectedBlockOffsets,

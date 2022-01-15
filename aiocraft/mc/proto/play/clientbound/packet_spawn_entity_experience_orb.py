@@ -9,16 +9,17 @@ class PacketSpawnEntityExperienceOrb(Packet):
 	
 	count : int
 	entityId : int
-	x : Union[float,int]
-	y : Union[float,int]
-	z : Union[float,int]
+	x : Union[int,float]
+	y : Union[int,float]
+	z : Union[int,float]
 
 	def __init__(self, proto:int,
 		count:int=None,
 		entityId:int=None,
-		x:Union[float,int]=None,
-		y:Union[float,int]=None,
-		z:Union[float,int]=None
+		x:Union[int,float]=None,
+		y:Union[int,float]=None,
+		z:Union[int,float]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			count=count,

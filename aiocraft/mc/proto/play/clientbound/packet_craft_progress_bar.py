@@ -14,7 +14,8 @@ class PacketCraftProgressBar(Packet):
 	def __init__(self, proto:int,
 		property:int=None,
 		value:int=None,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			property=property,

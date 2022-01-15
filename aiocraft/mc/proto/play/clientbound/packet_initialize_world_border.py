@@ -24,7 +24,8 @@ class PacketInitializeWorldBorder(Packet):
 		warningBlocks:int=None,
 		warningTime:int=None,
 		x:float=None,
-		z:float=None
+		z:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			newDiameter=newDiameter,

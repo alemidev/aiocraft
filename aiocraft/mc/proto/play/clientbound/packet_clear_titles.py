@@ -10,7 +10,8 @@ class PacketClearTitles(Packet):
 	reset : bool
 
 	def __init__(self, proto:int,
-		reset:bool=None
+		reset:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			reset=reset

@@ -12,7 +12,8 @@ class PacketSetPassengers(Packet):
 
 	def __init__(self, proto:int,
 		entityId:int=None,
-		passengers:list=None
+		passengers:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

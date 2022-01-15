@@ -14,7 +14,8 @@ class PacketChat(Packet):
 	def __init__(self, proto:int,
 		message:str=None,
 		position:int=None,
-		sender:str=None
+		sender:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			message=message,

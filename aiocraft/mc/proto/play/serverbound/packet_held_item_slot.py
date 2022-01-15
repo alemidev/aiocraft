@@ -10,7 +10,8 @@ class PacketHeldItemSlot(Packet):
 	slotId : int
 
 	def __init__(self, proto:int,
-		slotId:int=None
+		slotId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			slotId=slotId

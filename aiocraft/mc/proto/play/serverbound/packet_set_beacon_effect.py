@@ -12,7 +12,8 @@ class PacketSetBeaconEffect(Packet):
 
 	def __init__(self, proto:int,
 		primary_effect:int=None,
-		secondary_effect:int=None
+		secondary_effect:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			primary_effect=primary_effect,

@@ -16,7 +16,8 @@ class PacketBlockAction(Packet):
 		blockId:int=None,
 		byte1:int=None,
 		byte2:int=None,
-		location:tuple=None
+		location:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			blockId=blockId,

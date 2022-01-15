@@ -12,7 +12,8 @@ class PacketEntityUpdateAttributes(Packet):
 
 	def __init__(self, proto:int,
 		entityId:int=None,
-		properties:list=None
+		properties:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

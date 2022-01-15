@@ -10,13 +10,14 @@ class PacketScoreboardObjective(Packet):
 	action : int
 	displayText : Union[str, None]
 	name : str
-	type : Union[Union[str, None],Union[None, int]]
+	type : Union[Union[str, None],Union[int, None]]
 
 	def __init__(self, proto:int,
 		action:int=None,
 		displayText:Union[str, None]=None,
 		name:str=None,
-		type:Union[Union[str, None],Union[None, int]]=None
+		type:Union[Union[str, None],Union[int, None]]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

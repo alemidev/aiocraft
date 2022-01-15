@@ -11,14 +11,15 @@ class PacketEntityEffect(Packet):
 	duration : int
 	effectId : int
 	entityId : int
-	hideParticles : Union[bool,int]
+	hideParticles : Union[int,bool]
 
 	def __init__(self, proto:int,
 		amplifier:int=None,
 		duration:int=None,
 		effectId:int=None,
 		entityId:int=None,
-		hideParticles:Union[bool,int]=None
+		hideParticles:Union[int,bool]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			amplifier=amplifier,

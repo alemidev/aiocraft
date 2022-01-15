@@ -14,7 +14,8 @@ class PacketExperience(Packet):
 	def __init__(self, proto:int,
 		experienceBar:float=None,
 		level:int=None,
-		totalExperience:int=None
+		totalExperience:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			experienceBar=experienceBar,

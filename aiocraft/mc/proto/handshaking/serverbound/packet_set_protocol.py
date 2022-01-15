@@ -16,7 +16,8 @@ class PacketSetProtocol(Packet):
 		nextState:int=None,
 		protocolVersion:int=None,
 		serverHost:str=None,
-		serverPort:int=None
+		serverPort:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			nextState=nextState,

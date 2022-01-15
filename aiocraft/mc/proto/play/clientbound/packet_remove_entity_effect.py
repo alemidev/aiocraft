@@ -12,7 +12,8 @@ class PacketRemoveEntityEffect(Packet):
 
 	def __init__(self, proto:int,
 		effectId:int=None,
-		entityId:int=None
+		entityId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			effectId=effectId,

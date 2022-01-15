@@ -12,7 +12,8 @@ class PacketSpawnPosition(Packet):
 
 	def __init__(self, proto:int,
 		angle:float=None,
-		location:tuple=None
+		location:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			angle=angle,

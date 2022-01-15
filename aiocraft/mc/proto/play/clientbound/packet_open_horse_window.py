@@ -14,7 +14,8 @@ class PacketOpenHorseWindow(Packet):
 	def __init__(self, proto:int,
 		entityId:int=None,
 		nbSlots:int=None,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

@@ -8,7 +8,7 @@ class PacketLogin(Packet):
 	__slots__ = ( 'id', 'difficulty', 'dimension', 'dimensionCodec', 'enableRespawnScreen', 'entityId', 'gameMode', 'hashedSeed', 'isDebug', 'isFlat', 'isHardcore', 'levelType', 'maxPlayers', 'previousGameMode', 'reducedDebugInfo', 'simulationDistance', 'viewDistance', 'worldName', 'worldNames' )
 	
 	difficulty : int
-	dimension : Union[dict,str,int]
+	dimension : Union[int,dict,str]
 	dimensionCodec : dict
 	enableRespawnScreen : bool
 	entityId : int
@@ -28,7 +28,7 @@ class PacketLogin(Packet):
 
 	def __init__(self, proto:int,
 		difficulty:int=None,
-		dimension:Union[dict,str,int]=None,
+		dimension:Union[int,dict,str]=None,
 		dimensionCodec:dict=None,
 		enableRespawnScreen:bool=None,
 		entityId:int=None,
@@ -44,7 +44,8 @@ class PacketLogin(Packet):
 		simulationDistance:int=None,
 		viewDistance:int=None,
 		worldName:str=None,
-		worldNames:list=None
+		worldNames:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			difficulty=difficulty,

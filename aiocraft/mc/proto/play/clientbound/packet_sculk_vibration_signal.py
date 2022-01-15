@@ -8,15 +8,16 @@ class PacketSculkVibrationSignal(Packet):
 	__slots__ = ( 'id', 'arrivalTicks', 'destination', 'destinationIdentifier', 'sourcePosition' )
 	
 	arrivalTicks : int
-	destination : Union[None, int, tuple]
+	destination : Union[int, tuple, None]
 	destinationIdentifier : str
 	sourcePosition : tuple
 
 	def __init__(self, proto:int,
 		arrivalTicks:int=None,
-		destination:Union[None, int, tuple]=None,
+		destination:Union[int, tuple, None]=None,
 		destinationIdentifier:str=None,
-		sourcePosition:tuple=None
+		sourcePosition:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			arrivalTicks=arrivalTicks,

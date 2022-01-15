@@ -12,10 +12,10 @@ class PacketNamedEntitySpawn(Packet):
 	metadata : dict
 	pitch : int
 	playerUUID : str
-	x : Union[float,int]
-	y : Union[float,int]
+	x : Union[int,float]
+	y : Union[int,float]
 	yaw : int
-	z : Union[float,int]
+	z : Union[int,float]
 
 	def __init__(self, proto:int,
 		currentItem:int=None,
@@ -23,10 +23,11 @@ class PacketNamedEntitySpawn(Packet):
 		metadata:dict=None,
 		pitch:int=None,
 		playerUUID:str=None,
-		x:Union[float,int]=None,
-		y:Union[float,int]=None,
+		x:Union[int,float]=None,
+		y:Union[int,float]=None,
 		yaw:int=None,
-		z:Union[float,int]=None
+		z:Union[int,float]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			currentItem=currentItem,

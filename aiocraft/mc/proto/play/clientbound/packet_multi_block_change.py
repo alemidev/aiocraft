@@ -18,7 +18,8 @@ class PacketMultiBlockChange(Packet):
 		chunkX:int=None,
 		chunkZ:int=None,
 		notTrustEdges:bool=None,
-		records:list=None
+		records:list=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			chunkCoordinates=chunkCoordinates,

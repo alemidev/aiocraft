@@ -9,7 +9,7 @@ class PacketRespawn(Packet):
 	
 	copyMetadata : bool
 	difficulty : int
-	dimension : Union[dict,str,int]
+	dimension : Union[int,dict,str]
 	gamemode : int
 	hashedSeed : int
 	isDebug : bool
@@ -21,14 +21,15 @@ class PacketRespawn(Packet):
 	def __init__(self, proto:int,
 		copyMetadata:bool=None,
 		difficulty:int=None,
-		dimension:Union[dict,str,int]=None,
+		dimension:Union[int,dict,str]=None,
 		gamemode:int=None,
 		hashedSeed:int=None,
 		isDebug:bool=None,
 		isFlat:bool=None,
 		levelType:str=None,
 		previousGamemode:int=None,
-		worldName:str=None
+		worldName:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			copyMetadata=copyMetadata,

@@ -14,7 +14,8 @@ class PacketWorldBorderLerpSize(Packet):
 	def __init__(self, proto:int,
 		newDiameter:float=None,
 		oldDiameter:float=None,
-		speed:int=None
+		speed:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			newDiameter=newDiameter,

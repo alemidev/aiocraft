@@ -10,7 +10,8 @@ class PacketDisconnect(Packet):
 	reason : str
 
 	def __init__(self, proto:int,
-		reason:str=None
+		reason:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			reason=reason

@@ -14,7 +14,8 @@ class PacketGenerateStructure(Packet):
 	def __init__(self, proto:int,
 		keepJigsaws:bool=None,
 		levels:int=None,
-		location:tuple=None
+		location:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			keepJigsaws=keepJigsaws,

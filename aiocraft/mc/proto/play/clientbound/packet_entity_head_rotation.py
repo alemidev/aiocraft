@@ -12,7 +12,8 @@ class PacketEntityHeadRotation(Packet):
 
 	def __init__(self, proto:int,
 		entityId:int=None,
-		headYaw:int=None
+		headYaw:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

@@ -10,7 +10,8 @@ class PacketCraftingBookData(Packet):
 	type : int
 
 	def __init__(self, proto:int,
-		type:int=None
+		type:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			type=type

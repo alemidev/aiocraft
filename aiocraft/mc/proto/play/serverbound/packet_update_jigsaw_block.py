@@ -24,7 +24,8 @@ class PacketUpdateJigsawBlock(Packet):
 		name:str=None,
 		pool:str=None,
 		target:str=None,
-		targetPool:str=None
+		targetPool:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			attachmentType=attachmentType,

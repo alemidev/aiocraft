@@ -12,7 +12,8 @@ class PacketSetCreativeSlot(Packet):
 
 	def __init__(self, proto:int,
 		item:dict=None,
-		slot:int=None
+		slot:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			item=item,

@@ -10,7 +10,8 @@ class PacketSpectate(Packet):
 	target : str
 
 	def __init__(self, proto:int,
-		target:str=None
+		target:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			target=target

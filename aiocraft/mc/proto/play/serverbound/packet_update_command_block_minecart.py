@@ -14,7 +14,8 @@ class PacketUpdateCommandBlockMinecart(Packet):
 	def __init__(self, proto:int,
 		command:str=None,
 		entityId:int=None,
-		track_output:bool=None
+		track_output:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			command=command,

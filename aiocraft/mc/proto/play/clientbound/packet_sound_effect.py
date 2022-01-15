@@ -8,7 +8,7 @@ class PacketSoundEffect(Packet):
 	__slots__ = ( 'id', 'parrottedEntityType', 'pitch', 'soundCategory', 'soundId', 'volume', 'x', 'y', 'z' )
 	
 	parrottedEntityType : str
-	pitch : Union[float,int]
+	pitch : Union[int,float]
 	soundCategory : int
 	soundId : int
 	volume : float
@@ -18,13 +18,14 @@ class PacketSoundEffect(Packet):
 
 	def __init__(self, proto:int,
 		parrottedEntityType:str=None,
-		pitch:Union[float,int]=None,
+		pitch:Union[int,float]=None,
 		soundCategory:int=None,
 		soundId:int=None,
 		volume:float=None,
 		x:int=None,
 		y:int=None,
-		z:int=None
+		z:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			parrottedEntityType=parrottedEntityType,

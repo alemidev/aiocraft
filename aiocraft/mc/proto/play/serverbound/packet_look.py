@@ -14,7 +14,8 @@ class PacketLook(Packet):
 	def __init__(self, proto:int,
 		onGround:bool=None,
 		pitch:float=None,
-		yaw:float=None
+		yaw:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			onGround=onGround,

@@ -12,7 +12,8 @@ class PacketAdvancementTab(Packet):
 
 	def __init__(self, proto:int,
 		action:int=None,
-		tabId:Union[str, None]=None
+		tabId:Union[str, None]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

@@ -8,21 +8,22 @@ class PacketBossBar(Packet):
 	__slots__ = ( 'id', 'action', 'color', 'dividers', 'entityUUID', 'flags', 'health', 'title' )
 	
 	action : int
-	color : Union[None, int]
-	dividers : Union[None, int]
+	color : Union[int, None]
+	dividers : Union[int, None]
 	entityUUID : str
-	flags : Union[None, int]
-	health : Union[float, None]
+	flags : Union[int, None]
+	health : Union[None, float]
 	title : Union[str, None]
 
 	def __init__(self, proto:int,
 		action:int=None,
-		color:Union[None, int]=None,
-		dividers:Union[None, int]=None,
+		color:Union[int, None]=None,
+		dividers:Union[int, None]=None,
 		entityUUID:str=None,
-		flags:Union[None, int]=None,
-		health:Union[float, None]=None,
-		title:Union[str, None]=None
+		flags:Union[int, None]=None,
+		health:Union[None, float]=None,
+		title:Union[str, None]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

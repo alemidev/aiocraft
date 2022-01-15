@@ -10,7 +10,8 @@ class PacketOpenSignEntity(Packet):
 	location : tuple
 
 	def __init__(self, proto:int,
-		location:tuple=None
+		location:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			location=location

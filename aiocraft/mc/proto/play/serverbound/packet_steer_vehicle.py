@@ -14,7 +14,8 @@ class PacketSteerVehicle(Packet):
 	def __init__(self, proto:int,
 		forward:float=None,
 		jump:int=None,
-		sideways:float=None
+		sideways:float=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			forward=forward,

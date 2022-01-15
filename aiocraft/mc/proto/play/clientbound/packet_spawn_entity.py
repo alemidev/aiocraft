@@ -9,32 +9,33 @@ class PacketSpawnEntity(Packet):
 	
 	entityId : int
 	entityUUID : str
-	objectData : Union[dict,int]
+	objectData : Union[int,dict]
 	objectUUID : str
 	pitch : int
 	type : int
 	velocityX : int
 	velocityY : int
 	velocityZ : int
-	x : Union[float,int]
-	y : Union[float,int]
+	x : Union[int,float]
+	y : Union[int,float]
 	yaw : int
-	z : Union[float,int]
+	z : Union[int,float]
 
 	def __init__(self, proto:int,
 		entityId:int=None,
 		entityUUID:str=None,
-		objectData:Union[dict,int]=None,
+		objectData:Union[int,dict]=None,
 		objectUUID:str=None,
 		pitch:int=None,
 		type:int=None,
 		velocityX:int=None,
 		velocityY:int=None,
 		velocityZ:int=None,
-		x:Union[float,int]=None,
-		y:Union[float,int]=None,
+		x:Union[int,float]=None,
+		y:Union[int,float]=None,
 		yaw:int=None,
-		z:Union[float,int]=None
+		z:Union[int,float]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

@@ -262,7 +262,7 @@ class PacketClassWriter:
 				slots=format_tuple(["id"] + sorted(self.attrs), depth=0), # TODO jank fix when no slots
 				fields="\n\t" + "\n\t".join(f"{a} : {pytype(sorted(self.hints[a]))}" for a in sorted(self.attrs)),
 				state=self.state,
-				constructor=_format_line((Ref(f"{field}:{pytype(sorted(self.hints[field]))}=None") for field in sorted(self.attrs)), depth=2),
+				constructor=_format_line([Ref(f"{field}:{pytype(sorted(self.hints[field]))}=None") for field in sorted(self.attrs)] + [Ref("**kwargs")], depth=2),
 				constructed=_format_line((Ref(f"{field}={field}") for field in sorted(self.attrs)), depth=3),
 			)
 
@@ -274,12 +274,19 @@ class RegistryClassWriter:
 
 	def compile(self) -> str:
 		return REGISTRY_ENTRY.format(
-			entries='{\n\t' + ",\n\t".join((
-				str(v) + " : { " + ", ".join(
-					f"{pid}:{clazz}" for (pid, clazz) in self.registry[v].items()
-				) + ' }' ) for v in self.registry.keys()
-			) + '\n}'
+			entries=format_dict({ 
+				v : format_dict(
+					self.registry[v], depth=0
+				) for v in self.registry
+			})
 		)
+
+		# 	entries='{\n\t' + ",\n\t".join((
+		# 		str(v) + " : { " + ", ".join(
+		# 			f"{pid}:{clazz}" for (pid, clazz) in self.registry[v].items()
+		# 		) + ' }' ) for v in self.registry.keys()
+		# 	) + '\n}'
+		# )
 
 def _make_module(path:Path, contents:dict):
 	os.mkdir(path)

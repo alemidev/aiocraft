@@ -12,7 +12,8 @@ class PacketSetCooldown(Packet):
 
 	def __init__(self, proto:int,
 		cooldownTicks:int=None,
-		itemID:int=None
+		itemID:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			cooldownTicks=cooldownTicks,

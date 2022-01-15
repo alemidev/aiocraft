@@ -14,7 +14,8 @@ class PacketBlockDig(Packet):
 	def __init__(self, proto:int,
 		face:int=None,
 		location:tuple=None,
-		status:int=None
+		status:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			face=face,

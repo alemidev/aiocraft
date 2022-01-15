@@ -20,7 +20,8 @@ class PacketTradeList(Packet):
 		isRegularVillager:bool=None,
 		trades:list=None,
 		villagerLevel:int=None,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			canRestock=canRestock,

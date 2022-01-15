@@ -12,7 +12,8 @@ class PacketUpdateTime(Packet):
 
 	def __init__(self, proto:int,
 		age:int=None,
-		time:int=None
+		time:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			age=age,

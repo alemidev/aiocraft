@@ -26,7 +26,8 @@ class PacketSettings(Packet):
 		locale:str=None,
 		mainHand:int=None,
 		skinParts:int=None,
-		viewDistance:int=None
+		viewDistance:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			chatColors=chatColors,

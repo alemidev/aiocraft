@@ -12,7 +12,8 @@ class PacketAnimation(Packet):
 
 	def __init__(self, proto:int,
 		animation:int=None,
-		entityId:int=None
+		entityId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			animation=animation,

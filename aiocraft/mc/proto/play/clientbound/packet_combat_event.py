@@ -7,18 +7,19 @@ from ....types import *
 class PacketCombatEvent(Packet):
 	__slots__ = ( 'id', 'duration', 'entityId', 'event', 'message', 'playerId' )
 	
-	duration : Union[None, int]
-	entityId : Union[None, int]
+	duration : Union[int, None]
+	entityId : Union[int, None]
 	event : int
 	message : Union[str, None]
-	playerId : Union[None, int]
+	playerId : Union[int, None]
 
 	def __init__(self, proto:int,
-		duration:Union[None, int]=None,
-		entityId:Union[None, int]=None,
+		duration:Union[int, None]=None,
+		entityId:Union[int, None]=None,
 		event:int=None,
 		message:Union[str, None]=None,
-		playerId:Union[None, int]=None
+		playerId:Union[int, None]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			duration=duration,

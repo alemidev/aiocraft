@@ -12,7 +12,8 @@ class PacketEntityStatus(Packet):
 
 	def __init__(self, proto:int,
 		entityId:int=None,
-		entityStatus:int=None
+		entityStatus:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

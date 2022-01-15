@@ -12,7 +12,8 @@ class PacketNbtQueryResponse(Packet):
 
 	def __init__(self, proto:int,
 		nbt:Optional[dict]=None,
-		transactionId:int=None
+		transactionId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			nbt=nbt,

@@ -18,7 +18,8 @@ class PacketEditBook(Packet):
 		new_book:dict=None,
 		pages:list=None,
 		signing:bool=None,
-		title:tuple=None
+		title:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			hand=hand,

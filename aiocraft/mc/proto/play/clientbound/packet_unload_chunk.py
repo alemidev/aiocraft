@@ -12,7 +12,8 @@ class PacketUnloadChunk(Packet):
 
 	def __init__(self, proto:int,
 		chunkX:int=None,
-		chunkZ:int=None
+		chunkZ:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			chunkX=chunkX,

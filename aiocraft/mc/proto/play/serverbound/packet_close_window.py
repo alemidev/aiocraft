@@ -10,7 +10,8 @@ class PacketCloseWindow(Packet):
 	windowId : int
 
 	def __init__(self, proto:int,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			windowId=windowId

@@ -12,7 +12,8 @@ class PacketPlayerlistHeader(Packet):
 
 	def __init__(self, proto:int,
 		footer:str=None,
-		header:str=None
+		header:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			footer=footer,

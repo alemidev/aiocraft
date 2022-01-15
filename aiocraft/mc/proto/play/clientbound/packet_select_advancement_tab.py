@@ -10,7 +10,8 @@ class PacketSelectAdvancementTab(Packet):
 	id : tuple
 
 	def __init__(self, proto:int,
-		id:tuple=None
+		id:tuple=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			id=id

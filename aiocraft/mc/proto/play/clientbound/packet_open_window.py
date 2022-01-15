@@ -7,18 +7,19 @@ from ....types import *
 class PacketOpenWindow(Packet):
 	__slots__ = ( 'id', 'entityId', 'inventoryType', 'slotCount', 'windowId', 'windowTitle' )
 	
-	entityId : Union[None, int]
-	inventoryType : Union[str,int]
+	entityId : Union[int, None]
+	inventoryType : Union[int,str]
 	slotCount : int
 	windowId : int
 	windowTitle : str
 
 	def __init__(self, proto:int,
-		entityId:Union[None, int]=None,
-		inventoryType:Union[str,int]=None,
+		entityId:Union[int, None]=None,
+		inventoryType:Union[int,str]=None,
 		slotCount:int=None,
 		windowId:int=None,
-		windowTitle:str=None
+		windowTitle:str=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,

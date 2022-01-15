@@ -7,7 +7,7 @@ from ....types import *
 class PacketNamedSoundEffect(Packet):
 	__slots__ = ( 'id', 'pitch', 'soundCategory', 'soundName', 'volume', 'x', 'y', 'z' )
 	
-	pitch : Union[float,int]
+	pitch : Union[int,float]
 	soundCategory : int
 	soundName : str
 	volume : float
@@ -16,13 +16,14 @@ class PacketNamedSoundEffect(Packet):
 	z : int
 
 	def __init__(self, proto:int,
-		pitch:Union[float,int]=None,
+		pitch:Union[int,float]=None,
 		soundCategory:int=None,
 		soundName:str=None,
 		volume:float=None,
 		x:int=None,
 		y:int=None,
-		z:int=None
+		z:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			pitch=pitch,

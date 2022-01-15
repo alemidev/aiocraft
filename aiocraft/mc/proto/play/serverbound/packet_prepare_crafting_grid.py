@@ -16,7 +16,8 @@ class PacketPrepareCraftingGrid(Packet):
 		actionNumber:int=None,
 		prepareEntry:list=None,
 		returnEntry:list=None,
-		windowId:int=None
+		windowId:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			actionNumber=actionNumber,

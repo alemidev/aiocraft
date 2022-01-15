@@ -18,7 +18,8 @@ class PacketRelEntityMove(Packet):
 		dY:int=None,
 		dZ:int=None,
 		entityId:int=None,
-		onGround:bool=None
+		onGround:bool=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			dX=dX,

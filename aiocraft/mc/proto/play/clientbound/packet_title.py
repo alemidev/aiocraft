@@ -8,17 +8,18 @@ class PacketTitle(Packet):
 	__slots__ = ( 'id', 'action', 'fadeIn', 'fadeOut', 'stay', 'text' )
 	
 	action : int
-	fadeIn : Union[None, int]
-	fadeOut : Union[None, int]
-	stay : Union[None, int]
+	fadeIn : Union[int, None]
+	fadeOut : Union[int, None]
+	stay : Union[int, None]
 	text : Union[str, None]
 
 	def __init__(self, proto:int,
 		action:int=None,
-		fadeIn:Union[None, int]=None,
-		fadeOut:Union[None, int]=None,
-		stay:Union[None, int]=None,
-		text:Union[str, None]=None
+		fadeIn:Union[int, None]=None,
+		fadeOut:Union[int, None]=None,
+		stay:Union[int, None]=None,
+		text:Union[str, None]=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			action=action,

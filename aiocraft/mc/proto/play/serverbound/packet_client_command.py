@@ -12,7 +12,8 @@ class PacketClientCommand(Packet):
 
 	def __init__(self, proto:int,
 		actionId:int=None,
-		payload:int=None
+		payload:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			actionId=actionId,

@@ -12,7 +12,8 @@ class PacketDeclareCommands(Packet):
 
 	def __init__(self, proto:int,
 		nodes:list=None,
-		rootIndex:int=None
+		rootIndex:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			nodes=nodes,

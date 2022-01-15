@@ -10,7 +10,8 @@ class PacketUpdateViewDistance(Packet):
 	viewDistance : int
 
 	def __init__(self, proto:int,
-		viewDistance:int=None
+		viewDistance:int=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			viewDistance=viewDistance

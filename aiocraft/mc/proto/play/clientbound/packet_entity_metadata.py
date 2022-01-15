@@ -12,7 +12,8 @@ class PacketEntityMetadata(Packet):
 
 	def __init__(self, proto:int,
 		entityId:int=None,
-		metadata:dict=None
+		metadata:dict=None,
+		**kwargs
 	):
 		super().__init__(proto,
 			entityId=entityId,
