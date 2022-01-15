@@ -126,7 +126,7 @@ class Enchantment:
 	level : int
 
 	def __init__(self, type:EnchantmentType=None, id:int=None, lvl:int=1):
-		if not type and not id:
+		if type is None and id is None:
 			raise ValueError("No enchantment type or enchantment id provided")
 		self.type = type or EnchantmentType(id)
 		self.eid = self.type.value
