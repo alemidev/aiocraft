@@ -222,7 +222,7 @@ class Dispatcher:
 				buffer = io.BytesIO(data)
 
 				if self.compression is not None:
-					decompressed_size = VarInt.read(buffer, Context())
+					decompressed_size = VarInt.read(buffer, Context(_proto=self.proto))
 					if decompressed_size > 0:
 						decompressor = zlib.decompressobj()
 						decompressed_data = decompressor.decompress(buffer.read())
@@ -230,7 +230,7 @@ class Dispatcher:
 							raise ValueError(f"Failed decompressing packet: expected size is {decompressed_size}, but actual size is {len(decompressed_data)}")
 						buffer = io.BytesIO(decompressed_data)
 
-				packet_id = VarInt.read(buffer, Context())
+				packet_id = VarInt.read(buffer, Context(_proto=self.proto))
 				if self.state == ConnectionState.PLAY and self._packet_id_whitelist \
 				and packet_id not in self._packet_id_whitelist:
 					self._logger.debug("[<--] Received | Packet(0x%02x) (ignored)", packet_id)
@@ -269,12 +269,12 @@ class Dispatcher:
 				if self.compression is not None:
 					if length > self.compression:
 						new_buffer = io.BytesIO()
-						VarInt.write(length, new_buffer)
+						VarInt.write(length, new_buffer, Context(_proto=self.proto))
 						new_buffer.write(zlib.compress(buffer.read()))
 						buffer = new_buffer
 					else:
 						new_buffer = io.BytesIO()
-						VarInt.write(0, new_buffer)
+						VarInt.write(0, new_buffer, Context(_proto=self.proto))
 						new_buffer.write(buffer.read())
 						buffer = new_buffer
 					length = len(buffer.getvalue())

@@ -3,7 +3,7 @@ import json
 from asyncio import Event
 from typing import Tuple, Dict, Any
 
-from .types import Type, VarInt
+from .types import Type, VarInt, Context
 
 class Packet:
 	__slots__ = 'id', 'definition', '_processed', '_proto', '_state'
@@ -24,7 +24,7 @@ class Packet:
 		self.id = self._ids[proto]
 		for name, t in self.definition:
 			if name in kwargs and kwargs[name] is not None:
-				setattr(self, name, t.pytype(kwargs[name]))
+				setattr(self, name, kwargs[name])
 
 	@property
 	def processed(self) -> Event:
@@ -33,18 +33,20 @@ class Packet:
 
 	@classmethod
 	def deserialize(cls, proto:int, buffer:io.BytesIO):
-		pkt = cls(proto)
+		ctx = Context(_proto=proto)
 		for k, t in cls._definitions[proto]:
-			setattr(pkt, k, t.read(buffer, ctx=pkt))
-		return pkt
+			setattr(ctx, k, t.read(buffer, ctx=ctx))
+		return cls(proto, **ctx.as_dict())
 		# return cls(proto, **{ name : t.read(buffer) for (name, t) in cls._definitions[proto] })
 
 	def serialize(self) -> io.BytesIO:
+		ctx = Context(_proto=self._proto)
 		buf = io.BytesIO()
-		VarInt.write(self.id, buf)
+		VarInt.write(self.id, buf, ctx=ctx)
 		for name, t in self.definition:
 			if getattr(self, name, None) is not None: # minecraft proto has no null type: this is an optional field left unset
-				t.write(getattr(self, name), buf, ctx=self)
+				setattr(ctx, name, getattr(self, name)) # TODO maybe  **vars(self)  in ctx constructor?
+				t.write(getattr(self, name), buf, ctx=ctx)
 		buf.seek(0)
 		return buf
 

@@ -13,14 +13,17 @@ from .definitions import Item
 
 class Context(object):
 	def __init__(self, **kwargs):
-		for k, v in kwargs:
+		for k, v in kwargs.items():
 			setattr(self, k, v)
+
+	def as_dict(self) -> dict:
+		return vars(self) # is this reliable?
 
 	def __getattr__(self, name) -> Any:
 		return None # return None rather than raising an exc
 
 	def __str__(self) -> str:
-		return json.dumps(vars(self), indent=2, default=str, sort_keys=True)
+		return json.dumps(self.as_dict(), indent=2, default=str, sort_keys=True)
 
 	def __repr__(self) -> str:
 		values = ( f"{k}={repr(v)}" for k,v in vars(self).items() )
