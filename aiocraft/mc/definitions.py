@@ -101,7 +101,7 @@ class Item:
 	nbt : dict
 	damage : int # This got removed past 1.12.2
 
-	def __init__(self, item:'Item' = None, id:int=0, count:int=0, nbt:dict=None, damage:int=0):
+	def __init__(self, item:'Item' = None, id:int=0, count:int=1, nbt:dict=None, damage:int=0):
 		self.id = id
 		self.count = count
 		self.nbt = nbt or {}
@@ -111,6 +111,14 @@ class Item:
 			self.count = item.count
 			self.nbt = item.nbt
 			self.damage = item.damage
+
+	def as_dict(self) -> dict:
+		return {
+			'id': self.id,
+			'count': self.count,
+			'nbt': self.nbt,
+			'damage': self.damage,
+		}
 
 	def __getitem__(self, key:str): # backwards compatibility
 		return getattr(self, key)

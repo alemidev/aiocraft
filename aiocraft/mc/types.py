@@ -341,7 +341,7 @@ class SlotType(Type):
 		else:
 			check_type.write(False if new_way else -1, buffer, ctx)
 
-	def read(self, buffer:io.BytesIO, ctx:Context) -> Any:
+	def read(self, buffer:io.BytesIO, ctx:Context) -> Item:
 		slot : Dict[Any, Any] = {}
 		new_way = ctx._proto > 340
 		check_type = Boolean if new_way else Short
