@@ -2,19 +2,20 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketStopSound(Packet):
 	__slots__ = ( 'id', 'flags', 'sound', 'source' )
 	
 	flags : int
-	sound : Union[str, None]
-	source : Union[int, None]
+	sound : Union[None, str]
+	source : Union[None, int]
 
 	def __init__(self, proto:int,
 		flags:int=None,
-		sound:Union[str, None]=None,
-		source:Union[int, None]=None,
+		sound:Union[None, str]=None,
+		source:Union[None, int]=None,
 		**kwargs
 	):
 		super().__init__(proto,

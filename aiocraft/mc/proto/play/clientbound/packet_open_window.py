@@ -2,19 +2,20 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketOpenWindow(Packet):
 	__slots__ = ( 'id', 'entityId', 'inventoryType', 'slotCount', 'windowId', 'windowTitle' )
 	
-	entityId : Union[int, None]
+	entityId : Union[None, int]
 	inventoryType : Union[int,str]
 	slotCount : int
 	windowId : int
 	windowTitle : str
 
 	def __init__(self, proto:int,
-		entityId:Union[int, None]=None,
+		entityId:Union[None, int]=None,
 		inventoryType:Union[int,str]=None,
 		slotCount:int=None,
 		windowId:int=None,

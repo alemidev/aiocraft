@@ -2,12 +2,13 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketMapChunk(Packet):
 	__slots__ = ( 'id', 'biomes', 'bitMap', 'blockEntities', 'blockLight', 'blockLightMask', 'chunkData', 'emptyBlockLightMask', 'emptySkyLightMask', 'groundUp', 'heightmaps', 'ignoreOldData', 'skyLight', 'skyLightMask', 'trustEdges', 'x', 'z' )
 	
-	biomes : Union[Union[list, None],list]
+	biomes : Union[Union[None, list],list]
 	bitMap : Union[int,list]
 	blockEntities : list
 	blockLight : list
@@ -25,7 +26,7 @@ class PacketMapChunk(Packet):
 	z : int
 
 	def __init__(self, proto:int,
-		biomes:Union[Union[list, None],list]=None,
+		biomes:Union[Union[None, list],list]=None,
 		bitMap:Union[int,list]=None,
 		blockEntities:list=None,
 		blockLight:list=None,

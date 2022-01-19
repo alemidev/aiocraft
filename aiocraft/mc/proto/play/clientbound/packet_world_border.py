@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketWorldBorder(Packet):
@@ -10,11 +11,11 @@ class PacketWorldBorder(Packet):
 	action : int
 	new_radius : Union[None, float]
 	old_radius : Union[None, float]
-	portalBoundary : Union[int, None]
+	portalBoundary : Union[None, int]
 	radius : Union[None, float]
-	speed : Union[int, None]
-	warning_blocks : Union[int, None]
-	warning_time : Union[int, None]
+	speed : Union[None, int]
+	warning_blocks : Union[None, int]
+	warning_time : Union[None, int]
 	x : Union[None, float]
 	z : Union[None, float]
 
@@ -22,11 +23,11 @@ class PacketWorldBorder(Packet):
 		action:int=None,
 		new_radius:Union[None, float]=None,
 		old_radius:Union[None, float]=None,
-		portalBoundary:Union[int, None]=None,
+		portalBoundary:Union[None, int]=None,
 		radius:Union[None, float]=None,
-		speed:Union[int, None]=None,
-		warning_blocks:Union[int, None]=None,
-		warning_time:Union[int, None]=None,
+		speed:Union[None, int]=None,
+		warning_blocks:Union[None, int]=None,
+		warning_time:Union[None, int]=None,
 		x:Union[None, float]=None,
 		z:Union[None, float]=None,
 		**kwargs

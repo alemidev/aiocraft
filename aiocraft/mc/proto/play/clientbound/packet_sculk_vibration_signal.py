@@ -2,19 +2,20 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketSculkVibrationSignal(Packet):
 	__slots__ = ( 'id', 'arrivalTicks', 'destination', 'destinationIdentifier', 'sourcePosition' )
 	
 	arrivalTicks : int
-	destination : Union[int, tuple, None]
+	destination : Union[None, int, tuple]
 	destinationIdentifier : str
 	sourcePosition : tuple
 
 	def __init__(self, proto:int,
 		arrivalTicks:int=None,
-		destination:Union[int, tuple, None]=None,
+		destination:Union[None, int, tuple]=None,
 		destinationIdentifier:str=None,
 		sourcePosition:tuple=None,
 		**kwargs

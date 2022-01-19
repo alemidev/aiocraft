@@ -2,13 +2,14 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketLogin(Packet):
 	__slots__ = ( 'id', 'difficulty', 'dimension', 'dimensionCodec', 'enableRespawnScreen', 'entityId', 'gameMode', 'hashedSeed', 'isDebug', 'isFlat', 'isHardcore', 'levelType', 'maxPlayers', 'previousGameMode', 'reducedDebugInfo', 'simulationDistance', 'viewDistance', 'worldName', 'worldNames' )
 	
 	difficulty : int
-	dimension : Union[int,dict,str]
+	dimension : Union[dict,int,str]
 	dimensionCodec : dict
 	enableRespawnScreen : bool
 	entityId : int
@@ -28,7 +29,7 @@ class PacketLogin(Packet):
 
 	def __init__(self, proto:int,
 		difficulty:int=None,
-		dimension:Union[int,dict,str]=None,
+		dimension:Union[dict,int,str]=None,
 		dimensionCodec:dict=None,
 		enableRespawnScreen:bool=None,
 		entityId:int=None,

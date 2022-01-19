@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketMap(Packet):
@@ -12,11 +13,11 @@ class PacketMap(Packet):
 	icons : Union[list,tuple]
 	itemDamage : int
 	locked : bool
-	rows : Union[int, None]
+	rows : Union[None, int]
 	scale : int
 	trackingPosition : bool
-	x : Union[int, None]
-	y : Union[int, None]
+	x : Union[None, int]
+	y : Union[None, int]
 
 	def __init__(self, proto:int,
 		columns:int=None,
@@ -24,11 +25,11 @@ class PacketMap(Packet):
 		icons:Union[list,tuple]=None,
 		itemDamage:int=None,
 		locked:bool=None,
-		rows:Union[int, None]=None,
+		rows:Union[None, int]=None,
 		scale:int=None,
 		trackingPosition:bool=None,
-		x:Union[int, None]=None,
-		y:Union[int, None]=None,
+		x:Union[None, int]=None,
+		y:Union[None, int]=None,
 		**kwargs
 	):
 		super().__init__(proto,

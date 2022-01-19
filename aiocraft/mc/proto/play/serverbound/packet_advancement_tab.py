@@ -2,17 +2,18 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketAdvancementTab(Packet):
 	__slots__ = ( 'id', 'action', 'tabId' )
 	
 	action : int
-	tabId : Union[str, None]
+	tabId : Union[None, str]
 
 	def __init__(self, proto:int,
 		action:int=None,
-		tabId:Union[str, None]=None,
+		tabId:Union[None, str]=None,
 		**kwargs
 	):
 		super().__init__(proto,

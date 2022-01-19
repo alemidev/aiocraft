@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketSetCreativeSlot(Packet):

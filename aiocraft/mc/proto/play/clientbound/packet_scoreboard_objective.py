@@ -2,21 +2,22 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketScoreboardObjective(Packet):
 	__slots__ = ( 'id', 'action', 'displayText', 'name', 'type' )
 	
 	action : int
-	displayText : Union[str, None]
+	displayText : Union[None, str]
 	name : str
-	type : Union[Union[str, None],Union[int, None]]
+	type : Union[Union[None, int],Union[None, str]]
 
 	def __init__(self, proto:int,
 		action:int=None,
-		displayText:Union[str, None]=None,
+		displayText:Union[None, str]=None,
 		name:str=None,
-		type:Union[Union[str, None],Union[int, None]]=None,
+		type:Union[Union[None, int],Union[None, str]]=None,
 		**kwargs
 	):
 		super().__init__(proto,

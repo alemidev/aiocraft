@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketSpawnEntity(Packet):
@@ -9,32 +10,32 @@ class PacketSpawnEntity(Packet):
 	
 	entityId : int
 	entityUUID : str
-	objectData : Union[int,dict]
+	objectData : Union[dict,int]
 	objectUUID : str
 	pitch : int
 	type : int
 	velocityX : int
 	velocityY : int
 	velocityZ : int
-	x : Union[int,float]
-	y : Union[int,float]
+	x : Union[float,int]
+	y : Union[float,int]
 	yaw : int
-	z : Union[int,float]
+	z : Union[float,int]
 
 	def __init__(self, proto:int,
 		entityId:int=None,
 		entityUUID:str=None,
-		objectData:Union[int,dict]=None,
+		objectData:Union[dict,int]=None,
 		objectUUID:str=None,
 		pitch:int=None,
 		type:int=None,
 		velocityX:int=None,
 		velocityY:int=None,
 		velocityZ:int=None,
-		x:Union[int,float]=None,
-		y:Union[int,float]=None,
+		x:Union[float,int]=None,
+		y:Union[float,int]=None,
 		yaw:int=None,
-		z:Union[int,float]=None,
+		z:Union[float,int]=None,
 		**kwargs
 	):
 		super().__init__(proto,

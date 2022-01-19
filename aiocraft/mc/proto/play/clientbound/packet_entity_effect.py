@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketEntityEffect(Packet):
@@ -11,14 +12,14 @@ class PacketEntityEffect(Packet):
 	duration : int
 	effectId : int
 	entityId : int
-	hideParticles : Union[int,bool]
+	hideParticles : Union[bool,int]
 
 	def __init__(self, proto:int,
 		amplifier:int=None,
 		duration:int=None,
 		effectId:int=None,
 		entityId:int=None,
-		hideParticles:Union[int,bool]=None,
+		hideParticles:Union[bool,int]=None,
 		**kwargs
 	):
 		super().__init__(proto,

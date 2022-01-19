@@ -2,13 +2,14 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketFacePlayer(Packet):
 	__slots__ = ( 'id', 'entityId', 'entity_feet_eyes', 'feet_eyes', 'isEntity', 'x', 'y', 'z' )
 	
-	entityId : Union[int, None]
-	entity_feet_eyes : Union[str, None]
+	entityId : Union[None, int]
+	entity_feet_eyes : Union[None, str]
 	feet_eyes : int
 	isEntity : bool
 	x : float
@@ -16,8 +17,8 @@ class PacketFacePlayer(Packet):
 	z : float
 
 	def __init__(self, proto:int,
-		entityId:Union[int, None]=None,
-		entity_feet_eyes:Union[str, None]=None,
+		entityId:Union[None, int]=None,
+		entity_feet_eyes:Union[None, str]=None,
 		feet_eyes:int=None,
 		isEntity:bool=None,
 		x:float=None,

@@ -2,14 +2,15 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketBlockPlace(Packet):
 	__slots__ = ( 'id', 'cursorX', 'cursorY', 'cursorZ', 'direction', 'hand', 'heldItem', 'insideBlock', 'location' )
 	
-	cursorX : Union[int,float]
-	cursorY : Union[int,float]
-	cursorZ : Union[int,float]
+	cursorX : Union[float,int]
+	cursorY : Union[float,int]
+	cursorZ : Union[float,int]
 	direction : int
 	hand : int
 	heldItem : dict
@@ -17,9 +18,9 @@ class PacketBlockPlace(Packet):
 	location : tuple
 
 	def __init__(self, proto:int,
-		cursorX:Union[int,float]=None,
-		cursorY:Union[int,float]=None,
-		cursorZ:Union[int,float]=None,
+		cursorX:Union[float,int]=None,
+		cursorY:Union[float,int]=None,
+		cursorZ:Union[float,int]=None,
 		direction:int=None,
 		hand:int=None,
 		heldItem:dict=None,

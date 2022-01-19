@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketRespawn(Packet):
@@ -9,7 +10,7 @@ class PacketRespawn(Packet):
 	
 	copyMetadata : bool
 	difficulty : int
-	dimension : Union[int,dict,str]
+	dimension : Union[dict,int,str]
 	gamemode : int
 	hashedSeed : int
 	isDebug : bool
@@ -21,7 +22,7 @@ class PacketRespawn(Packet):
 	def __init__(self, proto:int,
 		copyMetadata:bool=None,
 		difficulty:int=None,
-		dimension:Union[int,dict,str]=None,
+		dimension:Union[dict,int,str]=None,
 		gamemode:int=None,
 		hashedSeed:int=None,
 		isDebug:bool=None,

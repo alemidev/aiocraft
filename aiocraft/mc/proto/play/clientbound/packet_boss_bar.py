@@ -2,27 +2,28 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketBossBar(Packet):
 	__slots__ = ( 'id', 'action', 'color', 'dividers', 'entityUUID', 'flags', 'health', 'title' )
 	
 	action : int
-	color : Union[int, None]
-	dividers : Union[int, None]
+	color : Union[None, int]
+	dividers : Union[None, int]
 	entityUUID : str
-	flags : Union[int, None]
+	flags : Union[None, int]
 	health : Union[None, float]
-	title : Union[str, None]
+	title : Union[None, str]
 
 	def __init__(self, proto:int,
 		action:int=None,
-		color:Union[int, None]=None,
-		dividers:Union[int, None]=None,
+		color:Union[None, int]=None,
+		dividers:Union[None, int]=None,
 		entityUUID:str=None,
-		flags:Union[int, None]=None,
+		flags:Union[None, int]=None,
 		health:Union[None, float]=None,
-		title:Union[str, None]=None,
+		title:Union[None, str]=None,
 		**kwargs
 	):
 		super().__init__(proto,

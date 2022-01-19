@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketScoreboardScore(Packet):
@@ -10,13 +11,13 @@ class PacketScoreboardScore(Packet):
 	action : int
 	itemName : str
 	scoreName : str
-	value : Union[int, None]
+	value : Union[None, int]
 
 	def __init__(self, proto:int,
 		action:int=None,
 		itemName:str=None,
 		scoreName:str=None,
-		value:Union[int, None]=None,
+		value:Union[None, int]=None,
 		**kwargs
 	):
 		super().__init__(proto,

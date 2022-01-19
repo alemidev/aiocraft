@@ -2,23 +2,24 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketCombatEvent(Packet):
 	__slots__ = ( 'id', 'duration', 'entityId', 'event', 'message', 'playerId' )
 	
-	duration : Union[int, None]
-	entityId : Union[int, None]
+	duration : Union[None, int]
+	entityId : Union[None, int]
 	event : int
-	message : Union[str, None]
-	playerId : Union[int, None]
+	message : Union[None, str]
+	playerId : Union[None, int]
 
 	def __init__(self, proto:int,
-		duration:Union[int, None]=None,
-		entityId:Union[int, None]=None,
+		duration:Union[None, int]=None,
+		entityId:Union[None, int]=None,
 		event:int=None,
-		message:Union[str, None]=None,
-		playerId:Union[int, None]=None,
+		message:Union[None, str]=None,
+		playerId:Union[None, int]=None,
 		**kwargs
 	):
 		super().__init__(proto,

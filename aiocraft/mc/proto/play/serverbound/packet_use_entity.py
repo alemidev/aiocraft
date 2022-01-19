@@ -2,12 +2,13 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketUseEntity(Packet):
 	__slots__ = ( 'id', 'hand', 'mouse', 'sneaking', 'target', 'x', 'y', 'z' )
 	
-	hand : Union[int, None]
+	hand : Union[None, int]
 	mouse : int
 	sneaking : bool
 	target : int
@@ -16,7 +17,7 @@ class PacketUseEntity(Packet):
 	z : Union[None, float]
 
 	def __init__(self, proto:int,
-		hand:Union[int, None]=None,
+		hand:Union[None, int]=None,
 		mouse:int=None,
 		sneaking:bool=None,
 		target:int=None,

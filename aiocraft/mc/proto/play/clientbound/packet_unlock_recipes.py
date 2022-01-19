@@ -2,6 +2,7 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketUnlockRecipes(Packet):
@@ -17,7 +18,7 @@ class PacketUnlockRecipes(Packet):
 	notification : bool
 	recipes : list
 	recipes1 : list
-	recipes2 : Union[Union[list, None],list]
+	recipes2 : Union[Union[None, list],list]
 	smeltingBookOpen : bool
 	smokerBookOpen : bool
 
@@ -32,7 +33,7 @@ class PacketUnlockRecipes(Packet):
 		notification:bool=None,
 		recipes:list=None,
 		recipes1:list=None,
-		recipes2:Union[Union[list, None],list]=None,
+		recipes2:Union[Union[None, list],list]=None,
 		smeltingBookOpen:bool=None,
 		smokerBookOpen:bool=None,
 		**kwargs

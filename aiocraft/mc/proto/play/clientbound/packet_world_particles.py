@@ -2,12 +2,13 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketWorldParticles(Packet):
 	__slots__ = ( 'id', 'data', 'longDistance', 'offsetX', 'offsetY', 'offsetZ', 'particleData', 'particleId', 'particles', 'x', 'y', 'z' )
 	
-	data : Union[Union[list, None],Union[int, dict, None],bytes]
+	data : Union[Union[None, dict, int],Union[None, list],bytes]
 	longDistance : bool
 	offsetX : float
 	offsetY : float
@@ -20,7 +21,7 @@ class PacketWorldParticles(Packet):
 	z : float
 
 	def __init__(self, proto:int,
-		data:Union[Union[list, None],Union[int, dict, None],bytes]=None,
+		data:Union[Union[None, dict, int],Union[None, list],bytes]=None,
 		longDistance:bool=None,
 		offsetX:float=None,
 		offsetY:float=None,

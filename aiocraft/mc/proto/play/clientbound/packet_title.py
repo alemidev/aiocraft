@@ -2,23 +2,24 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketTitle(Packet):
 	__slots__ = ( 'id', 'action', 'fadeIn', 'fadeOut', 'stay', 'text' )
 	
 	action : int
-	fadeIn : Union[int, None]
-	fadeOut : Union[int, None]
-	stay : Union[int, None]
-	text : Union[str, None]
+	fadeIn : Union[None, int]
+	fadeOut : Union[None, int]
+	stay : Union[None, int]
+	text : Union[None, str]
 
 	def __init__(self, proto:int,
 		action:int=None,
-		fadeIn:Union[int, None]=None,
-		fadeOut:Union[int, None]=None,
-		stay:Union[int, None]=None,
-		text:Union[str, None]=None,
+		fadeIn:Union[None, int]=None,
+		fadeOut:Union[None, int]=None,
+		stay:Union[None, int]=None,
+		text:Union[None, str]=None,
 		**kwargs
 	):
 		super().__init__(proto,

@@ -2,34 +2,35 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketTeams(Packet):
 	__slots__ = ( 'id', 'collisionRule', 'color', 'formatting', 'friendlyFire', 'mode', 'name', 'nameTagVisibility', 'players', 'prefix', 'suffix', 'team' )
 	
-	collisionRule : Union[str, None]
-	color : Union[int, None]
-	formatting : Union[int, None]
-	friendlyFire : Union[int, None]
+	collisionRule : Union[None, str]
+	color : Union[None, int]
+	formatting : Union[None, int]
+	friendlyFire : Union[None, int]
 	mode : int
-	name : Union[str, None]
-	nameTagVisibility : Union[str, None]
-	players : Union[list, None]
-	prefix : Union[str, None]
-	suffix : Union[str, None]
+	name : Union[None, str]
+	nameTagVisibility : Union[None, str]
+	players : Union[None, list]
+	prefix : Union[None, str]
+	suffix : Union[None, str]
 	team : str
 
 	def __init__(self, proto:int,
-		collisionRule:Union[str, None]=None,
-		color:Union[int, None]=None,
-		formatting:Union[int, None]=None,
-		friendlyFire:Union[int, None]=None,
+		collisionRule:Union[None, str]=None,
+		color:Union[None, int]=None,
+		formatting:Union[None, int]=None,
+		friendlyFire:Union[None, int]=None,
 		mode:int=None,
-		name:Union[str, None]=None,
-		nameTagVisibility:Union[str, None]=None,
-		players:Union[list, None]=None,
-		prefix:Union[str, None]=None,
-		suffix:Union[str, None]=None,
+		name:Union[None, str]=None,
+		nameTagVisibility:Union[None, str]=None,
+		players:Union[None, list]=None,
+		prefix:Union[None, str]=None,
+		suffix:Union[None, str]=None,
 		team:str=None,
 		**kwargs
 	):

@@ -2,12 +2,13 @@
 
 from typing import Tuple, List, Dict, Union, Optional
 from ....packet import Packet
+from ....definitions import *
 from ....types import *
 
 class PacketNamedSoundEffect(Packet):
 	__slots__ = ( 'id', 'pitch', 'soundCategory', 'soundName', 'volume', 'x', 'y', 'z' )
 	
-	pitch : Union[int,float]
+	pitch : Union[float,int]
 	soundCategory : int
 	soundName : str
 	volume : float
@@ -16,7 +17,7 @@ class PacketNamedSoundEffect(Packet):
 	z : int
 
 	def __init__(self, proto:int,
-		pitch:Union[int,float]=None,
+		pitch:Union[float,int]=None,
 		soundCategory:int=None,
 		soundName:str=None,
 		volume:float=None,
