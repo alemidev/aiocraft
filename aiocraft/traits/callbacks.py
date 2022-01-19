@@ -24,6 +24,7 @@ class CallbacksHolder:
 		if key not in self._callbacks:
 			self._callbacks[key] = []
 		self._callbacks[key].append(callback)
+		return callback
 
 	def trigger(self, key:Any) -> List[Callable]:
 		if key not in self._callbacks:
