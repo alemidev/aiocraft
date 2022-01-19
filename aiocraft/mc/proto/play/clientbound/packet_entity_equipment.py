@@ -10,13 +10,13 @@ class PacketEntityEquipment(Packet):
 	
 	entityId : int
 	equipments : bytes
-	item : dict
+	item : Item
 	slot : int
 
 	def __init__(self, proto:int,
 		entityId:int=None,
 		equipments:bytes=None,
-		item:dict=None,
+		item:Item=None,
 		slot:int=None,
 		**kwargs
 	):

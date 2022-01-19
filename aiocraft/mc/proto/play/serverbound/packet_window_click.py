@@ -10,8 +10,8 @@ class PacketWindowClick(Packet):
 	
 	action : int
 	changedSlots : list
-	cursorItem : dict
-	item : dict
+	cursorItem : Item
+	item : Item
 	mode : int
 	mouseButton : int
 	slot : int
@@ -21,8 +21,8 @@ class PacketWindowClick(Packet):
 	def __init__(self, proto:int,
 		action:int=None,
 		changedSlots:list=None,
-		cursorItem:dict=None,
-		item:dict=None,
+		cursorItem:Item=None,
+		item:Item=None,
 		mode:int=None,
 		mouseButton:int=None,
 		slot:int=None,

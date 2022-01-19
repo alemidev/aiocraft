@@ -8,7 +8,7 @@ from ....types import *
 class PacketWorldParticles(Packet):
 	__slots__ = ( 'id', 'data', 'longDistance', 'offsetX', 'offsetY', 'offsetZ', 'particleData', 'particleId', 'particles', 'x', 'y', 'z' )
 	
-	data : Union[Union[None, dict, int],Union[None, list],bytes]
+	data : Union[Union[Item, None, int],Union[None, list],bytes]
 	longDistance : bool
 	offsetX : float
 	offsetY : float
@@ -21,7 +21,7 @@ class PacketWorldParticles(Packet):
 	z : float
 
 	def __init__(self, proto:int,
-		data:Union[Union[None, dict, int],Union[None, list],bytes]=None,
+		data:Union[Union[Item, None, int],Union[None, list],bytes]=None,
 		longDistance:bool=None,
 		offsetX:float=None,
 		offsetY:float=None,

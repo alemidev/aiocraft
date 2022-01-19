@@ -9,14 +9,14 @@ class PacketEditBook(Packet):
 	__slots__ = ( 'id', 'hand', 'new_book', 'pages', 'signing', 'title' )
 	
 	hand : int
-	new_book : dict
+	new_book : Item
 	pages : list
 	signing : bool
 	title : tuple
 
 	def __init__(self, proto:int,
 		hand:int=None,
-		new_book:dict=None,
+		new_book:Item=None,
 		pages:list=None,
 		signing:bool=None,
 		title:tuple=None,

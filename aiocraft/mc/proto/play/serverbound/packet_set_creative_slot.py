@@ -8,11 +8,11 @@ from ....types import *
 class PacketSetCreativeSlot(Packet):
 	__slots__ = ( 'id', 'item', 'slot' )
 	
-	item : dict
+	item : Item
 	slot : int
 
 	def __init__(self, proto:int,
-		item:dict=None,
+		item:Item=None,
 		slot:int=None,
 		**kwargs
 	):

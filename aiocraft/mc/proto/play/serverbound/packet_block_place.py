@@ -13,7 +13,7 @@ class PacketBlockPlace(Packet):
 	cursorZ : Union[float,int]
 	direction : int
 	hand : int
-	heldItem : dict
+	heldItem : Item
 	insideBlock : bool
 	location : tuple
 
@@ -23,7 +23,7 @@ class PacketBlockPlace(Packet):
 		cursorZ:Union[float,int]=None,
 		direction:int=None,
 		hand:int=None,
-		heldItem:dict=None,
+		heldItem:Item=None,
 		insideBlock:bool=None,
 		location:tuple=None,
 		**kwargs

@@ -111,7 +111,7 @@ HINT_MAP = {
 	"string": 'str',
 	"nbt": 'dict',
 	"optionalNbt": 'Optional[dict]',
-	"slot": 'dict',
+	"slot": 'Item',
 	"position": 'tuple',
 	"entityMetadata": 'dict',
 	"restBuffer": 'bytes',

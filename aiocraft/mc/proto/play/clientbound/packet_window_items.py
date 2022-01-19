@@ -8,13 +8,13 @@ from ....types import *
 class PacketWindowItems(Packet):
 	__slots__ = ( 'id', 'carriedItem', 'items', 'stateId', 'windowId' )
 	
-	carriedItem : dict
+	carriedItem : Item
 	items : list
 	stateId : int
 	windowId : int
 
 	def __init__(self, proto:int,
-		carriedItem:dict=None,
+		carriedItem:Item=None,
 		items:list=None,
 		stateId:int=None,
 		windowId:int=None,
