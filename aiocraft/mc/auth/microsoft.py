@@ -1,8 +1,11 @@
+import re
 import uuid
+import logging
 
 from urllib.parse import urlencode
 from typing import Dict, Optional, Any
 
+from yarl import URL
 import aiohttp
 
 from ..definitions import GameProfile
@@ -26,6 +29,7 @@ class MicrosoftAuthenticator(AuthInterface):
 	accessToken : str
 	selectedProfile : GameProfile
 
+	MINECRAFT_CLIENT_ID = "00000000402b5328"
 	OAUTH_LOGIN = "https://login.live.com/oauth20"
 	XBL_LOGIN = "https://user.auth.xboxlive.com/user/authenticate"
 	XSTS_LOGIN = "https://xsts.auth.xboxlive.com/xsts/authorize"
@@ -59,15 +63,14 @@ class MicrosoftAuthenticator(AuthInterface):
 			f"&state={state}"
 		)
 
-	# TODO implement auth directly from credentials
-
-	async def authenticate(self, code:str, state:str=""): # TODO nicer way to get code?
+	async def login(self, code:str): # TODO nicer way to get code?
 		await self._ms_auth(code)
 		await self._xbl_auth()
 		await self._xsts_auth()
 		await self._mc_auth()
 		await self.fetch_mcstore()
 		await self.fetch_profile()
+		logging.info("Successfully logged into Microsoft account")
 
 	async def refresh(self):
 		if not self.ms_refresh_token:
@@ -76,9 +79,11 @@ class MicrosoftAuthenticator(AuthInterface):
 		await self._xbl_auth()
 		await self._xsts_auth()
 		await self._mc_auth()
+		logging.info("Successfully refreshed Microsoft token")
 
 	async def _ms_auth(self, code:str=""):
 		"""Authorize Microsoft account"""
+		logging.debug("Authenticating Microsoft account")
 		payload = {
 			"client_id": self.client_id,
 			"client_secret": self.client_secret,
@@ -104,6 +109,7 @@ class MicrosoftAuthenticator(AuthInterface):
 		"""Authorize with XBox Live"""
 		if not self.ms_token:
 			raise InvalidStateError("Missing MS access token")
+		logging.debug("Authenticating against XBox Live")
 		auth_response = await self._post(
 			self.XBL_LOGIN,
 			headers={
@@ -127,6 +133,7 @@ class MicrosoftAuthenticator(AuthInterface):
 		"""Authenticate with XBox Security Tokens"""
 		if not self.xbl_token:
 			raise InvalidStateError("Missing XBL Token")
+		logging.debug("Authenticating against XSTS")
 		auth_response = await self._post(
 			self.XSTS_LOGIN,
 			headers={
@@ -154,6 +161,7 @@ class MicrosoftAuthenticator(AuthInterface):
 			raise InvalidStateError("Missing userhash")
 		if not self.xsts_token:
 			raise InvalidStateError("Missing XSTS Token")
+		logging.debug("Authenticating against Minecraft")
 		auth_response = await self._post(
 			self.MINECRAFT_API + "/authentication/login_with_xbox",
 			headers={
@@ -168,6 +176,7 @@ class MicrosoftAuthenticator(AuthInterface):
 
 	async def fetch_mcstore(self):
 		"""Get the store information"""
+		logging.debug("Fetching MC Store")
 		self.mcstore = await self._get(
 			self.MINECRAFT_API + "/entitlements/mcstore",
 			headers={ "Authorization": f"Bearer {self.access_token}" },
@@ -175,6 +184,7 @@ class MicrosoftAuthenticator(AuthInterface):
 
 	async def fetch_profile(self):
 		"""Get player profile"""
+		logging.debug("Fetching profile")
 		p = await self._get(
 			self.MINECRAFT_API + "/minecraft/profile",
 			headers={ "Authorization": f"Bearer {self.access_token}" },
