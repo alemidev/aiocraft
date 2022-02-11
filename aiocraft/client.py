@@ -12,7 +12,7 @@ from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator
 from .dispatcher import Dispatcher
 from .traits import CallbacksHolder, Runnable
 from .mc.packet import Packet
-from .mc.token import Token, AuthException
+from .mc.auth import AuthInterface, AuthException, MojangToken
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
 from .mc.proto.handshaking.serverbound import PacketSetProtocol
 from .mc.proto.play.serverbound import PacketKeepAlive as PacketKeepAliveResponse
@@ -44,7 +44,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 
 	username:Optional[str]
 	password:Optional[str]
-	token:Optional[Token]
+	token:Optional[AuthInterface]
 
 	dispatcher : Dispatcher
 	_processing : bool
@@ -60,7 +60,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		port:int = 25565,
 		username:Optional[str] = None,
 		password:Optional[str] = None,
-		token:Optional[Token] = None,
+		token:Optional[AuthInterface] = None,
 		online_mode:bool = True,
 		**kwargs
 	):
@@ -129,7 +129,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 					if not self.username and not self.password:
 						raise e # we don't have credentials to make a new token, nothing we can really do here
 		if self.username and self.password:
-			self.token = await Token.authenticate(self.username, self.password)
+			self.token = await MojangToken.login(self.username, self.password)
 			self._logger.info("Authenticated from credentials")
 			self._authenticated = True
 			return

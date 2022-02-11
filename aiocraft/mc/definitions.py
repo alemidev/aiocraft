@@ -27,6 +27,17 @@ class Gamemode(Enum):
 	ADVENTURE = 2
 	SPECTATOR = 3
 
+@dataclass
+class GameProfile:
+	id : str
+	name : str
+
+	def as_dict(self):
+		return {
+			"id": self.id,
+			"name": self.name
+		}
+
 class EnchantmentType(Enum):
 	protection            = 0
 	fire_protection       = 1

@@ -8,30 +8,11 @@ from typing import Optional
 
 import aiohttp
 
-class AuthException(Exception):
-	action : str
-	type : str
-	message : str
-
-	def __init__(self, action:str, data:dict):
-		self.type = data["error"] if data and "error" in data else "Unknown"
-		self.message = data["errorMessage"] if data and "errorMessage" in data else "Token or credentials invalid"
-		self.action = action.rsplit('/',1)[1]
-		super().__init__(f"[{self.action}] {self.type} : {self.message}")
+from .interface import AuthInterface
+from ..definitions import GameProfile
 
 @dataclass
-class GameProfile:
-	id : str
-	name : str
-
-	def as_dict(self):
-		return {
-			"id": self.id,
-			"name": self.name
-		}
-
-@dataclass
-class Token:
+class MojangToken(AuthInterface):
 	username : str
 	accessToken : str
 	clientToken : str
@@ -40,7 +21,6 @@ class Token:
 	AGENT_NAME = "Minecraft"
 	AGENT_VERSION = 1
 	AUTH_SERVER = "https://authserver.mojang.com"
-	SESSION_SERVER = "https://sessionserver.mojang.com/session/minecraft"
 	CONTENT_TYPE = "application/json"
 	HEADERS = {"content-type": CONTENT_TYPE}
 
@@ -83,7 +63,7 @@ class Token:
 		)
 
 	@classmethod
-	async def authenticate(cls, username, password, invalidate=False):
+	async def login(cls, username, password, invalidate=False):
 		payload = {
 			"agent": {
 				"name": cls.AGENT_NAME,
@@ -107,16 +87,24 @@ class Token:
 
 	@classmethod
 	async def sign_out(cls, username:str, password:str) -> dict:
-		return await cls._post(cls.AUTH_SERVER + "/signout", {
-			"username": username,
-			"password": password
-		})
+		return await cls._post(
+			cls.AUTH_SERVER + "/signout",
+			headers=cls.HEADERS,
+			json={
+				"username": username,
+				"password": password
+			}
+		)
 
 	async def refresh(self, requestUser:bool = False) -> dict:
-		res = await self._post(self.AUTH_SERVER + "/refresh", {
-			"accessToken": self.accessToken,
-			"clientToken": self.clientToken
-		})
+		res = await self._post(
+			self.AUTH_SERVER + "/refresh",
+			headers=self.HEADERS,
+			json={
+				"accessToken": self.accessToken,
+				"clientToken": self.clientToken
+			}
+		)
 
 		self.accessToken = res["accessToken"]
 		self.clientToken = res["clientToken"]
@@ -131,42 +119,18 @@ class Token:
 		payload = { "accessToken": self.accessToken }
 		if clientToken:
 			payload["clientToken"] = self.clientToken
-		return await self._post(self.AUTH_SERVER + "/validate", payload)
+		return await self._post(
+			self.AUTH_SERVER + "/validate",
+			headers=self.HEADERS,
+			json=payload,
+		)
 
 	async def invalidate(self) -> dict:
-		return await self._post(self.AUTH_SERVER + "/invalidate", {
-			"accessToken": self.accessToken,
-			"clientToken": self.clientToken
-		})
-
-	async def join(self, server_id) -> dict:
-		return await self._post(self.SESSION_SERVER + "/join", {
-			"serverId": server_id,
-			"accessToken": self.accessToken,
-			"selectedProfile": self.selectedProfile.as_dict()
-		})
-
-	@classmethod
-	async def server_join(cls, username:str, serverId:str, ip:Optional[str] = None):
-		params = {"username":username, "serverId":serverId}
-		if ip:
-			params["ip"] = ip
-		return await cls._get(cls.SESSION_SERVER + "/hasJoined", params)
-
-	@classmethod
-	async def _post(cls, endpoint:str, data:dict) -> dict:
-		async with aiohttp.ClientSession() as sess:
-			async with sess.post(endpoint, headers=cls.HEADERS, json=data) as res:
-				data = await res.json(content_type=None)
-				if res.status >= 400:
-					raise AuthException(endpoint, data)
-				return data
-
-	@classmethod
-	async def _get(cls, endpoint:str, data:dict) -> dict:
-		async with aiohttp.ClientSession() as sess:
-			async with sess.get(endpoint, headers=cls.HEADERS, params=data) as res:
-				data = await res.json(content_type=None)
-				if res.status >= 400:
-					raise AuthException(endpoint, data)
-				return data
+		return await self._post(
+			self.AUTH_SERVER + "/invalidate",
+			headers=self.HEADERS,
+			json= {
+				"accessToken": self.accessToken,
+				"clientToken": self.clientToken
+			}
+		)
