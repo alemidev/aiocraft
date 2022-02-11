@@ -26,6 +26,11 @@ class MicrosoftAuthenticator(AuthInterface):
 	accessToken : str
 	selectedProfile : GameProfile
 
+	OAUTH_LOGIN = "https://login.live.com/oauth20"
+	XBL_LOGIN = "https://user.auth.xboxlive.com/user/authenticate"
+	XSTS_LOGIN = "https://xsts.auth.xboxlive.com/xsts/authorize"
+	MINECRAFT_API = "https://api.minecraftservices.com"
+
 	def __init__(self,
 		client_id:str,
 		client_secret:str,
@@ -46,8 +51,8 @@ class MicrosoftAuthenticator(AuthInterface):
 	def url(self, state:str=""):
 		"""Builds MS OAuth url for the user to login"""
 		return (
-			f"https://login.live.com/oauth20_authorize.srf?" +
-			f"client_id={self.client_id}" +
+			self.OAUTH_LOGIN + "_authorize.srf" +
+			f"?client_id={self.client_id}" +
 			f"&response_type=code" +
 			f"&redirect_uri={self.redirect_uri}" +
 			f"&scope=XboxLive.signin%20offline_access" +
@@ -87,7 +92,7 @@ class MicrosoftAuthenticator(AuthInterface):
 		else:
 			raise InvalidStateError("Missing auth code and refresh token")
 		auth_response = await self._post(
-			"https://login.live.com/oauth20_token.srf", 
+			self.OAUTH_LOGIN + "_token.srf", 
 			headers={ "Content-Type": "application/x-www-form-urlencoded" },
 			data=urlencode(payload)
 		)
@@ -100,7 +105,7 @@ class MicrosoftAuthenticator(AuthInterface):
 		if not self.ms_token:
 			raise InvalidStateError("Missing MS access token")
 		auth_response = await self._post(
-			"https://user.auth.xboxlive.com/user/authenticate",
+			self.XBL_LOGIN,
 			headers={
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -123,7 +128,7 @@ class MicrosoftAuthenticator(AuthInterface):
 		if not self.xbl_token:
 			raise InvalidStateError("Missing XBL Token")
 		auth_response = await self._post(
-			"https://xsts.auth.xboxlive.com/xsts/authorize",
+			self.XSTS_LOGIN,
 			headers={
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -150,7 +155,7 @@ class MicrosoftAuthenticator(AuthInterface):
 		if not self.xsts_token:
 			raise InvalidStateError("Missing XSTS Token")
 		auth_response = await self._post(
-			"https://api.minecraftservices.com/authentication/login_with_xbox",
+			self.MINECRAFT_API + "/authentication/login_with_xbox",
 			headers={
 				"Content-Type": "application/json",
 				"Accept": "application/json"
@@ -164,14 +169,14 @@ class MicrosoftAuthenticator(AuthInterface):
 	async def fetch_mcstore(self):
 		"""Get the store information"""
 		self.mcstore = await self._get(
-			"https://api.minecraftservices.com/entitlements/mcstore",
+			self.MINECRAFT_API + "/entitlements/mcstore",
 			headers={ "Authorization": f"Bearer {self.access_token}" },
 		)
 
 	async def fetch_profile(self):
 		"""Get player profile"""
 		p = await self._get(
-			"https://api.minecraftservices.com/minecraft/profile",
+			self.MINECRAFT_API + "/minecraft/profile",
 			headers={ "Authorization": f"Bearer {self.access_token}" },
 		)
 		self.profile = GameProfile(id=p['id'], name=p['name'])
