@@ -52,6 +52,10 @@ class MicrosoftAuthenticator(AuthInterface):
 		self.accessToken = ''
 		self.selectedProfile = GameProfile(id='', name='')
 
+	@property
+	def refreshable(self) -> bool:
+		return self.ms_refresh_token is not None
+
 	def url(self, state:str=""):
 		"""Builds MS OAuth url for the user to login"""
 		return (
@@ -64,22 +68,25 @@ class MicrosoftAuthenticator(AuthInterface):
 		)
 
 	async def login(self, code:str): # TODO nicer way to get code?
-		await self._ms_auth(code)
-		await self._xbl_auth()
-		await self._xsts_auth()
-		await self._mc_auth()
-		await self.fetch_mcstore()
+		self._full_auth(code)
 		await self.fetch_profile()
 		logging.info("Successfully logged into Microsoft account")
 
 	async def refresh(self):
 		if not self.ms_refresh_token:
-			raise InvalidStateError("Missing MS refresh token")
-		await self._ms_auth()
+			raise AuthException("Missing refresh token")
+		await self._full_auth()
+		await self.fetch_profile()
+		logging.info("Successfully refreshed Microsoft token")
+
+	async def validate(self):
+		await self.fetch_profile()
+
+	async def _full_auth(self, code:str=''):
+		await self._ms_auth(code)
 		await self._xbl_auth()
 		await self._xsts_auth()
 		await self._mc_auth()
-		logging.info("Successfully refreshed Microsoft token")
 
 	async def _ms_auth(self, code:str=""):
 		"""Authorize Microsoft account"""
@@ -172,14 +179,15 @@ class MicrosoftAuthenticator(AuthInterface):
 				"identityToken": f"XBL3.0 x={self.userhash};{self.xsts_token}"
 			},
 		)
-		self.access_token = auth_response['access_token']
+		self.accessToken = auth_response['access_token']
+		logging.info("Received access token : %s", self.accessToken)
 
 	async def fetch_mcstore(self):
 		"""Get the store information"""
 		logging.debug("Fetching MC Store")
 		self.mcstore = await self._get(
 			self.MINECRAFT_API + "/entitlements/mcstore",
-			headers={ "Authorization": f"Bearer {self.access_token}" },
+			headers={ "Authorization": f"Bearer {self.accessToken}" },
 		)
 
 	async def fetch_profile(self):
@@ -187,6 +195,6 @@ class MicrosoftAuthenticator(AuthInterface):
 		logging.debug("Fetching profile")
 		p = await self._get(
 			self.MINECRAFT_API + "/minecraft/profile",
-			headers={ "Authorization": f"Bearer {self.access_token}" },
+			headers={ "Authorization": f"Bearer {self.accessToken}" },
 		)
-		self.profile = GameProfile(id=p['id'], name=p['name'])
+		self.selectedProfile = GameProfile(id=p['id'], name=p['name'])
