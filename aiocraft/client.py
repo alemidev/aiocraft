@@ -12,7 +12,7 @@ from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator
 from .dispatcher import Dispatcher
 from .traits import CallbacksHolder, Runnable
 from .mc.packet import Packet
-from .mc.auth import AuthInterface, AuthException, MojangToken
+from .mc.auth import AuthInterface, AuthException, MojangToken, MicrosoftAuthenticator
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
 from .mc.proto.handshaking.serverbound import PacketSetProtocol
 from .mc.proto.play.serverbound import PacketKeepAlive as PacketKeepAliveResponse
@@ -42,9 +42,8 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	port:int
 	options:ClientOptions
 
-	username:Optional[str]
-	password:Optional[str]
-	token:Optional[AuthInterface]
+	_authenticator:AuthInterface
+	code:str
 
 	dispatcher : Dispatcher
 	_processing : bool
@@ -56,27 +55,28 @@ class MinecraftClient(CallbacksHolder, Runnable):
 
 	def __init__(
 		self,
-		host:str,
-		port:int = 25565,
-		username:Optional[str] = None,
-		password:Optional[str] = None,
-		token:Optional[AuthInterface] = None,
+		server:str,
+		code:str,
 		online_mode:bool = True,
+		client_id:str = '', # TODO maybe hardcode defaults?
+		client_secret:str='',
+		redirect_uri:str='http://localhost',
 		**kwargs
 	):
 		super().__init__()
-		self.host = host
-		self.port = port
+		if ":" in server:
+			_host, _port = server.split(":", 1)
+			self.host = _host.strip()
+			self.port = int(_port)
+		else:
+			self.host = server.strip()
+			self.port = 25565
 
 		self.options = ClientOptions(**kwargs)
 
-		self.token = token
-		self.username = username
-		self.password = password
+		self.code = code
+		self._authenticator = MicrosoftAuthenticator(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
 		self.online_mode = online_mode
-
-		if self.online_mode and not self.token and not self.username and not self.password:
-			raise ValueError("Cannot instantiate an online-mode client without token or credentials")
 
 		self.dispatcher = Dispatcher()
 		self._processing = False
@@ -113,24 +113,17 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	async def authenticate(self):
 		if self._authenticated:
 			return # Don't spam Auth endpoint!
-		if self.token:
-			try:
-				await self.token.validate() # will raise an exc if token is invalid
-				self._authenticated = True
-				return
-			except AuthException:
-				try:
-					await self.token.refresh()
-					self._logger.warning("Refreshed Token")
-					self._authenticated = True
-					return
-				except AuthException as e:
-					self._logger.warning("Token is not refreshable : %s", e.message)
-					if not self.username and not self.password:
-						raise e # we don't have credentials to make a new token, nothing we can really do here
-		if self.username and self.password:
-			self.token = await MojangToken.login(self.username, self.password)
-			self._logger.info("Authenticated from credentials")
+		try:
+			await self._authenticator.validate() # will raise an exc if token is invalid
+			self._authenticated = True
+			return
+		except AuthException:
+			if self._authenticator.refreshable:
+				await self._authenticator.refresh()
+				self._logger.warning("Refreshed Token")
+			else:
+				await self._authenticator.login(self.code)
+				self._logger.info("Logged in with OAuth code")
 			self._authenticated = True
 			return
 		raise ValueError("No token or credentials to authenticate") # This should never happen
@@ -156,6 +149,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		await super().start()
 		if self.started:
 			return
+
 		self._processing = True
 		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
 		self._logger.info("Minecraft client started")
@@ -218,7 +212,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		await self.dispatcher.write(
 			PacketLoginStart(
 				340,
-				username=self.token.selectedProfile.name if self.online_mode and self.token else self.username
+				username=self._authenticator.selectedProfile.name if self.online_mode else self.code # TODO this is awful
 			)
 		)
 		return True
@@ -230,7 +224,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				if not self.online_mode:
 					self._logger.error("Cannot answer Encryption Request in offline mode")
 					return False
-				if not self.token:
+				if not self._authenticator:
 					self._logger.error("No available token to enable encryption")
 					return False
 				secret = encryption.generate_shared_secret()
@@ -241,7 +235,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				)
 				if packet.serverId != '-':
 					try:
-						await self.token.join(
+						await self._authenticator.join(
 							encryption.generate_verification_hash(
 								packet.serverId,
 								secret,
