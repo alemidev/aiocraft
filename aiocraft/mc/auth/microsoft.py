@@ -3,7 +3,7 @@ import uuid
 import logging
 
 from urllib.parse import urlencode
-from typing import Dict, Optional, Any
+from typing import Dict, List, Optional, Any
 
 from yarl import URL
 import aiohttp
@@ -19,15 +19,9 @@ class MicrosoftAuthenticator(AuthInterface):
 	client_secret : str
 	redirect_uri : str
 
-	ms_token : Optional[str]
-	ms_refresh_token : Optional[str]
-	xbl_token : Optional[str]
-	xsts_token : Optional[str]
-	userhash : Optional[str]
-
-	mcstore : dict
 	accessToken : str
 	selectedProfile : GameProfile
+	refreshToken : Optional[str]
 
 	MINECRAFT_CLIENT_ID = "00000000402b5328"
 	OAUTH_LOGIN = "https://login.live.com/oauth20"
@@ -43,18 +37,25 @@ class MicrosoftAuthenticator(AuthInterface):
 		self.client_id = client_id
 		self.client_secret = client_secret
 		self.redirect_uri = redirect_uri
-		self.ms_token = None
-		self.ms_refresh_token = None
-		self.xbl_token = None
-		self.xsts_token = None
-		self.userhash = None
-		self.mcstore = {}
+		self.refreshToken = None
 		self.accessToken = ''
 		self.selectedProfile = GameProfile(id='', name='')
 
+	def serialize(self) -> Dict[str, Any]:
+		return {
+			'accessToken': self.accessToken,
+			'refreshToken': self.refreshToken,
+			'selectedProfile': self.selectedProfile.as_dict(),
+		}
+
+	def deserialize(self, data:Dict[str, Any]):
+		self.accessToken = data['accessToken']
+		self.refreshToken = data['refreshToken']
+		self.selectedProfile = GameProfile(**data['selectedProfile'])
+
 	@property
 	def refreshable(self) -> bool:
-		return self.ms_refresh_token is not None
+		return self.refreshToken is not None
 
 	def url(self, state:str=""):
 		"""Builds MS OAuth url for the user to login"""
@@ -68,27 +69,24 @@ class MicrosoftAuthenticator(AuthInterface):
 		)
 
 	async def login(self, code:str): # TODO nicer way to get code?
-		self._full_auth(code)
-		await self.fetch_profile()
+		self.accessToken = await self.authenticate(code)
+		prof = await self.fetch_profile()
+		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
 		logging.info("Successfully logged into Microsoft account")
 
 	async def refresh(self):
-		if not self.ms_refresh_token:
+		if not self.refreshToken:
 			raise AuthException("Missing refresh token")
-		await self._full_auth()
-		await self.fetch_profile()
+		self.accessToken = await self.authenticate()
+		prof = await self.fetch_profile()
+		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
 		logging.info("Successfully refreshed Microsoft token")
 
 	async def validate(self):
-		await self.fetch_profile()
+		prof = await self.fetch_profile()
+		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
 
-	async def _full_auth(self, code:str=''):
-		await self._ms_auth(code)
-		await self._xbl_auth()
-		await self._xsts_auth()
-		await self._mc_auth()
-
-	async def _ms_auth(self, code:str=""):
+	async def authenticate(self, code:str="") -> str:
 		"""Authorize Microsoft account"""
 		logging.debug("Authenticating Microsoft account")
 		payload = {
@@ -99,8 +97,8 @@ class MicrosoftAuthenticator(AuthInterface):
 		}
 		if code:
 			payload['code'] = code
-		elif self.ms_refresh_token:
-			payload['refresh_token'] = self.ms_refresh_token
+		elif self.refreshToken:
+			payload['refreshToken'] = self.refreshToken
 		else:
 			raise InvalidStateError("Missing auth code and refresh token")
 		auth_response = await self._post(
@@ -108,14 +106,14 @@ class MicrosoftAuthenticator(AuthInterface):
 			headers={ "Content-Type": "application/x-www-form-urlencoded" },
 			data=urlencode(payload)
 		)
-		self.ms_token = auth_response['access_token']
-		self.ms_refresh_token = auth_response['refresh_token']
+		self.refreshToken = auth_response['refreshToken']
 		# maybe store expire_in and other stuff too? TODO
 
-	async def _xbl_auth(self):
+		ms_token = auth_response['access_token']
+		return await self._xbl_auth(ms_token)
+
+	async def _xbl_auth(self, ms_token:str) -> str:
 		"""Authorize with XBox Live"""
-		if not self.ms_token:
-			raise InvalidStateError("Missing MS access token")
 		logging.debug("Authenticating against XBox Live")
 		auth_response = await self._post(
 			self.XBL_LOGIN,
@@ -127,19 +125,17 @@ class MicrosoftAuthenticator(AuthInterface):
 				"Properties": {
 					"AuthMethod": "RPS",
 					"SiteName": "user.auth.xboxlive.com",
-					"RpsTicket": f"d={self.ms_token}"
+					"RpsTicket": f"d={ms_token}"
 				},
 				"RelyingParty": "http://auth.xboxlive.com",
 				"TokenType": "JWT"
 			}
 		)
-		self.userhash = auth_response["DisplayClaims"]["xui"][0]["uhs"]
-		self.xbl_token = auth_response["Token"]
+		xbl_token = auth_response["Token"]
+		return await self._xsts_auth(xbl_token)
 
-	async def _xsts_auth(self):
+	async def _xsts_auth(self, xbl_token:str) -> str:
 		"""Authenticate with XBox Security Tokens"""
-		if not self.xbl_token:
-			raise InvalidStateError("Missing XBL Token")
 		logging.debug("Authenticating against XSTS")
 		auth_response = await self._post(
 			self.XSTS_LOGIN,
@@ -150,24 +146,18 @@ class MicrosoftAuthenticator(AuthInterface):
 			json={
 				"Properties": {
 					"SandboxId": "RETAIL",
-					"UserTokens": [
-						self.xbl_token
-					]
+					"UserTokens": [ xbl_token ]
 				},
 				"RelyingParty": "rp://api.minecraftservices.com/",
 				"TokenType": "JWT"
 			}
 		)
-		self.xsts_token = auth_response["Token"]
-		if self.userhash != auth_response["DisplayClaims"]["xui"][0]["uhs"]:
-			raise InvalidStateError("userhash differs from XBL and XSTS")
+		xsts_token = auth_response["Token"]
+		userhash = auth_response["DisplayClaims"]["xui"][0]["uhs"]
+		return await self._mc_auth(userhash, xsts_token)
 
-	async def _mc_auth(self):
+	async def _mc_auth(self, userhash:str, xsts_token:str) -> str:
 		"""Authenticate with Minecraft"""
-		if not self.userhash:
-			raise InvalidStateError("Missing userhash")
-		if not self.xsts_token:
-			raise InvalidStateError("Missing XSTS Token")
 		logging.debug("Authenticating against Minecraft")
 		auth_response = await self._post(
 			self.MINECRAFT_API + "/authentication/login_with_xbox",
@@ -176,25 +166,23 @@ class MicrosoftAuthenticator(AuthInterface):
 				"Accept": "application/json"
 			},
 			json={
-				"identityToken": f"XBL3.0 x={self.userhash};{self.xsts_token}"
+				"identityToken": f"XBL3.0 x={userhash};{xsts_token}"
 			},
 		)
-		self.accessToken = auth_response['access_token']
-		logging.info("Received access token : %s", self.accessToken)
+		return auth_response['access_token']
 
-	async def fetch_mcstore(self):
+	async def fetch_mcstore(self) -> Dict[str, Any]:
 		"""Get the store information"""
 		logging.debug("Fetching MC Store")
-		self.mcstore = await self._get(
+		return await self._get(
 			self.MINECRAFT_API + "/entitlements/mcstore",
 			headers={ "Authorization": f"Bearer {self.accessToken}" },
 		)
 
-	async def fetch_profile(self):
+	async def fetch_profile(self) -> Dict[str, Any]:
 		"""Get player profile"""
 		logging.debug("Fetching profile")
-		p = await self._get(
+		return await self._get(
 			self.MINECRAFT_API + "/minecraft/profile",
 			headers={ "Authorization": f"Bearer {self.accessToken}" },
 		)
-		self.selectedProfile = GameProfile(id=p['id'], name=p['name'])

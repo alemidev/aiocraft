@@ -149,7 +149,6 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		await super().start()
 		if self.started:
 			return
-
 		self._processing = True
 		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
 		self._logger.info("Minecraft client started")
