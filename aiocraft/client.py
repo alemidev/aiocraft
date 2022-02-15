@@ -43,6 +43,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	options:ClientOptions
 
 	_authenticator:AuthInterface
+	_username:str
 	code:str
 
 	dispatcher : Dispatcher
@@ -58,6 +59,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		server:str,
 		code:str,
 		online_mode:bool = True,
+		username:str = '',
 		client_id:str = '', # TODO maybe hardcode defaults?
 		client_secret:str='',
 		redirect_uri:str='http://localhost',
@@ -75,6 +77,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		self.options = ClientOptions(**kwargs)
 
 		self.code = code
+		self._username = username
 		self._authenticator = MicrosoftAuthenticator(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
 		self.online_mode = online_mode
 
@@ -211,7 +214,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		await self.dispatcher.write(
 			PacketLoginStart(
 				340,
-				username=self._authenticator.selectedProfile.name if self.online_mode else self.code # TODO this is awful
+				username=self._authenticator.selectedProfile.name if self.online_mode else self._username
 			)
 		)
 		return True
