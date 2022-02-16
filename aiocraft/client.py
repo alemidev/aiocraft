@@ -42,7 +42,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	port:int
 	options:ClientOptions
 
-	_authenticator:AuthInterface
+	_authenticator:MicrosoftAuthenticator
 	_username:str
 	code:str
 
@@ -57,7 +57,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	def __init__(
 		self,
 		server:str,
-		code:str,
+		login_code:str = '',
 		online_mode:bool = True,
 		username:str = '',
 		client_id:str = '', # TODO maybe hardcode defaults?
@@ -76,7 +76,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 
 		self.options = ClientOptions(**kwargs)
 
-		self.code = code
+		self.code = login_code
 		self._username = username
 		self._authenticator = MicrosoftAuthenticator(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
 		self.online_mode = online_mode
@@ -118,18 +118,16 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			return # Don't spam Auth endpoint!
 		try:
 			await self._authenticator.validate() # will raise an exc if token is invalid
-			self._authenticated = True
-			return
 		except AuthException:
 			if self._authenticator.refreshable:
 				await self._authenticator.refresh()
 				self._logger.warning("Refreshed Token")
-			else:
+			elif self.code:
 				await self._authenticator.login(self.code)
 				self._logger.info("Logged in with OAuth code")
-			self._authenticated = True
-			return
-		raise ValueError("No token or credentials to authenticate") # This should never happen
+			else:
+				raise ValueError("No refreshable auth or code to login")
+		self._authenticated = True
 
 	async def change_server(self, server:str):
 		restart = self.started
