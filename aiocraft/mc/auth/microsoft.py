@@ -85,6 +85,7 @@ class MicrosoftAuthenticator(AuthInterface):
 	async def validate(self):
 		prof = await self.fetch_profile()
 		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
+		logging.info("Session validated : %s", self.selectedProfile)
 
 	async def authenticate(self, code:str="") -> str:
 		"""Authorize Microsoft account"""
@@ -106,7 +107,7 @@ class MicrosoftAuthenticator(AuthInterface):
 			headers={ "Content-Type": "application/x-www-form-urlencoded" },
 			data=urlencode(payload)
 		)
-		self.refreshToken = auth_response['refreshToken']
+		self.refreshToken = auth_response['refresh_token']
 		# maybe store expire_in and other stuff too? TODO
 
 		ms_token = auth_response['access_token']

@@ -95,6 +95,9 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	def connected(self) -> bool:
 		return self.started and self.dispatcher.connected
 
+	async def write(self, packet:Packet, wait:bool=False):
+		await self.dispatcher.write(packet, wait)
+
 	def on_connected(self) -> Callable:
 		def wrapper(fun):
 			self.register(ClientEvent.CONNECTED, fun)
@@ -172,6 +175,9 @@ class MinecraftClient(CallbacksHolder, Runnable):
 					await self.authenticate()
 				except AuthException as e:
 					self._logger.error(str(e))
+					break
+				except Exception as e:
+					self._logger.exception("Unexpected error while authenticating")
 					break
 			try:
 				packet_whitelist = self.callback_keys(filter=Packet) if self.options.use_packet_whitelist else set()

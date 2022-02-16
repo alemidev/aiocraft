@@ -23,6 +23,7 @@ class AuthInterface:
 	selectedProfile : GameProfile
 
 	SESSION_SERVER = "https://sessionserver.mojang.com/session/minecraft"
+	TIMEOUT = aiohttp.ClientTimeout(total=3)
 
 	# async def authenticate(self, user:str, pwd:str):
 	# 	raise NotImplementedError
@@ -50,7 +51,7 @@ class AuthInterface:
 
 	@classmethod
 	async def _post(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
-		async with aiohttp.ClientSession() as sess:
+		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as sess:
 			async with sess.post(endpoint, **kwargs) as res:
 				data = await res.json(content_type=None)
 				if res.status >= 400:
@@ -59,7 +60,7 @@ class AuthInterface:
 
 	@classmethod
 	async def _get(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
-		async with aiohttp.ClientSession() as sess:
+		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as sess:
 			async with sess.get(endpoint, **kwargs) as res:
 				data = await res.json(content_type=None)
 				if res.status >= 400:
