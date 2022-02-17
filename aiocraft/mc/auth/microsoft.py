@@ -94,12 +94,13 @@ class MicrosoftAuthenticator(AuthInterface):
 			"client_id": self.client_id,
 			"client_secret": self.client_secret,
 			"redirect_uri": self.redirect_uri,
-			"grant_type": "authorization_code",
 		}
 		if code:
 			payload['code'] = code
+			payload['grant_type'] = 'authorization_code'
 		elif self.refreshToken:
 			payload['refresh_token'] = self.refreshToken
+			payload['grant_type'] = 'refresh_token'
 		else:
 			raise InvalidStateError("Missing auth code and refresh token")
 		auth_response = await self._post(

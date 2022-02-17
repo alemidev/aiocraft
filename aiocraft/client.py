@@ -76,7 +76,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 
 		self.options = ClientOptions(**kwargs)
 
-		self.code = login_code
+		self.code = login_code or None # TODO put this directly in the authenticator maybe?
 		self._username = username
 		self._authenticator = MicrosoftAuthenticator(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
 		self.online_mode = online_mode
@@ -122,12 +122,13 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		try:
 			await self._authenticator.validate() # will raise an exc if token is invalid
 		except AuthException:
-			if self._authenticator.refreshable:
+			if self.code:
+				await self._authenticator.login(self.code)
+				self.code = None
+				self._logger.info("Logged in with OAuth code")
+			elif self._authenticator.refreshable:
 				await self._authenticator.refresh()
 				self._logger.warning("Refreshed Token")
-			elif self.code:
-				await self._authenticator.login(self.code)
-				self._logger.info("Logged in with OAuth code")
 			else:
 				raise ValueError("No refreshable auth or code to login")
 		self._authenticated = True
