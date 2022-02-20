@@ -1,4 +1,0 @@
-pynbt
-cryptography
-aiohttp
-termcolor
