@@ -1,3 +1,4 @@
+import json
 from math import sqrt
 from enum import Enum
 from dataclasses import dataclass
@@ -31,6 +32,12 @@ class Gamemode(Enum):
 class GameProfile:
 	id : str
 	name : str
+
+	def __str__(self):
+		return json.dumps(self.as_dict(), indent=2)
+
+	def __repr__(self):
+		return f"GameProfile(id='{self.id}', name='{self.name}')"
 
 	def as_dict(self):
 		return {
