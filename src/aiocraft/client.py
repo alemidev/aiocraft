@@ -6,14 +6,17 @@ import uuid
 from dataclasses import dataclass
 from asyncio import Task
 from enum import Enum
+from time import time
 
-from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator
+from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, Any
 
 from .dispatcher import Dispatcher
 from .traits import CallbacksHolder, Runnable
 from .mc.packet import Packet
 from .mc.auth import AuthInterface, AuthException, MojangToken, MicrosoftAuthenticator
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
+from .mc.proto.status.serverbound import PacketPing, PacketPingStart
+from .mc.proto.status.clientbound import PacketServerInfo, PacketPing as PacketPong
 from .mc.proto.handshaking.serverbound import PacketSetProtocol
 from .mc.proto.play.serverbound import PacketKeepAlive as PacketKeepAliveResponse
 from .mc.proto.play.clientbound import PacketKeepAlive, PacketSetCompression, PacketKickDisconnect
@@ -44,7 +47,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 
 	_authenticator:MicrosoftAuthenticator
 	_username:str
-	code:str
+	code:Optional[str]
 
 	dispatcher : Dispatcher
 	_processing : bool
@@ -169,7 +172,65 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			await self.join_callbacks()
 		await super().stop(force)
 
+	async def info(self, host:str="", port:int=0, ping:bool=False) -> Dict[str, Any]:
+		"""Make a mini connection to asses server status and version"""
+		await self.dispatcher.connect(
+			host or self.host,
+			port or self.port,
+		)
+		#Handshake
+		await self.dispatcher.write(
+			PacketSetProtocol(
+				self.dispatcher.proto,
+				protocolVersion=self.dispatcher.proto,
+				serverHost=host or self.host,
+				serverPort=port or self.port,
+				nextState=ConnectionState.STATUS.value,
+			)
+		)
+		self.dispatcher.state = ConnectionState.STATUS
+		#Request
+		await self.dispatcher.write(
+			PacketPingStart(self.dispatcher.proto) #empty packet
+		)
+		#Response
+		data : Dict[str, Any] = {}
+		ping_id : int = 0
+		ping_time : float = 0
+		async for packet in self.dispatcher.packets():
+			if isinstance(packet, PacketServerInfo):
+				data = json.loads(packet.response)
+				self._logger.debug("Server data : %s", json.dumps(data, indent=2))
+				if not ping:
+					break
+				ping_id = int(time())
+				ping_time = time()
+				await self.dispatcher.write(
+					PacketPing(
+						self.dispatcher.proto,
+						time=ping_id,
+					)
+				)
+			if isinstance(packet, PacketPong):
+				if packet.time == ping_id:
+					data['ping'] = int(time() - ping_time)
+				break
+		await self.dispatcher.disconnect()
+		return data
+
 	async def _client_worker(self):
+		try:
+			self._logger.info("Pinging server")
+			server_data = await self.info()
+			self._logger.info(
+				"Connecting to: %s (%d/%d)",
+				server_data['version']['name'],
+				server_data['players']['online'],
+				server_data['players']['max']
+			)
+		except Exception:
+			self._logger.exception("Exception checking server stats")
+			return
 		while self._processing:
 			if self.online_mode:
 				try:
@@ -183,11 +244,13 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			try:
 				packet_whitelist = self.callback_keys(filter=Packet) if self.options.use_packet_whitelist else set()
 				await self.dispatcher.connect(
-					self.host,
-					self.port,
+					host=self.host,
+					port=self.port,
+					proto=server_data['version']['protocol'],
 					queue_timeout=self.options.poll_interval,
 					packet_whitelist=packet_whitelist
 				)
+				self.dispatcher.proto = server_data['version']['protocol'] # TODO maybe check if it's supported?
 				await self._handshake()
 				if await self._login():
 					await self._play()
@@ -209,8 +272,8 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	async def _handshake(self) -> bool: # TODO make this fancier! poll for version and status first
 		await self.dispatcher.write(
 			PacketSetProtocol(
-				340, # TODO!!!!
-				protocolVersion=340,
+				self.dispatcher.proto,
+				protocolVersion=self.dispatcher.proto,
 				serverHost=self.host,
 				serverPort=self.port,
 				nextState=2, # play
@@ -218,7 +281,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		)
 		await self.dispatcher.write(
 			PacketLoginStart(
-				340,
+				self.dispatcher.proto,
 				username=self._authenticator.selectedProfile.name if self.online_mode else self._username
 			)
 		)
@@ -256,7 +319,7 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				else:
 					self._logger.warning("Server gave an offline-mode serverId but still requested Encryption")
 				encryption_response = PacketEncryptionResponse(
-					340, # TODO!!!!
+					self.dispatcher.proto,
 					sharedSecret=encrypted_secret,
 					verifyToken=token
 				)

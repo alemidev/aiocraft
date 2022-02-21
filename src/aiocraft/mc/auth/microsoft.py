@@ -85,7 +85,7 @@ class MicrosoftAuthenticator(AuthInterface):
 	async def validate(self):
 		prof = await self.fetch_profile()
 		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
-		logging.info("Session validated : %s", self.selectedProfile)
+		logging.info("Session validated : %s", repr(self.selectedProfile))
 
 	async def authenticate(self, code:str="") -> str:
 		"""Authorize Microsoft account"""

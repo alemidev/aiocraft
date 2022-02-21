@@ -42,8 +42,8 @@ class Dispatcher:
 	_packet_whitelist : Set[Packet]
 	_packet_id_whitelist : Set[int]
 
-	_host : str
-	_port : int
+	host : str
+	port : int
 
 	proto : int
 	state : ConnectionState
@@ -53,9 +53,10 @@ class Dispatcher:
 	_logger : logging.Logger
 
 	def __init__(self, server:bool = False):
+		self.proto = 757
 		self._is_server = server
-		self._host = "localhost"
-		self._port = 25565
+		self.host = "localhost"
+		self.port = 25565
 		self._prepare()
 
 	@property
@@ -93,13 +94,15 @@ class Dispatcher:
 	def _prepare(self,
 			host:Optional[str] = None,
 			port:Optional[int] = None,
+			proto:Optional[int] = None,
 			queue_timeout:int = 1,
 			queue_size:int = 100,
 			packet_whitelist : List[Packet] = None
 	):
-		self._host = host or self._host or "localhost"
-		self._port = port or self._port or 25565
-		self._logger = LOGGER.getChild(f"on({self._host}:{self._port})")
+		self.proto = proto or self.proto or 757 # TODO not hardcode this?
+		self.host = host or self.host or "localhost"
+		self.port = port or self.port or 25565
+		self._logger = LOGGER.getChild(f"on({self.host}:{self.port})")
 		self._packet_whitelist = set(packet_whitelist) if packet_whitelist else set()
 		if self._packet_whitelist:
 			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKeepAlive)
@@ -108,7 +111,6 @@ class Dispatcher:
 		self.encryption = False
 		self.compression = None
 		self.state = ConnectionState.HANDSHAKING
-		self.proto = 340 # TODO 
 
 		# This can only happen after we know the connection protocol
 		self._packet_id_whitelist = set((P(self.proto).id for P in self._packet_whitelist)) if self._packet_whitelist else set()
@@ -123,6 +125,7 @@ class Dispatcher:
 	async def connect(self,
 			host : Optional[str] = None,
 			port : Optional[int] = None,
+			proto : Optional[int] = None,
 			reader : Optional[StreamReader] = None,
 			writer : Optional[StreamWriter] = None,
 			queue_timeout : int = 1,
@@ -132,14 +135,14 @@ class Dispatcher:
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
 
-		self._prepare(host, port, queue_timeout, queue_size, packet_whitelist)
+		self._prepare(host, port, proto, queue_timeout, queue_size, packet_whitelist)
 
 		if reader and writer:
 			self._down, self._up = reader, writer
 		else:
 			self._down, self._up = await asyncio.open_connection(
-				host=self._host,
-				port=self._port,
+				host=self.host,
+				port=self.port,
 			)
 
 		self._dispatching = True
