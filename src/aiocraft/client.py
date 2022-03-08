@@ -8,10 +8,9 @@ from asyncio import Task
 from enum import Enum
 from time import time
 
-from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, Any
+from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, Any, Set
 
 from .dispatcher import Dispatcher
-from .traits import CallbacksHolder, Runnable
 from .mc.packet import Packet
 from .mc.auth import AuthInterface, AuthException, MojangToken, MicrosoftAuthenticator
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
@@ -36,11 +35,7 @@ class ClientOptions:
 	poll_interval : float = 1.0
 	use_packet_whitelist : bool = True
 
-class ClientEvent(Enum):
-	CONNECTED = 0
-	DISCONNECTED = 1
-
-class MinecraftClient(CallbacksHolder, Runnable):
+class MinecraftClient:
 	host:str
 	port:int
 	options:ClientOptions
@@ -53,7 +48,6 @@ class MinecraftClient(CallbacksHolder, Runnable):
 	_processing : bool
 	_authenticated : bool
 	_worker : Task
-	_callbacks = Dict[str, Task]
 
 	_logger : logging.Logger
 
@@ -91,33 +85,11 @@ class MinecraftClient(CallbacksHolder, Runnable):
 		self._logger = LOGGER.getChild(f"on({self.host}:{self.port})")
 
 	@property
-	def started(self) -> bool:
-		return self._processing
-
-	@property
 	def connected(self) -> bool:
-		return self.started and self.dispatcher.connected
+		return self.dispatcher.connected
 
 	async def write(self, packet:Packet, wait:bool=False):
 		await self.dispatcher.write(packet, wait)
-
-	def on_connected(self) -> Callable:
-		def wrapper(fun):
-			self.register(ClientEvent.CONNECTED, fun)
-			return fun
-		return wrapper
-
-	def on_disconnected(self) -> Callable:
-		def wrapper(fun):
-			self.register(ClientEvent.DISCONNECTED, fun)
-			return fun
-		return wrapper
-
-	def on_packet(self, packet:Type[Packet]) -> Callable:
-		def wrapper(fun):
-			self.register(packet, fun)
-			return fun
-		return wrapper
 
 	async def authenticate(self):
 		if self._authenticated:
@@ -136,60 +108,49 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				raise ValueError("No refreshable auth or code to login")
 		self._authenticated = True
 
-	async def change_server(self, server:str):
-		restart = self.started
-		if restart:
-			await self.stop()
-
-		if ":" in server:
-			_host, _port = server.split(":", 1)
-			self.host = _host.strip()
-			self.port = int(_port)
-		else:
-			self.host = server.strip()
-			self.port = 25565
-		self._logger = LOGGER.getChild(f"{self.host}:{self.port}")
-
-		if restart:
-			await self.start()
-
-	async def start(self):
-		await super().start()
-		if self.started:
-			return
-		self._processing = True
-		self._worker = asyncio.get_event_loop().create_task(self._client_worker())
-		self._logger.info("Minecraft client started")
-
-	async def stop(self, force:bool=False):
-		self._processing = False
-		if self.dispatcher.connected:
-			await self.dispatcher.disconnect(block=not force)
-		if not force:
-			await self._worker
-			self._logger.info("Minecraft client stopped")
-		if not force:
-			await self.join_callbacks()
-		await super().stop(force)
-
-	async def info(self, host:str="", port:int=0, ping:bool=False) -> Dict[str, Any]:
+	async def info(self, host:str="", port:int=0, proto:int=0, ping:bool=False) -> Dict[str, Any]:
 		"""Make a mini connection to asses server status and version"""
-		await self.dispatcher.connect(
-			host or self.host,
-			port or self.port,
-		)
-		#Handshake
+		self.host = host or self.host
+		self.port = port or self.port
+		try:
+			await self.dispatcher.connect(self.host, self.port)
+			await self._handshake(ConnectionState.STATUS)
+			return await self._status(ping)
+		finally:
+			await self.dispatcher.disconnect()
+
+	async def join(self, host:str="", port:int=0, proto:int=0, packet_whitelist:Optional[Set[Type[Packet]]]=None): # jank packet_whitelist argument! TODO
+		self.host = host or self.host
+		self.port = port or self.port
+		if self.online_mode:
+			await self.authenticate()
+		try:
+			await self.dispatcher.connect(
+				host=self.host,
+				port=self.port,
+				proto=proto,
+				queue_timeout=self.options.poll_interval,
+				packet_whitelist=packet_whitelist
+			)
+			await self._handshake(ConnectionState.LOGIN)
+			if await self._login():
+				await self._play()
+		finally:
+			await self.dispatcher.disconnect()
+
+	async def _handshake(self, state:ConnectionState):
 		await self.dispatcher.write(
 			PacketSetProtocol(
 				self.dispatcher.proto,
 				protocolVersion=self.dispatcher.proto,
-				serverHost=host or self.host,
-				serverPort=port or self.port,
-				nextState=ConnectionState.STATUS.value,
+				serverHost=self.host,
+				serverPort=self.port,
+				nextState=state.value
 			)
 		)
+
+	async def _status(self, ping:bool=False) -> Dict[str, Any]:
 		self.dispatcher.state = ConnectionState.STATUS
-		#Request
 		await self.dispatcher.write(
 			PacketPingStart(self.dispatcher.proto) #empty packet
 		)
@@ -215,80 +176,16 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				if packet.time == ping_id:
 					data['ping'] = int(time() - ping_time)
 				break
-		await self.dispatcher.disconnect()
 		return data
 
-	async def _client_worker(self):
-		try:
-			self._logger.info("Pinging server")
-			server_data = await self.info()
-			self._logger.info(
-				"Connecting to: %s (%d/%d)",
-				server_data['version']['name'],
-				server_data['players']['online'],
-				server_data['players']['max']
-			)
-		except Exception:
-			self._logger.exception("Exception checking server stats")
-			return
-		while self._processing:
-			if self.online_mode:
-				try:
-					await self.authenticate()
-				except AuthException as e:
-					self._logger.error(str(e))
-					break
-				except Exception as e:
-					self._logger.exception("Unexpected error while authenticating")
-					break
-			try:
-				packet_whitelist = self.callback_keys(filter=Packet) if self.options.use_packet_whitelist else set()
-				await self.dispatcher.connect(
-					host=self.host,
-					port=self.port,
-					proto=server_data['version']['protocol'],
-					queue_timeout=self.options.poll_interval,
-					packet_whitelist=packet_whitelist
-				)
-				self.dispatcher.proto = server_data['version']['protocol'] # TODO maybe check if it's supported?
-				await self._handshake()
-				if await self._login():
-					await self._play()
-			except ConnectionRefusedError:
-				self._logger.error("Server rejected connection")
-			except OSError as e:
-				self._logger.error("Connection error : %s", str(e))
-			except Exception:
-				self._logger.exception("Exception in Client connection")
-			if self.dispatcher.connected:
-				await self.dispatcher.disconnect()
-			if not self.options.reconnect:
-				break
-			if self._processing: # if client was stopped exit immediately
-				await asyncio.sleep(self.options.reconnect_delay)
-		if self._processing:
-			await self.stop(force=True)
-
-	async def _handshake(self) -> bool: # TODO make this fancier! poll for version and status first
-		await self.dispatcher.write(
-			PacketSetProtocol(
-				self.dispatcher.proto,
-				protocolVersion=self.dispatcher.proto,
-				serverHost=self.host,
-				serverPort=self.port,
-				nextState=2, # play
-			)
-		)
+	async def _login(self) -> bool:
+		self.dispatcher.state = ConnectionState.LOGIN
 		await self.dispatcher.write(
 			PacketLoginStart(
 				self.dispatcher.proto,
 				username=self._authenticator.selectedProfile.name if self.online_mode else self._username
 			)
 		)
-		return True
-
-	async def _login(self) -> bool:
-		self.dispatcher.state = ConnectionState.LOGIN
 		async for packet in self.dispatcher.packets():
 			if isinstance(packet, PacketEncryptionBegin):
 				if not self.online_mode:
@@ -338,9 +235,8 @@ class MinecraftClient(CallbacksHolder, Runnable):
 				return False
 		return False
 
-	async def _play(self) -> bool:
+	async def _play(self):
 		self.dispatcher.state = ConnectionState.PLAY
-		self.run_callbacks(ClientEvent.CONNECTED)
 		async for packet in self.dispatcher.packets():
 			self._logger.debug("[ * ] Processing %s", packet.__class__.__name__)
 			if isinstance(packet, PacketSetCompression):
@@ -353,7 +249,3 @@ class MinecraftClient(CallbacksHolder, Runnable):
 			elif isinstance(packet, PacketKickDisconnect):
 				self._logger.error("Kicked while in game : %s", helpers.parse_chat(packet.reason))
 				break
-			self.run_callbacks(Packet, packet)
-			self.run_callbacks(type(packet), packet)
-		self.run_callbacks(ClientEvent.DISCONNECTED)
-		return False

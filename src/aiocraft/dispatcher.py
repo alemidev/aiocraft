@@ -5,7 +5,7 @@ import zlib
 import logging
 from asyncio import StreamReader, StreamWriter, Queue, Task
 from enum import Enum
-from typing import List, Dict, Set, Optional, AsyncIterator, Type
+from typing import List, Dict, Set, Optional, AsyncIterator, Type, Union
 
 from cryptography.hazmat.primitives.ciphers import CipherContext
 
@@ -39,7 +39,7 @@ class Dispatcher:
 	_incoming : Queue
 	_outgoing : Queue
 
-	_packet_whitelist : Set[Packet]
+	_packet_whitelist : Set[Type[Packet]]
 	_packet_id_whitelist : Set[int]
 
 	host : str
@@ -95,15 +95,15 @@ class Dispatcher:
 			host:Optional[str] = None,
 			port:Optional[int] = None,
 			proto:Optional[int] = None,
-			queue_timeout:int = 1,
+			queue_timeout:float = 1,
 			queue_size:int = 100,
-			packet_whitelist : List[Packet] = None
+			packet_whitelist : Set[Type[Packet]] = None
 	):
 		self.proto = proto or self.proto or 757 # TODO not hardcode this?
 		self.host = host or self.host or "localhost"
 		self.port = port or self.port or 25565
 		self._logger = LOGGER.getChild(f"on({self.host}:{self.port})")
-		self._packet_whitelist = set(packet_whitelist) if packet_whitelist else set()
+		self._packet_whitelist = set(packet_whitelist) if packet_whitelist else set() # just in case make new set
 		if self._packet_whitelist:
 			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKeepAlive)
 			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKickDisconnect)
@@ -128,9 +128,9 @@ class Dispatcher:
 			proto : Optional[int] = None,
 			reader : Optional[StreamReader] = None,
 			writer : Optional[StreamWriter] = None,
-			queue_timeout : int = 1,
+			queue_timeout : float = 1,
 			queue_size : int = 100,
-			packet_whitelist : Set[Packet] = None,
+			packet_whitelist : Set[Type[Packet]] = None,
 	):
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
@@ -165,33 +165,34 @@ class Dispatcher:
 			if block:
 				await self._up.wait_closed()
 				self._logger.debug("Socket closed")
-		self._logger.info("Disconnected")
+		if block:
+			self._logger.info("Disconnected")
 
 	def _packet_type_from_registry(self, packet_id:int) -> Type[Packet]:
 		# TODO de-jank this, language server gets kinda mad
-		reg = None
+		# m : Module
 		if self.state == ConnectionState.HANDSHAKING:
-			reg = minecraft_protocol.handshaking
+			m = minecraft_protocol.handshaking
 		elif self.state == ConnectionState.STATUS:
-			reg = minecraft_protocol.status
+			m = minecraft_protocol.status
 		elif self.state == ConnectionState.LOGIN:
-			reg = minecraft_protocol.login
+			m = minecraft_protocol.login
 		elif self.state == ConnectionState.PLAY:
-			reg = minecraft_protocol.play
+			m = minecraft_protocol.play
 		else:
 			raise InvalidState("Cannot access registries from invalid state")
 
 		if self.is_server:
-			reg = reg.serverbound.REGISTRY
+			reg = m.serverbound.REGISTRY
 		else:
-			reg = reg.clientbound.REGISTRY
+			reg = m.clientbound.REGISTRY
 
 		if not self.proto:
 			raise InvalidState("Cannot access registries from invalid protocol")
 
-		reg = reg[self.proto]
+		proto_reg = reg[self.proto]
 
-		return reg[packet_id]
+		return proto_reg[packet_id]
 
 	async def _read_varint(self) -> int:
 		numRead = 0
