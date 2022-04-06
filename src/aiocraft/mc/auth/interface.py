@@ -1,9 +1,12 @@
 """Minecraft authentication interface"""
+import logging
 from typing import Optional, Dict, Any
 
 import aiohttp
 
 from ..definitions import GameProfile
+
+logger = logging.getLogger(__file__)
 
 class AuthException(Exception):
 	endpoint : str
@@ -25,10 +28,19 @@ class AuthInterface:
 	SESSION_SERVER = "https://sessionserver.mojang.com/session/minecraft"
 	TIMEOUT = aiohttp.ClientTimeout(total=3)
 
-	# async def authenticate(self, user:str, pwd:str):
-	# 	raise NotImplementedError
+	async def login(self, *args) -> 'AuthInterface':
+		raise NotImplementedError
 
-	async def refresh(self):
+	async def refresh(self) -> 'AuthInterface':
+		raise NotImplementedError
+
+	async def validate(self) -> 'AuthInterface':
+		raise NotImplementedError
+
+	def serialize(self) -> Dict[str, Any]:
+		raise NotImplementedError
+
+	def deserialize(self, data:Dict[str, Any]) -> 'AuthInterface':
 		raise NotImplementedError
 
 	async def join(self, server_id) -> dict:
@@ -51,18 +63,20 @@ class AuthInterface:
 
 	@classmethod
 	async def _post(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
-		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as sess:
-			async with sess.post(endpoint, **kwargs) as res:
+		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
+			async with session.post(endpoint, **kwargs) as res:
 				data = await res.json(content_type=None)
+				logger.debug("POST /%s [%s] : %s", endpoint, str(kwargs), str(data))
 				if res.status >= 400:
 					raise AuthException(endpoint, res.status, data, kwargs)
 				return data
 
 	@classmethod
 	async def _get(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
-		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as sess:
-			async with sess.get(endpoint, **kwargs) as res:
+		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
+			async with session.get(endpoint, **kwargs) as res:
 				data = await res.json(content_type=None)
+				logger.debug("GET /%s [%s] : %s", endpoint, str(kwargs), str(data))
 				if res.status >= 400:
 					raise AuthException(endpoint, res.status, data, kwargs)
 				return data

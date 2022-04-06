@@ -9,7 +9,7 @@ from yarl import URL
 import aiohttp
 
 from ..definitions import GameProfile
-from .interface import AuthInterface
+from .interface import AuthInterface, AuthException
 
 class InvalidStateError(Exception):
 	pass

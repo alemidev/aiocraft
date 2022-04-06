@@ -12,7 +12,7 @@ from .interface import AuthInterface
 from ..definitions import GameProfile
 
 @dataclass
-class MojangToken(AuthInterface):
+class MojangAuthenticator(AuthInterface):
 	username : str
 	accessToken : str
 	clientToken : str
@@ -23,6 +23,9 @@ class MojangToken(AuthInterface):
 	AUTH_SERVER = "https://authserver.mojang.com"
 	CONTENT_TYPE = "application/json"
 	HEADERS = {"content-type": CONTENT_TYPE}
+
+	def __init__(self):
+		pass
 
 	def __equals__(self, other) -> bool:
 		if not isinstance(other, self.__class__):
@@ -40,7 +43,7 @@ class MojangToken(AuthInterface):
 	def __str__(self) -> str:
 		return repr(self)
 
-	def as_dict(self):
+	def serialize(self):
 		return {
 			"username":self.username,
 			"accessToken":self.accessToken,
@@ -48,26 +51,17 @@ class MojangToken(AuthInterface):
 			"selectedProfile": self.selectedProfile.as_dict(),
 		}
 
-	@classmethod
-	def from_file(cls, fname:str):
-		with open(fname) as f:
-			return cls.from_dict(json.load(f))
+	def deserialize(self, data:dict):
+		self.username=data["username"] if "username" in data else data["selectedProfile"]["name"],
+		self.accessToken=data["accessToken"],
+		self.clientToken=data["clientToken"],
+		self.selectedProfile=GameProfile(**data["selectedProfile"])
 
-	@classmethod
-	def from_dict(cls, data:dict):
-		return cls(
-			username=data["username"] if "username" in data else data["selectedProfile"]["name"],
-			accessToken=data["accessToken"],
-			clientToken=data["clientToken"],
-			selectedProfile=GameProfile(**data["selectedProfile"]),
-		)
-
-	@classmethod
-	async def login(cls, username, password, invalidate=False):
+	async def login(self, username:str, password:str, invalidate=False) -> AuthInterface:
 		payload = {
 			"agent": {
-				"name": cls.AGENT_NAME,
-				"version": cls.AGENT_VERSION
+				"name": self.AGENT_NAME,
+				"version": self.AGENT_VERSION
 			},
 			"username": username,
 			"password": password
@@ -76,14 +70,14 @@ class MojangToken(AuthInterface):
 		if not invalidate:
 			payload["clientToken"] = uuid.uuid4().hex
 
-		res = await cls._post(cls.AUTH_SERVER + "/authenticate", payload)
+		res = await self._post(self.AUTH_SERVER + "/authenticate", payload)
 
-		return cls(
-			username=username,
-			accessToken=res["accessToken"],
-			clientToken=res["clientToken"],
-			selectedProfile=GameProfile(**res["selectedProfile"])
-		)
+		self.username=username,
+		self.accessToken=res["accessToken"],
+		self.clientToken=res["clientToken"],
+		self.selectedProfile=GameProfile(**res["selectedProfile"])
+
+		return self
 
 	@classmethod
 	async def sign_out(cls, username:str, password:str) -> dict:
@@ -112,8 +106,6 @@ class MojangToken(AuthInterface):
 
 		if "user" in res:
 			self.username = res["user"]["username"]
-
-		return res
 
 	async def validate(self, clientToken:bool = True) -> dict:
 		payload = { "accessToken": self.accessToken }
