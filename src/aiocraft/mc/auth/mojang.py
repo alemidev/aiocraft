@@ -4,16 +4,17 @@ import uuid
 import logging
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Dict, Any
 
 import aiohttp
 
-from .interface import AuthInterface
+from .interface import AuthInterface, AuthException
 from ..definitions import GameProfile
 
 @dataclass
 class MojangAuthenticator(AuthInterface):
 	username : str
+	password : Optional[str]
 	accessToken : str
 	clientToken : str
 	selectedProfile : GameProfile
@@ -24,8 +25,9 @@ class MojangAuthenticator(AuthInterface):
 	CONTENT_TYPE = "application/json"
 	HEADERS = {"content-type": CONTENT_TYPE}
 
-	def __init__(self):
-		pass
+	def __init__(self, username:str="", password:Optional[str]=None):
+		self.username = username
+		self.password = password
 
 	def __equals__(self, other) -> bool:
 		if not isinstance(other, self.__class__):
@@ -38,12 +40,12 @@ class MojangAuthenticator(AuthInterface):
 		return False
 
 	def __repr__(self) -> str:
-		return json.dumps(self.as_dict())
+		return json.dumps(self.serialize())
 
 	def __str__(self) -> str:
 		return repr(self)
 
-	def serialize(self):
+	def serialize(self) -> Dict[str, Any]:
 		return {
 			"username":self.username,
 			"accessToken":self.accessToken,
@@ -51,30 +53,29 @@ class MojangAuthenticator(AuthInterface):
 			"selectedProfile": self.selectedProfile.as_dict(),
 		}
 
-	def deserialize(self, data:dict):
-		self.username=data["username"] if "username" in data else data["selectedProfile"]["name"],
-		self.accessToken=data["accessToken"],
-		self.clientToken=data["clientToken"],
-		self.selectedProfile=GameProfile(**data["selectedProfile"])
+	def deserialize(self, data:Dict[str, Any]) -> AuthInterface:
+		self.username = data["username"] if "username" in data else data["selectedProfile"]["name"]
+		self.accessToken = data["accessToken"]
+		self.clientToken = data["clientToken"]
+		self.selectedProfile = GameProfile(**data["selectedProfile"])
+		return self
 
-	async def login(self, username:str, password:str, invalidate=False) -> AuthInterface:
+	async def login(self) -> AuthInterface:
 		payload = {
 			"agent": {
 				"name": self.AGENT_NAME,
 				"version": self.AGENT_VERSION
 			},
-			"username": username,
-			"password": password
+			"username": self.username,
+			"password": self.password
 		}
 
-		if not invalidate:
-			payload["clientToken"] = uuid.uuid4().hex
+		payload["clientToken"] = uuid.uuid4().hex # don't include this to invalidate all other sessions
 
-		res = await self._post(self.AUTH_SERVER + "/authenticate", payload)
+		res = await self._post(self.AUTH_SERVER + "/authenticate", json=payload)
 
-		self.username=username,
-		self.accessToken=res["accessToken"],
-		self.clientToken=res["clientToken"],
+		self.accessToken=res["accessToken"]
+		self.clientToken=res["clientToken"]
 		self.selectedProfile=GameProfile(**res["selectedProfile"])
 
 		return self
@@ -90,7 +91,7 @@ class MojangAuthenticator(AuthInterface):
 			}
 		)
 
-	async def refresh(self, requestUser:bool = False) -> dict:
+	async def refresh(self, requestUser:bool = False) -> AuthInterface:
 		res = await self._post(
 			self.AUTH_SERVER + "/refresh",
 			headers=self.HEADERS,
@@ -107,18 +108,23 @@ class MojangAuthenticator(AuthInterface):
 		if "user" in res:
 			self.username = res["user"]["username"]
 
-	async def validate(self, clientToken:bool = True) -> dict:
+		return self
+
+	async def validate(self, clientToken:bool = True) -> AuthInterface:
+		if not self.accessToken:
+			raise AuthException("/validate", 404, {"message":"No access token"}, {})
 		payload = { "accessToken": self.accessToken }
 		if clientToken:
 			payload["clientToken"] = self.clientToken
-		return await self._post(
+		await self._post(
 			self.AUTH_SERVER + "/validate",
 			headers=self.HEADERS,
 			json=payload,
 		)
+		return self
 
-	async def invalidate(self) -> dict:
-		return await self._post(
+	async def invalidate(self) -> AuthInterface:
+		await self._post(
 			self.AUTH_SERVER + "/invalidate",
 			headers=self.HEADERS,
 			json= {
@@ -126,3 +132,4 @@ class MojangAuthenticator(AuthInterface):
 				"clientToken": self.clientToken
 			}
 		)
+		return self

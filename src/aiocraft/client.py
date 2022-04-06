@@ -27,18 +27,9 @@ from .util import encryption, helpers
 
 LOGGER = logging.getLogger(__name__)
 
-@dataclass
-class ClientOptions:
-	reconnect : bool = True
-	reconnect_delay : float = 10.0
-	keep_alive : bool = True
-	poll_interval : float = 1.0
-	use_packet_whitelist : bool = True
-
 class MinecraftClient:
 	host:str
 	port:int
-	options:ClientOptions
 	username:str
 	online_mode:bool
 	authenticator:Optional[AuthInterface]
@@ -54,7 +45,6 @@ class MinecraftClient:
 		online_mode:bool = True,
 		authenticator:AuthInterface=None,
 		username:str = "",
-		**kwargs
 	):
 		super().__init__()
 		if ":" in server:
@@ -64,8 +54,6 @@ class MinecraftClient:
 		else:
 			self.host = server.strip()
 			self.port = 25565
-
-		self.options = ClientOptions(**kwargs)
 
 		self.username = username
 		self.online_mode = online_mode
@@ -90,15 +78,12 @@ class MinecraftClient:
 		try:
 			await self.authenticator.validate() # will raise an exc if token is invalid
 		except AuthException:
-			if self.code:
-				await self.authenticator.login(self.code)
-				self.code = None
-				self.logger.info("Logged in with OAuth code")
-			elif self.authenticator.refreshable:
+			if self.authenticator.refreshable:
 				await self._authenticator.refresh()
 				self.logger.warning("Refreshed Token")
 			else:
-				raise ValueError("No refreshable auth or code to login")
+				await self.authenticator.login()
+				self.logger.info("Logged in")
 		self._authenticated = True
 
 	async def info(self, host:str="", port:int=0, proto:int=0, ping:bool=False) -> Dict[str, Any]:
@@ -122,7 +107,6 @@ class MinecraftClient:
 				host=self.host,
 				port=self.port,
 				proto=proto,
-				queue_timeout=self.options.poll_interval,
 				packet_whitelist=packet_whitelist
 			)
 			await self._handshake(ConnectionState.LOGIN)
@@ -176,7 +160,7 @@ class MinecraftClient:
 		await self.dispatcher.write(
 			PacketLoginStart(
 				self.dispatcher.proto,
-				username=self.authenticator.selectedProfile.name if self.online_mode else self._username
+				username=self.authenticator.selectedProfile.name if self.online_mode and self.authenticator else self.username
 			)
 		)
 		async for packet in self.dispatcher.packets():
@@ -195,7 +179,7 @@ class MinecraftClient:
 				)
 				if packet.serverId != '-':
 					try:
-						await self._authenticator.join(
+						await self.authenticator.join(
 							encryption.generate_verification_hash(
 								packet.serverId,
 								secret,
@@ -236,9 +220,8 @@ class MinecraftClient:
 				self.logger.info("Compression updated")
 				self.dispatcher.compression = packet.threshold
 			elif isinstance(packet, PacketKeepAlive):
-				if self.options.keep_alive:
-					keep_alive_packet = PacketKeepAliveResponse(340, keepAliveId=packet.keepAliveId)
-					await self.dispatcher.write(keep_alive_packet)
+				keep_alive_packet = PacketKeepAliveResponse(340, keepAliveId=packet.keepAliveId)
+				await self.dispatcher.write(keep_alive_packet)
 			elif isinstance(packet, PacketKickDisconnect):
 				self.logger.error("Kicked while in game : %s", helpers.parse_chat(packet.reason))
 				break

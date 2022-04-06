@@ -28,7 +28,7 @@ class AuthInterface:
 	SESSION_SERVER = "https://sessionserver.mojang.com/session/minecraft"
 	TIMEOUT = aiohttp.ClientTimeout(total=3)
 
-	async def login(self, *args) -> 'AuthInterface':
+	async def login(self) -> 'AuthInterface':
 		raise NotImplementedError
 
 	async def refresh(self) -> 'AuthInterface':

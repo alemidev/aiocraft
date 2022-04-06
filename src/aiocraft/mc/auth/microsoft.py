@@ -18,6 +18,7 @@ class MicrosoftAuthenticator(AuthInterface):
 	client_id : str
 	client_secret : str
 	redirect_uri : str
+	code : Optional[str]
 
 	accessToken : str
 	selectedProfile : GameProfile
@@ -32,11 +33,13 @@ class MicrosoftAuthenticator(AuthInterface):
 	def __init__(self,
 		client_id:str,
 		client_secret:str,
-		redirect_uri:str="http://localhost"
+		redirect_uri:str="http://localhost",
+		code:Optional[str]=None
 	):
 		self.client_id = client_id
 		self.client_secret = client_secret
 		self.redirect_uri = redirect_uri
+		self.code = code
 		self.refreshToken = None
 		self.accessToken = ''
 		self.selectedProfile = GameProfile(id='', name='')
@@ -68,8 +71,8 @@ class MicrosoftAuthenticator(AuthInterface):
 			f"&state={state}"
 		)
 
-	async def login(self, code:str): # TODO nicer way to get code?
-		self.accessToken = await self.authenticate(code)
+	async def login(self): # TODO nicer way to get code?
+		self.accessToken = await self.authenticate(self.code)
 		prof = await self.fetch_profile()
 		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
 		logging.info("Successfully logged into Microsoft account")
@@ -83,6 +86,8 @@ class MicrosoftAuthenticator(AuthInterface):
 		logging.info("Successfully refreshed Microsoft token")
 
 	async def validate(self):
+		if not self.accessToken:
+			raise AuthException("No access token")
 		prof = await self.fetch_profile()
 		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
 		logging.info("Session validated : %s", repr(self.selectedProfile))

@@ -95,7 +95,6 @@ class Dispatcher:
 			host:Optional[str] = None,
 			port:Optional[int] = None,
 			proto:Optional[int] = None,
-			queue_timeout:float = 1,
 			queue_size:int = 100,
 			packet_whitelist : Set[Type[Packet]] = None
 	):
@@ -128,14 +127,13 @@ class Dispatcher:
 			proto : Optional[int] = None,
 			reader : Optional[StreamReader] = None,
 			writer : Optional[StreamWriter] = None,
-			queue_timeout : float = 1,
 			queue_size : int = 100,
 			packet_whitelist : Set[Type[Packet]] = None,
 	):
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
 
-		self._prepare(host, port, proto, queue_timeout, queue_size, packet_whitelist)
+		self._prepare(host, port, proto, queue_size, packet_whitelist)
 
 		if reader and writer:
 			self._down, self._up = reader, writer
@@ -147,7 +145,7 @@ class Dispatcher:
 
 		self._dispatching = True
 		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
-		self._writer = asyncio.get_event_loop().create_task(self._up_worker(timeout=queue_timeout))
+		self._writer = asyncio.get_event_loop().create_task(self._up_worker())
 		self._logger.info("Connected")
 
 	async def disconnect(self, block:bool=True):
