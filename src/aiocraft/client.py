@@ -12,7 +12,7 @@ from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, A
 
 from .dispatcher import Dispatcher
 from .mc.packet import Packet
-from .mc.auth import AuthInterface, AuthException, MojangToken, MicrosoftAuthenticator
+from .mc.auth import AuthInterface, AuthException, MojangAuthenticator, MicrosoftAuthenticator
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
 from .mc.proto.status.serverbound import PacketPing, PacketPingStart
 from .mc.proto.status.clientbound import PacketServerInfo, PacketPing as PacketPong
@@ -39,27 +39,21 @@ class MinecraftClient:
 	host:str
 	port:int
 	options:ClientOptions
-
-	_authenticator:MicrosoftAuthenticator
-	_username:str
-	code:Optional[str]
-
+	username:str
+	online_mode:bool
+	authenticator:Optional[AuthInterface]
 	dispatcher : Dispatcher
-	_processing : bool
+	logger : logging.Logger
 	_authenticated : bool
+	_processing : bool
 	_worker : Task
-
-	_logger : logging.Logger
 
 	def __init__(
 		self,
 		server:str,
-		login_code:str = '',
 		online_mode:bool = True,
-		username:str = '',
-		client_id:str = '', # TODO maybe hardcode defaults?
-		client_secret:str='',
-		redirect_uri:str='http://localhost',
+		authenticator:AuthInterface=None,
+		username:str = "",
 		**kwargs
 	):
 		super().__init__()
@@ -73,16 +67,15 @@ class MinecraftClient:
 
 		self.options = ClientOptions(**kwargs)
 
-		self.code = login_code or None # TODO put this directly in the authenticator maybe?
-		self._username = username
-		self._authenticator = MicrosoftAuthenticator(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+		self.username = username
 		self.online_mode = online_mode
+		self.authenticator = authenticator
+		self._authenticated = False
 
 		self.dispatcher = Dispatcher()
 		self._processing = False
-		self._authenticated = False
 
-		self._logger = LOGGER.getChild(f"on({self.host}:{self.port})")
+		self.logger = LOGGER.getChild(f"on({self.host}:{self.port})")
 
 	@property
 	def connected(self) -> bool:
@@ -95,15 +88,15 @@ class MinecraftClient:
 		if self._authenticated:
 			return # Don't spam Auth endpoint!
 		try:
-			await self._authenticator.validate() # will raise an exc if token is invalid
+			await self.authenticator.validate() # will raise an exc if token is invalid
 		except AuthException:
 			if self.code:
-				await self._authenticator.login(self.code)
+				await self.authenticator.login(self.code)
 				self.code = None
-				self._logger.info("Logged in with OAuth code")
-			elif self._authenticator.refreshable:
+				self.logger.info("Logged in with OAuth code")
+			elif self.authenticator.refreshable:
 				await self._authenticator.refresh()
-				self._logger.warning("Refreshed Token")
+				self.logger.warning("Refreshed Token")
 			else:
 				raise ValueError("No refreshable auth or code to login")
 		self._authenticated = True
@@ -161,7 +154,7 @@ class MinecraftClient:
 		async for packet in self.dispatcher.packets():
 			if isinstance(packet, PacketServerInfo):
 				data = json.loads(packet.response)
-				self._logger.debug("Server data : %s", json.dumps(data, indent=2))
+				self.logger.debug("Server data : %s", json.dumps(data, indent=2))
 				if not ping:
 					break
 				ping_id = int(time())
@@ -183,16 +176,16 @@ class MinecraftClient:
 		await self.dispatcher.write(
 			PacketLoginStart(
 				self.dispatcher.proto,
-				username=self._authenticator.selectedProfile.name if self.online_mode else self._username
+				username=self.authenticator.selectedProfile.name if self.online_mode else self._username
 			)
 		)
 		async for packet in self.dispatcher.packets():
 			if isinstance(packet, PacketEncryptionBegin):
 				if not self.online_mode:
-					self._logger.error("Cannot answer Encryption Request in offline mode")
+					self.logger.error("Cannot answer Encryption Request in offline mode")
 					return False
-				if not self._authenticator:
-					self._logger.error("No available token to enable encryption")
+				if not self.authenticator:
+					self.logger.error("No available token to enable encryption")
 					return False
 				secret = encryption.generate_shared_secret()
 				token, encrypted_secret = encryption.encrypt_token_and_secret(
@@ -210,11 +203,11 @@ class MinecraftClient:
 							)
 						)
 					except AuthException:
-						self._logger.error("Could not authenticate with Mojang")
+						self.logger.error("Could not authenticate with Mojang")
 						self._authenticated = False
 						return False
 				else:
-					self._logger.warning("Server gave an offline-mode serverId but still requested Encryption")
+					self.logger.warning("Server gave an offline-mode serverId but still requested Encryption")
 				encryption_response = PacketEncryptionResponse(
 					self.dispatcher.proto,
 					sharedSecret=encrypted_secret,
@@ -223,29 +216,29 @@ class MinecraftClient:
 				await self.dispatcher.write(encryption_response, wait=True)
 				self.dispatcher.encrypt(secret)
 			elif isinstance(packet, PacketCompress):
-				self._logger.info("Compression enabled")
+				self.logger.info("Compression enabled")
 				self.dispatcher.compression = packet.threshold
 			elif isinstance(packet, PacketLoginPluginRequest):
-				self._logger.info("Ignoring plugin request") # TODO ?
+				self.logger.info("Ignoring plugin request") # TODO ?
 			elif isinstance(packet, PacketSuccess):
-				self._logger.info("Login success, joining world...")
+				self.logger.info("Login success, joining world...")
 				return True
 			elif isinstance(packet, PacketDisconnect):
-				self._logger.error("Kicked while logging in : %s", helpers.parse_chat(packet.reason))
+				self.logger.error("Kicked while logging in : %s", helpers.parse_chat(packet.reason))
 				return False
 		return False
 
 	async def _play(self):
 		self.dispatcher.state = ConnectionState.PLAY
 		async for packet in self.dispatcher.packets():
-			self._logger.debug("[ * ] Processing %s", packet.__class__.__name__)
+			self.logger.debug("[ * ] Processing %s", packet.__class__.__name__)
 			if isinstance(packet, PacketSetCompression):
-				self._logger.info("Compression updated")
+				self.logger.info("Compression updated")
 				self.dispatcher.compression = packet.threshold
 			elif isinstance(packet, PacketKeepAlive):
 				if self.options.keep_alive:
 					keep_alive_packet = PacketKeepAliveResponse(340, keepAliveId=packet.keepAliveId)
 					await self.dispatcher.write(keep_alive_packet)
 			elif isinstance(packet, PacketKickDisconnect):
-				self._logger.error("Kicked while in game : %s", helpers.parse_chat(packet.reason))
+				self.logger.error("Kicked while in game : %s", helpers.parse_chat(packet.reason))
 				break
