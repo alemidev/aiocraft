@@ -28,11 +28,8 @@ from .util import encryption, helpers
 LOGGER = logging.getLogger(__name__)
 
 class MinecraftClient:
-	host:str
-	port:int
-	username:str
 	online_mode:bool
-	authenticator:Optional[AuthInterface]
+	authenticator:AuthInterface
 	dispatcher : Dispatcher
 	logger : logging.Logger
 	_authenticated : bool
@@ -42,28 +39,26 @@ class MinecraftClient:
 	def __init__(
 		self,
 		server:str,
+		authenticator:AuthInterface,
 		online_mode:bool = True,
-		authenticator:AuthInterface=None,
-		username:str = "",
 	):
 		super().__init__()
 		if ":" in server:
 			_host, _port = server.split(":", 1)
-			self.host = _host.strip()
-			self.port = int(_port)
+			host = _host.strip()
+			port = int(_port)
 		else:
-			self.host = server.strip()
-			self.port = 25565
+			host = server.strip()
+			port = 25565
 
-		self.username = username
 		self.online_mode = online_mode
 		self.authenticator = authenticator
 		self._authenticated = False
 
-		self.dispatcher = Dispatcher()
+		self.dispatcher = Dispatcher().set_host(host, port)
 		self._processing = False
 
-		self.logger = LOGGER.getChild(f"on({self.host}:{self.port})")
+		self.logger = LOGGER.getChild(f"on({server})")
 
 	@property
 	def connected(self) -> bool:
@@ -88,27 +83,18 @@ class MinecraftClient:
 
 	async def info(self, host:str="", port:int=0, proto:int=0, ping:bool=False) -> Dict[str, Any]:
 		"""Make a mini connection to asses server status and version"""
-		self.host = host or self.host
-		self.port = port or self.port
 		try:
-			await self.dispatcher.connect(self.host, self.port)
+			await self.dispatcher.set_host(host, port).connect()
 			await self._handshake(ConnectionState.STATUS)
 			return await self._status(ping)
 		finally:
 			await self.dispatcher.disconnect()
 
-	async def join(self, host:str="", port:int=0, proto:int=0, packet_whitelist:Optional[Set[Type[Packet]]]=None): # jank packet_whitelist argument! TODO
-		self.host = host or self.host
-		self.port = port or self.port
+	async def join(self, host:str="", port:int=0, proto:int=0):
 		if self.online_mode:
 			await self.authenticate()
 		try:
-			await self.dispatcher.connect(
-				host=self.host,
-				port=self.port,
-				proto=proto,
-				packet_whitelist=packet_whitelist
-			)
+			await self.dispatcher.set_host(host, port).set_proto(proto).connect()
 			await self._handshake(ConnectionState.LOGIN)
 			if await self._login():
 				await self._play()
@@ -120,8 +106,8 @@ class MinecraftClient:
 			PacketSetProtocol(
 				self.dispatcher.proto,
 				protocolVersion=self.dispatcher.proto,
-				serverHost=self.host,
-				serverPort=self.port,
+				serverHost=self.dispatcher.host,
+				serverPort=self.dispatcher.port,
 				nextState=state.value
 			)
 		)
@@ -160,16 +146,13 @@ class MinecraftClient:
 		await self.dispatcher.write(
 			PacketLoginStart(
 				self.dispatcher.proto,
-				username=self.authenticator.selectedProfile.name if self.online_mode and self.authenticator else self.username
+				username=self.authenticator.selectedProfile.name
 			)
 		)
 		async for packet in self.dispatcher.packets():
 			if isinstance(packet, PacketEncryptionBegin):
-				if not self.online_mode:
+				if not self.online_mode or not self.authenticator or not self.authenticator.accessToken:  # overkill to check authenticator and accessToken but whatever
 					self.logger.error("Cannot answer Encryption Request in offline mode")
-					return False
-				if not self.authenticator:
-					self.logger.error("No available token to enable encryption")
 					return False
 				secret = encryption.generate_shared_secret()
 				token, encrypted_secret = encryption.encrypt_token_and_secret(
