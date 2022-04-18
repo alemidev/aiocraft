@@ -73,10 +73,10 @@ class MinecraftClient:
 		try:
 			await self.authenticator.validate() # will raise an exc if token is invalid
 		except AuthException:
-			if self.authenticator.refreshable:
-				await self._authenticator.refresh()
+			try:
+				await self.authenticator.refresh()
 				self.logger.warning("Refreshed Token")
-			else:
+			except AuthException:
 				await self.authenticator.login()
 				self.logger.info("Logged in")
 		self._authenticated = True
