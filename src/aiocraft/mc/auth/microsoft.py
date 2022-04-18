@@ -79,7 +79,7 @@ class MicrosoftAuthenticator(AuthInterface):
 
 	async def refresh(self):
 		if not self.refreshToken:
-			raise AuthException("Missing refresh token")
+			raise AuthException("refresh", 404, {"error": "Missing refresh token"}, {})
 		self.accessToken = await self.authenticate()
 		prof = await self.fetch_profile()
 		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
@@ -87,7 +87,7 @@ class MicrosoftAuthenticator(AuthInterface):
 
 	async def validate(self):
 		if not self.accessToken:
-			raise AuthException("No access token")
+			raise AuthException("validate", 404, {"error": "No access token"}, {})
 		prof = await self.fetch_profile()
 		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
 		logging.info("Session validated : %s", repr(self.selectedProfile))

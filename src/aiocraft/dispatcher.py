@@ -59,6 +59,8 @@ class Dispatcher:
 		self.host = "localhost"
 		self.port = 25565
 		self._dispatching = False
+		self._packet_whitelist = None
+		self._packet_id_whitelist = None
 
 	@property
 	def is_server(self) -> bool:
@@ -113,8 +115,8 @@ class Dispatcher:
 
 	def set_proto(self, proto:Optional[int]=757) -> 'Dispatcher':
 		self.proto = proto or self.proto
-		if self._packet_id_whitelist:
-			self._packet_id_whitelist = set((P(self.proto).id for P in self._packet_whitelist)) if self._packet_whitelist else set()
+		if self._packet_whitelist:
+			self._packet_id_whitelist = set((P(self.proto).id for P in self._packet_whitelist))
 		return self
 
 	def set_state(self, state:Optional[ConnectionState]=ConnectionState.HANDSHAKING) -> 'Dispatcher':
