@@ -1,5 +1,6 @@
 """Minecraft authentication interface"""
 import logging
+from multiprocessing.sharedctypes import Value
 from typing import Optional, Dict, Any
 
 import aiohttp
@@ -40,7 +41,7 @@ class AuthInterface:
 	def serialize(self) -> Dict[str, Any]:
 		raise NotImplementedError
 
-	def deserialize(self, data:Dict[str, Any]) -> 'AuthInterface':
+	def deserialize(self, data:Dict[str, Any]):
 		raise NotImplementedError
 
 	async def join(self, server_id) -> dict:
@@ -80,3 +81,24 @@ class AuthInterface:
 				if res.status >= 400:
 					raise AuthException(endpoint, res.status, data, kwargs)
 				return data
+
+class OfflineAuthenticator(AuthInterface):
+	def __init__(self, name:str, id:str=''):
+		self.accessToken = ''
+		self.selectedProfile = GameProfile(id=id, name=name)
+
+	async def login(self) -> 'AuthInterface':
+		raise AuthException('login', 418, {"error":"offline authenticator cannot login"}, kwargs={})
+
+	async def refresh(self) -> 'AuthInterface':
+		raise AuthException('refresh', 418, {"error":"offline authenticator cannot refresh"}, kwargs={})
+
+	async def validate(self) -> 'AuthInterface':
+		raise AuthException('validate', 418, {"error":"offline authenticator cannot validate"}, kwargs={})
+
+	def serialize(self) -> Dict[str, Any]:
+		return {}
+
+	def deserialize(self, data:Dict[str, Any]) -> 'AuthInterface':
+		pass
+
