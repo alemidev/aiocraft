@@ -58,6 +58,7 @@ class Dispatcher:
 		self._is_server = server
 		self.host = "localhost"
 		self.port = 25565
+		self._dispatching = False
 
 	@property
 	def is_server(self) -> bool:
