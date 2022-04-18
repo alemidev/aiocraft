@@ -28,6 +28,9 @@ class MojangAuthenticator(AuthInterface):
 	def __init__(self, username:str="", password:Optional[str]=None):
 		self.username = username
 		self.password = password
+		self.accessToken = ""
+		self.clientToken = ""
+		self.selectedProfile = GameProfile("", username)
 
 	def __equals__(self, other) -> bool:
 		if not isinstance(other, self.__class__):
@@ -92,6 +95,8 @@ class MojangAuthenticator(AuthInterface):
 		)
 
 	async def refresh(self, requestUser:bool = False) -> AuthInterface:
+		if not self.accessToken or not self.clientToken:
+			raise AuthException("/refresh", 0, {"message":"No access token or client token"}, {})
 		res = await self._post(
 			self.AUTH_SERVER + "/refresh",
 			headers=self.HEADERS,
@@ -112,7 +117,7 @@ class MojangAuthenticator(AuthInterface):
 
 	async def validate(self, clientToken:bool = True) -> AuthInterface:
 		if not self.accessToken:
-			raise AuthException("/validate", 404, {"message":"No access token"}, {})
+			raise AuthException("/validate", 0, {"message":"No access token"}, {})
 		payload = { "accessToken": self.accessToken }
 		if clientToken:
 			payload["clientToken"] = self.clientToken
