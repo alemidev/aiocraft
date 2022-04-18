@@ -88,7 +88,8 @@ class MinecraftClient:
 			await self._handshake(ConnectionState.STATUS)
 			return await self._status(ping)
 		finally:
-			await self.dispatcher.disconnect()
+			if self.dispatcher.connected:
+				await self.dispatcher.disconnect()
 
 	async def join(self, host:str="", port:int=0, proto:int=0):
 		if self.online_mode:
@@ -99,7 +100,8 @@ class MinecraftClient:
 			if await self._login():
 				await self._play()
 		finally:
-			await self.dispatcher.disconnect()
+			if self.dispatcher.connected:
+				await self.dispatcher.disconnect()
 
 	async def _handshake(self, state:ConnectionState):
 		await self.dispatcher.write(

@@ -249,6 +249,7 @@ class Dispatcher:
 				await self._incoming.put(packet)
 				if self.state != ConnectionState.PLAY:
 					await self._incoming.join() # During play we can pre-process packets
+
 			except (asyncio.TimeoutError, TimeoutError):
 				self.logger.error("Connection timed out")
 				await self.disconnect(block=False)
