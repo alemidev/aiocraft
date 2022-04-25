@@ -1,6 +1,7 @@
 import io
 import math
 import logging
+import struct
 
 from typing import Dict, Tuple, Any
 
@@ -12,34 +13,56 @@ class BitStream:
 	data : bytes
 	cursor : int
 	size : int
+	
 	def __init__(self, data:bytes, size:int):
 		self.data = data
 		self.cursor = 0
 		self.size = size if size > 0 else len(self.data) * 8
+
 	def __len__(self) -> int:
 		return self.size - self.cursor
+
 	def read(self, size:int) -> int:
 		if len(self) < size:
 			raise ValueError(f"Not enough bits ({len(self)} left, {size} requested)")
 		# Calculate splice indexes
-		start_byte = (self.cursor//8)
+		start_byte = math.floor(self.cursor / 8)
 		end_byte = math.ceil((self.cursor + size) / 8)
 		# Construct int from bytes
-		buf = int.from_bytes(
-			self.data[start_byte:end_byte],
-			byteorder='little', signed=False
-		)
-		# Trim extra bytes
-		end_offset = (self.cursor + size) % 8
-		if end_offset > 0:
-			buf = buf >> (8 - end_offset) # There's an extra 1 to the left in air, maybe shift 1 bit less?
-		start_offset = self.cursor % 8
-		buf = buf & (( 1 << size ) - 1)
+		buf = 0
+		delta = end_byte-start_byte
+		fmt = f">{delta}B" # TODO endianness doesn't seem to matter?
+		unpacked = struct.unpack(fmt, self.data[start_byte:end_byte])
+		for (i, x) in enumerate(unpacked):
+			# buf |= (x << (8 * (len(unpacked) - (i + 1))))
+			buf |= (x << (8 * i))
+		# Trim extra bits
+		# offset = self.cursor % 8 # start
+		offset = (8*delta) - ((self.cursor + size) % (8 * delta)) # end
+		if offset > 0:
+			buf = buf >> offset # There's an extra 1 to the left in air, maybe shift 1 bit less?
+		buf = buf & ((1 << size) - 1)
 		# Increment and return
-		self.cursor += size
+		self.cursor += size 
 		return buf
 
 class PalettedContainer(Type):
+	"""
+	block_data = [ UnsignedLong.read(buf) for _ in range(container_size) ]
+	for y in range(self.size):
+		for z in range(self.size):
+			for x in range(self.size):
+				i = x + ((y * 16) + z) * 16
+				start_long = (i * bits) // 64
+				start_offset = (i * bits) % 64
+				end_long = ((i + 1) * bits - 1) // 64
+				if start_long == end_long:
+					block = (block_data[start_long] >> start_offset) & max_val
+				else:
+					end_offset = 64 - start_offset
+					block = (block_data[start_long] >> start_offset |
+							 block_data[end_long] << end_offset) & max_val
+	"""
 	pytype : type
 	threshold : int
 	size : int
@@ -53,6 +76,7 @@ class PalettedContainer(Type):
 
 	def read(self, buffer:io.BytesIO, ctx:Context):
 		bits = UnsignedByte.read(buffer, ctx=ctx) # FIXME if bits > 4 it reads trash
+		#logging.debug("[%d|%d@%d] Bits per block : %d", ctx.x, ctx.z, ctx.sec, bits)
 		if bits < 4:
 			bits = 4
 		if bits >= self.threshold:
@@ -61,9 +85,11 @@ class PalettedContainer(Type):
 		palette = np.zeros((palette_len,), dtype='int32')
 		for i in range(palette_len):
 			palette[i] = VarInt.read(buffer, ctx=ctx)
+		# logging.debug("[%d|%d@%d] Palette section : [%d] %s", ctx.x, ctx.z, ctx.sec, palette_len, str(palette))
 		container_size = VarInt.read(buffer, ctx=ctx)
-		stream = BitStream(buffer.read(container_size * 8), container_size*8*8) # a Long is 64 bits long
 		section = np.zeros((self.size, self.size, self.size), dtype='int32')
+		stream = BitStream(buffer.read(container_size * 8), container_size*8*8) # a Long is 64 bits long
+		# logging.debug("[%d|%d@%d] Buffer : %s", ctx.x, ctx.z, ctx.sec, stream.data)
 		for y in range(self.size):
 			for z in range(self.size):
 				for x in range(self.size):
@@ -159,8 +185,11 @@ class Chunk(Type):
 		return self.blocks[item]
 
 	def read(self, buffer:io.BytesIO, ctx:Context):
+		ctx.x = self.x
+		ctx.z = self.z
 		for i in range(16):
 			if (self.bitmask >> i) & 1:
+				ctx.sec = i
 				block_states, block_light, sky_light = ChunkSection.read(buffer, ctx=ctx)
 				self.blocks[:, i*16 : (i+1)*16, :] = block_states
 				self.block_light[:, i*16 : (i+1)*16, :] = block_light
