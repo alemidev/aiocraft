@@ -43,6 +43,8 @@ class Dispatcher:
 	_packet_whitelist : Optional[Set[Type[Packet]]]
 	_packet_id_whitelist : Optional[Set[int]]
 
+	_log_ignored_packets : bool
+
 	host : str
 	port : int
 
@@ -61,6 +63,7 @@ class Dispatcher:
 		self._dispatching = False
 		self._packet_whitelist = None
 		self._packet_id_whitelist = None
+		self._log_ignored_packets = False
 
 	@property
 	def is_server(self) -> bool:
@@ -121,6 +124,10 @@ class Dispatcher:
 
 	def set_state(self, state:Optional[ConnectionState]=ConnectionState.HANDSHAKING) -> 'Dispatcher':
 		self.state = state or self.state
+		return self
+
+	def log_ignored_packets(self, log:bool) -> 'Dispatcher':
+		self._log_ignored_packets = log
 		return self
 
 	async def connect(self,
@@ -241,7 +248,8 @@ class Dispatcher:
 				packet_id = VarInt.read(buffer, Context(_proto=self.proto))
 				if self.state == ConnectionState.PLAY and self._packet_id_whitelist \
 				and packet_id not in self._packet_id_whitelist:
-					self.logger.debug("[<--] Received | Packet(0x%02x) (ignored)", packet_id)
+					if self._log_ignored_packets:
+						self.logger.debug("[<--] Received | Packet(0x%02x) (ignored)", packet_id)
 					continue # ignore this packet, we rarely need them all, should improve performance
 				cls = self._packet_type_from_registry(packet_id)
 				packet = cls.deserialize(self.proto, buffer)
