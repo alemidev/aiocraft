@@ -5,6 +5,8 @@ from typing import Tuple, Dict, Any
 
 from .types import Type, VarInt, Context
 
+MAX_FIELD_PRINT_SIZE = 255
+
 class Packet:
 	__slots__ = 'id', 'definition', '_processed', '_proto', '_state'
 
@@ -71,7 +73,7 @@ class Packet:
 		return json.dumps(obj, indent=2, default=str)
 
 	def __repr__(self) -> str:
-		trunc = lambda x : x if len(x) < 100 else "[blob]"
+		trunc = lambda x : x if len(x) < MAX_FIELD_PRINT_SIZE else "[blob]"
 		attrs = (f"{key}={trunc(repr(getattr(self, key, None)))}" for (key, t) in self.definition)
 		return f"{self.__class__.__name__}({self._proto}, {', '.join(attrs)})"
 
