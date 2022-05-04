@@ -1,8 +1,10 @@
+from datetime import datetime
+import uuid
 import json
 from math import sqrt
 from enum import Enum
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Tuple, Optional, List, Any, Dict
 
 class ConnectionState(Enum):
 	NONE = -1
@@ -163,3 +165,62 @@ class Enchantment:
 
 	def __str__(self) -> str:
 		return f"{self.type.name}" + (f" {self.level}" if self.level > 1 else "")
+
+@dataclass
+class Texture:
+	name : str
+	value : str
+	signature : Optional[str]
+
+	def __getitem__(self, name:str) -> Optional[Any]:
+		return getattr(self, name, None)
+
+	def serialize(self) -> Dict[str, Any]:
+		return {
+			"_": "Texture",
+			"name": self.name,
+			"value": self.value,
+			"signature": self.signature
+		}
+
+	@classmethod
+	def deserialize(cls, data:Dict[str, Any]) -> 'Texture':
+		if "_" in data and data["_"] != cls.__name__:
+			raise ValueError(f"Cannot deserialize {data['_']} as {cls.__name__}")
+		return cls(**data)
+
+@dataclass
+class Player:
+	UUID : uuid.UUID
+	name : str
+	joinTime : datetime
+	properties : Optional[List[Texture]] = None
+	gamemode : Gamemode = Gamemode.SURVIVAL
+	ping : int = -1
+	displayName : Optional[str] = None
+
+	def __getitem__(self, name:str) -> Optional[Any]:
+		return getattr(self, name, None)
+
+	def serialize(self) -> Dict[str, Any]:
+		return {
+			"_": "Player",
+			"UUID": self.UUID,
+			"name": self.name,
+			"joinTime": self.joinTime,
+			"properties": [ p.serialize() for p in self.properties ] \
+				if self.properties is not None else None,
+			"gamemode": self.gamemode,
+			"ping": self.ping,
+			"displayName": self.displayName
+		}
+
+	@classmethod
+	def deserialize(cls, data:Dict[str, Any]) -> 'Player':
+		if "_" in data and data["_"] != cls.__name__:
+			raise ValueError(f"Cannot deserialize {data['_']} as {cls.__name__}")
+		if "joinTime" not in data:
+			data["joinTime"] = datetime(2011, 11, 18, 0, 0, 0)
+		data["properties"] = [ Texture.deserialize(t) for t in data["properties"] ]
+		return cls(**data)
+
