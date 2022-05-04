@@ -228,7 +228,7 @@ class Dispatcher:
 
 	async def _down_worker(self, timeout:float=30):
 		while self._dispatching:
-			try: # these 2 will timeout or raise EOFError if client gets disconnected
+			try: # Will timeout or raise EOFError if client gets disconnected
 				data = await asyncio.wait_for(self._read_packet(), timeout=timeout)
 
 				if self.encryption:
@@ -273,11 +273,14 @@ class Dispatcher:
 				await self.disconnect(block=False)
 
 	async def _up_worker(self, timeout=1):
-		while self._dispatching:
+		while True:
 			try:
-				packet = await asyncio.wait_for(self._outgoing.get(), timeout=timeout)
+				packet : Packet = await asyncio.wait_for(self._outgoing.get(), timeout=timeout)
 			except asyncio.TimeoutError:
 				continue # check again self._dispatching
+
+			if not self._dispatching: # uglier than 'while self._dispatching' but I need to check it again after unblocking
+				return
 
 			try:
 				buffer = packet.serialize()
@@ -301,7 +304,7 @@ class Dispatcher:
 					data = self._encryptor.update(data)
 
 				self._up.write(data)
-				await self._up.drain()
+				await self._up.drain() # TODO maybe no need to call drain?
 
 				self.logger.debug("[-->] Sent | %s", repr(packet))
 			except Exception:
