@@ -273,7 +273,7 @@ class Dispatcher:
 				await self.disconnect(block=False)
 
 	async def _up_worker(self, timeout=1):
-		while True:
+		while self._dispatching:
 			try:
 				packet : Packet = await asyncio.wait_for(self._outgoing.get(), timeout=timeout)
 			except asyncio.TimeoutError:
