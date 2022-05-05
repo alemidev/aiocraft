@@ -187,7 +187,11 @@ class Texture:
 	def deserialize(cls, data:Dict[str, Any]) -> 'Texture':
 		if "_" in data and data["_"] != cls.__name__:
 			raise ValueError(f"Cannot deserialize {data['_']} as {cls.__name__}")
-		return cls(**data)
+		return cls(
+			name=data["name"],
+			value=data["value"],
+			signature=data["signature"] if "signature" in data else None,
+		)
 
 @dataclass
 class Player:
@@ -219,8 +223,14 @@ class Player:
 	def deserialize(cls, data:Dict[str, Any]) -> 'Player':
 		if "_" in data and data["_"] != cls.__name__:
 			raise ValueError(f"Cannot deserialize {data['_']} as {cls.__name__}")
-		if "joinTime" not in data:
-			data["joinTime"] = datetime(2011, 11, 18, 0, 0, 0)
-		data["properties"] = [ Texture.deserialize(t) for t in data["properties"] ]
-		return cls(**data)
+		return cls(
+			UUID=data["UUID"],
+			name=data["name"],
+			joinTime=data["joinTime"] if "joinTime" in data else datetime(2011, 11, 18, 0, 0, 0),
+			properties=[ Texture.deserialize(t) for t in data["properties"] ] \
+				if "properties" in data and data["properties"] else None,
+			gamemode=data["gamemode"],
+			ping=data["ping"],
+			displayName=data["displayName"] if "displayName" in data else None,
+		)
 
