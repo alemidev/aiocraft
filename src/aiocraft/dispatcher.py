@@ -148,7 +148,8 @@ class Dispatcher:
 
 		if reader and writer:
 			self._down, self._up = reader, writer
-		else:
+		else: # TODO put a timeout here and throw exception
+			self.logger.debug("Attempting to connect to %s:%d", self.host, self.port)
 			self._down, self._up = await asyncio.open_connection(
 				host=self.host,
 				port=self.port,
@@ -169,6 +170,7 @@ class Dispatcher:
 			if not self._up.is_closing() and self._up.can_write_eof():
 				try:
 					self._up.write_eof()
+					self.logger.debug("Wrote EOF on socket")
 				except OSError as e:
 					self.logger.error("Could not write EOF : %s", str(e))
 			self._up.close()
