@@ -10,7 +10,7 @@ from time import time
 
 from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, Any, Set
 
-from .dispatcher import Dispatcher
+from .dispatcher import Dispatcher, Transport
 from .mc.packet import Packet
 from .mc.auth import AuthInterface, AuthException, MojangAuthenticator, MicrosoftAuthenticator
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
@@ -40,6 +40,7 @@ class MinecraftClient:
 		self,
 		server:str,
 		authenticator:AuthInterface,
+		use_udp:bool=False,
 		online_mode:bool = True,
 	):
 		super().__init__()
@@ -55,7 +56,8 @@ class MinecraftClient:
 		self.authenticator = authenticator
 		self._authenticated = False
 
-		self.dispatcher = Dispatcher().set_host(host, port)
+		_transp = Transport.UDP if use_udp else Transport.TCP
+		self.dispatcher = Dispatcher().set_host(host, port, transport=_transp)
 		self._processing = False
 
 		self.logger = LOGGER.getChild(f"on({server})")
@@ -106,10 +108,10 @@ class MinecraftClient:
 	async def _handshake(self, state:ConnectionState):
 		await self.dispatcher.write(
 			PacketSetProtocol(
-				self.dispatcher.proto,
-				protocolVersion=self.dispatcher.proto,
-				serverHost=self.dispatcher.host,
-				serverPort=self.dispatcher.port,
+				self.dispatcher._proto,
+				protocolVersion=self.dispatcher._proto,
+				serverHost=self.dispatcher._host,
+				serverPort=self.dispatcher._port,
 				nextState=state.value
 			)
 		)
@@ -117,7 +119,7 @@ class MinecraftClient:
 	async def _status(self, ping:bool=False) -> Dict[str, Any]:
 		self.dispatcher.state = ConnectionState.STATUS
 		await self.dispatcher.write(
-			PacketPingStart(self.dispatcher.proto) #empty packet
+			PacketPingStart(self.dispatcher._proto) #empty packet
 		)
 		#Response
 		data : Dict[str, Any] = {}
@@ -133,7 +135,7 @@ class MinecraftClient:
 				ping_time = time()
 				await self.dispatcher.write(
 					PacketPing(
-						self.dispatcher.proto,
+						self.dispatcher._proto,
 						time=ping_id,
 					)
 				)
@@ -147,7 +149,7 @@ class MinecraftClient:
 		self.dispatcher.state = ConnectionState.LOGIN
 		await self.dispatcher.write(
 			PacketLoginStart(
-				self.dispatcher.proto,
+				self.dispatcher._proto,
 				username=self.authenticator.selectedProfile.name
 			)
 		)
@@ -178,7 +180,7 @@ class MinecraftClient:
 				else:
 					self.logger.warning("Server gave an offline-mode serverId but still requested Encryption")
 				encryption_response = PacketEncryptionResponse(
-					self.dispatcher.proto,
+					self.dispatcher._proto,
 					sharedSecret=encrypted_secret,
 					verifyToken=token
 				)
@@ -186,7 +188,7 @@ class MinecraftClient:
 				self.dispatcher.encrypt(secret)
 			elif isinstance(packet, PacketCompress):
 				self.logger.info("Compression enabled")
-				self.dispatcher.compression = packet.threshold
+				self.dispatcher._compression = packet.threshold
 			elif isinstance(packet, PacketLoginPluginRequest):
 				self.logger.info("Ignoring plugin request") # TODO ?
 			elif isinstance(packet, PacketSuccess):
@@ -203,7 +205,7 @@ class MinecraftClient:
 			self.logger.debug("[ * ] Processing %s", packet.__class__.__name__)
 			if isinstance(packet, PacketSetCompression):
 				self.logger.info("Compression updated")
-				self.dispatcher.compression = packet.threshold
+				self.dispatcher._compression = packet.threshold
 			elif isinstance(packet, PacketKeepAlive):
 				keep_alive_packet = PacketKeepAliveResponse(340, keepAliveId=packet.keepAliveId)
 				await self.dispatcher.write(keep_alive_packet)
