@@ -10,7 +10,7 @@ from time import time
 
 from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, Any, Set
 
-from .dispatcher import Dispatcher, Transport
+from .dispatcher import Dispatcher
 from .mc.packet import Packet
 from .mc.auth import AuthInterface, AuthException, MojangAuthenticator, MicrosoftAuthenticator
 from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
