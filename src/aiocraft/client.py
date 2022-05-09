@@ -40,7 +40,6 @@ class MinecraftClient:
 		self,
 		server:str,
 		authenticator:AuthInterface,
-		use_udp:bool=False,
 		online_mode:bool = True,
 	):
 		super().__init__()
@@ -56,8 +55,7 @@ class MinecraftClient:
 		self.authenticator = authenticator
 		self._authenticated = False
 
-		_transp = Transport.UDP if use_udp else Transport.TCP
-		self.dispatcher = Dispatcher().set_host(host, port, transport=_transp)
+		self.dispatcher = Dispatcher().set_host(host, port)
 		self._processing = False
 
 		self.logger = LOGGER.getChild(f"on({server})")

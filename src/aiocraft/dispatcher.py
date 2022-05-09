@@ -9,7 +9,6 @@ from typing import List, Dict, Set, Optional, AsyncIterator, Type, Union
 from types import ModuleType
 
 from cryptography.hazmat.primitives.ciphers import CipherContext
-import asyncio_dgram
 
 from .mc import proto as minecraft_protocol
 from .mc.types import VarInt, Context
@@ -19,9 +18,6 @@ from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
 
-class Transport(Enum):
-	TCP = 0
-	UDP = 1
 
 class InvalidState(Exception):
 	pass
@@ -32,11 +28,11 @@ class ConnectionError(Exception):
 class Dispatcher:
 	_is_server : bool # True when receiving packets from clients
 
-	_down : Union[StreamReader, asyncio_dgram.DatagramServer]
+	_down : StreamReader
 	_reader : Optional[Task]
 	_decryptor : CipherContext
 
-	_up   : Union[StreamWriter, asyncio_dgram.DatagramClient]
+	_up   : StreamWriter
 	_writer : Optional[Task]
 	_encryptor : CipherContext
 
@@ -52,7 +48,6 @@ class Dispatcher:
 
 	_host : str
 	_port : int
-	_transport : Transport
 
 	_proto : int
 
@@ -67,7 +62,6 @@ class Dispatcher:
 		self._is_server = server
 		self._host = "localhost"
 		self._port = 25565
-		self._transport = Transport.TCP
 		self._dispatching = False
 		self._packet_whitelist = None
 		self._packet_id_whitelist = None
@@ -144,13 +138,11 @@ class Dispatcher:
 
 	def set_host(
 		self,
-		host:Optional[str]="localhost",
-		port:Optional[int]=25565,
-		transport:Transport=Transport.TCP
+		host:Optional[str]="",
+		port:Optional[int]=0,
 	) -> 'Dispatcher':
 		self._host = host or self._host
 		self._port = port or self._port
-		self._transport = transport
 		self.logger = LOGGER.getChild(f"on({self._host}:{self._port})")
 		return self
 
@@ -188,14 +180,10 @@ class Dispatcher:
 			self._down, self._up = reader, writer
 		else: # TODO put a timeout here and throw exception
 			self.logger.debug("Attempting to connect to %s:%d", self._host, self._port)
-			if self.transport == Transport.TCP:
-				self._down, self._up = await asyncio.open_connection(
-					host=self._host,
-					port=self._port,
-				)
-			else:
-				self._up = await asyncio_dgram.connect((self.host, self.port))
-				self._down = await asyncio_dgram.bind(("0.0.0.0", self.port))
+			self._down, self._up = await asyncio.open_connection(
+				host=self._host,
+				port=self._port,
+			)
 
 		self._dispatching = True
 		self._reader = asyncio.get_event_loop().create_task(self._down_worker())
@@ -268,28 +256,12 @@ class Dispatcher:
 		return result
 
 	async def _read_packet(self) -> bytes:
-		if isinstance(self._down, StreamReader):
-			length = await self._read_varint_from_stream()
-			return await self._down.readexactly(length)
-		elif isinstance(self._down, asyncio_dgram.DatagramServer):
-			data, source = await self._down.recv()
-			if source != self.host:
-				self.logger.warning("Host %s sent buffer '%s'", source, str(data))
-				return b''
-			# TODO do I need to discard size or maybe check it and merge with next packet?
-			return data
-		else:
-			self.logger.error("Unknown protocol, could not read from stream")
-			return b''
+		length = await self._read_varint_from_stream()
+		return await self._down.readexactly(length)
 
 	async def _write_packet(self, data:bytes):
-		if isinstance(self._up, StreamWriter):
-			self._up.write(data)
-			await self._up.drain() # TODO maybe no need to call drain?
-		elif isinstance(self._up, asyncio_dgram.DatagramClient):
-			await self._up.send(data)
-		else:
-			self.logger.error("Unknown protocol, could not send packet")
+		self._up.write(data)
+		await self._up.drain() # TODO maybe no need to call drain?
 
 	async def _down_worker(self, timeout:float=30):
 		while self._dispatching:
