@@ -80,10 +80,6 @@ class Dispatcher:
 		return self._port
 
 	@property
-	def transport(self) -> Transport:
-		return self._transport
-
-	@property
 	def encryption(self) -> bool:
 		return self._encryption
 
