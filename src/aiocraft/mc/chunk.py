@@ -3,11 +3,29 @@ import math
 import logging
 import struct
 
-from typing import Dict, Tuple, Any
+from typing import Dict, Tuple, Any, Optional, Iterable, List
 
 import numpy as np
 
-from aiocraft.mc.types import VarInt, Short, UnsignedByte, Type, Context
+from aiocraft.mc.types import VarInt, Short, UnsignedByte, UnsignedLong, Type, Context
+
+def bit_pack(data:Iterable[int], bits:int, size:int=64):
+	if size <= bits:
+		raise ValueError("Cannot pack into chunks smaller than bits per block")
+	out : List[int] = []
+	cursor = 0
+	buffer = 0
+	for el in data:
+		if cursor + bits > size:
+			delta = (cursor+bits) - size
+			buffer |= (el & (2**(bits-delta) - 1)) << cursor
+			out.append(buffer)
+			buffer = 0 | (( el >> (bits-delta) ) & (2**(delta) - 1))
+			cursor = delta
+		else:
+			buffer |= (el & (2**bits - 1)) << cursor
+			cursor += bits
+	return out
 
 class BitStream:
 	data : bytes
@@ -72,7 +90,11 @@ class PalettedContainer(Type):
 		self.size = size
 
 	def write(self, data, buffer:io.BytesIO, ctx:Context):
-		raise NotImplementedError
+		# TODO attempt to make a palette rather than sending always 13
+		UnsignedByte.write(13, buffer, ctx=ctx) # 13 bits per block
+		VarInt.write(0, buffer, ctx=ctx) # 0 palette len
+		for c in bit_pack(blocks, 13, 8*8):  # FIXME add generator to iter blocks? idk
+			UnsignedLong.write(c, buffer, ctx=ctx)
 
 	def read(self, buffer:io.BytesIO, ctx:Context):
 		bits = UnsignedByte.read(buffer, ctx=ctx) # FIXME if bits > 4 it reads trash
@@ -110,8 +132,20 @@ class HalfByteArrayType(Type):
 	def __init__(self, size:int):
 		self.size = size
 
-	def write(self, data, buffer:io.BytesIO, ctx:Context):
-		raise NotImplementedError
+	def write(self, data:np.ndarray, buffer:io.BytesIO, ctx:Context):
+		if data.shape != (self.size, self.size, self.size):
+			raise ValueError(f"Array must be of shape {str((self.size, self.size, self.size))}")
+		alternating = False
+		val = 0
+		for y in range(self.size):
+			for z in range(self.size):
+				for x in range(self.size):
+					if alternating:
+						val |= (data[x, y, z] & 0xF)
+						buffer.write(struct.pack("B", val)) # FIXME this format is probably wrong
+					else:
+						val |= (data[x, y, z] & 0xF) << 4
+					alternating = not alternating
 
 	def read(self, buffer:io.BytesIO, ctx:Context):
 		section = np.empty((self.size, self.size, self.size), dtype='int32')
@@ -144,8 +178,11 @@ class NewChunkSectionType(Type):
 class OldChunkSectionType(Type):
 	pytype : type
 
-	def write(self, data, buffer:io.BytesIO, ctx:Context):
-		raise NotImplementedError
+	def write(self, data:Tuple[np.ndarray, np.ndarray, np.ndarray], buffer:io.BytesIO, ctx:Context):
+		BlockStateContainer.write(data[0], buffer, ctx=ctx)
+		BlockLightSection.write(data[1], buffer, ctx=ctx)
+		if ctx.overworld:
+			SkyLightSection.write(data[2], buffer, ctx=ctx)
 
 	def read(self, buffer:io.BytesIO, ctx:Context):
 		block_states = BlockStateContainer.read(buffer, ctx=ctx)
@@ -184,6 +221,13 @@ class Chunk(Type):
 	def __getitem__(self, item:Any):
 		return self.blocks[item]
 
+	def merge(self, other:'Chunk'):
+		for i in range(16):
+			if not ((self.bitmask >> i) & 1):
+				self.blocks[:, i*16 : (i+1)*16, :] = other.blocks[:, i*16 : (i+1)*16, :]
+				self.block_light[:, i*16 : (i+1)*16, :] = other.block_light[:, i*16 : (i+1)*16, :]
+				self.sky_light[:, i*16 : (i+1)*16, :] = other.sky_light[:, i*16 : (i+1)*16, :]
+
 	def read(self, buffer:io.BytesIO, ctx:Context):
 		ctx.x = self.x
 		ctx.z = self.z
@@ -200,6 +244,16 @@ class Chunk(Type):
 			logging.warning("Leftover data in chunk buffer")
 		return self
 
+	def write(self, data:Any, buffer:io.BytesIO, ctx:Context):
+		for i in range(16):
+			if (self.bitmask >> i) & 1:
+				ChunkSection.write(
+					(self.blocks[:, i*16 : (i+1)*16, :], self.block_light[:, i*16 : (i+1)*16, :], self.sky_light[:, i*16 : (i+1)*16, :]),
+					buffer,
+					ctx=ctx
+				)
+		pass # TODO!!
+
 class World:
 	chunks : Dict[Tuple[int, int], Chunk]
 
@@ -215,5 +269,7 @@ class World:
 			raise KeyError(f"Chunk {coord} not loaded")
 		return self.chunks[coord][int(x%16), int(y), int(z%16)]
 
-	def put(self, chunk:Chunk, x:int, z:int):
+	def put(self, chunk:Chunk, x:int, z:int, merge:bool=False):
+		if merge and (x,z) in self.chunks:
+			chunk.merge(self.chunks[(x,z)])
 		self.chunks[(x,z)] = chunk
