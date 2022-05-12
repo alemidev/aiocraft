@@ -1,0 +1,12 @@
+[package]
+name = "chunk_unpacker"
+version = "1.0.0"
+edition = "2021"
+
+
+[lib]
+name = "chunk_unpacker"
+crate-type = ["cdylib"] 
+
+[dependencies]
+pyo3 = { version = "0.16.4", features = ["extension-module"] }
