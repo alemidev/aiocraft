@@ -1,9 +1,55 @@
 [build-system]
-requires = [
-	"setuptools>=42",
-	"wheel"
+requires = ["maturin>=0.12,<0.13"]
+build-backend = "maturin"
+
+[project]
+name = "aiocraft"
+version = "0.1.0"
+authors = [
+	{ email = "me@alemi.dev", name = "alemi"},
+	{ email = "francescotolomei@mail.com", name = "f-tml" },
 ]
-build-backend = "setuptools.build_meta"
+maintainers = [
+	{ email = "me@alemi.dev", name = "alemi"},
+	{ email = "francescotolomei@mail.com", name = "f-tml" },
+]
+description = "asyncio-powered headless minecraft client library"
+long_description = "file: README.md"
+long_description_content_type = "text/markdown"
+# requires-python = ">=3.6" # Can this work with 3.6?
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+	"Programming Language :: Rust",
+	"Programming Language :: Python :: Implementation :: CPython",
+	"Programming Language :: Python :: Implementation :: PyPy",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
+	"Development Status :: 4 - Beta",
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["python", "rust", "mc", "minecraft", "protocol", "async", "asyncio", "definitions"]
+
+dependencies = [
+	"pynbt",
+	"cryptography",
+	"aiohttp",
+	"termcolor"
+]
+
+# [project.optional-dependencies]
+# test = [
+# 	"pytest < 5.0.0",
+# 	"pytest-cov[all]"
+# ]
+
+[project.urls]
+homepage = "https://github.com/alemidev/aiocraft"
+# documentation = "readthedocs.org"
+repository = "https://github.com/alemidev/aiocraft"
+# changelog = "github.com/me/spam/blob/master/CHANGELOG.md"
+bug_tracker = "https://github.com/alemidev/aiocraft/issues"
 
 [style]
 use_tabs=true

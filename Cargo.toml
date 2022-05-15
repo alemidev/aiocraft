@@ -1,12 +1,17 @@
 [package]
-name = "chunk_unpacker"
+name = "aiocraft"
 version = "1.0.0"
 edition = "2021"
 
-
 [lib]
-name = "chunk_unpacker"
+name = "aiocraft"
+path = "src/lib.rs"    # The source file of the target.
 crate-type = ["cdylib"] 
 
 [dependencies]
+log = "0.4.17"
+pyo3-log = "0.6.0"
 pyo3 = { version = "0.16.4", features = ["extension-module"] }
+
+[style]
+use_tabs = true
