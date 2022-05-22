@@ -148,6 +148,10 @@ class Dispatcher:
 			self._packet_id_whitelist = set((P(self._proto).id for P in self._packet_whitelist))
 		return self
 
+	def set_compression(self, threshold:Optional[int] = None) -> 'Dispatcher':
+		self._compression = threshold
+		return self
+
 	def set_state(self, state:Optional[ConnectionState]=ConnectionState.HANDSHAKING) -> 'Dispatcher':
 		self.state = state or self.state
 		return self
