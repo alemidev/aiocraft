@@ -30,7 +30,8 @@ pub fn bit_pack(data: Vec<i32>, bits: i32, size: i32) -> PyResult<Vec<i32>> {
 }
 
 pub trait ChunkSection {
-	fn new<R: Read>(chunk_data: &mut R) -> Self;
+	fn new() -> Self;
+	fn read<R: Read>(&mut self, chunk_data: &mut R) -> PyResult<()>;
 	fn get_states(&self) -> [[[u16; 16]; 16]; 16];
 	fn get_light(&self) -> [[[u16; 16]; 16]; 16];
 	fn get_sky_light(&self) -> Option<[[[u16; 16]; 16]; 16]>;
@@ -53,9 +54,9 @@ pub trait ChunkSection {
 		return Ok(result);
 	}
 
-	fn read_paletted_container<R: Read>(buffer: &mut R) -> [[[u16; 16]; 16]; 16] {
+	fn read_paletted_container<R: Read>(buffer: &mut R) -> PyResult<[[[u16; 16]; 16]; 16]> {
 		let mut data: [u8; 1] = [0u8; 1];
-		buffer.read_exact(&mut data);
+		buffer.read_exact(&mut data)?;
 		// bits = UnsignedByte.read(buffer, ctx=ctx) # FIXME if bits > 4 it reads trash
 		// #logging.debug("[%d|%d@%d] Bits per block : %d", ctx.x, ctx.z, ctx.sec, bits)
 		let bits;
@@ -68,17 +69,17 @@ pub trait ChunkSection {
 		else {
 			bits = data[0]
 		}
-		let palette_len = ChunkFormat340::read_varint(buffer).unwrap(); // TODO handle possible error
+		let palette_len = ChunkFormat340::read_varint(buffer)?;
 		let mut palette = vec![0; palette_len as usize];
 		for p in 0..palette_len as usize {
-			palette[p] = ChunkFormat340::read_varint(buffer).unwrap(); // TODO handle possible error
+			palette[p] = ChunkFormat340::read_varint(buffer)?;
 		}
 		// # logging.debug("[%d|%d@%d] Palette section : [%d] %s", ctx.x, ctx.z, ctx.sec, palette_len, str(palette))
-		let container_size = ChunkFormat340::read_varint(buffer).unwrap(); // TODO handle possible error
+		let container_size = ChunkFormat340::read_varint(buffer)?;
 		let mut block_data = vec![0u64; container_size as usize];
 		let mut long_arr: [u8; 8] = [0u8; 8];
 		for i in 0..container_size as usize {
-			buffer.read_exact(&mut long_arr);
+			buffer.read_exact(&mut long_arr)?;
 			let mut tmp: u64 = 0;
 			for j in 0..8 {
 				tmp |= (long_arr[j] as u64) << (j * 8);
@@ -88,7 +89,6 @@ pub trait ChunkSection {
 		let mut section = [[[0u16; 16]; 16]; 16];
 		let max_val: u16 = (1 << bits) - 1;
 		for y in 0..16 {
-			// TODO should probably read them as longs first!
 			for z in 0..16 {
 				for x in 0..16 {
 					let i = x + ((y * 16) + z) * 16;
@@ -119,7 +119,7 @@ pub trait ChunkSection {
 				}
 			}
 		}
-		return section;
+		return Ok(section);
 	}
 }
 
@@ -130,9 +130,9 @@ struct ChunkFormat340 {
 }
 
 impl ChunkFormat340 {
-	fn read_half_byte_array<R: Read>(buffer: &mut R) -> [[[u16; 16]; 16]; 16] {
+	fn read_half_byte_array<R: Read>(buffer: &mut R) -> PyResult<[[[u16; 16]; 16]; 16]> {
 		let mut buf: [u8; (16 * 16 * 16) / 2] = [0u8; (16 * 16 * 16) / 2];
-		buffer.read_exact(&mut buf);
+		buffer.read_exact(&mut buf)?;
 		let mut out = [[[0u16; 16]; 16]; 16];
 		for y in 0..16 {
 			for z in 0..16 {
@@ -143,17 +143,20 @@ impl ChunkFormat340 {
 				}
 			}
 		}
-		return out;
+		return Ok(out);
 	}
 }
 
 impl ChunkSection for ChunkFormat340 {
-	fn new<R: Read>(chunk_data: &mut R) -> Self {
-		Self {
-			block_states: ChunkFormat340::read_paletted_container(chunk_data), // TODO! It's a paletted container
-			block_light: ChunkFormat340::read_half_byte_array(chunk_data),
-			sky_light: Some(ChunkFormat340::read_half_byte_array(chunk_data)), // TODO are we in overworld?
-		}
+	fn new() -> Self {
+		return Self { block_states: [[[0;16];16];16], block_light: [[[0;16];16];16], sky_light: Some([[[0;16];16];16]) };
+	}
+
+	fn read<R: Read>(&mut self, chunk_data: &mut R) -> PyResult<()> {
+		self.block_states = ChunkFormat340::read_paletted_container(chunk_data)?; // TODO! Handle error
+		self.block_light = ChunkFormat340::read_half_byte_array(chunk_data)?;
+		self.sky_light =  Some(ChunkFormat340::read_half_byte_array(chunk_data)?); // TODO are we in overworld?
+		return Ok(());
 	}
 
 	fn get_states(&self) -> [[[u16; 16]; 16]; 16] {
@@ -179,6 +182,7 @@ pub struct Chunk {
 	block_light: [[[u16; 16]; 256]; 16],
 	sky_light: [[[u16; 16]; 256]; 16],
 	biomes: [u8; 256],
+	block_entities: String, // TODO less jank way to store this NBT/JSON/PyDict ...
 }
 // Biomes
 // The biomes array is only present when ground-up continuous is set to true. Biomes cannot be changed unless a chunk is re-sent.
@@ -187,7 +191,7 @@ pub struct Chunk {
 #[pymethods]
 impl Chunk {
 	#[new]
-	pub fn new(x: i32, z: i32, bitmask: u16, ground_up_continuous: bool) -> Self {
+	pub fn new(x: i32, z: i32, bitmask: u16, ground_up_continuous: bool, block_entities: String) -> Self {
 		Self {
 			x: x,
 			z: z,
@@ -197,6 +201,7 @@ impl Chunk {
 			block_light: [[[0u16; 16]; 256]; 16],
 			sky_light: [[[0u16; 16]; 256]; 16],
 			biomes: [0u8; 256],
+			block_entities: block_entities,
 		}
 	}
 
@@ -204,7 +209,8 @@ impl Chunk {
 		let mut c = Cursor::new(chunk_data);
 		for i in 0..16 {
 			if ((self.bitmask >> i) & 1) != 0 {
-				let section: ChunkFormat340 = ChunkFormat340::new(&mut c);
+				let mut section: ChunkFormat340 = ChunkFormat340::new();
+				section.read(&mut c)?;
 				for x in 0..16 {
 					for y in 0..16 {
 						for z in 0..16 {
@@ -218,7 +224,7 @@ impl Chunk {
 		}
 
 		if self.ground_up_continuous {
-			c.read_exact(&mut self.biomes);
+			c.read_exact(&mut self.biomes)?;
 		}
 
 		// if buffer.read() {
@@ -260,6 +266,7 @@ impl Clone for Chunk {
 			block_light: self.block_light.clone(),
 			sky_light: self.sky_light.clone(),
 			biomes: self.biomes.clone(),
+			block_entities: self.block_entities.clone(),
 		}
 	}
 }
@@ -288,6 +295,14 @@ impl World {
 			return Some(chunk.block_states[(x % 16) as usize][y as usize][(z % 16) as usize]);
 		}
 		None
+	}
+
+	pub fn put_block(&mut self, x: usize, y:usize, z:usize, id:u16) -> Option<u16> {
+		let x_off = x % 16; let z_off = z % 16;
+		let c = self.chunks.get_mut(&(x as i32 / 16, z as i32 / 16))?;
+		let old_block = c.block_states[x_off][y][z_off];
+		c.block_states[x_off][y][z_off] = id;
+		return Some(old_block);
 	}
 
 	pub fn get(&self, x: i32, z: i32) -> Option<Chunk> {
