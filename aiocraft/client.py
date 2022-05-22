@@ -10,6 +10,8 @@ from time import time
 
 from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, Any, Set
 
+import dns.resolver
+
 from .dispatcher import Dispatcher
 from .mc.packet import Packet
 from .mc.auth import AuthInterface, AuthException, MojangAuthenticator, MicrosoftAuthenticator
@@ -41,24 +43,28 @@ class MinecraftClient:
 		server:str,
 		authenticator:AuthInterface,
 		online_mode:bool = True,
+		force_port:int = 0,
+		resolve_srv:bool = True,
 	):
-		super().__init__()
-		if ":" in server:
-			_host, _port = server.split(":", 1)
-			host = _host.strip()
-			port = int(_port)
-		else:
-			host = server.strip()
-			port = 25565
-
+		self.logger = LOGGER.getChild(f"on({server})")
 		self.online_mode = online_mode
 		self.authenticator = authenticator
 		self._authenticated = False
-
-		self.dispatcher = Dispatcher().set_host(host, port)
 		self._processing = False
 
-		self.logger = LOGGER.getChild(f"on({server})")
+		host = server
+		port = force_port or 25565
+
+		if resolve_srv:
+			try:
+				answ = dns.resolver.resolve(f"_minecraft._tcp.{server}", "SRV")
+				# TODO can we just use the 1st record?
+				host = str(answ[0].target).rstrip('.')
+				port = answ[0].port
+			except dns.resolver.exception.DNSException: # TODO is this the right thing to catch?
+				self.logger.warning("Failed resolving SRV record for '%s'", server)
+
+		self.dispatcher = Dispatcher().set_host(host, port)
 
 	@property
 	def connected(self) -> bool:
