@@ -61,7 +61,7 @@ class MinecraftClient:
 				# TODO can we just use the 1st record?
 				host = str(answ[0].target).rstrip('.')
 				port = answ[0].port
-			except dns.resolver.exception.DNSException: # TODO is this the right thing to catch?
+			except Exception:  # TODO what can I catch? dns.resolver.exception doesn't always exist, wtf
 				self.logger.warning("Failed resolving SRV record for '%s'", server)
 
 		self.dispatcher = Dispatcher().set_host(host, port)
