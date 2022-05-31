@@ -4,6 +4,7 @@ from multiprocessing.sharedctypes import Value
 from typing import Optional, Dict, Any
 
 import aiohttp
+from json.decoder import JSONDecodeError
 
 from ..definitions import GameProfile
 
@@ -66,7 +67,10 @@ class AuthInterface:
 	async def _post(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
 		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
 			async with session.post(endpoint, **kwargs) as res:
-				data = await res.json(content_type=None)
+				try:
+					data = await res.json(content_type=None)
+				except JSONDecodeError:
+					raise AuthException(endpoint, res.status, {"invalid": await res.text()}, kwargs)
 				logger.debug("POST /%s [%s] : %s", endpoint, str(kwargs), str(data))
 				if res.status >= 400:
 					raise AuthException(endpoint, res.status, data, kwargs)
@@ -76,7 +80,10 @@ class AuthInterface:
 	async def _get(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
 		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
 			async with session.get(endpoint, **kwargs) as res:
-				data = await res.json(content_type=None)
+				try:
+					data = await res.json(content_type=None)
+				except JSONDecodeError:
+					raise AuthException(endpoint, res.status, {"invalid": await res.text()}, kwargs)
 				logger.debug("GET /%s [%s] : %s", endpoint, str(kwargs), str(data))
 				if res.status >= 400:
 					raise AuthException(endpoint, res.status, data, kwargs)
