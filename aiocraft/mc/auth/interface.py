@@ -1,6 +1,6 @@
 """Minecraft authentication interface"""
 import logging
-from multiprocessing.sharedctypes import Value
+from asyncio.exceptions import TimeoutError
 from typing import Optional, Dict, Any
 
 import aiohttp
@@ -66,28 +66,34 @@ class AuthInterface:
 	@classmethod
 	async def _post(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
 		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
-			async with session.post(endpoint, **kwargs) as res:
-				try:
-					data = await res.json(content_type=None)
-				except JSONDecodeError:
-					raise AuthException(endpoint, res.status, {"invalid": await res.text()}, kwargs)
-				logger.debug("POST /%s [%s] : %s", endpoint, str(kwargs), str(data))
-				if res.status >= 400:
-					raise AuthException(endpoint, res.status, data, kwargs)
-				return data
+			try:
+				async with session.post(endpoint, **kwargs) as res:
+					try:
+						data = await res.json(content_type=None)
+					except JSONDecodeError:
+						raise AuthException(endpoint, res.status, {"error": "Invalid JSON response", "response": await res.text()}, kwargs)
+					logger.debug("POST /%s [%s] : %s", endpoint, str(kwargs), str(data))
+					if res.status >= 400:
+						raise AuthException(endpoint, res.status, data, kwargs)
+					return data
+			except TimeoutError:
+				raise AuthException(endpoint, res.status, {"error": "request timed out"}, kwargs)
 
 	@classmethod
 	async def _get(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
 		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
-			async with session.get(endpoint, **kwargs) as res:
-				try:
-					data = await res.json(content_type=None)
-				except JSONDecodeError:
-					raise AuthException(endpoint, res.status, {"invalid": await res.text()}, kwargs)
-				logger.debug("GET /%s [%s] : %s", endpoint, str(kwargs), str(data))
-				if res.status >= 400:
-					raise AuthException(endpoint, res.status, data, kwargs)
-				return data
+			try:
+				async with session.get(endpoint, **kwargs) as res:
+					try:
+						data = await res.json(content_type=None)
+					except JSONDecodeError:
+						raise AuthException(endpoint, res.status, {"error": "Invalid JSON response", "response": await res.text()}, kwargs)
+					logger.debug("GET /%s [%s] : %s", endpoint, str(kwargs), str(data))
+					if res.status >= 400:
+						raise AuthException(endpoint, res.status, data, kwargs)
+					return data
+			except TimeoutError:
+				raise AuthException(endpoint, res.status, {"error": "request timed out"}, kwargs)
 
 class OfflineAuthenticator(AuthInterface):
 	def __init__(self, name:str, id:str=''):
