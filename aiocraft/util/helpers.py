@@ -39,13 +39,15 @@ def _parse_formatted_block(msg:dict) -> str:
 
 def parse_chat(msg:Union[dict,str], ansi_color:bool=False) -> str:
 	"""Recursive function to parse minecraft chat json, with optional colors"""
-	if isinstance(msg, str):
+	if isinstance(msg, dict):
+		data = msg
+	elif isinstance(msg, str):
 		try:
 			data = json.loads(msg)
 		except ValueError:
 			return str(msg) # It's not json, it's already plaintext
 	else:
-		data = msg
+		return str(msg)
 	out = ""
 	if "text" in data or "translate" in data:
 		if ansi_color:
