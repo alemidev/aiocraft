@@ -77,7 +77,7 @@ class AuthInterface:
 						raise AuthException(endpoint, res.status, data, kwargs)
 					return data
 			except TimeoutError:
-				raise AuthException(endpoint, res.status, {"error": "request timed out"}, kwargs)
+				raise AuthException(endpoint, 0, {"error": "request timed out"}, kwargs)
 
 	@classmethod
 	async def _get(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
@@ -93,7 +93,7 @@ class AuthInterface:
 						raise AuthException(endpoint, res.status, data, kwargs)
 					return data
 			except TimeoutError:
-				raise AuthException(endpoint, res.status, {"error": "request timed out"}, kwargs)
+				raise AuthException(endpoint, 0, {"error": "request timed out"}, kwargs)
 
 class OfflineAuthenticator(AuthInterface):
 	def __init__(self, name:str, id:str=''):
