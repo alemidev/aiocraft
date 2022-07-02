@@ -118,8 +118,8 @@ class BlockPos:
 class Item:
 	id : int
 	count : int
-	nbt : dict
-	damage : int # This got removed past 1.12.2
+	nbt : dict # TODO
+	damage : Optional[int] # This got removed past 1.12.2
 
 	def __init__(self, item:'Item' = None, id:int=0, count:int=1, nbt:dict=None, damage:int=0):
 		self.id = id
@@ -132,7 +132,7 @@ class Item:
 			self.nbt = item.nbt
 			self.damage = item.damage
 
-	def as_dict(self) -> dict:
+	def serialize(self) -> dict:
 		return {
 			'id': self.id,
 			'count': self.count,
@@ -140,13 +140,22 @@ class Item:
 			'damage': self.damage,
 		}
 
+	@classmethod
+	def deserialize(cls, data:dict) -> 'Item':
+		return cls(
+			id=data["id"],
+			count=data["count"],
+			nbt=data["nbt"],
+			damage=data["damage"]
+		)
+
 	def __getitem__(self, key:str): # backwards compatibility
 		return getattr(self, key)
 
 	@property
 	def durability(self) -> int:
 		# TODO make a map of durability for each item and subtract damage?
-		return self.damage
+		return self.damage or -1
 
 class Enchantment:
 	eid : int
