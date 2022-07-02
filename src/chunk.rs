@@ -307,6 +307,9 @@ impl World {
 	}
 
 	pub fn get_block(&self, x: i32, y: i32, z: i32) -> Option<u16> {
+		if y < 0 {
+			return Some(0); // TODO no longer the case after 1.17
+		}
 		let mut chunk_x = x / 16;
 		let mut chunk_z = z / 16;
 		if chunk_x < 0 && chunk_x % 16 != 0 { chunk_x-=1; }
@@ -318,6 +321,9 @@ impl World {
 	}
 
 	pub fn put_block(&mut self, x: i32, y:i32, z:i32, id:u16) -> Option<u16> {
+		if y < 0 {
+			return Some(0);
+		}
 		let mut chunk_x = x / 16;
 		let mut chunk_z = z / 16;
 		if chunk_x < 0 && chunk_x % 16 != 0 { chunk_x-=1; }
@@ -334,7 +340,6 @@ impl World {
 	}
 
 	pub fn put(&mut self, chunk: Chunk, x: i32, z: i32, merge: bool) -> Option<Chunk> {
-		info!("Adding chunk x{} z{}", x, z);
 		if merge && self.chunks.contains_key(&(x, z)) {
 			return self.chunks.get_mut(&(x, z)).unwrap().merge(chunk);
 		} else {
