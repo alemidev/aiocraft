@@ -4,6 +4,14 @@ use log::{info, warn};
 
 use pyo3::{exceptions::PyValueError, prelude::*};
 
+fn abs(v:i32, modulo:i32) -> i32 {
+	if v < 0 {
+		return modulo + (v % modulo);
+	} else {
+		return v % modulo;
+	}
+}
+
 #[pyfunction]
 pub fn bit_pack(data: Vec<i32>, bits: i32, size: i32) -> PyResult<Vec<i32>> {
 	if size <= bits {
@@ -77,12 +85,12 @@ pub trait ChunkSection {
 		// # logging.debug("[%d|%d@%d] Palette section : [%d] %s", ctx.x, ctx.z, ctx.sec, palette_len, str(palette))
 		let container_size = ChunkFormat340::read_varint(buffer)?;
 		let mut block_data = vec![0u64; container_size as usize];
-		let mut long_arr: [u8; 8] = [0u8; 8];
+		let mut recv_buf: [u8; 8] = [0u8; 8];
 		for i in 0..container_size as usize {
-			buffer.read_exact(&mut long_arr)?;
+			buffer.read_exact(&mut recv_buf)?;
 			let mut tmp: u64 = 0;
 			for j in 0..8 {
-				tmp |= (long_arr[j] as u64) << (j * 8);
+				tmp |= (recv_buf[j] as u64) << ((7-j) * 8);
 			}
 			block_data[i] = tmp;
 		}
@@ -91,7 +99,7 @@ pub trait ChunkSection {
 		for y in 0..16 {
 			for z in 0..16 {
 				for x in 0..16 {
-					let i = x + ((y * 16) + z) * 16;
+					let i = (((y * 16) + z) * 16) + x;
 					let start_byte = (i * bits as usize) / 64;
 					let start_offset = (i * bits as usize) % 64;
 					let end_byte = ((i + 1) * bits as usize - 1) / 64;
@@ -169,8 +177,6 @@ impl ChunkSection for ChunkFormat340 {
 		self.sky_light
 	}
 }
-
-// https://stackoverflow.com/questions/41069865/how-to-create-an-in-memory-object-that-can-be-used-as-a-reader-writer-or-seek/50732452#50732452
 
 #[pyclass]
 pub struct Chunk {
@@ -253,6 +259,16 @@ impl Chunk {
 		}
 		return Some(old_chunk); //TODO: is this really we want to return?
 	}
+
+	pub fn get_slice(&self, y:u8) -> Vec<Vec<u16>> {
+		let mut slice = vec![vec![0u16;16];16];
+		for x in 0..16 {
+			for z in 0..16 {
+				slice[x][z] = self.block_states[x][y as usize][z];
+			}
+		}
+		return slice;
+	}
 }
 
 impl Clone for Chunk {
@@ -291,17 +307,21 @@ impl World {
 	}
 
 	pub fn get_block(&self, x: i32, y: i32, z: i32) -> Option<u16> {
-		if let Some(chunk) = self.chunks.get(&(x / 16, z / 16)) {
-			return Some(chunk.block_states[(x % 16) as usize][y as usize][(z % 16) as usize]);
+		let mut chunk_x = x / 16;
+		let mut chunk_z = z / 16;
+		if chunk_x < 0 && chunk_x % 16 != 0 { chunk_x-=1; }
+		if chunk_z < 0 && chunk_z % 16 != 0 { chunk_z-=1; }
+		if let Some(chunk) = self.chunks.get(&(chunk_x, chunk_z)) {
+			return Some(chunk.block_states[abs(x, 16) as usize][y as usize][abs(z, 16) as usize]);
 		}
 		None
 	}
 
-	pub fn put_block(&mut self, x: usize, y:usize, z:usize, id:u16) -> Option<u16> {
-		let x_off = x % 16; let z_off = z % 16;
+	pub fn put_block(&mut self, x: i32, y:i32, z:i32, id:u16) -> Option<u16> {
+		let x_off = (x % 16) as usize; let z_off = (z % 16) as usize;
 		let c = self.chunks.get_mut(&(x as i32 / 16, z as i32 / 16))?;
-		let old_block = c.block_states[x_off][y][z_off];
-		c.block_states[x_off][y][z_off] = id;
+		let old_block = c.block_states[x_off][y as usize][z_off];
+		c.block_states[x_off][y as usize][z_off] = id;
 		return Some(old_block);
 	}
 
