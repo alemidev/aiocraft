@@ -152,6 +152,12 @@ class Item:
 	def __getitem__(self, key:str): # backwards compatibility
 		return getattr(self, key)
 
+	def __str__(self) -> str:
+		return repr(self)
+
+	def __repr__(self) -> str:
+		return f"Item(id={self.id}, count={self.count}, damage={self.damage}, nbt={str(self.nbt)})"
+
 	@property
 	def durability(self) -> int:
 		# TODO make a map of durability for each item and subtract damage?
