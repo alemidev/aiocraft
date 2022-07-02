@@ -318,8 +318,12 @@ impl World {
 	}
 
 	pub fn put_block(&mut self, x: i32, y:i32, z:i32, id:u16) -> Option<u16> {
-		let x_off = (x % 16) as usize; let z_off = (z % 16) as usize;
-		let c = self.chunks.get_mut(&(x as i32 / 16, z as i32 / 16))?;
+		let mut chunk_x = x / 16;
+		let mut chunk_z = z / 16;
+		if chunk_x < 0 && chunk_x % 16 != 0 { chunk_x-=1; }
+		if chunk_z < 0 && chunk_z % 16 != 0 { chunk_z-=1; }
+		let x_off = abs(x, 16) as usize; let z_off = abs(z, 16) as usize;
+		let c = self.chunks.get_mut(&(chunk_x, chunk_z))?;
 		let old_block = c.block_states[x_off][y as usize][z_off];
 		c.block_states[x_off][y as usize][z_off] = id;
 		return Some(old_block);
