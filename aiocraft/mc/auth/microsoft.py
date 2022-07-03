@@ -48,7 +48,7 @@ class MicrosoftAuthenticator(AuthInterface):
 		return {
 			'accessToken': self.accessToken,
 			'refreshToken': self.refreshToken,
-			'selectedProfile': self.selectedProfile.as_dict(),
+			'selectedProfile': self.selectedProfile.serialize(),
 		}
 
 	def deserialize(self, data:Dict[str, Any]):

@@ -53,7 +53,7 @@ class MojangAuthenticator(AuthInterface):
 			"username":self.username,
 			"accessToken":self.accessToken,
 			"clientToken":self.clientToken,
-			"selectedProfile": self.selectedProfile.as_dict(),
+			"selectedProfile": self.selectedProfile.serialize(),
 		}
 
 	def deserialize(self, data:Dict[str, Any]) -> AuthInterface:

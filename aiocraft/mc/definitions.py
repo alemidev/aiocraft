@@ -36,12 +36,12 @@ class GameProfile:
 	name : str
 
 	def __str__(self):
-		return json.dumps(self.as_dict(), indent=2)
+		return json.dumps(self.serialize(), indent=2)
 
 	def __repr__(self):
 		return f"GameProfile(id='{self.id}', name='{self.name}')"
 
-	def as_dict(self):
+	def serialize(self):
 		return {
 			"id": self.id,
 			"name": self.name

@@ -38,7 +38,7 @@ class Packet:
 		ctx = Context(_proto=proto)
 		for k, t in cls._definitions[proto]:
 			setattr(ctx, k, t.read(buffer, ctx=ctx))
-		return cls(proto, **ctx.as_dict())
+		return cls(proto, **ctx.serialize())
 		# return cls(proto, **{ name : t.read(buffer) for (name, t) in cls._definitions[proto] })
 
 	def serialize(self) -> io.BytesIO:
