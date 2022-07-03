@@ -6,7 +6,7 @@ use pyo3::{exceptions::PyValueError, prelude::*};
 
 fn abs(v:i32, modulo:i32) -> i32 {
 	if v < 0 {
-		return modulo + (v % modulo);
+		return (modulo + (v % modulo)) % modulo;
 	} else {
 		return v % modulo;
 	}
