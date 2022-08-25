@@ -72,7 +72,10 @@ class MicrosoftAuthenticator(AuthInterface):
 		)
 
 	async def login(self): # TODO nicer way to get code?
+		if not self.code:
+			raise AuthException("/login", 0, {"error": "Missing login code"}, {})
 		self.accessToken = await self.authenticate(self.code)
+		self.code = None  # this is only valid once
 		prof = await self.fetch_profile()
 		self.selectedProfile = GameProfile(id=prof['id'], name=prof['name'])
 		logging.info("Successfully logged into Microsoft account")

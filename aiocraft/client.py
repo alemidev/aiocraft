@@ -82,7 +82,9 @@ class MinecraftClient:
 			try:
 				await self.authenticator.refresh()
 				self.logger.warning("Refreshed Token")
-			except AuthException:
+			except AuthException as e:
+				if not self.authenticator.code:
+					raise e  # no code to login, re-raise refresh exc
 				await self.authenticator.login()
 				self.logger.info("Logged in")
 		self._authenticated = True
