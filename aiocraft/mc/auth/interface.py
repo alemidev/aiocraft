@@ -60,7 +60,7 @@ class AuthInterface:
 			json={
 				"serverId": server_id,
 				"accessToken": self.accessToken,
-				"selectedProfile": self.selectedProfile.serialize()
+				"selectedProfile": self.selectedProfile.id,
 			}
 		)
 
