@@ -1,23 +1,23 @@
 """Minecraft identity utilities."""
 import json
 import uuid
-import logging
 
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
 
-import aiohttp
 
 from .interface import AuthInterface, AuthException
 from ..definitions import GameProfile
 
 @dataclass
 class MojangAuthenticator(AuthInterface):
+	#selectedProfile : GameProfile
+	#accessToken : str
+	#session_server_override : str
 	username : str
 	password : Optional[str]
-	accessToken : str
 	clientToken : str
-	selectedProfile : GameProfile
+	auth_server_override : str
 
 	AGENT_NAME = "Minecraft"
 	AGENT_VERSION = 1
@@ -25,12 +25,19 @@ class MojangAuthenticator(AuthInterface):
 	CONTENT_TYPE = "application/json"
 	HEADERS = {"content-type": CONTENT_TYPE}
 
-	def __init__(self, username:str="", password:Optional[str]=None):
+	def __init__(
+		self, username:str="",
+		password:Optional[str]=None,
+		session_server_override:Optional[str]=None,
+		auth_server_override:Optional[str]=None,
+	):
 		self.username = username
 		self.password = password
 		self.accessToken = ""
 		self.clientToken = ""
 		self.selectedProfile = GameProfile("", username)
+		self.session_server_override = session_server_override
+		self.auth_server_override = auth_server_override
 
 	def __equals__(self, other) -> bool:
 		if not isinstance(other, self.__class__):
@@ -47,6 +54,10 @@ class MojangAuthenticator(AuthInterface):
 
 	def __str__(self) -> str:
 		return repr(self)
+
+	@property
+	def auth_server(self) -> str:
+		return self.auth_server_override or self.AUTH_SERVER
 
 	def serialize(self) -> Dict[str, Any]:
 		return {
@@ -75,7 +86,7 @@ class MojangAuthenticator(AuthInterface):
 
 		payload["clientToken"] = uuid.uuid4().hex # don't include this to invalidate all other sessions
 
-		res = await self._post(self.AUTH_SERVER + "/authenticate", json=payload)
+		res = await self._post(self.auth_server + "/authenticate", json=payload)
 
 		self.accessToken=res["accessToken"]
 		self.clientToken=res["clientToken"]
@@ -83,11 +94,10 @@ class MojangAuthenticator(AuthInterface):
 
 		return self
 
-	@classmethod
-	async def sign_out(cls, username:str, password:str) -> dict:
-		return await cls._post(
-			cls.AUTH_SERVER + "/signout",
-			headers=cls.HEADERS,
+	async def sign_out(self, username:str, password:str) -> dict:
+		return await self._post(
+			self.auth_server + "/signout",
+			headers=self.HEADERS,
 			json={
 				"username": username,
 				"password": password
@@ -98,7 +108,7 @@ class MojangAuthenticator(AuthInterface):
 		if not self.accessToken or not self.clientToken:
 			raise AuthException("/refresh", 0, {"message":"No access token or client token"}, {})
 		res = await self._post(
-			self.AUTH_SERVER + "/refresh",
+			self.auth_server + "/refresh",
 			headers=self.HEADERS,
 			json={
 				"accessToken": self.accessToken,
@@ -122,7 +132,7 @@ class MojangAuthenticator(AuthInterface):
 		if clientToken:
 			payload["clientToken"] = self.clientToken
 		await self._post(
-			self.AUTH_SERVER + "/validate",
+			self.auth_server + "/validate",
 			headers=self.HEADERS,
 			json=payload,
 		)
@@ -130,7 +140,7 @@ class MojangAuthenticator(AuthInterface):
 
 	async def invalidate(self) -> AuthInterface:
 		await self._post(
-			self.AUTH_SERVER + "/invalidate",
+			self.auth_server + "/invalidate",
 			headers=self.HEADERS,
 			json= {
 				"accessToken": self.accessToken,

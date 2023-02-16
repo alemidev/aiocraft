@@ -26,9 +26,13 @@ class AuthException(Exception):
 class AuthInterface:
 	accessToken : str
 	selectedProfile : GameProfile
+	session_server_override : str
 
 	SESSION_SERVER = "https://sessionserver.mojang.com/session/minecraft"
 	TIMEOUT = aiohttp.ClientTimeout(total=3)
+
+	def __init__(self):
+		raise NotImplementedError
 
 	async def login(self) -> 'AuthInterface':
 		raise NotImplementedError
@@ -45,9 +49,13 @@ class AuthInterface:
 	def deserialize(self, data:Dict[str, Any]):
 		raise NotImplementedError
 
+	@property
+	def session_server(self) -> str:
+		return self.session_server_override or self.SESSION_SERVER
+
 	async def join(self, server_id) -> dict:
 		return await self._post(
-			self.SESSION_SERVER + "/join",
+			self.session_server + "/join",
 			headers={"content-type":"application/json"},
 			json={
 				"serverId": server_id,
@@ -56,16 +64,14 @@ class AuthInterface:
 			}
 		)
 
-	@classmethod # TODO more love for server side!
-	async def server_join(cls, username:str, serverId:str, ip:Optional[str] = None):
+	async def server_join(self, username:str, serverId:str, ip:Optional[str] = None):
 		params = {"username":username, "serverId":serverId}
 		if ip:
 			params["ip"] = ip
-		return await cls._get(cls.SESSION_SERVER + "/hasJoined", params=params)
+		return await self._get(self.session_server + "/hasJoined", params=params)
 
-	@classmethod
-	async def _post(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
-		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
+	async def _post(self, endpoint:str, **kwargs) -> Dict[str, Any]:
+		async with aiohttp.ClientSession(timeout=self.TIMEOUT) as session:
 			try:
 				async with session.post(endpoint, **kwargs) as res:
 					try:
@@ -79,9 +85,8 @@ class AuthInterface:
 			except TimeoutError:
 				raise AuthException(endpoint, 0, {"error": "request timed out"}, kwargs)
 
-	@classmethod
-	async def _get(cls, endpoint:str, **kwargs) -> Dict[str, Any]:
-		async with aiohttp.ClientSession(timeout=cls.TIMEOUT) as session:
+	async def _get(self, endpoint:str, **kwargs) -> Dict[str, Any]:
+		async with aiohttp.ClientSession(timeout=self.TIMEOUT) as session:
 			try:
 				async with session.get(endpoint, **kwargs) as res:
 					try:
