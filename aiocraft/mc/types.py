@@ -359,6 +359,46 @@ class SlotType(Type):
 
 Slot = SlotType()
 
+class ParticleType(Type):
+	pytype : type = dict
+
+	def write(self, data:dict, buffer:io.BytesIO, ctx:Context):
+		raise NotImplementedError
+
+	def read(self, data:dict, buffer:io.BytesIO, ctx:Context):
+		data : Dict[str, Any] = {}
+		data["id"] = VarInt.read(buffer, ctx)
+		if data["id"] in (2, 3, 25):
+			data["blockState"] = VarInt.read(buffer, ctx)
+		elif data["id"] == 30:
+			data["roll"] = Float.read(buffer, ctx)
+		elif data["id"] == 39:
+			data["item"] = Slot.read(buffer, ctx)
+		elif data["id"] == 92:
+			data["delay"] = VarInt.read(buffer, ctx)
+		elif data["id"] == 14:
+			data["red"] = Float.read(buffer, ctx)
+			data["green"] = Float.read(buffer, ctx)
+			data["blue"] = Float.read(buffer, ctx)
+			data["scale"] = Float.read(buffer, ctx)
+		elif data["id"] == 15:
+			data["from_red"] = Float.read(buffer, ctx)
+			data["from_green"] = Float.read(buffer, ctx)
+			data["from_blue"] = Float.read(buffer, ctx)
+			data["scale"] = Float.read(buffer, ctx)
+			data["to_red"] = Float.read(buffer, ctx)
+			data["to_green"] = Float.read(buffer, ctx)
+			data["to_blue"] = Float.read(buffer, ctx)
+		elif data["id"] == 40:
+			data["type"] = String.read(buffer, ctx)
+			data["position"] = Position.read(buffer, ctx)
+			data["entity"] = VarInt.read(buffer, ctx)
+			data["eyes"] = Float.read(buffer, ctx)
+			data["ticks"] = VarInt.read(buffer, ctx)
+		return data
+
+Particle = ParticleType()
+
 # wiki.vg does not document these anymore. Minecraft 1.12.2 has these as metadata types
 _ENTITY_METADATA_TYPES = {
 	0  : Byte,
@@ -383,21 +423,49 @@ _ENTITY_METADATA_TYPES_NEW = {
 	2  : Float,
 	3  : String,
 	4  : Chat,
-	5  : OptionalType(Chat), # Chat is present if the Boolean is set to true
+	5  : OptionalType(Chat),
 	6  : Slot,
 	7  : Boolean,
-	8  : StructType(("x", Float), ("y", Float), ("z", Float)), # Rotation
+	8  : StructType(("x", Float), ("y", Float), ("z", Float)), 
 	9  : Position,
 	10 : OptionalType(Position),
-	11 : VarInt, # Direction (Down = 0, Up = 1, North = 2, South = 3, West = 4, East = 5)
+	11 : VarInt, # Direction
 	12 : OptionalType(UUID),
-	13 : VarInt, # OptBlockID (VarInt) 0 for absent (implies air); otherwise, a block state ID as per the global palette
+	13 : OptionalType(VarInt), # Optional BlockID
 	14 : NBTTag,
-	15 : TrailingData, # Particle, # TODO!
-	16 : StructType(("type", VarInt), ("profession", VarInt), ("level", VarInt)), # Villager Data
-	17 : OptionalType(VarInt), # Used for entity IDs.
-	18 : VarInt, # Pose 0: STANDING, 1: FALL_FLYING, 2: SLEEPING, 3: SWIMMING, 4: SPIN_ATTACK, 5: SNEAKING, 6: LONG_JUMPING, 7: DYING 
+	15 : Particle,
+	16 : StructType(("type", VarInt), ("profession", VarInt), ("level", VarInt)),
+	17 : OptionalType(VarInt),
+	18 : VarInt, # pose
 }
+
+# This is for 1.19
+# _ENTITY_METADATA_TYPES_NEW = {
+# 	0  : Byte,
+# 	1  : VarInt,
+# 	2  : VarLong,
+# 	3  : Float,
+# 	4  : String,
+# 	5  : Chat,
+# 	6  : OptionalType(Chat),
+# 	7  : Slot,
+# 	8  : Boolean,
+# 	9  : StructType(("x", Float), ("y", Float), ("z", Float)), 
+# 	10 : Position,
+# 	11 : OptionalType(Position),
+# 	12 : VarInt, # Direction
+# 	13 : OptionalType(UUID),
+# 	14 : OptionalType(VarInt), # Optional BlockID
+# 	15 : NBTTag,
+# 	16 : Particle,
+# 	17 : StructType(("type", VarInt), ("profession", VarInt), ("level", VarInt)),
+# 	18 : OptionalType(VarInt),
+# 	19 : VarInt, # pose
+# 	20 : VarInt, # cat variant
+# 	21 : VarInt, # frog variant
+# 	22 : StructType(("dimension", Identifier), ("position", Position)),
+# 	23 : VarInt, # painting variant
+# }
 
 class EntityMetadataType(Type):
 	pytype : type = dict
