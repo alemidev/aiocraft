@@ -59,6 +59,12 @@ class MojangAuthenticator(AuthInterface):
 	def auth_server(self) -> str:
 		return self.auth_server_override or self.AUTH_SERVER
 
+	@property
+	def code(self) -> str:
+		if self.username and self.password:
+			return self.username
+		return ""
+
 	def serialize(self) -> Dict[str, Any]:
 		return {
 			"username":self.username,
