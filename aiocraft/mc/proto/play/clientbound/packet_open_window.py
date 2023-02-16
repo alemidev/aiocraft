@@ -69,7 +69,11 @@ class PacketOpenWindow(Packet):
 		751 : 45,
 		755 : 46,
 		756 : 46,
-		757 : 46
+		757 : 46,
+		758 : 46,
+		759 : 43,
+		760 : 45,
+		761 : 44
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'windowId', Byte ), ( 'inventoryType', String ), ( 'windowTitle', String ), ( 'slotCount', Byte ), ( 'entityId', SwitchType('inventoryType', { 'EntityHorse' : Int }, None, ) ) ],
@@ -108,5 +112,9 @@ class PacketOpenWindow(Packet):
 		751 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
 		755 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
 		756 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
-		757 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ]
+		757 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
+		758 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
+		759 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
+		760 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ],
+		761 : [ ( 'windowId', VarInt ), ( 'inventoryType', VarInt ), ( 'windowTitle', String ) ]
 	}

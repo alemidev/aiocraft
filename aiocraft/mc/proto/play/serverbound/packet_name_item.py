@@ -40,7 +40,11 @@ class PacketNameItem(Packet):
 		751 : 32,
 		755 : 32,
 		756 : 32,
-		757 : 32
+		757 : 32,
+		758 : 32,
+		759 : 34,
+		760 : 35,
+		761 : 35
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'name', String ) ],
@@ -62,5 +66,9 @@ class PacketNameItem(Packet):
 		751 : [ ( 'name', String ) ],
 		755 : [ ( 'name', String ) ],
 		756 : [ ( 'name', String ) ],
-		757 : [ ( 'name', String ) ]
+		757 : [ ( 'name', String ) ],
+		758 : [ ( 'name', String ) ],
+		759 : [ ( 'name', String ) ],
+		760 : [ ( 'name', String ) ],
+		761 : [ ( 'name', String ) ]
 	}

@@ -75,7 +75,11 @@ class PacketEntityMoveLook(Packet):
 		751 : 40,
 		755 : 42,
 		756 : 42,
-		757 : 42
+		757 : 42,
+		758 : 42,
+		759 : 39,
+		760 : 41,
+		761 : 40
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'dX', Byte ), ( 'dY', Byte ), ( 'dZ', Byte ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
@@ -114,5 +118,9 @@ class PacketEntityMoveLook(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'onGround', Boolean ) ]
 	}

@@ -10,12 +10,12 @@ class PacketWorldBorderLerpSize(Packet):
 	
 	newDiameter : float
 	oldDiameter : float
-	speed : int
+	speed : Union[bytes,int]
 
 	def __init__(self, proto:int,
 		newDiameter:float=None,
 		oldDiameter:float=None,
-		speed:int=None,
+		speed:Union[bytes,int]=None,
 		**kwargs
 	):
 		super().__init__(proto,
@@ -29,10 +29,18 @@ class PacketWorldBorderLerpSize(Packet):
 	_ids : Dict[int, int] = {
 		755 : 67,
 		756 : 67,
-		757 : 67
+		757 : 67,
+		758 : 67,
+		759 : 66,
+		760 : 69,
+		761 : 68
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		755 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ) ],
-		756 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ) ],
-		757 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ) ]
+		755 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ) ],
+		756 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ) ],
+		757 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ) ],
+		758 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ) ],
+		759 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ) ],
+		760 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ) ],
+		761 : [ ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ) ]
 	}

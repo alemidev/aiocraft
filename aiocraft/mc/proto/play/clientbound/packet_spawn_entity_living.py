@@ -93,7 +93,8 @@ class PacketSpawnEntityLiving(Packet):
 		751 : 2,
 		755 : 2,
 		756 : 2,
-		757 : 2
+		757 : 2,
+		758 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ), ( 'metadata', EntityMetadata ) ],
@@ -132,5 +133,6 @@ class PacketSpawnEntityLiving(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'headPitch', Byte ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
 	}

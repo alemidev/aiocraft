@@ -63,7 +63,11 @@ class PacketUpdateHealth(Packet):
 		751 : 73,
 		755 : 82,
 		756 : 82,
-		757 : 82
+		757 : 82,
+		758 : 82,
+		759 : 82,
+		760 : 85,
+		761 : 83
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
@@ -102,5 +106,9 @@ class PacketUpdateHealth(Packet):
 		751 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
 		755 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
 		756 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
-		757 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ]
+		757 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
+		758 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
+		759 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
+		760 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ],
+		761 : [ ( 'health', Float ), ( 'food', VarInt ), ( 'foodSaturation', Float ) ]
 	}

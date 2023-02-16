@@ -6,16 +6,19 @@ from ....definitions import *
 from ....types import *
 
 class PacketUseItem(Packet):
-	__slots__ = ( 'id', 'hand' )
+	__slots__ = ( 'id', 'hand', 'sequence' )
 	
 	hand : int
+	sequence : int
 
 	def __init__(self, proto:int,
 		hand:int=None,
+		sequence:int=None,
 		**kwargs
 	):
 		super().__init__(proto,
-			hand=hand
+			hand=hand,
+			sequence=sequence
 		)
 
 	_state : int = 3
@@ -56,7 +59,11 @@ class PacketUseItem(Packet):
 		751 : 47,
 		755 : 47,
 		756 : 47,
-		757 : 47
+		757 : 47,
+		758 : 47,
+		759 : 49,
+		760 : 50,
+		761 : 50
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		76 : [ ( 'hand', VarInt ) ],
@@ -94,5 +101,9 @@ class PacketUseItem(Packet):
 		751 : [ ( 'hand', VarInt ) ],
 		755 : [ ( 'hand', VarInt ) ],
 		756 : [ ( 'hand', VarInt ) ],
-		757 : [ ( 'hand', VarInt ) ]
+		757 : [ ( 'hand', VarInt ) ],
+		758 : [ ( 'hand', VarInt ) ],
+		759 : [ ( 'hand', VarInt ), ( 'sequence', VarInt ) ],
+		760 : [ ( 'hand', VarInt ), ( 'sequence', VarInt ) ],
+		761 : [ ( 'hand', VarInt ), ( 'sequence', VarInt ) ]
 	}

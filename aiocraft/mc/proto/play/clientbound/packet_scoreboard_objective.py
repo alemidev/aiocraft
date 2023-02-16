@@ -66,7 +66,11 @@ class PacketScoreboardObjective(Packet):
 		751 : 74,
 		755 : 83,
 		756 : 83,
-		757 : 83
+		757 : 83,
+		758 : 83,
+		759 : 83,
+		760 : 86,
+		761 : 84
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : String, 2 : String }, None, ) ) ],
@@ -105,5 +109,9 @@ class PacketScoreboardObjective(Packet):
 		751 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
 		755 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
 		756 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
-		757 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ]
+		757 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
+		758 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
+		759 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
+		760 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ],
+		761 : [ ( 'name', String ), ( 'action', Byte ), ( 'displayText', SwitchType('action', { 0 : String, 2 : String }, None, ) ), ( 'type', SwitchType('action', { 0 : VarInt, 2 : VarInt }, None, ) ) ]
 	}

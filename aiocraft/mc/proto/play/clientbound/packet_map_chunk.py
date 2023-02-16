@@ -102,7 +102,11 @@ class PacketMapChunk(Packet):
 		751 : 32,
 		755 : 34,
 		756 : 34,
-		757 : 34
+		757 : 34,
+		758 : 34,
+		759 : 31,
+		760 : 33,
+		761 : 32
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'x', Int ), ( 'z', Int ), ( 'groundUp', Boolean ), ( 'bitMap', UnsignedShort ), ( 'chunkData', ByteArray ) ],
@@ -141,5 +145,9 @@ class PacketMapChunk(Packet):
 		751 : [ ( 'x', Int ), ( 'z', Int ), ( 'groundUp', Boolean ), ( 'bitMap', VarInt ), ( 'heightmaps', NBTTag ), ( 'biomes', SwitchType('groundUp', { 'false' : Void, 'true' : ArrayType(VarInt, VarInt, ) }, None, ) ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(NBTTag, VarInt, ) ) ],
 		755 : [ ( 'x', Int ), ( 'z', Int ), ( 'bitMap', ArrayType(Long, VarInt, ) ), ( 'heightmaps', NBTTag ), ( 'biomes', ArrayType(VarInt, VarInt, ) ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(NBTTag, VarInt, ) ) ],
 		756 : [ ( 'x', Int ), ( 'z', Int ), ( 'bitMap', ArrayType(Long, VarInt, ) ), ( 'heightmaps', NBTTag ), ( 'biomes', ArrayType(VarInt, VarInt, ) ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(NBTTag, VarInt, ) ) ],
-		757 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ]
+		757 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
+		758 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
+		759 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
+		760 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ],
+		761 : [ ( 'x', Int ), ( 'z', Int ), ( 'heightmaps', NBTTag ), ( 'chunkData', ByteArray ), ( 'blockEntities', ArrayType(TrailingData, VarInt, ) ), ( 'trustEdges', Boolean ), ( 'skyLightMask', ArrayType(Long, VarInt, ) ), ( 'blockLightMask', ArrayType(Long, VarInt, ) ), ( 'emptySkyLightMask', ArrayType(Long, VarInt, ) ), ( 'emptyBlockLightMask', ArrayType(Long, VarInt, ) ), ( 'skyLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ), ( 'blockLight', ArrayType(ArrayType(Byte, VarInt, ), VarInt, ) ) ]
 	}

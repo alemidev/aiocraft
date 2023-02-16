@@ -6,9 +6,10 @@ from ....definitions import *
 from ....types import *
 
 class PacketRespawn(Packet):
-	__slots__ = ( 'id', 'copyMetadata', 'difficulty', 'dimension', 'gamemode', 'hashedSeed', 'isDebug', 'isFlat', 'levelType', 'previousGamemode', 'worldName' )
+	__slots__ = ( 'id', 'copyMetadata', 'death', 'difficulty', 'dimension', 'gamemode', 'hashedSeed', 'isDebug', 'isFlat', 'levelType', 'previousGamemode', 'worldName' )
 	
 	copyMetadata : bool
+	death : tuple
 	difficulty : int
 	dimension : Union[dict,int,str]
 	gamemode : int
@@ -21,6 +22,7 @@ class PacketRespawn(Packet):
 
 	def __init__(self, proto:int,
 		copyMetadata:bool=None,
+		death:tuple=None,
 		difficulty:int=None,
 		dimension:Union[dict,int,str]=None,
 		gamemode:int=None,
@@ -34,6 +36,7 @@ class PacketRespawn(Packet):
 	):
 		super().__init__(proto,
 			copyMetadata=copyMetadata,
+			death=death,
 			difficulty=difficulty,
 			dimension=dimension,
 			gamemode=gamemode,
@@ -84,7 +87,11 @@ class PacketRespawn(Packet):
 		751 : 57,
 		755 : 61,
 		756 : 61,
-		757 : 61
+		757 : 61,
+		758 : 61,
+		759 : 59,
+		760 : 62,
+		761 : 61
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'dimension', Int ), ( 'difficulty', Byte ), ( 'gamemode', Byte ), ( 'levelType', String ) ],
@@ -123,5 +130,9 @@ class PacketRespawn(Packet):
 		751 : [ ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ) ],
 		755 : [ ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ) ],
 		756 : [ ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ) ],
-		757 : [ ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ) ]
+		757 : [ ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ) ],
+		758 : [ ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ) ],
+		759 : [ ( 'dimension', String ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ), ( 'death', OptionalType(StructType(( 'dimensionName', String ), ( 'location', Position ), ), ) ) ],
+		760 : [ ( 'dimension', String ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ), ( 'death', OptionalType(StructType(( 'dimensionName', String ), ( 'location', Position ), ), ) ) ],
+		761 : [ ( 'dimension', String ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'gamemode', Byte ), ( 'previousGamemode', Byte ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'copyMetadata', Boolean ), ( 'death', OptionalType(StructType(( 'dimensionName', String ), ( 'location', Position ), ), ) ) ]
 	}

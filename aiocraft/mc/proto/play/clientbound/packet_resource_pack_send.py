@@ -66,7 +66,11 @@ class PacketResourcePackSend(Packet):
 		751 : 56,
 		755 : 60,
 		756 : 60,
-		757 : 60
+		757 : 60,
+		758 : 60,
+		759 : 58,
+		760 : 61,
+		761 : 60
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'url', String ), ( 'hash', String ) ],
@@ -105,5 +109,9 @@ class PacketResourcePackSend(Packet):
 		751 : [ ( 'url', String ), ( 'hash', String ) ],
 		755 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
 		756 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
-		757 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ]
+		757 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
+		758 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
+		759 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
+		760 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ],
+		761 : [ ( 'url', String ), ( 'hash', String ), ( 'forced', Boolean ), ( 'promptMessage', OptionalType(String, ) ) ]
 	}

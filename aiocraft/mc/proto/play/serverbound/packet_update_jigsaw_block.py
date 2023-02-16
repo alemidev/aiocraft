@@ -56,7 +56,11 @@ class PacketUpdateJigsawBlock(Packet):
 		751 : 41,
 		755 : 41,
 		756 : 41,
-		757 : 41
+		757 : 41,
+		758 : 41,
+		759 : 43,
+		760 : 44,
+		761 : 44
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'location', Position ), ( 'attachmentType', String ), ( 'targetPool', String ), ( 'finalState', String ) ],
@@ -73,5 +77,9 @@ class PacketUpdateJigsawBlock(Packet):
 		751 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
 		755 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
 		756 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
-		757 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ]
+		757 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
+		758 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
+		759 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
+		760 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ],
+		761 : [ ( 'location', Position ), ( 'name', String ), ( 'target', String ), ( 'pool', String ), ( 'finalState', String ), ( 'jointType', String ) ]
 	}

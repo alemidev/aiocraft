@@ -56,7 +56,11 @@ class PacketPingStart(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0
+		757 : 0,
+		758 : 0,
+		759 : 0,
+		760 : 0,
+		761 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [  ],
@@ -95,5 +99,9 @@ class PacketPingStart(Packet):
 		751 : [  ],
 		755 : [  ],
 		756 : [  ],
-		757 : [  ]
+		757 : [  ],
+		758 : [  ],
+		759 : [  ],
+		760 : [  ],
+		761 : [  ]
 	}

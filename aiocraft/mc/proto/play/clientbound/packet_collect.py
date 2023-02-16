@@ -63,7 +63,11 @@ class PacketCollect(Packet):
 		751 : 85,
 		755 : 96,
 		756 : 96,
-		757 : 97
+		757 : 97,
+		758 : 97,
+		759 : 98,
+		760 : 101,
+		761 : 99
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ) ],
@@ -102,5 +106,9 @@ class PacketCollect(Packet):
 		751 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
 		755 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
 		756 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
-		757 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ]
+		757 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
+		758 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
+		759 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
+		760 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ],
+		761 : [ ( 'collectedEntityId', VarInt ), ( 'collectorEntityId', VarInt ), ( 'pickupItemCount', VarInt ) ]
 	}

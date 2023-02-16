@@ -40,5 +40,9 @@ REGISTRY = {
 	751 : { 0 : PacketPingStart, 1 : PacketPing },
 	755 : { 0 : PacketPingStart, 1 : PacketPing },
 	756 : { 0 : PacketPingStart, 1 : PacketPing },
-	757 : { 0 : PacketPingStart, 1 : PacketPing }
+	757 : { 0 : PacketPingStart, 1 : PacketPing },
+	758 : { 0 : PacketPingStart, 1 : PacketPing },
+	759 : { 0 : PacketPingStart, 1 : PacketPing },
+	760 : { 0 : PacketPingStart, 1 : PacketPing },
+	761 : { 0 : PacketPingStart, 1 : PacketPing }
 }

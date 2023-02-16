@@ -22,10 +22,18 @@ class PacketEnterCombatEvent(Packet):
 	_ids : Dict[int, int] = {
 		755 : 52,
 		756 : 52,
-		757 : 52
+		757 : 52,
+		758 : 52,
+		759 : 50,
+		760 : 53,
+		761 : 51
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [  ],
 		756 : [  ],
-		757 : [  ]
+		757 : [  ],
+		758 : [  ],
+		759 : [  ],
+		760 : [  ],
+		761 : [  ]
 	}

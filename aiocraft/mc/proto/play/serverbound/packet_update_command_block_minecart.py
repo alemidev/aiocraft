@@ -46,7 +46,11 @@ class PacketUpdateCommandBlockMinecart(Packet):
 		751 : 39,
 		755 : 39,
 		756 : 39,
-		757 : 39
+		757 : 39,
+		758 : 39,
+		759 : 41,
+		760 : 42,
+		761 : 42
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
@@ -68,5 +72,9 @@ class PacketUpdateCommandBlockMinecart(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'command', String ), ( 'track_output', Boolean ) ]
 	}

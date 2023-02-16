@@ -60,7 +60,11 @@ class PacketGameStateChange(Packet):
 		751 : 29,
 		755 : 30,
 		756 : 30,
-		757 : 30
+		757 : 30,
+		758 : 30,
+		759 : 27,
+		760 : 29,
+		761 : 28
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
@@ -99,5 +103,9 @@ class PacketGameStateChange(Packet):
 		751 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
 		755 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
 		756 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
-		757 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ]
+		757 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
+		758 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
+		759 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
+		760 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ],
+		761 : [ ( 'reason', Byte ), ( 'gameMode', Float ) ]
 	}

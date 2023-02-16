@@ -41,7 +41,11 @@ class PacketOpenHorseWindow(Packet):
 		751 : 30,
 		755 : 31,
 		756 : 31,
-		757 : 31
+		757 : 31,
+		758 : 31,
+		759 : 28,
+		760 : 30,
+		761 : 29
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
@@ -58,5 +62,9 @@ class PacketOpenHorseWindow(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
 		755 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
 		756 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
-		757 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ]
+		757 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
+		758 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
+		759 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
+		760 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ],
+		761 : [ ( 'windowId', Byte ), ( 'nbSlots', VarInt ), ( 'entityId', Int ) ]
 	}

@@ -47,7 +47,11 @@ class PacketStopSound(Packet):
 		751 : 82,
 		755 : 93,
 		756 : 93,
-		757 : 94
+		757 : 94,
+		758 : 94,
+		759 : 94,
+		760 : 97,
+		761 : 95
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		351 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
@@ -70,5 +74,9 @@ class PacketStopSound(Packet):
 		751 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
 		755 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
 		756 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
-		757 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ]
+		757 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
+		758 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
+		759 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
+		760 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ],
+		761 : [ ( 'flags', Byte ), ( 'source', SwitchType('flags', { 1 : VarInt, 3 : VarInt }, None, ) ), ( 'sound', SwitchType('flags', { 2 : String, 3 : String }, None, ) ) ]
 	}

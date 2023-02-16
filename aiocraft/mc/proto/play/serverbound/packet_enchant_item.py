@@ -60,7 +60,11 @@ class PacketEnchantItem(Packet):
 		751 : 8,
 		755 : 7,
 		756 : 7,
-		757 : 7
+		757 : 7,
+		758 : 7,
+		759 : 9,
+		760 : 10,
+		761 : 9
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
@@ -99,5 +103,9 @@ class PacketEnchantItem(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
 		755 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
 		756 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
-		757 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ]
+		757 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
+		758 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
+		759 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
+		760 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ],
+		761 : [ ( 'windowId', Byte ), ( 'enchantment', Byte ) ]
 	}

@@ -41,5 +41,9 @@ REGISTRY = {
 	751 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse },
 	755 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse },
 	756 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse },
-	757 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse }
+	757 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse },
+	758 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse },
+	759 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse },
+	760 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse },
+	761 : { 0 : PacketLoginStart, 1 : PacketEncryptionBegin, 2 : PacketLoginPluginResponse }
 }

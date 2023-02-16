@@ -60,7 +60,11 @@ class PacketScoreboardDisplayObjective(Packet):
 		751 : 67,
 		755 : 76,
 		756 : 76,
-		757 : 76
+		757 : 76,
+		758 : 76,
+		759 : 76,
+		760 : 79,
+		761 : 77
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'position', Byte ), ( 'name', String ) ],
@@ -99,5 +103,9 @@ class PacketScoreboardDisplayObjective(Packet):
 		751 : [ ( 'position', Byte ), ( 'name', String ) ],
 		755 : [ ( 'position', Byte ), ( 'name', String ) ],
 		756 : [ ( 'position', Byte ), ( 'name', String ) ],
-		757 : [ ( 'position', Byte ), ( 'name', String ) ]
+		757 : [ ( 'position', Byte ), ( 'name', String ) ],
+		758 : [ ( 'position', Byte ), ( 'name', String ) ],
+		759 : [ ( 'position', Byte ), ( 'name', String ) ],
+		760 : [ ( 'position', Byte ), ( 'name', String ) ],
+		761 : [ ( 'position', Byte ), ( 'name', String ) ]
 	}

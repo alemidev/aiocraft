@@ -63,7 +63,11 @@ class PacketExperience(Packet):
 		751 : 72,
 		755 : 81,
 		756 : 81,
-		757 : 81
+		757 : 81,
+		758 : 81,
+		759 : 81,
+		760 : 84,
+		761 : 82
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
@@ -102,5 +106,9 @@ class PacketExperience(Packet):
 		751 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
 		755 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
 		756 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
-		757 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ]
+		757 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
+		758 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
+		759 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
+		760 : [ ( 'experienceBar', Float ), ( 'level', VarInt ), ( 'totalExperience', VarInt ) ],
+		761 : [ ( 'experienceBar', Float ), ( 'totalExperience', VarInt ), ( 'level', VarInt ) ]
 	}

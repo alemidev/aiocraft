@@ -49,7 +49,11 @@ class PacketUpdateCommandBlock(Packet):
 		751 : 38,
 		755 : 38,
 		756 : 38,
-		757 : 38
+		757 : 38,
+		758 : 38,
+		759 : 40,
+		760 : 41,
+		761 : 41
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
@@ -71,5 +75,9 @@ class PacketUpdateCommandBlock(Packet):
 		751 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
 		755 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
 		756 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
-		757 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ]
+		757 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
+		758 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
+		759 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
+		760 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ],
+		761 : [ ( 'location', Position ), ( 'command', String ), ( 'mode', VarInt ), ( 'flags', Byte ) ]
 	}

@@ -63,7 +63,11 @@ class PacketAbilities(Packet):
 		751 : 26,
 		755 : 25,
 		756 : 25,
-		757 : 25
+		757 : 25,
+		758 : 25,
+		759 : 27,
+		760 : 28,
+		761 : 27
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'flags', Byte ), ( 'flyingSpeed', Float ), ( 'walkingSpeed', Float ) ],
@@ -102,5 +106,9 @@ class PacketAbilities(Packet):
 		751 : [ ( 'flags', Byte ) ],
 		755 : [ ( 'flags', Byte ) ],
 		756 : [ ( 'flags', Byte ) ],
-		757 : [ ( 'flags', Byte ) ]
+		757 : [ ( 'flags', Byte ) ],
+		758 : [ ( 'flags', Byte ) ],
+		759 : [ ( 'flags', Byte ) ],
+		760 : [ ( 'flags', Byte ) ],
+		761 : [ ( 'flags', Byte ) ]
 	}

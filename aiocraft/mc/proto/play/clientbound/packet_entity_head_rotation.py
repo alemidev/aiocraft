@@ -60,7 +60,11 @@ class PacketEntityHeadRotation(Packet):
 		751 : 58,
 		755 : 62,
 		756 : 62,
-		757 : 62
+		757 : 62,
+		758 : 62,
+		759 : 60,
+		760 : 63,
+		761 : 62
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
@@ -99,5 +103,9 @@ class PacketEntityHeadRotation(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'headYaw', Byte ) ]
 	}

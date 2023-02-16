@@ -83,7 +83,11 @@ class PacketUnlockRecipes(Packet):
 		751 : 53,
 		755 : 57,
 		756 : 57,
-		757 : 57
+		757 : 57,
+		758 : 57,
+		759 : 55,
+		760 : 58,
+		761 : 57
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		321 : [ ( 'notification', Boolean ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'recipes', ArrayType(StructType(( 'identifier', String ), ( 'isUnlocked', Boolean ), ( 'hasBeenDisplayed', Boolean ), ), VarInt, ) ) ],
@@ -112,5 +116,9 @@ class PacketUnlockRecipes(Packet):
 		751 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
 		755 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
 		756 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
-		757 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ]
+		757 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
+		758 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
+		759 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
+		760 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ],
+		761 : [ ( 'action', VarInt ), ( 'craftingBookOpen', Boolean ), ( 'filteringCraftable', Boolean ), ( 'smeltingBookOpen', Boolean ), ( 'filteringSmeltable', Boolean ), ( 'blastFurnaceOpen', Boolean ), ( 'filteringBlastFurnace', Boolean ), ( 'smokerBookOpen', Boolean ), ( 'filteringSmoker', Boolean ), ( 'recipes1', ArrayType(String, VarInt, ) ), ( 'recipes2', SwitchType('action', { 0 : ArrayType(String, VarInt, ) }, None, ) ) ]
 	}

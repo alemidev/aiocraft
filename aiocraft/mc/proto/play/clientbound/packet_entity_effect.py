@@ -6,12 +6,13 @@ from ....definitions import *
 from ....types import *
 
 class PacketEntityEffect(Packet):
-	__slots__ = ( 'id', 'amplifier', 'duration', 'effectId', 'entityId', 'hideParticles' )
+	__slots__ = ( 'id', 'amplifier', 'duration', 'effectId', 'entityId', 'factorCodec', 'hideParticles' )
 	
 	amplifier : int
 	duration : int
 	effectId : int
 	entityId : int
+	factorCodec : tuple
 	hideParticles : Union[bool,int]
 
 	def __init__(self, proto:int,
@@ -19,6 +20,7 @@ class PacketEntityEffect(Packet):
 		duration:int=None,
 		effectId:int=None,
 		entityId:int=None,
+		factorCodec:tuple=None,
 		hideParticles:Union[bool,int]=None,
 		**kwargs
 	):
@@ -27,6 +29,7 @@ class PacketEntityEffect(Packet):
 			duration=duration,
 			effectId=effectId,
 			entityId=entityId,
+			factorCodec=factorCodec,
 			hideParticles=hideParticles
 		)
 
@@ -69,7 +72,11 @@ class PacketEntityEffect(Packet):
 		751 : 89,
 		755 : 100,
 		756 : 100,
-		757 : 101
+		757 : 101,
+		758 : 101,
+		759 : 102,
+		760 : 105,
+		761 : 104
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Boolean ) ],
@@ -108,5 +115,9 @@ class PacketEntityEffect(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ), ( 'factorCodec', OptionalType(NBTTag, ) ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ), ( 'factorCodec', OptionalType(NBTTag, ) ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ), ( 'amplifier', Byte ), ( 'duration', VarInt ), ( 'hideParticles', Byte ), ( 'factorCodec', OptionalType(NBTTag, ) ) ]
 	}

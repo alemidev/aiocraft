@@ -66,7 +66,11 @@ class PacketEntityVelocity(Packet):
 		751 : 70,
 		755 : 79,
 		756 : 79,
-		757 : 79
+		757 : 79,
+		758 : 79,
+		759 : 79,
+		760 : 82,
+		761 : 80
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
@@ -105,5 +109,9 @@ class PacketEntityVelocity(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
 	}

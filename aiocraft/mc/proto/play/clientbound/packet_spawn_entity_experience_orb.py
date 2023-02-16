@@ -69,7 +69,11 @@ class PacketSpawnEntityExperienceOrb(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1
+		757 : 1,
+		758 : 1,
+		759 : 1,
+		760 : 1,
+		761 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'count', Short ) ],
@@ -108,5 +112,9 @@ class PacketSpawnEntityExperienceOrb(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'count', Short ) ]
 	}

@@ -29,10 +29,18 @@ class PacketDeathCombatEvent(Packet):
 	_ids : Dict[int, int] = {
 		755 : 53,
 		756 : 53,
-		757 : 53
+		757 : 53,
+		758 : 53,
+		759 : 51,
+		760 : 54,
+		761 : 52
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ],
 		756 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ],
-		757 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ]
+		757 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ],
+		758 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ],
+		759 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ],
+		760 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ],
+		761 : [ ( 'playerId', VarInt ), ( 'entityId', Int ), ( 'message', String ) ]
 	}

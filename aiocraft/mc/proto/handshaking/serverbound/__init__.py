@@ -40,5 +40,9 @@ REGISTRY = {
 	751 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing },
 	755 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing },
 	756 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing },
-	757 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing }
+	757 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing },
+	758 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing },
+	759 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing },
+	760 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing },
+	761 : { 0 : PacketSetProtocol, 254 : PacketLegacyServerListPing }
 }

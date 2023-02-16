@@ -56,7 +56,11 @@ class PacketEntityDestroy(Packet):
 		736 : 55,
 		751 : 54,
 		756 : 58,
-		757 : 58
+		757 : 58,
+		758 : 58,
+		759 : 56,
+		760 : 59,
+		761 : 58
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
@@ -94,5 +98,9 @@ class PacketEntityDestroy(Packet):
 		736 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
 		751 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
 		756 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
-		757 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ]
+		757 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
+		758 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
+		759 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
+		760 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ],
+		761 : [ ( 'entityIds', ArrayType(VarInt, VarInt, ) ) ]
 	}

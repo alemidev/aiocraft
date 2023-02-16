@@ -72,7 +72,11 @@ class PacketPositionLook(Packet):
 		751 : 19,
 		755 : 18,
 		756 : 18,
-		757 : 18
+		757 : 18,
+		758 : 18,
+		759 : 20,
+		760 : 21,
+		761 : 20
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
@@ -111,5 +115,9 @@ class PacketPositionLook(Packet):
 		751 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		758 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		759 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		760 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		761 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
 	}

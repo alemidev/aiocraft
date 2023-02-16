@@ -78,7 +78,11 @@ class PacketPosition(Packet):
 		751 : 52,
 		755 : 56,
 		756 : 56,
-		757 : 56
+		757 : 56,
+		758 : 56,
+		759 : 54,
+		760 : 57,
+		761 : 56
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ) ],
@@ -117,5 +121,9 @@ class PacketPosition(Packet):
 		751 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ) ],
 		755 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
 		756 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
-		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ]
+		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
+		758 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
+		759 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
+		760 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ],
+		761 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Float ), ( 'pitch', Float ), ( 'flags', Byte ), ( 'teleportId', VarInt ), ( 'dismountVehicle', Boolean ) ]
 	}

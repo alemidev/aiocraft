@@ -57,7 +57,11 @@ class PacketSpectate(Packet):
 		751 : 45,
 		755 : 45,
 		756 : 45,
-		757 : 45
+		757 : 45,
+		758 : 45,
+		759 : 47,
+		760 : 48,
+		761 : 48
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'target', UUID ) ],
@@ -96,5 +100,9 @@ class PacketSpectate(Packet):
 		751 : [ ( 'target', UUID ) ],
 		755 : [ ( 'target', UUID ) ],
 		756 : [ ( 'target', UUID ) ],
-		757 : [ ( 'target', UUID ) ]
+		757 : [ ( 'target', UUID ) ],
+		758 : [ ( 'target', UUID ) ],
+		759 : [ ( 'target', UUID ) ],
+		760 : [ ( 'target', UUID ) ],
+		761 : [ ( 'target', UUID ) ]
 	}

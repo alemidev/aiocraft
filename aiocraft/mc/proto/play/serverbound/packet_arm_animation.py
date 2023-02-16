@@ -57,7 +57,11 @@ class PacketArmAnimation(Packet):
 		751 : 44,
 		755 : 44,
 		756 : 44,
-		757 : 44
+		757 : 44,
+		758 : 44,
+		759 : 46,
+		760 : 47,
+		761 : 47
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [  ],
@@ -96,5 +100,9 @@ class PacketArmAnimation(Packet):
 		751 : [ ( 'hand', VarInt ) ],
 		755 : [ ( 'hand', VarInt ) ],
 		756 : [ ( 'hand', VarInt ) ],
-		757 : [ ( 'hand', VarInt ) ]
+		757 : [ ( 'hand', VarInt ) ],
+		758 : [ ( 'hand', VarInt ) ],
+		759 : [ ( 'hand', VarInt ) ],
+		760 : [ ( 'hand', VarInt ) ],
+		761 : [ ( 'hand', VarInt ) ]
 	}

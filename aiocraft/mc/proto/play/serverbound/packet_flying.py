@@ -57,7 +57,11 @@ class PacketFlying(Packet):
 		751 : 21,
 		755 : 20,
 		756 : 20,
-		757 : 20
+		757 : 20,
+		758 : 20,
+		759 : 22,
+		760 : 23,
+		761 : 22
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'onGround', Boolean ) ],
@@ -96,5 +100,9 @@ class PacketFlying(Packet):
 		751 : [ ( 'onGround', Boolean ) ],
 		755 : [ ( 'onGround', Boolean ) ],
 		756 : [ ( 'onGround', Boolean ) ],
-		757 : [ ( 'onGround', Boolean ) ]
+		757 : [ ( 'onGround', Boolean ) ],
+		758 : [ ( 'onGround', Boolean ) ],
+		759 : [ ( 'onGround', Boolean ) ],
+		760 : [ ( 'onGround', Boolean ) ],
+		761 : [ ( 'onGround', Boolean ) ]
 	}

@@ -57,7 +57,11 @@ class PacketKeepAlive(Packet):
 		751 : 31,
 		755 : 33,
 		756 : 33,
-		757 : 33
+		757 : 33,
+		758 : 33,
+		759 : 30,
+		760 : 32,
+		761 : 31
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'keepAliveId', VarInt ) ],
@@ -96,5 +100,9 @@ class PacketKeepAlive(Packet):
 		751 : [ ( 'keepAliveId', Long ) ],
 		755 : [ ( 'keepAliveId', Long ) ],
 		756 : [ ( 'keepAliveId', Long ) ],
-		757 : [ ( 'keepAliveId', Long ) ]
+		757 : [ ( 'keepAliveId', Long ) ],
+		758 : [ ( 'keepAliveId', Long ) ],
+		759 : [ ( 'keepAliveId', Long ) ],
+		760 : [ ( 'keepAliveId', Long ) ],
+		761 : [ ( 'keepAliveId', Long ) ]
 	}

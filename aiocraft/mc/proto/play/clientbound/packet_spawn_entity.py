@@ -6,10 +6,11 @@ from ....definitions import *
 from ....types import *
 
 class PacketSpawnEntity(Packet):
-	__slots__ = ( 'id', 'entityId', 'entityUUID', 'objectData', 'objectUUID', 'pitch', 'type', 'velocityX', 'velocityY', 'velocityZ', 'x', 'y', 'yaw', 'z' )
+	__slots__ = ( 'id', 'entityId', 'entityUUID', 'headPitch', 'objectData', 'objectUUID', 'pitch', 'type', 'velocityX', 'velocityY', 'velocityZ', 'x', 'y', 'yaw', 'z' )
 	
 	entityId : int
 	entityUUID : str
+	headPitch : int
 	objectData : Union[dict,int]
 	objectUUID : str
 	pitch : int
@@ -25,6 +26,7 @@ class PacketSpawnEntity(Packet):
 	def __init__(self, proto:int,
 		entityId:int=None,
 		entityUUID:str=None,
+		headPitch:int=None,
 		objectData:Union[dict,int]=None,
 		objectUUID:str=None,
 		pitch:int=None,
@@ -41,6 +43,7 @@ class PacketSpawnEntity(Packet):
 		super().__init__(proto,
 			entityId=entityId,
 			entityUUID=entityUUID,
+			headPitch=headPitch,
 			objectData=objectData,
 			objectUUID=objectUUID,
 			pitch=pitch,
@@ -93,7 +96,11 @@ class PacketSpawnEntity(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0
+		757 : 0,
+		758 : 0,
+		759 : 0,
+		760 : 0,
+		761 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'type', Byte ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', StructType(( 'intField', Int ), ( 'velocityX', SwitchType('intField', { 0 : Void }, Short, ) ), ( 'velocityY', SwitchType('intField', { 0 : Void }, Short, ) ), ( 'velocityZ', SwitchType('intField', { 0 : Void }, Short, ) ), ) ) ],
@@ -132,5 +139,9 @@ class PacketSpawnEntity(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'objectData', Int ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'headPitch', Byte ), ( 'objectData', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'headPitch', Byte ), ( 'objectData', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'objectUUID', UUID ), ( 'type', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'pitch', Byte ), ( 'yaw', Byte ), ( 'headPitch', Byte ), ( 'objectData', VarInt ), ( 'velocityX', Short ), ( 'velocityY', Short ), ( 'velocityZ', Short ) ]
 	}

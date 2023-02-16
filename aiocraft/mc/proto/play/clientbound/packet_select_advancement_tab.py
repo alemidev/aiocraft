@@ -44,7 +44,11 @@ class PacketSelectAdvancementTab(Packet):
 		751 : 60,
 		755 : 64,
 		756 : 64,
-		757 : 64
+		757 : 64,
+		758 : 64,
+		759 : 62,
+		760 : 65,
+		761 : 64
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		335 : [ ( 'id', OptionalType(String, ) ) ],
@@ -70,5 +74,9 @@ class PacketSelectAdvancementTab(Packet):
 		751 : [ ( 'id', OptionalType(String, ) ) ],
 		755 : [ ( 'id', OptionalType(String, ) ) ],
 		756 : [ ( 'id', OptionalType(String, ) ) ],
-		757 : [ ( 'id', OptionalType(String, ) ) ]
+		757 : [ ( 'id', OptionalType(String, ) ) ],
+		758 : [ ( 'id', OptionalType(String, ) ) ],
+		759 : [ ( 'id', OptionalType(String, ) ) ],
+		760 : [ ( 'id', OptionalType(String, ) ) ],
+		761 : [ ( 'id', OptionalType(String, ) ) ]
 	}

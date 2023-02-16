@@ -23,10 +23,18 @@ class PacketActionBar(Packet):
 	_ids : Dict[int, int] = {
 		755 : 65,
 		756 : 65,
-		757 : 65
+		757 : 65,
+		758 : 65,
+		759 : 64,
+		760 : 67,
+		761 : 66
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'text', String ) ],
 		756 : [ ( 'text', String ) ],
-		757 : [ ( 'text', String ) ]
+		757 : [ ( 'text', String ) ],
+		758 : [ ( 'text', String ) ],
+		759 : [ ( 'text', String ) ],
+		760 : [ ( 'text', String ) ],
+		761 : [ ( 'text', String ) ]
 	}

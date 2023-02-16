@@ -63,7 +63,11 @@ class PacketBlockBreakAnimation(Packet):
 		751 : 8,
 		755 : 9,
 		756 : 9,
-		757 : 9
+		757 : 9,
+		758 : 9,
+		759 : 6,
+		760 : 6,
+		761 : 6
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
@@ -102,5 +106,9 @@ class PacketBlockBreakAnimation(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'location', Position ), ( 'destroyStage', Byte ) ]
 	}

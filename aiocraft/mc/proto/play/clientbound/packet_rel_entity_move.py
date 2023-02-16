@@ -69,7 +69,11 @@ class PacketRelEntityMove(Packet):
 		751 : 39,
 		755 : 41,
 		756 : 41,
-		757 : 41
+		757 : 41,
+		758 : 41,
+		759 : 38,
+		760 : 40,
+		761 : 39
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'dX', Byte ), ( 'dY', Byte ), ( 'dZ', Byte ), ( 'onGround', Boolean ) ],
@@ -108,5 +112,9 @@ class PacketRelEntityMove(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'dX', Short ), ( 'dY', Short ), ( 'dZ', Short ), ( 'onGround', Boolean ) ]
 	}

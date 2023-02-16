@@ -23,10 +23,18 @@ class PacketWorldBorderWarningReach(Packet):
 	_ids : Dict[int, int] = {
 		755 : 70,
 		756 : 70,
-		757 : 70
+		757 : 70,
+		758 : 70,
+		759 : 69,
+		760 : 72,
+		761 : 71
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'warningBlocks', VarInt ) ],
 		756 : [ ( 'warningBlocks', VarInt ) ],
-		757 : [ ( 'warningBlocks', VarInt ) ]
+		757 : [ ( 'warningBlocks', VarInt ) ],
+		758 : [ ( 'warningBlocks', VarInt ) ],
+		759 : [ ( 'warningBlocks', VarInt ) ],
+		760 : [ ( 'warningBlocks', VarInt ) ],
+		761 : [ ( 'warningBlocks', VarInt ) ]
 	}

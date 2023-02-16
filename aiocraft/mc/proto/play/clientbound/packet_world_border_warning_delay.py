@@ -23,10 +23,18 @@ class PacketWorldBorderWarningDelay(Packet):
 	_ids : Dict[int, int] = {
 		755 : 69,
 		756 : 69,
-		757 : 69
+		757 : 69,
+		758 : 69,
+		759 : 68,
+		760 : 71,
+		761 : 70
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'warningTime', VarInt ) ],
 		756 : [ ( 'warningTime', VarInt ) ],
-		757 : [ ( 'warningTime', VarInt ) ]
+		757 : [ ( 'warningTime', VarInt ) ],
+		758 : [ ( 'warningTime', VarInt ) ],
+		759 : [ ( 'warningTime', VarInt ) ],
+		760 : [ ( 'warningTime', VarInt ) ],
+		761 : [ ( 'warningTime', VarInt ) ]
 	}

@@ -66,7 +66,11 @@ class PacketPosition(Packet):
 		751 : 18,
 		755 : 17,
 		756 : 17,
-		757 : 17
+		757 : 17,
+		758 : 17,
+		759 : 19,
+		760 : 20,
+		761 : 19
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
@@ -105,5 +109,9 @@ class PacketPosition(Packet):
 		751 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
+		758 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
+		759 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
+		760 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ],
+		761 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'onGround', Boolean ) ]
 	}

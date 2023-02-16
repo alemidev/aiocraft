@@ -29,10 +29,18 @@ class PacketSetTitleTime(Packet):
 	_ids : Dict[int, int] = {
 		755 : 90,
 		756 : 90,
-		757 : 91
+		757 : 91,
+		758 : 91,
+		759 : 91,
+		760 : 94,
+		761 : 92
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ],
 		756 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ],
-		757 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ]
+		757 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ],
+		758 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ],
+		759 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ],
+		760 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ],
+		761 : [ ( 'fadeIn', Int ), ( 'stay', Int ), ( 'fadeOut', Int ) ]
 	}

@@ -26,10 +26,18 @@ class PacketWorldBorderCenter(Packet):
 	_ids : Dict[int, int] = {
 		755 : 66,
 		756 : 66,
-		757 : 66
+		757 : 66,
+		758 : 66,
+		759 : 65,
+		760 : 68,
+		761 : 67
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'x', Double ), ( 'z', Double ) ],
 		756 : [ ( 'x', Double ), ( 'z', Double ) ],
-		757 : [ ( 'x', Double ), ( 'z', Double ) ]
+		757 : [ ( 'x', Double ), ( 'z', Double ) ],
+		758 : [ ( 'x', Double ), ( 'z', Double ) ],
+		759 : [ ( 'x', Double ), ( 'z', Double ) ],
+		760 : [ ( 'x', Double ), ( 'z', Double ) ],
+		761 : [ ( 'x', Double ), ( 'z', Double ) ]
 	}

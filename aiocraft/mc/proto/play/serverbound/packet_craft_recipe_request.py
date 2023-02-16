@@ -49,7 +49,11 @@ class PacketCraftRecipeRequest(Packet):
 		751 : 25,
 		755 : 24,
 		756 : 24,
-		757 : 24
+		757 : 24,
+		758 : 24,
+		759 : 26,
+		760 : 27,
+		761 : 26
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		338 : [ ( 'windowId', Byte ), ( 'recipe', VarInt ), ( 'makeAll', Boolean ) ],
@@ -74,5 +78,9 @@ class PacketCraftRecipeRequest(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
 		755 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
 		756 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
-		757 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ]
+		757 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
+		758 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
+		759 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
+		760 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ],
+		761 : [ ( 'windowId', Byte ), ( 'recipe', String ), ( 'makeAll', Boolean ) ]
 	}

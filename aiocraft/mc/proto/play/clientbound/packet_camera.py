@@ -57,7 +57,11 @@ class PacketCamera(Packet):
 		751 : 62,
 		755 : 71,
 		756 : 71,
-		757 : 71
+		757 : 71,
+		758 : 71,
+		759 : 70,
+		760 : 73,
+		761 : 72
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'cameraId', VarInt ) ],
@@ -96,5 +100,9 @@ class PacketCamera(Packet):
 		751 : [ ( 'cameraId', VarInt ) ],
 		755 : [ ( 'cameraId', VarInt ) ],
 		756 : [ ( 'cameraId', VarInt ) ],
-		757 : [ ( 'cameraId', VarInt ) ]
+		757 : [ ( 'cameraId', VarInt ) ],
+		758 : [ ( 'cameraId', VarInt ) ],
+		759 : [ ( 'cameraId', VarInt ) ],
+		760 : [ ( 'cameraId', VarInt ) ],
+		761 : [ ( 'cameraId', VarInt ) ]
 	}

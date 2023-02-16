@@ -66,7 +66,11 @@ class PacketEntityEquipment(Packet):
 		751 : 71,
 		755 : 80,
 		756 : 80,
-		757 : 80
+		757 : 80,
+		758 : 80,
+		759 : 80,
+		760 : 83,
+		761 : 81
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ],
@@ -105,5 +109,9 @@ class PacketEntityEquipment(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'equipments', TrailingData ) ]
 	}

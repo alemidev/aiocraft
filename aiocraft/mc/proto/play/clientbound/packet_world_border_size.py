@@ -23,10 +23,18 @@ class PacketWorldBorderSize(Packet):
 	_ids : Dict[int, int] = {
 		755 : 68,
 		756 : 68,
-		757 : 68
+		757 : 68,
+		758 : 68,
+		759 : 67,
+		760 : 70,
+		761 : 69
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'diameter', Double ) ],
 		756 : [ ( 'diameter', Double ) ],
-		757 : [ ( 'diameter', Double ) ]
+		757 : [ ( 'diameter', Double ) ],
+		758 : [ ( 'diameter', Double ) ],
+		759 : [ ( 'diameter', Double ) ],
+		760 : [ ( 'diameter', Double ) ],
+		761 : [ ( 'diameter', Double ) ]
 	}

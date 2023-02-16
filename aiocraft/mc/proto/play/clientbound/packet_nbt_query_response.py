@@ -43,7 +43,11 @@ class PacketNbtQueryResponse(Packet):
 		751 : 84,
 		755 : 95,
 		756 : 95,
-		757 : 96
+		757 : 96,
+		758 : 96,
+		759 : 97,
+		760 : 100,
+		761 : 98
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
@@ -65,5 +69,9 @@ class PacketNbtQueryResponse(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		758 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		759 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		760 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ],
+		761 : [ ( 'transactionId', VarInt ), ( 'nbt', OptionalType(NBTTag) ) ]
 	}

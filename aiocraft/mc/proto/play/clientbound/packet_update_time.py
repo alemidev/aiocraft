@@ -60,7 +60,11 @@ class PacketUpdateTime(Packet):
 		751 : 78,
 		755 : 88,
 		756 : 88,
-		757 : 89
+		757 : 89,
+		758 : 89,
+		759 : 89,
+		760 : 92,
+		761 : 90
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'age', Long ), ( 'time', Long ) ],
@@ -99,5 +103,9 @@ class PacketUpdateTime(Packet):
 		751 : [ ( 'age', Long ), ( 'time', Long ) ],
 		755 : [ ( 'age', Long ), ( 'time', Long ) ],
 		756 : [ ( 'age', Long ), ( 'time', Long ) ],
-		757 : [ ( 'age', Long ), ( 'time', Long ) ]
+		757 : [ ( 'age', Long ), ( 'time', Long ) ],
+		758 : [ ( 'age', Long ), ( 'time', Long ) ],
+		759 : [ ( 'age', Long ), ( 'time', Long ) ],
+		760 : [ ( 'age', Long ), ( 'time', Long ) ],
+		761 : [ ( 'age', Long ), ( 'time', Long ) ]
 	}

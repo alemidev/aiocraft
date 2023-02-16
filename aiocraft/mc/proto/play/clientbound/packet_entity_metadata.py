@@ -60,7 +60,11 @@ class PacketEntityMetadata(Packet):
 		751 : 68,
 		755 : 77,
 		756 : 77,
-		757 : 77
+		757 : 77,
+		758 : 77,
+		759 : 77,
+		760 : 80,
+		761 : 78
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
@@ -99,5 +103,9 @@ class PacketEntityMetadata(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'metadata', EntityMetadata ) ]
 	}

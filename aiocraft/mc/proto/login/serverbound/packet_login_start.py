@@ -6,15 +6,21 @@ from ....definitions import *
 from ....types import *
 
 class PacketLoginStart(Packet):
-	__slots__ = ( 'id', 'username' )
+	__slots__ = ( 'id', 'playerUUID', 'signature', 'username' )
 	
+	playerUUID : tuple
+	signature : tuple
 	username : str
 
 	def __init__(self, proto:int,
+		playerUUID:tuple=None,
+		signature:tuple=None,
 		username:str=None,
 		**kwargs
 	):
 		super().__init__(proto,
+			playerUUID=playerUUID,
+			signature=signature,
 			username=username
 		)
 
@@ -57,7 +63,11 @@ class PacketLoginStart(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0
+		757 : 0,
+		758 : 0,
+		759 : 0,
+		760 : 0,
+		761 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'username', String ) ],
@@ -96,5 +106,9 @@ class PacketLoginStart(Packet):
 		751 : [ ( 'username', String ) ],
 		755 : [ ( 'username', String ) ],
 		756 : [ ( 'username', String ) ],
-		757 : [ ( 'username', String ) ]
+		757 : [ ( 'username', String ) ],
+		758 : [ ( 'username', String ) ],
+		759 : [ ( 'username', String ), ( 'signature', OptionalType(StructType(( 'timestamp', Long ), ( 'publicKey', ByteArray ), ( 'signature', ByteArray ), ), ) ) ],
+		760 : [ ( 'username', String ), ( 'signature', OptionalType(StructType(( 'timestamp', Long ), ( 'publicKey', ByteArray ), ( 'signature', ByteArray ), ), ) ), ( 'playerUUID', OptionalType(UUID, ) ) ],
+		761 : [ ( 'username', String ), ( 'playerUUID', OptionalType(UUID, ) ) ]
 	}

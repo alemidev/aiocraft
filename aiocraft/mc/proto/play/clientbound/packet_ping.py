@@ -23,10 +23,18 @@ class PacketPing(Packet):
 	_ids : Dict[int, int] = {
 		755 : 48,
 		756 : 48,
-		757 : 48
+		757 : 48,
+		758 : 48,
+		759 : 45,
+		760 : 47,
+		761 : 46
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'id', Int ) ],
 		756 : [ ( 'id', Int ) ],
-		757 : [ ( 'id', Int ) ]
+		757 : [ ( 'id', Int ) ],
+		758 : [ ( 'id', Int ) ],
+		759 : [ ( 'id', Int ) ],
+		760 : [ ( 'id', Int ) ],
+		761 : [ ( 'id', Int ) ]
 	}

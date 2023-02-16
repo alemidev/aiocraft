@@ -59,7 +59,11 @@ class PacketUnloadChunk(Packet):
 		751 : 28,
 		755 : 29,
 		756 : 29,
-		757 : 29
+		757 : 29,
+		758 : 29,
+		759 : 26,
+		760 : 28,
+		761 : 27
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		76 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
@@ -97,5 +101,9 @@ class PacketUnloadChunk(Packet):
 		751 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
 		755 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
 		756 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
-		757 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ]
+		757 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
+		758 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
+		759 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
+		760 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ],
+		761 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ) ]
 	}

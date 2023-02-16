@@ -6,7 +6,7 @@ from ....definitions import *
 from ....types import *
 
 class PacketBlockPlace(Packet):
-	__slots__ = ( 'id', 'cursorX', 'cursorY', 'cursorZ', 'direction', 'hand', 'heldItem', 'insideBlock', 'location' )
+	__slots__ = ( 'id', 'cursorX', 'cursorY', 'cursorZ', 'direction', 'hand', 'heldItem', 'insideBlock', 'location', 'sequence' )
 	
 	cursorX : Union[float,int]
 	cursorY : Union[float,int]
@@ -16,6 +16,7 @@ class PacketBlockPlace(Packet):
 	heldItem : Item
 	insideBlock : bool
 	location : tuple
+	sequence : int
 
 	def __init__(self, proto:int,
 		cursorX:Union[float,int]=None,
@@ -26,6 +27,7 @@ class PacketBlockPlace(Packet):
 		heldItem:Item=None,
 		insideBlock:bool=None,
 		location:tuple=None,
+		sequence:int=None,
 		**kwargs
 	):
 		super().__init__(proto,
@@ -36,7 +38,8 @@ class PacketBlockPlace(Packet):
 			hand=hand,
 			heldItem=heldItem,
 			insideBlock=insideBlock,
-			location=location
+			location=location,
+			sequence=sequence
 		)
 
 	_state : int = 3
@@ -78,7 +81,11 @@ class PacketBlockPlace(Packet):
 		751 : 46,
 		755 : 46,
 		756 : 46,
-		757 : 46
+		757 : 46,
+		758 : 46,
+		759 : 48,
+		760 : 49,
+		761 : 49
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'location', Position ), ( 'direction', Byte ), ( 'heldItem', Slot ), ( 'cursorX', Byte ), ( 'cursorY', Byte ), ( 'cursorZ', Byte ) ],
@@ -117,5 +124,9 @@ class PacketBlockPlace(Packet):
 		751 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
 		755 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
 		756 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
-		757 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ]
+		757 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
+		758 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ) ],
+		759 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ), ( 'sequence', VarInt ) ],
+		760 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ), ( 'sequence', VarInt ) ],
+		761 : [ ( 'hand', VarInt ), ( 'location', Position ), ( 'direction', VarInt ), ( 'cursorX', Float ), ( 'cursorY', Float ), ( 'cursorZ', Float ), ( 'insideBlock', Boolean ), ( 'sequence', VarInt ) ]
 	}

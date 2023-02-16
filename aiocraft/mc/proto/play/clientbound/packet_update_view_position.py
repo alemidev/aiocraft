@@ -38,7 +38,11 @@ class PacketUpdateViewPosition(Packet):
 		751 : 64,
 		755 : 73,
 		756 : 73,
-		757 : 73
+		757 : 73,
+		758 : 73,
+		759 : 72,
+		760 : 75,
+		761 : 74
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
@@ -55,5 +59,9 @@ class PacketUpdateViewPosition(Packet):
 		751 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
 		755 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
 		756 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
-		757 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ]
+		757 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
+		758 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
+		759 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
+		760 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ],
+		761 : [ ( 'chunkX', VarInt ), ( 'chunkZ', VarInt ) ]
 	}

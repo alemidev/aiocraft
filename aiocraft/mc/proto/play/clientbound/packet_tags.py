@@ -53,7 +53,11 @@ class PacketTags(Packet):
 		751 : 91,
 		755 : 102,
 		756 : 102,
-		757 : 103
+		757 : 103,
+		758 : 103,
+		759 : 104,
+		760 : 107,
+		761 : 106
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		351 : [ ( 'blockTags', TrailingData ), ( 'itemTags', TrailingData ) ],
@@ -76,5 +80,9 @@ class PacketTags(Packet):
 		751 : [ ( 'blockTags', TrailingData ), ( 'itemTags', TrailingData ), ( 'fluidTags', TrailingData ), ( 'entityTags', TrailingData ) ],
 		755 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
 		756 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
-		757 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ]
+		757 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
+		758 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
+		759 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
+		760 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ],
+		761 : [ ( 'tags', ArrayType(StructType(( 'tagType', String ), ( 'tags', TrailingData ), ), VarInt, ) ) ]
 	}

@@ -78,7 +78,11 @@ class PacketExplosion(Packet):
 		751 : 27,
 		755 : 28,
 		756 : 28,
-		757 : 28
+		757 : 28,
+		758 : 28,
+		759 : 25,
+		760 : 27,
+		761 : 26
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
@@ -117,5 +121,9 @@ class PacketExplosion(Packet):
 		751 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), Int, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
 		755 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
 		756 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
-		757 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ]
+		757 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
+		758 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
+		759 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
+		760 : [ ( 'x', Float ), ( 'y', Float ), ( 'z', Float ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ],
+		761 : [ ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'radius', Float ), ( 'affectedBlockOffsets', ArrayType(StructType(( 'x', Byte ), ( 'y', Byte ), ( 'z', Byte ), ), VarInt, ) ), ( 'playerMotionX', Float ), ( 'playerMotionY', Float ), ( 'playerMotionZ', Float ) ]
 	}

@@ -60,7 +60,11 @@ class PacketCustomPayload(Packet):
 		751 : 23,
 		755 : 24,
 		756 : 24,
-		757 : 24
+		757 : 24,
+		758 : 24,
+		759 : 21,
+		760 : 22,
+		761 : 21
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
@@ -99,5 +103,9 @@ class PacketCustomPayload(Packet):
 		751 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
 		755 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
 		756 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
-		757 : [ ( 'channel', String ), ( 'data', TrailingData ) ]
+		757 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
+		758 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
+		759 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
+		760 : [ ( 'channel', String ), ( 'data', TrailingData ) ],
+		761 : [ ( 'channel', String ), ( 'data', TrailingData ) ]
 	}

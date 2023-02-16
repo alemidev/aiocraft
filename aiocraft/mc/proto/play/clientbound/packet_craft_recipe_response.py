@@ -46,7 +46,11 @@ class PacketCraftRecipeResponse(Packet):
 		751 : 47,
 		755 : 49,
 		756 : 49,
-		757 : 49
+		757 : 49,
+		758 : 49,
+		759 : 46,
+		760 : 48,
+		761 : 47
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		338 : [ ( 'windowId', Byte ), ( 'recipe', VarInt ) ],
@@ -71,5 +75,9 @@ class PacketCraftRecipeResponse(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
 		755 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
 		756 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
-		757 : [ ( 'windowId', Byte ), ( 'recipe', String ) ]
+		757 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
+		758 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
+		759 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
+		760 : [ ( 'windowId', Byte ), ( 'recipe', String ) ],
+		761 : [ ( 'windowId', Byte ), ( 'recipe', String ) ]
 	}

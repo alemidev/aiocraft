@@ -60,7 +60,11 @@ class PacketDifficulty(Packet):
 		751 : 13,
 		755 : 14,
 		756 : 14,
-		757 : 14
+		757 : 14,
+		758 : 14,
+		759 : 11,
+		760 : 11,
+		761 : 11
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'difficulty', Byte ) ],
@@ -99,5 +103,9 @@ class PacketDifficulty(Packet):
 		751 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
 		755 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
 		756 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
-		757 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ]
+		757 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
+		758 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
+		759 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
+		760 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ],
+		761 : [ ( 'difficulty', Byte ), ( 'difficultyLocked', Boolean ) ]
 	}

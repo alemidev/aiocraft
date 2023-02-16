@@ -57,7 +57,11 @@ class PacketKickDisconnect(Packet):
 		751 : 25,
 		755 : 26,
 		756 : 26,
-		757 : 26
+		757 : 26,
+		758 : 26,
+		759 : 23,
+		760 : 25,
+		761 : 23
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'reason', String ) ],
@@ -96,5 +100,9 @@ class PacketKickDisconnect(Packet):
 		751 : [ ( 'reason', String ) ],
 		755 : [ ( 'reason', String ) ],
 		756 : [ ( 'reason', String ) ],
-		757 : [ ( 'reason', String ) ]
+		757 : [ ( 'reason', String ) ],
+		758 : [ ( 'reason', String ) ],
+		759 : [ ( 'reason', String ) ],
+		760 : [ ( 'reason', String ) ],
+		761 : [ ( 'reason', String ) ]
 	}

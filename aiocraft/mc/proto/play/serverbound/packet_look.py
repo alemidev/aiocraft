@@ -63,7 +63,11 @@ class PacketLook(Packet):
 		751 : 20,
 		755 : 19,
 		756 : 19,
-		757 : 19
+		757 : 19,
+		758 : 19,
+		759 : 21,
+		760 : 22,
+		761 : 21
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
@@ -102,5 +106,9 @@ class PacketLook(Packet):
 		751 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		755 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
 		756 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
-		757 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
+		757 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		758 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		759 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		760 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ],
+		761 : [ ( 'yaw', Float ), ( 'pitch', Float ), ( 'onGround', Boolean ) ]
 	}

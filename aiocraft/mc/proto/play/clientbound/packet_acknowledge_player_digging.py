@@ -6,16 +6,18 @@ from ....definitions import *
 from ....types import *
 
 class PacketAcknowledgePlayerDigging(Packet):
-	__slots__ = ( 'id', 'block', 'location', 'status', 'successful' )
+	__slots__ = ( 'id', 'block', 'location', 'sequenceId', 'status', 'successful' )
 	
 	block : int
 	location : tuple
+	sequenceId : int
 	status : int
 	successful : bool
 
 	def __init__(self, proto:int,
 		block:int=None,
 		location:tuple=None,
+		sequenceId:int=None,
 		status:int=None,
 		successful:bool=None,
 		**kwargs
@@ -23,6 +25,7 @@ class PacketAcknowledgePlayerDigging(Packet):
 		super().__init__(proto,
 			block=block,
 			location=location,
+			sequenceId=sequenceId,
 			status=status,
 			successful=successful
 		)
@@ -41,7 +44,11 @@ class PacketAcknowledgePlayerDigging(Packet):
 		751 : 7,
 		755 : 8,
 		756 : 8,
-		757 : 8
+		757 : 8,
+		758 : 8,
+		759 : 5,
+		760 : 5,
+		761 : 5
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		498 : [ ( 'location', Position ), ( 'block', VarInt ), ( 'status', VarInt ), ( 'successful', Boolean ) ],
@@ -55,5 +62,9 @@ class PacketAcknowledgePlayerDigging(Packet):
 		751 : [ ( 'location', Position ), ( 'block', VarInt ), ( 'status', VarInt ), ( 'successful', Boolean ) ],
 		755 : [ ( 'location', Position ), ( 'block', VarInt ), ( 'status', VarInt ), ( 'successful', Boolean ) ],
 		756 : [ ( 'location', Position ), ( 'block', VarInt ), ( 'status', VarInt ), ( 'successful', Boolean ) ],
-		757 : [ ( 'location', Position ), ( 'block', VarInt ), ( 'status', VarInt ), ( 'successful', Boolean ) ]
+		757 : [ ( 'location', Position ), ( 'block', VarInt ), ( 'status', VarInt ), ( 'successful', Boolean ) ],
+		758 : [ ( 'location', Position ), ( 'block', VarInt ), ( 'status', VarInt ), ( 'successful', Boolean ) ],
+		759 : [ ( 'sequenceId', VarInt ) ],
+		760 : [ ( 'sequenceId', VarInt ) ],
+		761 : [ ( 'sequenceId', VarInt ) ]
 	}

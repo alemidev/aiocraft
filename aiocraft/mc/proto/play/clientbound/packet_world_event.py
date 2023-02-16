@@ -66,7 +66,11 @@ class PacketWorldEvent(Packet):
 		751 : 33,
 		755 : 35,
 		756 : 35,
-		757 : 35
+		757 : 35,
+		758 : 35,
+		759 : 32,
+		760 : 34,
+		761 : 33
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
@@ -105,5 +109,9 @@ class PacketWorldEvent(Packet):
 		751 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
 		755 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
 		756 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
-		757 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ]
+		757 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
+		758 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
+		759 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
+		760 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ],
+		761 : [ ( 'effectId', Int ), ( 'location', Position ), ( 'data', Int ), ( 'is_global', Boolean ) ]
 	}

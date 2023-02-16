@@ -66,7 +66,11 @@ class PacketSetSlot(Packet):
 		751 : 21,
 		755 : 22,
 		756 : 22,
-		757 : 22
+		757 : 22,
+		758 : 22,
+		759 : 19,
+		760 : 19,
+		761 : 18
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'item', Slot ) ],
@@ -105,5 +109,9 @@ class PacketSetSlot(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'item', Slot ) ],
 		755 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'item', Slot ) ],
 		756 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ],
-		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ]
+		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ],
+		758 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ],
+		759 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ],
+		760 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ],
+		761 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'item', Slot ) ]
 	}

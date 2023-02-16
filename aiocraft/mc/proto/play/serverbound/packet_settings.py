@@ -81,7 +81,11 @@ class PacketSettings(Packet):
 		751 : 5,
 		755 : 5,
 		756 : 5,
-		757 : 5
+		757 : 5,
+		758 : 5,
+		759 : 7,
+		760 : 8,
+		761 : 7
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', Byte ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ) ],
@@ -120,5 +124,9 @@ class PacketSettings(Packet):
 		751 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ) ],
 		755 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'disableTextFiltering', Boolean ) ],
 		756 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'disableTextFiltering', Boolean ) ],
-		757 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ]
+		757 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ],
+		758 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ],
+		759 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ],
+		760 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ],
+		761 : [ ( 'locale', String ), ( 'viewDistance', Byte ), ( 'chatFlags', VarInt ), ( 'chatColors', Boolean ), ( 'skinParts', Byte ), ( 'mainHand', VarInt ), ( 'enableTextFiltering', Boolean ), ( 'enableServerListing', Boolean ) ]
 	}

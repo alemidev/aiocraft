@@ -6,17 +6,20 @@ from ....definitions import *
 from ....types import *
 
 class PacketSuccess(Packet):
-	__slots__ = ( 'id', 'username', 'uuid' )
+	__slots__ = ( 'id', 'properties', 'username', 'uuid' )
 	
+	properties : list
 	username : str
 	uuid : str
 
 	def __init__(self, proto:int,
+		properties:list=None,
 		username:str=None,
 		uuid:str=None,
 		**kwargs
 	):
 		super().__init__(proto,
+			properties=properties,
 			username=username,
 			uuid=uuid
 		)
@@ -60,7 +63,11 @@ class PacketSuccess(Packet):
 		751 : 2,
 		755 : 2,
 		756 : 2,
-		757 : 2
+		757 : 2,
+		758 : 2,
+		759 : 2,
+		760 : 2,
+		761 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'uuid', String ), ( 'username', String ) ],
@@ -99,5 +106,9 @@ class PacketSuccess(Packet):
 		751 : [ ( 'uuid', UUID ), ( 'username', String ) ],
 		755 : [ ( 'uuid', UUID ), ( 'username', String ) ],
 		756 : [ ( 'uuid', UUID ), ( 'username', String ) ],
-		757 : [ ( 'uuid', UUID ), ( 'username', String ) ]
+		757 : [ ( 'uuid', UUID ), ( 'username', String ) ],
+		758 : [ ( 'uuid', UUID ), ( 'username', String ) ],
+		759 : [ ( 'uuid', UUID ), ( 'username', String ), ( 'properties', ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) ) ],
+		760 : [ ( 'uuid', UUID ), ( 'username', String ), ( 'properties', ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) ) ],
+		761 : [ ( 'uuid', UUID ), ( 'username', String ), ( 'properties', ArrayType(StructType(( 'name', String ), ( 'value', String ), ( 'signature', OptionalType(String, ) ), ), VarInt, ) ) ]
 	}

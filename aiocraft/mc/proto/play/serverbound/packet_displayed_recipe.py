@@ -24,11 +24,19 @@ class PacketDisplayedRecipe(Packet):
 		751 : 31,
 		755 : 31,
 		756 : 31,
-		757 : 31
+		757 : 31,
+		758 : 31,
+		759 : 33,
+		760 : 34,
+		761 : 34
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		751 : [ ( 'recipeId', String ) ],
 		755 : [ ( 'recipeId', String ) ],
 		756 : [ ( 'recipeId', String ) ],
-		757 : [ ( 'recipeId', String ) ]
+		757 : [ ( 'recipeId', String ) ],
+		758 : [ ( 'recipeId', String ) ],
+		759 : [ ( 'recipeId', String ) ],
+		760 : [ ( 'recipeId', String ) ],
+		761 : [ ( 'recipeId', String ) ]
 	}

@@ -66,7 +66,11 @@ class PacketTabComplete(Packet):
 		751 : 15,
 		755 : 17,
 		756 : 17,
-		757 : 17
+		757 : 17,
+		758 : 17,
+		759 : 14,
+		760 : 14,
+		761 : 13
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'matches', ArrayType(String, VarInt, ) ) ],
@@ -105,5 +109,9 @@ class PacketTabComplete(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
+		758 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
+		759 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
+		760 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ],
+		761 : [ ( 'transactionId', VarInt ), ( 'start', VarInt ), ( 'length', VarInt ), ( 'matches', ArrayType(StructType(( 'match', String ), ( 'tooltip', OptionalType(String, ) ), ), VarInt, ) ) ]
 	}

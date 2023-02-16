@@ -35,7 +35,11 @@ class PacketOpenBook(Packet):
 		751 : 44,
 		755 : 45,
 		756 : 45,
-		757 : 45
+		757 : 45,
+		758 : 45,
+		759 : 42,
+		760 : 44,
+		761 : 43
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'hand', VarInt ) ],
@@ -52,5 +56,9 @@ class PacketOpenBook(Packet):
 		751 : [ ( 'hand', VarInt ) ],
 		755 : [ ( 'hand', VarInt ) ],
 		756 : [ ( 'hand', VarInt ) ],
-		757 : [ ( 'hand', VarInt ) ]
+		757 : [ ( 'hand', VarInt ) ],
+		758 : [ ( 'hand', VarInt ) ],
+		759 : [ ( 'hand', VarInt ) ],
+		760 : [ ( 'hand', VarInt ) ],
+		761 : [ ( 'hand', VarInt ) ]
 	}

@@ -81,7 +81,11 @@ class PacketWindowClick(Packet):
 		751 : 9,
 		755 : 8,
 		756 : 8,
-		757 : 8
+		757 : 8,
+		758 : 8,
+		759 : 10,
+		760 : 11,
+		761 : 10
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ],
@@ -120,5 +124,9 @@ class PacketWindowClick(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'action', Short ), ( 'mode', Byte ), ( 'item', Slot ) ],
 		755 : [ ( 'windowId', Byte ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', Byte ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
 		756 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
-		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ]
+		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
+		758 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
+		759 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
+		760 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ],
+		761 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'slot', Short ), ( 'mouseButton', Byte ), ( 'mode', VarInt ), ( 'changedSlots', ArrayType(StructType(( 'location', Short ), ( 'item', Slot ), ), VarInt, ) ), ( 'cursorItem', Slot ) ]
 	}

@@ -58,7 +58,11 @@ class PacketSteerBoat(Packet):
 		751 : 23,
 		755 : 22,
 		756 : 22,
-		757 : 22
+		757 : 22,
+		758 : 22,
+		759 : 24,
+		760 : 25,
+		761 : 24
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
@@ -95,5 +99,9 @@ class PacketSteerBoat(Packet):
 		751 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
 		755 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
 		756 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
-		757 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ]
+		757 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
+		758 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
+		759 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
+		760 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ],
+		761 : [ ( 'leftPaddle', Boolean ), ( 'rightPaddle', Boolean ) ]
 	}

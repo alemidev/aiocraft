@@ -60,7 +60,11 @@ class PacketSetCreativeSlot(Packet):
 		751 : 40,
 		755 : 40,
 		756 : 40,
-		757 : 40
+		757 : 40,
+		758 : 40,
+		759 : 42,
+		760 : 43,
+		761 : 43
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'slot', Short ), ( 'item', Slot ) ],
@@ -99,5 +103,9 @@ class PacketSetCreativeSlot(Packet):
 		751 : [ ( 'slot', Short ), ( 'item', Slot ) ],
 		755 : [ ( 'slot', Short ), ( 'item', Slot ) ],
 		756 : [ ( 'slot', Short ), ( 'item', Slot ) ],
-		757 : [ ( 'slot', Short ), ( 'item', Slot ) ]
+		757 : [ ( 'slot', Short ), ( 'item', Slot ) ],
+		758 : [ ( 'slot', Short ), ( 'item', Slot ) ],
+		759 : [ ( 'slot', Short ), ( 'item', Slot ) ],
+		760 : [ ( 'slot', Short ), ( 'item', Slot ) ],
+		761 : [ ( 'slot', Short ), ( 'item', Slot ) ]
 	}

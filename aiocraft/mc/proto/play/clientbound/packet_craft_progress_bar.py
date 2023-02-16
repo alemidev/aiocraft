@@ -63,7 +63,11 @@ class PacketCraftProgressBar(Packet):
 		751 : 20,
 		755 : 21,
 		756 : 21,
-		757 : 21
+		757 : 21,
+		758 : 21,
+		759 : 18,
+		760 : 18,
+		761 : 17
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
@@ -102,5 +106,9 @@ class PacketCraftProgressBar(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
 		755 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
 		756 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
-		757 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ]
+		757 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
+		758 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
+		759 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
+		760 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ],
+		761 : [ ( 'windowId', Byte ), ( 'property', Short ), ( 'value', Short ) ]
 	}

@@ -60,7 +60,11 @@ class PacketResourcePackReceive(Packet):
 		751 : 33,
 		755 : 33,
 		756 : 33,
-		757 : 33
+		757 : 33,
+		758 : 33,
+		759 : 35,
+		760 : 36,
+		761 : 36
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'hash', String ), ( 'result', VarInt ) ],
@@ -99,5 +103,9 @@ class PacketResourcePackReceive(Packet):
 		751 : [ ( 'result', VarInt ) ],
 		755 : [ ( 'result', VarInt ) ],
 		756 : [ ( 'result', VarInt ) ],
-		757 : [ ( 'result', VarInt ) ]
+		757 : [ ( 'result', VarInt ) ],
+		758 : [ ( 'result', VarInt ) ],
+		759 : [ ( 'result', VarInt ) ],
+		760 : [ ( 'result', VarInt ) ],
+		761 : [ ( 'result', VarInt ) ]
 	}

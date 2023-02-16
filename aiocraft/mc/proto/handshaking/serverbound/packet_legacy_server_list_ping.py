@@ -57,7 +57,11 @@ class PacketLegacyServerListPing(Packet):
 		751 : 254,
 		755 : 254,
 		756 : 254,
-		757 : 254
+		757 : 254,
+		758 : 254,
+		759 : 254,
+		760 : 254,
+		761 : 254
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'payload', Byte ) ],
@@ -96,5 +100,9 @@ class PacketLegacyServerListPing(Packet):
 		751 : [ ( 'payload', Byte ) ],
 		755 : [ ( 'payload', Byte ) ],
 		756 : [ ( 'payload', Byte ) ],
-		757 : [ ( 'payload', Byte ) ]
+		757 : [ ( 'payload', Byte ) ],
+		758 : [ ( 'payload', Byte ) ],
+		759 : [ ( 'payload', Byte ) ],
+		760 : [ ( 'payload', Byte ) ],
+		761 : [ ( 'payload', Byte ) ]
 	}

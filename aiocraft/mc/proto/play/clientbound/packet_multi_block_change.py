@@ -6,13 +6,14 @@ from ....definitions import *
 from ....types import *
 
 class PacketMultiBlockChange(Packet):
-	__slots__ = ( 'id', 'chunkCoordinates', 'chunkX', 'chunkZ', 'notTrustEdges', 'records' )
+	__slots__ = ( 'id', 'chunkCoordinates', 'chunkX', 'chunkZ', 'notTrustEdges', 'records', 'suppressLightUpdates' )
 	
 	chunkCoordinates : bytes
 	chunkX : int
 	chunkZ : int
 	notTrustEdges : bool
 	records : list
+	suppressLightUpdates : bool
 
 	def __init__(self, proto:int,
 		chunkCoordinates:bytes=None,
@@ -20,6 +21,7 @@ class PacketMultiBlockChange(Packet):
 		chunkZ:int=None,
 		notTrustEdges:bool=None,
 		records:list=None,
+		suppressLightUpdates:bool=None,
 		**kwargs
 	):
 		super().__init__(proto,
@@ -27,7 +29,8 @@ class PacketMultiBlockChange(Packet):
 			chunkX=chunkX,
 			chunkZ=chunkZ,
 			notTrustEdges=notTrustEdges,
-			records=records
+			records=records,
+			suppressLightUpdates=suppressLightUpdates
 		)
 
 	_state : int = 3
@@ -69,7 +72,11 @@ class PacketMultiBlockChange(Packet):
 		751 : 59,
 		755 : 63,
 		756 : 63,
-		757 : 63
+		757 : 63,
+		758 : 63,
+		759 : 61,
+		760 : 64,
+		761 : 63
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
@@ -105,8 +112,12 @@ class PacketMultiBlockChange(Packet):
 		734 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
 		735 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
 		736 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
-		751 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
-		755 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
-		756 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
-		757 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ]
+		751 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		755 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		756 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		757 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		758 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		759 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
+		760 : [ ( 'chunkCoordinates', Int ), ( 'suppressLightUpdates', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
+		761 : [ ( 'chunkCoordinates', Int ), ( 'suppressLightUpdates', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ]
 	}

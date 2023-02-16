@@ -60,7 +60,11 @@ class PacketClientCommand(Packet):
 		751 : 4,
 		755 : 4,
 		756 : 4,
-		757 : 4
+		757 : 4,
+		758 : 4,
+		759 : 6,
+		760 : 7,
+		761 : 6
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'payload', VarInt ) ],
@@ -99,5 +103,9 @@ class PacketClientCommand(Packet):
 		751 : [ ( 'actionId', VarInt ) ],
 		755 : [ ( 'actionId', VarInt ) ],
 		756 : [ ( 'actionId', VarInt ) ],
-		757 : [ ( 'actionId', VarInt ) ]
+		757 : [ ( 'actionId', VarInt ) ],
+		758 : [ ( 'actionId', VarInt ) ],
+		759 : [ ( 'actionId', VarInt ) ],
+		760 : [ ( 'actionId', VarInt ) ],
+		761 : [ ( 'actionId', VarInt ) ]
 	}

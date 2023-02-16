@@ -26,10 +26,18 @@ class PacketEndCombatEvent(Packet):
 	_ids : Dict[int, int] = {
 		755 : 51,
 		756 : 51,
-		757 : 51
+		757 : 51,
+		758 : 51,
+		759 : 49,
+		760 : 52,
+		761 : 50
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ],
 		756 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ],
-		757 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ]
+		757 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ],
+		758 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ],
+		759 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ],
+		760 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ],
+		761 : [ ( 'duration', VarInt ), ( 'entityId', Int ) ]
 	}

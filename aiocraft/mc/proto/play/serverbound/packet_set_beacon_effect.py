@@ -8,12 +8,12 @@ from ....types import *
 class PacketSetBeaconEffect(Packet):
 	__slots__ = ( 'id', 'primary_effect', 'secondary_effect' )
 	
-	primary_effect : int
-	secondary_effect : int
+	primary_effect : Union[int,tuple]
+	secondary_effect : Union[int,tuple]
 
 	def __init__(self, proto:int,
-		primary_effect:int=None,
-		secondary_effect:int=None,
+		primary_effect:Union[int,tuple]=None,
+		secondary_effect:Union[int,tuple]=None,
 		**kwargs
 	):
 		super().__init__(proto,
@@ -43,7 +43,11 @@ class PacketSetBeaconEffect(Packet):
 		751 : 36,
 		755 : 36,
 		756 : 36,
-		757 : 36
+		757 : 36,
+		758 : 36,
+		759 : 38,
+		760 : 39,
+		761 : 39
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
@@ -65,5 +69,9 @@ class PacketSetBeaconEffect(Packet):
 		751 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
 		755 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
 		756 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
-		757 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ]
+		757 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
+		758 : [ ( 'primary_effect', VarInt ), ( 'secondary_effect', VarInt ) ],
+		759 : [ ( 'primary_effect', OptionalType(VarInt, ) ), ( 'secondary_effect', OptionalType(VarInt, ) ) ],
+		760 : [ ( 'primary_effect', OptionalType(VarInt, ) ), ( 'secondary_effect', OptionalType(VarInt, ) ) ],
+		761 : [ ( 'primary_effect', OptionalType(VarInt, ) ), ( 'secondary_effect', OptionalType(VarInt, ) ) ]
 	}

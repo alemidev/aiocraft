@@ -6,10 +6,11 @@ from ....definitions import *
 from ....types import *
 
 class PacketSoundEffect(Packet):
-	__slots__ = ( 'id', 'parrottedEntityType', 'pitch', 'soundCategory', 'soundId', 'volume', 'x', 'y', 'z' )
+	__slots__ = ( 'id', 'parrottedEntityType', 'pitch', 'seed', 'soundCategory', 'soundId', 'volume', 'x', 'y', 'z' )
 	
 	parrottedEntityType : str
 	pitch : Union[float,int]
+	seed : int
 	soundCategory : int
 	soundId : int
 	volume : float
@@ -20,6 +21,7 @@ class PacketSoundEffect(Packet):
 	def __init__(self, proto:int,
 		parrottedEntityType:str=None,
 		pitch:Union[float,int]=None,
+		seed:int=None,
 		soundCategory:int=None,
 		soundId:int=None,
 		volume:float=None,
@@ -31,6 +33,7 @@ class PacketSoundEffect(Packet):
 		super().__init__(proto,
 			parrottedEntityType=parrottedEntityType,
 			pitch=pitch,
+			seed=seed,
 			soundCategory=soundCategory,
 			soundId=soundId,
 			volume=volume,
@@ -76,7 +79,11 @@ class PacketSoundEffect(Packet):
 		751 : 81,
 		755 : 92,
 		756 : 92,
-		757 : 93
+		757 : 93,
+		758 : 93,
+		759 : 93,
+		760 : 96,
+		761 : 94
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Byte ) ],
@@ -113,5 +120,9 @@ class PacketSoundEffect(Packet):
 		751 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		755 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		756 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
-		757 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ]
+		757 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
+		758 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
+		759 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ), ( 'seed', Long ) ],
+		760 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ), ( 'seed', Long ) ],
+		761 : [ ( 'soundId', VarInt ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ), ( 'seed', Long ) ]
 	}

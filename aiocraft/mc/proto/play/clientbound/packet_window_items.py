@@ -66,7 +66,11 @@ class PacketWindowItems(Packet):
 		751 : 19,
 		755 : 20,
 		756 : 20,
-		757 : 20
+		757 : 20,
+		758 : 20,
+		759 : 17,
+		760 : 17,
+		761 : 16
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
@@ -105,5 +109,9 @@ class PacketWindowItems(Packet):
 		751 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
 		755 : [ ( 'windowId', Byte ), ( 'items', ArrayType(Slot, Short, ) ) ],
 		756 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ],
-		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ]
+		757 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ],
+		758 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ],
+		759 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ],
+		760 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ],
+		761 : [ ( 'windowId', Byte ), ( 'stateId', VarInt ), ( 'items', ArrayType(Slot, VarInt, ) ), ( 'carriedItem', Slot ) ]
 	}

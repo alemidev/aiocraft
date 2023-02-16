@@ -23,10 +23,18 @@ class PacketSetTitleSubtitle(Packet):
 	_ids : Dict[int, int] = {
 		755 : 87,
 		756 : 87,
-		757 : 88
+		757 : 88,
+		758 : 88,
+		759 : 88,
+		760 : 91,
+		761 : 89
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'text', String ) ],
 		756 : [ ( 'text', String ) ],
-		757 : [ ( 'text', String ) ]
+		757 : [ ( 'text', String ) ],
+		758 : [ ( 'text', String ) ],
+		759 : [ ( 'text', String ) ],
+		760 : [ ( 'text', String ) ],
+		761 : [ ( 'text', String ) ]
 	}

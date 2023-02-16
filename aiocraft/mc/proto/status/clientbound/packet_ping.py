@@ -57,7 +57,11 @@ class PacketPing(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1
+		757 : 1,
+		758 : 1,
+		759 : 1,
+		760 : 1,
+		761 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'time', Long ) ],
@@ -96,5 +100,9 @@ class PacketPing(Packet):
 		751 : [ ( 'time', Long ) ],
 		755 : [ ( 'time', Long ) ],
 		756 : [ ( 'time', Long ) ],
-		757 : [ ( 'time', Long ) ]
+		757 : [ ( 'time', Long ) ],
+		758 : [ ( 'time', Long ) ],
+		759 : [ ( 'time', Long ) ],
+		760 : [ ( 'time', Long ) ],
+		761 : [ ( 'time', Long ) ]
 	}

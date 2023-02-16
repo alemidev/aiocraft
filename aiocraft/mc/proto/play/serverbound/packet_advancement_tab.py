@@ -48,7 +48,11 @@ class PacketAdvancementTab(Packet):
 		751 : 34,
 		755 : 34,
 		756 : 34,
-		757 : 34
+		757 : 34,
+		758 : 34,
+		759 : 36,
+		760 : 37,
+		761 : 37
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		331 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
@@ -75,5 +79,9 @@ class PacketAdvancementTab(Packet):
 		751 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
 		755 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
 		756 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
-		757 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ]
+		757 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
+		758 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
+		759 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
+		760 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ],
+		761 : [ ( 'action', VarInt ), ( 'tabId', SwitchType('action', { 0 : String, 1 : Void }, None, ) ) ]
 	}

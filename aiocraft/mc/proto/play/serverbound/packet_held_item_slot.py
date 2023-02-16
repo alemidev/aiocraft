@@ -57,7 +57,11 @@ class PacketHeldItemSlot(Packet):
 		751 : 37,
 		755 : 37,
 		756 : 37,
-		757 : 37
+		757 : 37,
+		758 : 37,
+		759 : 39,
+		760 : 40,
+		761 : 40
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'slotId', Short ) ],
@@ -96,5 +100,9 @@ class PacketHeldItemSlot(Packet):
 		751 : [ ( 'slotId', Short ) ],
 		755 : [ ( 'slotId', Short ) ],
 		756 : [ ( 'slotId', Short ) ],
-		757 : [ ( 'slotId', Short ) ]
+		757 : [ ( 'slotId', Short ) ],
+		758 : [ ( 'slotId', Short ) ],
+		759 : [ ( 'slotId', Short ) ],
+		760 : [ ( 'slotId', Short ) ],
+		761 : [ ( 'slotId', Short ) ]
 	}

@@ -55,7 +55,11 @@ class PacketTeleportConfirm(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0
+		757 : 0,
+		758 : 0,
+		759 : 0,
+		760 : 0,
+		761 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'teleportId', VarInt ) ],
@@ -92,5 +96,9 @@ class PacketTeleportConfirm(Packet):
 		751 : [ ( 'teleportId', VarInt ) ],
 		755 : [ ( 'teleportId', VarInt ) ],
 		756 : [ ( 'teleportId', VarInt ) ],
-		757 : [ ( 'teleportId', VarInt ) ]
+		757 : [ ( 'teleportId', VarInt ) ],
+		758 : [ ( 'teleportId', VarInt ) ],
+		759 : [ ( 'teleportId', VarInt ) ],
+		760 : [ ( 'teleportId', VarInt ) ],
+		761 : [ ( 'teleportId', VarInt ) ]
 	}

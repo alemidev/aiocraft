@@ -69,7 +69,11 @@ class PacketUpdateSign(Packet):
 		751 : 43,
 		755 : 43,
 		756 : 43,
-		757 : 43
+		757 : 43,
+		758 : 43,
+		759 : 45,
+		760 : 46,
+		761 : 46
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
@@ -108,5 +112,9 @@ class PacketUpdateSign(Packet):
 		751 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
 		755 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
 		756 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
-		757 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ]
+		757 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
+		758 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
+		759 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
+		760 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ],
+		761 : [ ( 'location', Position ), ( 'text1', String ), ( 'text2', String ), ( 'text3', String ), ( 'text4', String ) ]
 	}

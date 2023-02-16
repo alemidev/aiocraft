@@ -66,7 +66,11 @@ class PacketBlockAction(Packet):
 		751 : 10,
 		755 : 11,
 		756 : 11,
-		757 : 11
+		757 : 11,
+		758 : 11,
+		759 : 8,
+		760 : 8,
+		761 : 8
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
@@ -105,5 +109,9 @@ class PacketBlockAction(Packet):
 		751 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
 		755 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
 		756 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
-		757 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ]
+		757 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
+		758 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
+		759 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
+		760 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ],
+		761 : [ ( 'location', Position ), ( 'byte1', Byte ), ( 'byte2', Byte ), ( 'blockId', VarInt ) ]
 	}

@@ -60,7 +60,11 @@ class PacketPlayerlistHeader(Packet):
 		751 : 83,
 		755 : 94,
 		756 : 94,
-		757 : 95
+		757 : 95,
+		758 : 95,
+		759 : 96,
+		760 : 99,
+		761 : 97
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'header', String ), ( 'footer', String ) ],
@@ -99,5 +103,9 @@ class PacketPlayerlistHeader(Packet):
 		751 : [ ( 'header', String ), ( 'footer', String ) ],
 		755 : [ ( 'header', String ), ( 'footer', String ) ],
 		756 : [ ( 'header', String ), ( 'footer', String ) ],
-		757 : [ ( 'header', String ), ( 'footer', String ) ]
+		757 : [ ( 'header', String ), ( 'footer', String ) ],
+		758 : [ ( 'header', String ), ( 'footer', String ) ],
+		759 : [ ( 'header', String ), ( 'footer', String ) ],
+		760 : [ ( 'header', String ), ( 'footer', String ) ],
+		761 : [ ( 'header', String ), ( 'footer', String ) ]
 	}

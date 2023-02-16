@@ -40,5 +40,9 @@ REGISTRY = {
 	751 : { 0 : PacketServerInfo, 1 : PacketPing },
 	755 : { 0 : PacketServerInfo, 1 : PacketPing },
 	756 : { 0 : PacketServerInfo, 1 : PacketPing },
-	757 : { 0 : PacketServerInfo, 1 : PacketPing }
+	757 : { 0 : PacketServerInfo, 1 : PacketPing },
+	758 : { 0 : PacketServerInfo, 1 : PacketPing },
+	759 : { 0 : PacketServerInfo, 1 : PacketPing },
+	760 : { 0 : PacketServerInfo, 1 : PacketPing },
+	761 : { 0 : PacketServerInfo, 1 : PacketPing }
 }

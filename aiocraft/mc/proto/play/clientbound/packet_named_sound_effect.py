@@ -6,9 +6,10 @@ from ....definitions import *
 from ....types import *
 
 class PacketNamedSoundEffect(Packet):
-	__slots__ = ( 'id', 'pitch', 'soundCategory', 'soundName', 'volume', 'x', 'y', 'z' )
+	__slots__ = ( 'id', 'pitch', 'seed', 'soundCategory', 'soundName', 'volume', 'x', 'y', 'z' )
 	
 	pitch : Union[float,int]
+	seed : int
 	soundCategory : int
 	soundName : str
 	volume : float
@@ -18,6 +19,7 @@ class PacketNamedSoundEffect(Packet):
 
 	def __init__(self, proto:int,
 		pitch:Union[float,int]=None,
+		seed:int=None,
 		soundCategory:int=None,
 		soundName:str=None,
 		volume:float=None,
@@ -28,6 +30,7 @@ class PacketNamedSoundEffect(Packet):
 	):
 		super().__init__(proto,
 			pitch=pitch,
+			seed=seed,
 			soundCategory=soundCategory,
 			soundName=soundName,
 			volume=volume,
@@ -75,7 +78,10 @@ class PacketNamedSoundEffect(Packet):
 		751 : 24,
 		755 : 25,
 		756 : 25,
-		757 : 25
+		757 : 25,
+		758 : 25,
+		759 : 22,
+		760 : 23
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'soundName', String ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Byte ) ],
@@ -114,5 +120,8 @@ class PacketNamedSoundEffect(Packet):
 		751 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		755 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
 		756 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
-		757 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ]
+		757 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
+		758 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ) ],
+		759 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ), ( 'seed', Long ) ],
+		760 : [ ( 'soundName', String ), ( 'soundCategory', VarInt ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'volume', Float ), ( 'pitch', Float ), ( 'seed', Long ) ]
 	}

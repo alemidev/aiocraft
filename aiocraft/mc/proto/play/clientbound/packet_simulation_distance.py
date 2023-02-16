@@ -21,8 +21,16 @@ class PacketSimulationDistance(Packet):
 	_state : int = 3
 
 	_ids : Dict[int, int] = {
-		757 : 87
+		757 : 87,
+		758 : 87,
+		759 : 87,
+		760 : 90,
+		761 : 88
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		757 : [ ( 'distance', VarInt ) ]
+		757 : [ ( 'distance', VarInt ) ],
+		758 : [ ( 'distance', VarInt ) ],
+		759 : [ ( 'distance', VarInt ) ],
+		760 : [ ( 'distance', VarInt ) ],
+		761 : [ ( 'distance', VarInt ) ]
 	}

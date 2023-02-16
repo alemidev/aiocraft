@@ -69,7 +69,11 @@ class PacketTabComplete(Packet):
 		751 : 6,
 		755 : 6,
 		756 : 6,
-		757 : 6
+		757 : 6,
+		758 : 6,
+		759 : 8,
+		760 : 9,
+		761 : 8
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'text', String ), ( 'block', OptionalType(Position, ) ) ],
@@ -108,5 +112,9 @@ class PacketTabComplete(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'text', String ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
+		758 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
+		759 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
+		760 : [ ( 'transactionId', VarInt ), ( 'text', String ) ],
+		761 : [ ( 'transactionId', VarInt ), ( 'text', String ) ]
 	}

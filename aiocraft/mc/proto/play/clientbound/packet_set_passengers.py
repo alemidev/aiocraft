@@ -58,7 +58,11 @@ class PacketSetPassengers(Packet):
 		751 : 75,
 		755 : 84,
 		756 : 84,
-		757 : 84
+		757 : 84,
+		758 : 84,
+		759 : 84,
+		760 : 87,
+		761 : 85
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		107 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
@@ -95,5 +99,9 @@ class PacketSetPassengers(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'passengers', ArrayType(VarInt, VarInt, ) ) ]
 	}

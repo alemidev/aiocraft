@@ -59,7 +59,11 @@ class PacketSetCooldown(Packet):
 		751 : 22,
 		755 : 23,
 		756 : 23,
-		757 : 23
+		757 : 23,
+		758 : 23,
+		759 : 20,
+		760 : 20,
+		761 : 19
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		76 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
@@ -97,5 +101,9 @@ class PacketSetCooldown(Packet):
 		751 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
 		755 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
 		756 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
-		757 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ]
+		757 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
+		758 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
+		759 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
+		760 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ],
+		761 : [ ( 'itemID', VarInt ), ( 'cooldownTicks', VarInt ) ]
 	}

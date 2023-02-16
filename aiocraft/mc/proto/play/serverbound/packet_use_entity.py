@@ -75,7 +75,11 @@ class PacketUseEntity(Packet):
 		751 : 14,
 		755 : 13,
 		756 : 13,
-		757 : 13
+		757 : 13,
+		758 : 13,
+		759 : 15,
+		760 : 16,
+		761 : 15
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ) ],
@@ -114,5 +118,9 @@ class PacketUseEntity(Packet):
 		751 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ],
 		755 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ],
 		756 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ],
-		757 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ]
+		757 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ],
+		758 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ],
+		759 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ],
+		760 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ],
+		761 : [ ( 'target', VarInt ), ( 'mouse', VarInt ), ( 'x', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'y', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'z', SwitchType('mouse', { 2 : Float }, None, ) ), ( 'hand', SwitchType('mouse', { 0 : VarInt, 2 : VarInt }, None, ) ), ( 'sneaking', Boolean ) ]
 	}

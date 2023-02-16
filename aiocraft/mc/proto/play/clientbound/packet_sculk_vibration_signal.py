@@ -32,10 +32,12 @@ class PacketSculkVibrationSignal(Packet):
 	_ids : Dict[int, int] = {
 		755 : 5,
 		756 : 5,
-		757 : 5
+		757 : 5,
+		758 : 5
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ],
 		756 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ],
-		757 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ]
+		757 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ],
+		758 : [ ( 'sourcePosition', Position ), ( 'destinationIdentifier', String ), ( 'destination', SwitchType('destinationIdentifier', { 'block' : Position, 'entityId' : VarInt }, None, ) ), ( 'arrivalTicks', VarInt ) ]
 	}

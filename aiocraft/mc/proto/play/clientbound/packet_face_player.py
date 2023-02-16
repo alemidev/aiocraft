@@ -58,7 +58,11 @@ class PacketFacePlayer(Packet):
 		751 : 51,
 		755 : 55,
 		756 : 55,
-		757 : 55
+		757 : 55,
+		758 : 55,
+		759 : 53,
+		760 : 56,
+		761 : 55
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
@@ -80,5 +84,9 @@ class PacketFacePlayer(Packet):
 		751 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
 		755 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
 		756 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
-		757 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ]
+		757 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
+		758 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
+		759 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
+		760 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ],
+		761 : [ ( 'feet_eyes', VarInt ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'isEntity', Boolean ), ( 'entityId', SwitchType('isEntity', { 'true' : VarInt }, None, ) ), ( 'entity_feet_eyes', SwitchType('isEntity', { 'true' : String }, None, ) ) ]
 	}

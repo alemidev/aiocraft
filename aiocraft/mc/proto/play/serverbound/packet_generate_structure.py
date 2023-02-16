@@ -33,7 +33,11 @@ class PacketGenerateStructure(Packet):
 		751 : 15,
 		755 : 14,
 		756 : 14,
-		757 : 14
+		757 : 14,
+		758 : 14,
+		759 : 16,
+		760 : 17,
+		761 : 16
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		734 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
@@ -42,5 +46,9 @@ class PacketGenerateStructure(Packet):
 		751 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
 		755 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
 		756 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
-		757 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ]
+		757 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
+		758 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
+		759 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
+		760 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ],
+		761 : [ ( 'location', Position ), ( 'levels', VarInt ), ( 'keepJigsaws', Boolean ) ]
 	}

@@ -60,7 +60,11 @@ class PacketBlockChange(Packet):
 		751 : 11,
 		755 : 12,
 		756 : 12,
-		757 : 12
+		757 : 12,
+		758 : 12,
+		759 : 9,
+		760 : 9,
+		761 : 9
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'location', Position ), ( 'type', VarInt ) ],
@@ -99,5 +103,9 @@ class PacketBlockChange(Packet):
 		751 : [ ( 'location', Position ), ( 'type', VarInt ) ],
 		755 : [ ( 'location', Position ), ( 'type', VarInt ) ],
 		756 : [ ( 'location', Position ), ( 'type', VarInt ) ],
-		757 : [ ( 'location', Position ), ( 'type', VarInt ) ]
+		757 : [ ( 'location', Position ), ( 'type', VarInt ) ],
+		758 : [ ( 'location', Position ), ( 'type', VarInt ) ],
+		759 : [ ( 'location', Position ), ( 'type', VarInt ) ],
+		760 : [ ( 'location', Position ), ( 'type', VarInt ) ],
+		761 : [ ( 'location', Position ), ( 'type', VarInt ) ]
 	}

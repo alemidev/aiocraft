@@ -57,7 +57,11 @@ class PacketCloseWindow(Packet):
 		751 : 18,
 		755 : 19,
 		756 : 19,
-		757 : 19
+		757 : 19,
+		758 : 19,
+		759 : 16,
+		760 : 16,
+		761 : 15
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'windowId', Byte ) ],
@@ -96,5 +100,9 @@ class PacketCloseWindow(Packet):
 		751 : [ ( 'windowId', Byte ) ],
 		755 : [ ( 'windowId', Byte ) ],
 		756 : [ ( 'windowId', Byte ) ],
-		757 : [ ( 'windowId', Byte ) ]
+		757 : [ ( 'windowId', Byte ) ],
+		758 : [ ( 'windowId', Byte ) ],
+		759 : [ ( 'windowId', Byte ) ],
+		760 : [ ( 'windowId', Byte ) ],
+		761 : [ ( 'windowId', Byte ) ]
 	}

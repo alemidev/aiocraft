@@ -63,7 +63,11 @@ class PacketTileEntityData(Packet):
 		751 : 9,
 		755 : 10,
 		756 : 10,
-		757 : 10
+		757 : 10,
+		758 : 10,
+		759 : 7,
+		760 : 7,
+		761 : 7
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
@@ -102,5 +106,9 @@ class PacketTileEntityData(Packet):
 		751 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
 		755 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
 		756 : [ ( 'location', Position ), ( 'action', Byte ), ( 'nbtData', OptionalType(NBTTag) ) ],
-		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ]
+		757 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		758 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		759 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		760 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ],
+		761 : [ ( 'location', Position ), ( 'action', VarInt ), ( 'nbtData', OptionalType(NBTTag) ) ]
 	}

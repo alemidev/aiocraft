@@ -43,7 +43,11 @@ class PacketQueryEntityNbt(Packet):
 		751 : 13,
 		755 : 12,
 		756 : 12,
-		757 : 12
+		757 : 12,
+		758 : 12,
+		759 : 14,
+		760 : 15,
+		761 : 14
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
@@ -65,5 +69,9 @@ class PacketQueryEntityNbt(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
+		758 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
+		759 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
+		760 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ],
+		761 : [ ( 'transactionId', VarInt ), ( 'entityId', VarInt ) ]
 	}

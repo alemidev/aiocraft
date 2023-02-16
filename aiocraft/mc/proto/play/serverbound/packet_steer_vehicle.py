@@ -63,7 +63,11 @@ class PacketSteerVehicle(Packet):
 		751 : 29,
 		755 : 28,
 		756 : 28,
-		757 : 28
+		757 : 28,
+		758 : 28,
+		759 : 30,
+		760 : 31,
+		761 : 30
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
@@ -102,5 +106,9 @@ class PacketSteerVehicle(Packet):
 		751 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
 		755 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
 		756 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
-		757 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ]
+		757 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
+		758 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
+		759 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
+		760 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ],
+		761 : [ ( 'sideways', Float ), ( 'forward', Float ), ( 'jump', Byte ) ]
 	}

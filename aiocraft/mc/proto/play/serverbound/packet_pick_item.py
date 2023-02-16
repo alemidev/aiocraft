@@ -40,7 +40,11 @@ class PacketPickItem(Packet):
 		751 : 24,
 		755 : 23,
 		756 : 23,
-		757 : 23
+		757 : 23,
+		758 : 23,
+		759 : 25,
+		760 : 26,
+		761 : 25
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'slot', VarInt ) ],
@@ -62,5 +66,9 @@ class PacketPickItem(Packet):
 		751 : [ ( 'slot', VarInt ) ],
 		755 : [ ( 'slot', VarInt ) ],
 		756 : [ ( 'slot', VarInt ) ],
-		757 : [ ( 'slot', VarInt ) ]
+		757 : [ ( 'slot', VarInt ) ],
+		758 : [ ( 'slot', VarInt ) ],
+		759 : [ ( 'slot', VarInt ) ],
+		760 : [ ( 'slot', VarInt ) ],
+		761 : [ ( 'slot', VarInt ) ]
 	}

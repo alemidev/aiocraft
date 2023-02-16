@@ -60,7 +60,11 @@ class PacketEntityStatus(Packet):
 		751 : 26,
 		755 : 27,
 		756 : 27,
-		757 : 27
+		757 : 27,
+		758 : 27,
+		759 : 24,
+		760 : 26,
+		761 : 25
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
@@ -99,5 +103,9 @@ class PacketEntityStatus(Packet):
 		751 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
 		755 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
 		756 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
-		757 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ]
+		757 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
+		758 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
+		759 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
+		760 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ],
+		761 : [ ( 'entityId', Int ), ( 'entityStatus', Byte ) ]
 	}

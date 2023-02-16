@@ -63,7 +63,11 @@ class PacketEntityAction(Packet):
 		751 : 28,
 		755 : 27,
 		756 : 27,
-		757 : 27
+		757 : 27,
+		758 : 27,
+		759 : 29,
+		760 : 30,
+		761 : 29
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
@@ -102,5 +106,9 @@ class PacketEntityAction(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'actionId', VarInt ), ( 'jumpBoost', VarInt ) ]
 	}

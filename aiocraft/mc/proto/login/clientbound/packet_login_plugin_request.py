@@ -46,7 +46,11 @@ class PacketLoginPluginRequest(Packet):
 		751 : 4,
 		755 : 4,
 		756 : 4,
-		757 : 4
+		757 : 4,
+		758 : 4,
+		759 : 4,
+		760 : 4,
+		761 : 4
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
@@ -68,5 +72,9 @@ class PacketLoginPluginRequest(Packet):
 		751 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
 		755 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
 		756 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
-		757 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ]
+		757 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
+		758 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
+		759 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
+		760 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ],
+		761 : [ ( 'messageId', VarInt ), ( 'channel', String ), ( 'data', TrailingData ) ]
 	}

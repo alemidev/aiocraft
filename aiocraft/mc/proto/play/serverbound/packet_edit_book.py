@@ -52,7 +52,11 @@ class PacketEditBook(Packet):
 		751 : 12,
 		755 : 11,
 		756 : 11,
-		757 : 11
+		757 : 11,
+		758 : 11,
+		759 : 13,
+		760 : 14,
+		761 : 13
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'new_book', Slot ), ( 'signing', Boolean ) ],
@@ -74,5 +78,9 @@ class PacketEditBook(Packet):
 		751 : [ ( 'new_book', Slot ), ( 'signing', Boolean ), ( 'hand', VarInt ) ],
 		755 : [ ( 'new_book', Slot ), ( 'signing', Boolean ), ( 'hand', VarInt ) ],
 		756 : [ ( 'hand', VarInt ), ( 'pages', ArrayType(String, VarInt, ) ), ( 'title', OptionalType(String, ) ) ],
-		757 : [ ( 'hand', VarInt ), ( 'pages', ArrayType(String, VarInt, ) ), ( 'title', OptionalType(String, ) ) ]
+		757 : [ ( 'hand', VarInt ), ( 'pages', ArrayType(String, VarInt, ) ), ( 'title', OptionalType(String, ) ) ],
+		758 : [ ( 'hand', VarInt ), ( 'pages', ArrayType(String, VarInt, ) ), ( 'title', OptionalType(String, ) ) ],
+		759 : [ ( 'hand', VarInt ), ( 'pages', ArrayType(String, VarInt, ) ), ( 'title', OptionalType(String, ) ) ],
+		760 : [ ( 'hand', VarInt ), ( 'pages', ArrayType(String, VarInt, ) ), ( 'title', OptionalType(String, ) ) ],
+		761 : [ ( 'hand', VarInt ), ( 'pages', ArrayType(String, VarInt, ) ), ( 'title', OptionalType(String, ) ) ]
 	}

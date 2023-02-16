@@ -60,7 +60,11 @@ class PacketSpawnPosition(Packet):
 		751 : 66,
 		755 : 75,
 		756 : 75,
-		757 : 75
+		757 : 75,
+		758 : 75,
+		759 : 74,
+		760 : 77,
+		761 : 76
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'location', Position ) ],
@@ -99,5 +103,9 @@ class PacketSpawnPosition(Packet):
 		751 : [ ( 'location', Position ) ],
 		755 : [ ( 'location', Position ), ( 'angle', Float ) ],
 		756 : [ ( 'location', Position ), ( 'angle', Float ) ],
-		757 : [ ( 'location', Position ), ( 'angle', Float ) ]
+		757 : [ ( 'location', Position ), ( 'angle', Float ) ],
+		758 : [ ( 'location', Position ), ( 'angle', Float ) ],
+		759 : [ ( 'location', Position ), ( 'angle', Float ) ],
+		760 : [ ( 'location', Position ), ( 'angle', Float ) ],
+		761 : [ ( 'location', Position ), ( 'angle', Float ) ]
 	}

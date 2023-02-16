@@ -6,8 +6,9 @@ from ....definitions import *
 from ....types import *
 
 class PacketLogin(Packet):
-	__slots__ = ( 'id', 'difficulty', 'dimension', 'dimensionCodec', 'enableRespawnScreen', 'entityId', 'gameMode', 'hashedSeed', 'isDebug', 'isFlat', 'isHardcore', 'levelType', 'maxPlayers', 'previousGameMode', 'reducedDebugInfo', 'simulationDistance', 'viewDistance', 'worldName', 'worldNames' )
+	__slots__ = ( 'id', 'death', 'difficulty', 'dimension', 'dimensionCodec', 'enableRespawnScreen', 'entityId', 'gameMode', 'hashedSeed', 'isDebug', 'isFlat', 'isHardcore', 'levelType', 'maxPlayers', 'previousGameMode', 'reducedDebugInfo', 'simulationDistance', 'viewDistance', 'worldName', 'worldNames', 'worldType' )
 	
+	death : tuple
 	difficulty : int
 	dimension : Union[dict,int,str]
 	dimensionCodec : dict
@@ -26,8 +27,10 @@ class PacketLogin(Packet):
 	viewDistance : int
 	worldName : str
 	worldNames : list
+	worldType : str
 
 	def __init__(self, proto:int,
+		death:tuple=None,
 		difficulty:int=None,
 		dimension:Union[dict,int,str]=None,
 		dimensionCodec:dict=None,
@@ -46,9 +49,11 @@ class PacketLogin(Packet):
 		viewDistance:int=None,
 		worldName:str=None,
 		worldNames:list=None,
+		worldType:str=None,
 		**kwargs
 	):
 		super().__init__(proto,
+			death=death,
 			difficulty=difficulty,
 			dimension=dimension,
 			dimensionCodec=dimensionCodec,
@@ -66,7 +71,8 @@ class PacketLogin(Packet):
 			simulationDistance=simulationDistance,
 			viewDistance=viewDistance,
 			worldName=worldName,
-			worldNames=worldNames
+			worldNames=worldNames,
+			worldType=worldType
 		)
 
 	_state : int = 3
@@ -108,7 +114,11 @@ class PacketLogin(Packet):
 		751 : 36,
 		755 : 38,
 		756 : 38,
-		757 : 38
+		757 : 38,
+		758 : 38,
+		759 : 35,
+		760 : 37,
+		761 : 36
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', Int ), ( 'gameMode', Byte ), ( 'dimension', Byte ), ( 'difficulty', Byte ), ( 'maxPlayers', Byte ), ( 'levelType', String ), ( 'reducedDebugInfo', Boolean ) ],
@@ -147,5 +157,9 @@ class PacketLogin(Packet):
 		751 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ) ],
 		755 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ) ],
 		756 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ) ],
-		757 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'simulationDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ) ]
+		757 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'simulationDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ) ],
+		758 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'dimension', NBTTag ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'simulationDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ) ],
+		759 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'worldType', String ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'simulationDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'death', OptionalType(StructType(( 'dimensionName', String ), ( 'location', Position ), ), ) ) ],
+		760 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'worldType', String ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'simulationDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'death', OptionalType(StructType(( 'dimensionName', String ), ( 'location', Position ), ), ) ) ],
+		761 : [ ( 'entityId', Int ), ( 'isHardcore', Boolean ), ( 'gameMode', Byte ), ( 'previousGameMode', Byte ), ( 'worldNames', ArrayType(String, VarInt, ) ), ( 'dimensionCodec', NBTTag ), ( 'worldType', String ), ( 'worldName', String ), ( 'hashedSeed', Long ), ( 'maxPlayers', VarInt ), ( 'viewDistance', VarInt ), ( 'simulationDistance', VarInt ), ( 'reducedDebugInfo', Boolean ), ( 'enableRespawnScreen', Boolean ), ( 'isDebug', Boolean ), ( 'isFlat', Boolean ), ( 'death', OptionalType(StructType(( 'dimensionName', String ), ( 'location', Position ), ), ) ) ]
 	}

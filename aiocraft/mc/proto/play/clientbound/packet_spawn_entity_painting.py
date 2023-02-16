@@ -69,7 +69,8 @@ class PacketSpawnEntityPainting(Packet):
 		751 : 3,
 		755 : 3,
 		756 : 3,
-		757 : 3
+		757 : 3,
+		758 : 3
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'title', String ), ( 'location', Position ), ( 'direction', Byte ) ],
@@ -108,5 +109,6 @@ class PacketSpawnEntityPainting(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'entityUUID', UUID ), ( 'title', VarInt ), ( 'location', Position ), ( 'direction', Byte ) ]
 	}

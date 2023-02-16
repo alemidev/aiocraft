@@ -60,7 +60,11 @@ class PacketRemoveEntityEffect(Packet):
 		751 : 55,
 		755 : 59,
 		756 : 59,
-		757 : 59
+		757 : 59,
+		758 : 59,
+		759 : 57,
+		760 : 60,
+		761 : 59
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
@@ -99,5 +103,9 @@ class PacketRemoveEntityEffect(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'effectId', Byte ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'effectId', VarInt ) ]
 	}

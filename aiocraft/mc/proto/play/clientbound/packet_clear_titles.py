@@ -23,10 +23,18 @@ class PacketClearTitles(Packet):
 	_ids : Dict[int, int] = {
 		755 : 16,
 		756 : 16,
-		757 : 16
+		757 : 16,
+		758 : 16,
+		759 : 13,
+		760 : 13,
+		761 : 12
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		755 : [ ( 'reset', Boolean ) ],
 		756 : [ ( 'reset', Boolean ) ],
-		757 : [ ( 'reset', Boolean ) ]
+		757 : [ ( 'reset', Boolean ) ],
+		758 : [ ( 'reset', Boolean ) ],
+		759 : [ ( 'reset', Boolean ) ],
+		760 : [ ( 'reset', Boolean ) ],
+		761 : [ ( 'reset', Boolean ) ]
 	}

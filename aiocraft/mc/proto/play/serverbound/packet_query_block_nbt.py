@@ -43,7 +43,11 @@ class PacketQueryBlockNbt(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1
+		757 : 1,
+		758 : 1,
+		759 : 1,
+		760 : 1,
+		761 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		393 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
@@ -65,5 +69,9 @@ class PacketQueryBlockNbt(Packet):
 		751 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
 		755 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
 		756 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
-		757 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ]
+		757 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
+		758 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
+		759 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
+		760 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ],
+		761 : [ ( 'transactionId', VarInt ), ( 'location', Position ) ]
 	}

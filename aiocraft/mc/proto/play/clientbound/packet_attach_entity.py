@@ -63,7 +63,11 @@ class PacketAttachEntity(Packet):
 		751 : 69,
 		755 : 78,
 		756 : 78,
-		757 : 78
+		757 : 78,
+		758 : 78,
+		759 : 78,
+		760 : 81,
+		761 : 79
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', Int ), ( 'vehicleId', Int ), ( 'leash', Boolean ) ],
@@ -102,5 +106,9 @@ class PacketAttachEntity(Packet):
 		751 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
 		755 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
 		756 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
-		757 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ]
+		757 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
+		758 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
+		759 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
+		760 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ],
+		761 : [ ( 'entityId', Int ), ( 'vehicleId', Int ) ]
 	}

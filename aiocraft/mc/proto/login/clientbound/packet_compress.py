@@ -57,7 +57,11 @@ class PacketCompress(Packet):
 		751 : 3,
 		755 : 3,
 		756 : 3,
-		757 : 3
+		757 : 3,
+		758 : 3,
+		759 : 3,
+		760 : 3,
+		761 : 3
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'threshold', VarInt ) ],
@@ -96,5 +100,9 @@ class PacketCompress(Packet):
 		751 : [ ( 'threshold', VarInt ) ],
 		755 : [ ( 'threshold', VarInt ) ],
 		756 : [ ( 'threshold', VarInt ) ],
-		757 : [ ( 'threshold', VarInt ) ]
+		757 : [ ( 'threshold', VarInt ) ],
+		758 : [ ( 'threshold', VarInt ) ],
+		759 : [ ( 'threshold', VarInt ) ],
+		760 : [ ( 'threshold', VarInt ) ],
+		761 : [ ( 'threshold', VarInt ) ]
 	}

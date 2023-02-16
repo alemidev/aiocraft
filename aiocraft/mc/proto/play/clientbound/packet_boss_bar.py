@@ -74,7 +74,11 @@ class PacketBossBar(Packet):
 		751 : 12,
 		755 : 13,
 		756 : 13,
-		757 : 13
+		757 : 13,
+		758 : 13,
+		759 : 10,
+		760 : 10,
+		761 : 10
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		76 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
@@ -112,5 +116,9 @@ class PacketBossBar(Packet):
 		751 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
 		755 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
 		756 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
-		757 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ]
+		757 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
+		758 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
+		759 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
+		760 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ],
+		761 : [ ( 'entityUUID', UUID ), ( 'action', VarInt ), ( 'title', SwitchType('action', { 0 : String, 3 : String }, None, ) ), ( 'health', SwitchType('action', { 0 : Float, 2 : Float }, None, ) ), ( 'color', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'dividers', SwitchType('action', { 0 : VarInt, 4 : VarInt }, None, ) ), ( 'flags', SwitchType('action', { 0 : Byte, 5 : Byte }, None, ) ) ]
 	}

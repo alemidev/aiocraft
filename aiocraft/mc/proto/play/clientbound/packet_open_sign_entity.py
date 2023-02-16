@@ -57,7 +57,11 @@ class PacketOpenSignEntity(Packet):
 		751 : 46,
 		755 : 47,
 		756 : 47,
-		757 : 47
+		757 : 47,
+		758 : 47,
+		759 : 44,
+		760 : 46,
+		761 : 45
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'location', Position ) ],
@@ -96,5 +100,9 @@ class PacketOpenSignEntity(Packet):
 		751 : [ ( 'location', Position ) ],
 		755 : [ ( 'location', Position ) ],
 		756 : [ ( 'location', Position ) ],
-		757 : [ ( 'location', Position ) ]
+		757 : [ ( 'location', Position ) ],
+		758 : [ ( 'location', Position ) ],
+		759 : [ ( 'location', Position ) ],
+		760 : [ ( 'location', Position ) ],
+		761 : [ ( 'location', Position ) ]
 	}

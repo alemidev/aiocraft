@@ -63,7 +63,8 @@ class PacketChat(Packet):
 		751 : 14,
 		755 : 15,
 		756 : 15,
-		757 : 15
+		757 : 15,
+		758 : 15
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'message', String ), ( 'position', Byte ) ],
@@ -102,5 +103,6 @@ class PacketChat(Packet):
 		751 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
 		755 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
 		756 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
-		757 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ]
+		757 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ],
+		758 : [ ( 'message', String ), ( 'position', Byte ), ( 'sender', UUID ) ]
 	}

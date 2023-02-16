@@ -57,7 +57,11 @@ class PacketStatistics(Packet):
 		751 : 6,
 		755 : 7,
 		756 : 7,
-		757 : 7
+		757 : 7,
+		758 : 7,
+		759 : 4,
+		760 : 4,
+		761 : 4
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entries', ArrayType(StructType(( 'name', String ), ( 'value', VarInt ), ), VarInt, ) ) ],
@@ -96,5 +100,9 @@ class PacketStatistics(Packet):
 		751 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ],
 		755 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ],
 		756 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ],
-		757 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ]
+		757 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ],
+		758 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ],
+		759 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ],
+		760 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ],
+		761 : [ ( 'entries', ArrayType(StructType(( 'categoryId', VarInt ), ( 'statisticId', VarInt ), ( 'value', VarInt ), ), VarInt, ) ) ]
 	}

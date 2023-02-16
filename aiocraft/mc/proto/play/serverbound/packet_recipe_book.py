@@ -30,11 +30,19 @@ class PacketRecipeBook(Packet):
 		751 : 30,
 		755 : 30,
 		756 : 30,
-		757 : 30
+		757 : 30,
+		758 : 30,
+		759 : 32,
+		760 : 33,
+		761 : 33
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		751 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
 		755 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
 		756 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
-		757 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ]
+		757 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
+		758 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
+		759 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
+		760 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ],
+		761 : [ ( 'bookId', VarInt ), ( 'bookOpen', Boolean ), ( 'filterActive', Boolean ) ]
 	}

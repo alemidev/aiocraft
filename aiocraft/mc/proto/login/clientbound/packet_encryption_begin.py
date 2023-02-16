@@ -63,7 +63,11 @@ class PacketEncryptionBegin(Packet):
 		751 : 1,
 		755 : 1,
 		756 : 1,
-		757 : 1
+		757 : 1,
+		758 : 1,
+		759 : 1,
+		760 : 1,
+		761 : 1
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
@@ -102,5 +106,9 @@ class PacketEncryptionBegin(Packet):
 		751 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
 		755 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
 		756 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
-		757 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ]
+		757 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
+		758 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
+		759 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
+		760 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ],
+		761 : [ ( 'serverId', String ), ( 'publicKey', ByteArray ), ( 'verifyToken', ByteArray ) ]
 	}

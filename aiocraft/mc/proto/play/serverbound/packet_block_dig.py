@@ -6,21 +6,24 @@ from ....definitions import *
 from ....types import *
 
 class PacketBlockDig(Packet):
-	__slots__ = ( 'id', 'face', 'location', 'status' )
+	__slots__ = ( 'id', 'face', 'location', 'sequence', 'status' )
 	
 	face : int
 	location : tuple
+	sequence : int
 	status : int
 
 	def __init__(self, proto:int,
 		face:int=None,
 		location:tuple=None,
+		sequence:int=None,
 		status:int=None,
 		**kwargs
 	):
 		super().__init__(proto,
 			face=face,
 			location=location,
+			sequence=sequence,
 			status=status
 		)
 
@@ -63,44 +66,52 @@ class PacketBlockDig(Packet):
 		751 : 27,
 		755 : 26,
 		756 : 26,
-		757 : 26
+		757 : 26,
+		758 : 26,
+		759 : 28,
+		760 : 29,
+		761 : 28
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		47 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		76 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		107 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		108 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		109 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		110 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		201 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		210 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		304 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		315 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		321 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		327 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		331 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		335 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		338 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		340 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		351 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		393 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		401 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		402 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		403 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		404 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		477 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		480 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		490 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		498 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		573 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		575 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		578 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		709 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		734 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		735 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		736 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		751 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		755 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		756 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ],
-		757 : [ ( 'status', Byte ), ( 'location', Position ), ( 'face', Byte ) ]
+		47 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		76 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		107 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		108 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		109 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		110 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		201 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		210 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		304 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		315 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		321 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		327 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		331 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		335 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		338 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		340 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		351 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		393 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		401 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		402 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		403 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		404 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		477 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		480 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		490 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		498 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		573 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		575 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		578 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		709 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		734 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		735 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		736 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		751 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		755 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		756 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		757 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		758 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ) ],
+		759 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ), ( 'sequence', VarInt ) ],
+		760 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ), ( 'sequence', VarInt ) ],
+		761 : [ ( 'status', VarInt ), ( 'location', Position ), ( 'face', Byte ), ( 'sequence', VarInt ) ]
 	}

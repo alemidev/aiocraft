@@ -35,7 +35,11 @@ class PacketUpdateViewDistance(Packet):
 		751 : 65,
 		755 : 74,
 		756 : 74,
-		757 : 74
+		757 : 74,
+		758 : 74,
+		759 : 73,
+		760 : 76,
+		761 : 75
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		477 : [ ( 'viewDistance', VarInt ) ],
@@ -52,5 +56,9 @@ class PacketUpdateViewDistance(Packet):
 		751 : [ ( 'viewDistance', VarInt ) ],
 		755 : [ ( 'viewDistance', VarInt ) ],
 		756 : [ ( 'viewDistance', VarInt ) ],
-		757 : [ ( 'viewDistance', VarInt ) ]
+		757 : [ ( 'viewDistance', VarInt ) ],
+		758 : [ ( 'viewDistance', VarInt ) ],
+		759 : [ ( 'viewDistance', VarInt ) ],
+		760 : [ ( 'viewDistance', VarInt ) ],
+		761 : [ ( 'viewDistance', VarInt ) ]
 	}

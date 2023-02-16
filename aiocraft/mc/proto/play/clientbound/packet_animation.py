@@ -60,7 +60,11 @@ class PacketAnimation(Packet):
 		751 : 5,
 		755 : 6,
 		756 : 6,
-		757 : 6
+		757 : 6,
+		758 : 6,
+		759 : 3,
+		760 : 3,
+		761 : 3
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
@@ -99,5 +103,9 @@ class PacketAnimation(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'animation', Byte ) ]
 	}

@@ -81,7 +81,11 @@ class PacketNamedEntitySpawn(Packet):
 		751 : 4,
 		755 : 4,
 		756 : 4,
-		757 : 4
+		757 : 4,
+		758 : 4,
+		759 : 2,
+		760 : 2,
+		761 : 2
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Int ), ( 'y', Int ), ( 'z', Int ), ( 'yaw', Byte ), ( 'pitch', Byte ), ( 'currentItem', Short ), ( 'metadata', EntityMetadata ) ],
@@ -120,5 +124,9 @@ class PacketNamedEntitySpawn(Packet):
 		751 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
 		755 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
 		756 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
-		757 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ]
+		757 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
+		758 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
+		759 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
+		760 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ],
+		761 : [ ( 'entityId', VarInt ), ( 'playerUUID', UUID ), ( 'x', Double ), ( 'y', Double ), ( 'z', Double ), ( 'yaw', Byte ), ( 'pitch', Byte ) ]
 	}

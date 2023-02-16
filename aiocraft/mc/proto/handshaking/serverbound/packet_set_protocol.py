@@ -66,7 +66,11 @@ class PacketSetProtocol(Packet):
 		751 : 0,
 		755 : 0,
 		756 : 0,
-		757 : 0
+		757 : 0,
+		758 : 0,
+		759 : 0,
+		760 : 0,
+		761 : 0
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
 		47 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
@@ -105,5 +109,9 @@ class PacketSetProtocol(Packet):
 		751 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
 		755 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
 		756 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
-		757 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ]
+		757 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
+		758 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
+		759 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
+		760 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ],
+		761 : [ ( 'protocolVersion', VarInt ), ( 'serverHost', String ), ( 'serverPort', UnsignedShort ), ( 'nextState', VarInt ) ]
 	}
