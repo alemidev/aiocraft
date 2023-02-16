@@ -346,7 +346,7 @@ class SlotType(Type):
 		new_way = ctx._proto > 340
 		check_type = Boolean if new_way else Short
 		val = check_type.read(buffer, ctx)
-		if (new_way and val) or val != -1:
+		if (new_way and val) or (not new_way and val != -1):
 			if new_way:
 				slot["id"] = VarInt.read(buffer, ctx)
 			else:
