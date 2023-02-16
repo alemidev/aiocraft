@@ -233,7 +233,10 @@ class Dispatcher:
 		if not self._proto:
 			raise InvalidState("Cannot access registries from invalid protocol")
 
-		proto_reg = reg[self._proto]
+		proto = self._proto
+		while proto not in reg:
+			proto -= 1
+		proto_reg = reg[proto]
 
 		return proto_reg[packet_id]
 

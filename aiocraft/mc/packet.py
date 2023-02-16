@@ -22,6 +22,8 @@ class Packet:
 	def __init__(self, proto:int, **kwargs):
 		self._proto = proto
 		self._processed = Event()
+		while proto not in self._definitions:
+			proto -= 1
 		self.definition = self._definitions[proto]
 		self.id = self._ids[proto]
 		for name, t in self.definition:
@@ -36,7 +38,10 @@ class Packet:
 	@classmethod
 	def deserialize(cls, proto:int, buffer:io.BytesIO):
 		ctx = Context(_proto=proto)
-		for k, t in cls._definitions[proto]:
+		fallback_proto = proto
+		while fallback_proto not in cls._definitions:
+			fallback_proto -= 1
+		for k, t in cls._definitions[fallback_proto]:
 			setattr(ctx, k, t.read(buffer, ctx=ctx))
 		return cls(proto, **ctx.serialize())
 		# return cls(proto, **{ name : t.read(buffer) for (name, t) in cls._definitions[proto] })
