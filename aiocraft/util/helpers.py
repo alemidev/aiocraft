@@ -1,6 +1,6 @@
 import json
 
-from typing import Union
+from typing import Union, List, Dict
 
 from termcolor import colored # TODO don't use a lib and put ANSI escaped by hand maybe?
 
@@ -23,9 +23,8 @@ _EQUIVALENTS = {
 	"black": "white"
 }
 
-def _parse_formatted_block(msg:dict) -> str:
+def _parse_formatted_block(text: str, msg:dict) -> str:
 	attr = []
-	txt = msg["text"] if "text" in msg else msg["translate"] if "translate" in msg else "N/A"
 	if "bold" in msg and msg["bold"]:
 		attr.append("bold")
 	if "underlined" in msg and msg["underlined"]:
@@ -33,9 +32,23 @@ def _parse_formatted_block(msg:dict) -> str:
 	if "obfuscated" in msg and msg["obfuscated"]:
 		attr.append("blink")
 	if "color" in msg:
-		return colored(txt, _EQUIVALENTS[msg["color"]], attrs=attr)
+		return colored(text, _EQUIVALENTS[msg["color"]], attrs=attr)
 	else:
-		return colored(txt, "white", attrs=attr)
+		return colored(text, "white", attrs=attr)
+
+def _parse_translated_block(translate:str, withs: List[dict]) -> str:
+	out = ""
+	if translate == "chat.type.text":
+		out += "<"
+		out += parse_chat(withs[0])
+		out += "> "
+		out += parse_chat(withs[1])
+	else: # fallback behavior
+		out += translate + "("
+		for elem in withs:
+			out += parse_chat(elem) + ","
+		out += ")"
+	return out
 
 def parse_chat(msg:Union[dict,str], ansi_color:bool=False) -> str:
 	"""Recursive function to parse minecraft chat json, with optional colors"""
@@ -48,17 +61,20 @@ def parse_chat(msg:Union[dict,str], ansi_color:bool=False) -> str:
 			return str(msg) # It's not json, it's already plaintext
 	else:
 		return str(msg)
+
 	out = ""
-	if "text" in data or "translate" in data:
+
+	if "translate" in data and "with" in data:
+		translation = _parse_translated_block(data["translate"], data["with"])
 		if ansi_color:
-			out += _parse_formatted_block(data)
-		elif "text" in data:
+			out += _parse_formatted_block(translation, data)
+		else:
+			out += translation
+	if "text" in data:
+		if ansi_color:
+			out += _parse_formatted_block(data["text"], data)
+		else:
 			out += data["text"]
-		elif "translate" in data:
-			out += data["translate"]
-	if "with" in data:
-		for elem in data["with"]:
-			out += parse_chat(elem, ansi_color)
 	if "extra" in data:
 		for elem in data["extra"]:
 			out += parse_chat(elem, ansi_color)
