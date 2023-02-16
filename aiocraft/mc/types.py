@@ -365,36 +365,19 @@ class ParticleType(Type):
 	def write(self, data:dict, buffer:io.BytesIO, ctx:Context):
 		raise NotImplementedError
 
+	# TODO this changes across versions!
 	def read(self, data:dict, buffer:io.BytesIO, ctx:Context):
 		data : Dict[str, Any] = {}
 		data["id"] = VarInt.read(buffer, ctx)
-		if data["id"] in (2, 3, 25):
+		if data["id"] in (3, 23):
 			data["blockState"] = VarInt.read(buffer, ctx)
-		elif data["id"] == 30:
-			data["roll"] = Float.read(buffer, ctx)
-		elif data["id"] == 39:
+		elif data["id"] == 32:
 			data["item"] = Slot.read(buffer, ctx)
-		elif data["id"] == 92:
-			data["delay"] = VarInt.read(buffer, ctx)
 		elif data["id"] == 14:
 			data["red"] = Float.read(buffer, ctx)
 			data["green"] = Float.read(buffer, ctx)
 			data["blue"] = Float.read(buffer, ctx)
 			data["scale"] = Float.read(buffer, ctx)
-		elif data["id"] == 15:
-			data["from_red"] = Float.read(buffer, ctx)
-			data["from_green"] = Float.read(buffer, ctx)
-			data["from_blue"] = Float.read(buffer, ctx)
-			data["scale"] = Float.read(buffer, ctx)
-			data["to_red"] = Float.read(buffer, ctx)
-			data["to_green"] = Float.read(buffer, ctx)
-			data["to_blue"] = Float.read(buffer, ctx)
-		elif data["id"] == 40:
-			data["type"] = String.read(buffer, ctx)
-			data["position"] = Position.read(buffer, ctx)
-			data["entity"] = VarInt.read(buffer, ctx)
-			data["eyes"] = Float.read(buffer, ctx)
-			data["ticks"] = VarInt.read(buffer, ctx)
 		return data
 
 Particle = ParticleType()
@@ -431,7 +414,7 @@ _ENTITY_METADATA_TYPES_NEW = {
 	10 : OptionalType(Position),
 	11 : VarInt, # Direction
 	12 : OptionalType(UUID),
-	13 : OptionalType(VarInt), # Optional BlockID
+	13 : VarInt, # Optional BlockID
 	14 : NBTTag,
 	15 : Particle,
 	16 : StructType(("type", VarInt), ("profession", VarInt), ("level", VarInt)),
