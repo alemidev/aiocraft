@@ -126,7 +126,7 @@ class MojangAuthenticator(AuthInterface):
 		self.clientToken = res["clientToken"]
 		self.selectedProfile = GameProfile(**res["selectedProfile"])
 
-		if "user" in res:
+		if "user" in res and res["user"]:
 			self.username = res["user"]["username"]
 
 		return self
