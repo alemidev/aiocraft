@@ -11,7 +11,7 @@ class PacketInitializeWorldBorder(Packet):
 	newDiameter : float
 	oldDiameter : float
 	portalTeleportBoundary : int
-	speed : Union[bytes,int]
+	speed : int
 	warningBlocks : int
 	warningTime : int
 	x : float
@@ -21,7 +21,7 @@ class PacketInitializeWorldBorder(Packet):
 		newDiameter:float=None,
 		oldDiameter:float=None,
 		portalTeleportBoundary:int=None,
-		speed:Union[bytes,int]=None,
+		speed:int=None,
 		warningBlocks:int=None,
 		warningTime:int=None,
 		x:float=None,
@@ -51,10 +51,10 @@ class PacketInitializeWorldBorder(Packet):
 		761 : 30
 	}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {
-		755 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
-		756 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
-		757 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
-		758 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', TrailingData ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
+		755 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarLong ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
+		756 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarLong ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
+		757 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarLong ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
+		758 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarLong ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
 		759 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
 		760 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ],
 		761 : [ ( 'x', Double ), ( 'z', Double ), ( 'oldDiameter', Double ), ( 'newDiameter', Double ), ( 'speed', VarInt ), ( 'portalTeleportBoundary', VarInt ), ( 'warningBlocks', VarInt ), ( 'warningTime', VarInt ) ]

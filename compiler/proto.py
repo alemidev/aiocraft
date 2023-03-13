@@ -71,6 +71,7 @@ class Ref:
 
 TYPE_MAP = {
 	"varint": Ref('VarInt'),
+	"varlong": Ref('VarLong'),
 	"u8": Ref('Byte'),
 	"i8": Ref('Byte'),
 	"u16": Ref('UnsignedShort'),
@@ -96,6 +97,7 @@ TYPE_MAP = {
 
 HINT_MAP = {
 	"varint": 'int',
+	"varlong": 'int',
 	"u8": 'int',
 	"i8": 'int',
 	"u16": 'int',
