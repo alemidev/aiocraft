@@ -162,7 +162,13 @@ def mctype(slot_type:Any) -> Ref:
 				mctype(v["default"]) if "default" in v and v['default'] != 'void' else None,
 			)
 		elif t == "bitfield":
-			return Ref('Int') # TODO
+			# TODO can be made better...
+			size = 0
+			for field in v:
+				size += field["size"]
+			if size <= 32:
+				return Ref('Int')
+			return Ref('Long')
 		# elif t == "mapper": # ????
 		# 	return TrailingData
 		else:

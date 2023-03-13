@@ -112,12 +112,12 @@ class PacketMultiBlockChange(Packet):
 		734 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
 		735 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
 		736 : [ ( 'chunkX', Int ), ( 'chunkZ', Int ), ( 'records', ArrayType(StructType(( 'horizontalPos', Byte ), ( 'y', Byte ), ( 'blockId', VarInt ), ), VarInt, ) ) ],
-		751 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
-		755 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
-		756 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
-		757 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
-		758 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
-		759 : [ ( 'chunkCoordinates', Int ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
-		760 : [ ( 'chunkCoordinates', Int ), ( 'suppressLightUpdates', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
-		761 : [ ( 'chunkCoordinates', Int ), ( 'suppressLightUpdates', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ]
+		751 : [ ( 'chunkCoordinates', Long ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		755 : [ ( 'chunkCoordinates', Long ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		756 : [ ( 'chunkCoordinates', Long ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		757 : [ ( 'chunkCoordinates', Long ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		758 : [ ( 'chunkCoordinates', Long ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(TrailingData, VarInt, ) ) ],
+		759 : [ ( 'chunkCoordinates', Long ), ( 'notTrustEdges', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
+		760 : [ ( 'chunkCoordinates', Long ), ( 'suppressLightUpdates', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ],
+		761 : [ ( 'chunkCoordinates', Long ), ( 'suppressLightUpdates', Boolean ), ( 'records', ArrayType(VarInt, VarInt, ) ) ]
 	}
