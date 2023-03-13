@@ -216,20 +216,32 @@ class PositionType(Type):
 	pytype : type = tuple
 	MAX_SIZE : int = 8
 
-	# TODO THIS IS FOR 1.12.2!!! Make a generic version-less?
-
 	def write(self, data:tuple, buffer:io.BytesIO, ctx:Context):
-		packed = ((0x3FFFFFF & data[0]) << 38) \
-			| ((0xFFF & data[1]) << 26) \
-			| (0x3FFFFFF & data[2])
-		UnsignedLong.write(packed, buffer, ctx=ctx)
+		if ctx._proto <= 441:
+			packed = ((0x3FFFFFF & data[0]) << 38) \
+				| ((0xFFF & data[1]) << 26) \
+				| (0x3FFFFFF & data[2])
+			UnsignedLong.write(packed, buffer, ctx=ctx)
+		else:
+			packed = ((0x3FFFFFF & data[0]) << 38) \
+				| ((0xFFF & data[2]) << 12) \
+				| (0x3FFFFFF & data[1])
+			UnsignedLong.write(packed, buffer, ctx=ctx)
+			pass
 
 	def read(self, buffer:io.BytesIO, ctx:Context) -> tuple:
-		packed = UnsignedLong.read(buffer, ctx)
-		x = twos_comp(packed >> 38, 26)
-		y = (packed >> 26) & 0xFFF
-		z = twos_comp(packed & 0x3FFFFFF, 26)
-		return (x, y, z)
+		if ctx._proto <= 441:
+			packed = UnsignedLong.read(buffer, ctx)
+			x = twos_comp(packed >> 38, 26)
+			y = (packed >> 26) & 0xFFF
+			z = twos_comp(packed & 0x3FFFFFF, 26)
+			return (x, y, z)
+		else:
+			packed = UnsignedLong.read(buffer, ctx)
+			x = twos_comp(packed >> 38, 26)
+			z = twos_comp((packed >> 12) & 0x3FFFFFF, 26)
+			y = packed & 0xFFF
+			return (x, y, z)
 
 Position = PositionType()
 
