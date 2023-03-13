@@ -197,6 +197,8 @@ def mchint(slot_type:Any) -> Ref:
 			else:
 				possibilities.add(Ref('None'))
 			return Ref(f'Union[{", ".join(str(s) for s in sorted(possibilities))}]')
+		elif t == "bitfield":
+			return Ref('int')
 		# elif t == "mapper": # ????
 		# 	return TrailingData
 	logging.error("Unknown type %s, using 'bytes' as hint", str(slot_type))

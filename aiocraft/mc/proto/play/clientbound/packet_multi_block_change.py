@@ -8,7 +8,7 @@ from ....types import *
 class PacketMultiBlockChange(Packet):
 	__slots__ = ( 'id', 'chunkCoordinates', 'chunkX', 'chunkZ', 'notTrustEdges', 'records', 'suppressLightUpdates' )
 	
-	chunkCoordinates : bytes
+	chunkCoordinates : int
 	chunkX : int
 	chunkZ : int
 	notTrustEdges : bool
@@ -16,7 +16,7 @@ class PacketMultiBlockChange(Packet):
 	suppressLightUpdates : bool
 
 	def __init__(self, proto:int,
-		chunkCoordinates:bytes=None,
+		chunkCoordinates:int=None,
 		chunkX:int=None,
 		chunkZ:int=None,
 		notTrustEdges:bool=None,
