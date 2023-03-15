@@ -92,6 +92,11 @@ class BlockPos:
 			and self.y == other.y \
 			and self.z == other.z
 
+	def close(self, other:'BlockPos', threshold:float = 0.1) -> bool:
+		return (self.x - other.x) < threshold \
+			and (self.y - other.y) < threshold \
+			and (self.z - other.z) < threshold
+
 	def __repr__(self) -> str:
 		return f"{self.__class__.__name__}(x={self.x},y={self.y},z={self.z})"
 
