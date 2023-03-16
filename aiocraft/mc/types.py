@@ -224,8 +224,8 @@ class PositionType(Type):
 			UnsignedLong.write(packed, buffer, ctx=ctx)
 		else:
 			packed = ((0x3FFFFFF & data[0]) << 38) \
-				| ((0xFFF & data[2]) << 12) \
-				| (0x3FFFFFF & data[1])
+				| ((0x3FFFFFF & data[2]) << 12) \
+				| (0xFFF & data[1])
 			UnsignedLong.write(packed, buffer, ctx=ctx)
 			pass
 
