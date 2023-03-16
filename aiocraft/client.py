@@ -71,6 +71,7 @@ class MinecraftClient:
 		return self.dispatcher.connected
 
 	async def write(self, packet:Packet, wait:bool=False):
+		# TODO get rid of this, too many ways to do one thing...
 		await self.dispatcher.write(packet, wait)
 
 	async def authenticate(self):

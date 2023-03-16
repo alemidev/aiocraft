@@ -97,6 +97,9 @@ class BlockPos:
 			and (self.y - other.y) < threshold \
 			and (self.z - other.z) < threshold
 
+	def clone(self) -> 'BlockPos':
+		return BlockPos(self.x, self.y, self.z)
+
 	def __repr__(self) -> str:
 		return f"{self.__class__.__name__}(x={self.x},y={self.y},z={self.z})"
 
