@@ -17,18 +17,31 @@ class Dimension(Enum):
 	NETHER = -1
 	OVERWORLD = 0
 	END = 1
+	UNKNOWN = 666
+
+	@classmethod
+	def from_str(cls, txt:str) -> 'Dimension':
+		if txt == 'minecraft:overworld':
+			return Dimension.OVERWORLD
+		if txt == 'minecraft:the_nether':
+			return Dimension.NETHER
+		if txt == 'minecraft:the_end':
+			return Dimension.END
+		return Dimension.UNKNOWN
 
 class Difficulty(Enum):
 	PEACEFUL = 0
 	EASY = 1
 	NORMAL = 2
 	HARD = 3
+	UNKNOWN = -1
 
 class Gamemode(Enum):
 	SURVIVAL = 0
 	CREATIVE = 1
 	ADVENTURE = 2
 	SPECTATOR = 3
+	UNKNOWN = -1
 
 @dataclass
 class GameProfile:
