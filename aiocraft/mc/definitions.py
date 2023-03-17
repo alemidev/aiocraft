@@ -21,11 +21,12 @@ class Dimension(Enum):
 
 	@classmethod
 	def from_str(cls, txt:str) -> 'Dimension':
-		if txt == 'minecraft:overworld':
+		txt = txt.lower().replace('minecraft:', '')
+		if txt == 'overworld':
 			return Dimension.OVERWORLD
-		if txt == 'minecraft:the_nether':
+		if txt == 'the_nether':
 			return Dimension.NETHER
-		if txt == 'minecraft:the_end':
+		if txt == 'the_end':
 			return Dimension.END
 		return Dimension.UNKNOWN
 
