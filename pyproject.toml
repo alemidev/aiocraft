@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "aiocraft"
-version = "0.1.0"
+version = "0.2.1"
 authors = [
 	{ email = "me@alemi.dev", name = "alemi"},
 	{ email = "francescotolomei@mail.com", name = "f-tml" },
