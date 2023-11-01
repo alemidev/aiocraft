@@ -17,18 +17,32 @@ class Dimension(Enum):
 	NETHER = -1
 	OVERWORLD = 0
 	END = 1
+	UNKNOWN = 666
+
+	@classmethod
+	def from_str(cls, txt:str) -> 'Dimension':
+		txt = txt.lower().replace('minecraft:', '')
+		if txt == 'overworld':
+			return Dimension.OVERWORLD
+		if txt == 'the_nether':
+			return Dimension.NETHER
+		if txt == 'the_end':
+			return Dimension.END
+		return Dimension.UNKNOWN
 
 class Difficulty(Enum):
 	PEACEFUL = 0
 	EASY = 1
 	NORMAL = 2
 	HARD = 3
+	UNKNOWN = -1
 
 class Gamemode(Enum):
 	SURVIVAL = 0
 	CREATIVE = 1
 	ADVENTURE = 2
 	SPECTATOR = 3
+	UNKNOWN = -1
 
 @dataclass
 class GameProfile:
@@ -93,15 +107,15 @@ class BlockPos:
 			and self.z == other.z
 
 	def close(self, other:'BlockPos', threshold:float = 0.1) -> bool:
-		return (self.x - other.x) < threshold \
-			and (self.y - other.y) < threshold \
-			and (self.z - other.z) < threshold
+		return abs(self.x - other.x) < threshold \
+			and abs(self.y - other.y) < threshold \
+			and abs(self.z - other.z) < threshold
 
 	def clone(self) -> 'BlockPos':
 		return BlockPos(self.x, self.y, self.z)
 
 	def __repr__(self) -> str:
-		return f"{self.__class__.__name__}(x={self.x},y={self.y},z={self.z})"
+		return f"{self.__class__.__name__}(x={self.x:.1f},y={self.y:.1f},z={self.z:.1f})"
 
 	def __str__(self) -> str:
 		return repr(self)
