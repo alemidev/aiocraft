@@ -11,7 +11,7 @@ from typing import List, Tuple, Dict, Any, Union, Optional, Callable, Type as Cl
 
 from .definitions import Item
 
-class Context(object):
+class Context:
 	def __init__(self, **kwargs):
 		for k, v in kwargs.items():
 			setattr(self, k, v)
@@ -29,7 +29,7 @@ class Context(object):
 		values = ( f"{k}={repr(v)}" for k,v in vars(self).items() )
 		return f"Context({', '.join(values)})"
 
-class Type(object):
+class Type:
 	pytype : Union[type, Callable] = lambda x : x
 
 	def write(self, data:Any, buffer:io.BytesIO, ctx:Context) -> None:
@@ -113,10 +113,11 @@ class NBTType(Type):
 			pynbt.NBTFile(value=data).save(buffer)
 
 	def read(self, buffer:io.BytesIO, ctx:Context) -> Optional[dict]:
+		index = buffer.tell()
 		head = Byte.read(buffer, ctx)
 		if head == 0x0:
 			return None
-		buffer.seek(-1,1) # go back 1 byte
+		buffer.seek(index) # go back to start and read again
 		return nbt_to_py(pynbt.NBTFile(io=buffer))
 
 NBTTag = NBTType()
@@ -302,10 +303,20 @@ class SwitchType(Type):
 	field : str
 	mappings : Dict[Any, Type]
 
-	def __init__(self, watch:str, mappings:Dict[Any, Type], default:Type = None):
+	def __init__(self, watch:str, mappings:Dict[Any, Type], default:Type | None = None):
 		self.field = watch
-		self.mappings = mappings
 		self.default = default
+		# TODO AWFUL FIX, probably because json is weird
+		self.mappings = {}
+		for k, v in mappings.items():
+			if k == 'true':
+				self.mappings[True] = v
+			elif k == 'false':
+				self.mappings[False] = v
+			else:
+				# TODO probably breaks for numbers too?
+				self.mappings[k] = v
+		# TODO AWFUL FIX, probably because json is weird
 
 	def write(self, data:Any, buffer:io.BytesIO, ctx:Context):
 		watched = getattr(ctx, self.field, None)
@@ -379,88 +390,18 @@ class ParticleType(Type):
 
 	# TODO this changes across versions!
 	def read(self, data:dict, buffer:io.BytesIO, ctx:Context):
-		data : Dict[str, Any] = {}
-		data["id"] = VarInt.read(buffer, ctx)
-		if data["id"] in (3, 23):
-			data["blockState"] = VarInt.read(buffer, ctx)
-		elif data["id"] == 32:
-			data["item"] = Slot.read(buffer, ctx)
-		elif data["id"] == 14:
-			data["red"] = Float.read(buffer, ctx)
-			data["green"] = Float.read(buffer, ctx)
-			data["blue"] = Float.read(buffer, ctx)
-			data["scale"] = Float.read(buffer, ctx)
+		from aiocraft.mc.proto.ext import ParticlesDefinitions
+		data_id = VarInt.read(buffer, ctx)
+		if data_id in ParticlesDefinitions._definitions[ctx._proto]:
+			t = ParticlesDefinitions._definitions[ctx._proto][data_id]
+			data = t.read(buffer, ctx)
+			data["id"] = data_id
+		else:
+			data = {"id": data_id}
 		return data
 
 Particle = ParticleType()
 
-# wiki.vg does not document these anymore. Minecraft 1.12.2 has these as metadata types
-_ENTITY_METADATA_TYPES = {
-	0  : Byte,
-	1  : VarInt,
-	2  : Float,
-	3  : String,
-	4  : Chat,
-	5  : Slot,
-	6  : Boolean,
-	7  : StructType(("x", Float), ("y", Float), ("z", Float)), # Rotation
-	8  : Position,
-	9  : OptionalType(Position),
-	10 : VarInt, # Direction (Down = 0, Up = 1, North = 2, South = 3, West = 4, East = 5)
-	11 : OptionalType(UUID),
-	12 : VarInt, # OptBlockID (VarInt) 0 for absent (implies air); otherwise, a block state ID as per the global palette
-	13 : NBTTag,
-}
-
-_ENTITY_METADATA_TYPES_NEW = {
-	0  : Byte,
-	1  : VarInt,
-	2  : Float,
-	3  : String,
-	4  : Chat,
-	5  : OptionalType(Chat),
-	6  : Slot,
-	7  : Boolean,
-	8  : StructType(("x", Float), ("y", Float), ("z", Float)), 
-	9  : Position,
-	10 : OptionalType(Position),
-	11 : VarInt, # Direction
-	12 : OptionalType(UUID),
-	13 : VarInt, # Optional BlockID
-	14 : NBTTag,
-	15 : Particle,
-	16 : StructType(("type", VarInt), ("profession", VarInt), ("level", VarInt)),
-	17 : OptionalType(VarInt),
-	18 : VarInt, # pose
-}
-
-# This is for 1.19
-# _ENTITY_METADATA_TYPES_NEW = {
-# 	0  : Byte,
-# 	1  : VarInt,
-# 	2  : VarLong,
-# 	3  : Float,
-# 	4  : String,
-# 	5  : Chat,
-# 	6  : OptionalType(Chat),
-# 	7  : Slot,
-# 	8  : Boolean,
-# 	9  : StructType(("x", Float), ("y", Float), ("z", Float)), 
-# 	10 : Position,
-# 	11 : OptionalType(Position),
-# 	12 : VarInt, # Direction
-# 	13 : OptionalType(UUID),
-# 	14 : OptionalType(VarInt), # Optional BlockID
-# 	15 : NBTTag,
-# 	16 : Particle,
-# 	17 : StructType(("type", VarInt), ("profession", VarInt), ("level", VarInt)),
-# 	18 : OptionalType(VarInt),
-# 	19 : VarInt, # pose
-# 	20 : VarInt, # cat variant
-# 	21 : VarInt, # frog variant
-# 	22 : StructType(("dimension", Identifier), ("position", Position)),
-# 	23 : VarInt, # painting variant
-# }
 
 class EntityMetadataType(Type):
 	pytype : type = dict
@@ -470,7 +411,8 @@ class EntityMetadataType(Type):
 		buffer.write(b'\xFF')
 
 	def read(self, buffer:io.BytesIO, ctx:Context) -> Dict[int, Any]:
-		types_map = _ENTITY_METADATA_TYPES_NEW if ctx._proto > 340 else _ENTITY_METADATA_TYPES
+		from aiocraft.mc.proto.ext import MetadataDefinitions
+		types_map = MetadataDefinitions._definitions[ctx._proto]
 		out : Dict[int, Any] = {}
 		while True:
 			index = UnsignedByte.read(buffer, ctx)

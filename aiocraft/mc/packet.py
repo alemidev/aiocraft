@@ -1,7 +1,7 @@
 import io
 import json
 from asyncio import Event
-from typing import Tuple, Dict, Any
+from typing import Tuple, List, Dict, Any
 
 from .types import Type, VarInt, Context
 
@@ -11,13 +11,13 @@ class Packet:
 	__slots__ = 'id', 'definition', '_processed', '_proto', '_state'
 
 	id : int
-	definition : Tuple[Tuple[str, Type]]
+	definition : List[Tuple[str, Type]]
 	_processed : Event
 	_proto : int
 	_state : int
 
 	_ids : Dict[int, int] # definitions are compiled at install time
-	_definitions : Dict[int, Tuple[Tuple[str, Type]]] # definitions are compiled at install time
+	_definitions : Dict[int, List[Tuple[str, Type]]] # definitions are compiled at install time
 
 	def __init__(self, proto:int, **kwargs):
 		self._proto = proto

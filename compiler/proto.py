@@ -5,10 +5,7 @@ import keyword
 import logging
 
 from pathlib import Path
-from typing import Tuple, List, Dict, Union, Set, Type as Class
-
-from aiocraft.mc.types import *
-from aiocraft.mc.definitions import Item
+from typing import Any
 
 # TODO de-spaghetti this file sometime!
 
@@ -33,6 +30,15 @@ class {name}(Packet):
 
 	_ids : Dict[int, int] = {ids}
 	_definitions : Dict[int, List[Tuple[str, Type]]] = {definitions}
+"""
+
+EXT_FORMATTER = """from ..types import *
+
+class MetadataDefinitions:
+	_definitions: dict[int, dict[int, Type]] = {metadata}
+
+class ParticlesDefinitions:
+	_definitions: dict[int, dict[int, Type]] = {particles}
 """
 
 class Ref:
@@ -135,7 +141,7 @@ def format_dict(d:dict, depth:int=1) -> str:
 def format_list(l:list, depth:int=0) -> str:
 	return "[" + _format_line(l, depth) + "]"
 
-def format_tuple(l:list, depth:int=0) -> str:
+def format_tuple(l:tuple | list, depth:int=0) -> str:
 	return "(" + _format_line(l, depth) + ")"
 
 def mctype(slot_type:Any) -> Ref:
@@ -231,11 +237,11 @@ def snake_to_camel(name:str) -> str:
 
 class PacketClassWriter:
 	name  : str
-	attrs : Set[str]
-	types : Dict[str, List[Type]]
-	hints : Dict[str, List[Type]]
-	ids   : Dict[int, int]
-	definitions : Dict[int, List[Tuple[str, Type]]]
+	attrs : set[str]
+	types : dict[str, set[Ref]]
+	hints : dict[str, set[Ref]]
+	ids   : dict[int, int]
+	definitions : dict[int, list[tuple[str, Ref]]]
 	state : int
 
 	def __init__(self, pkt:dict, state:int):
@@ -253,7 +259,7 @@ class PacketClassWriter:
 				if "name" not in field:
 					logging.error("Skipping anonymous field %s", str(field))
 					continue
-				field_name = field["name"] if not keyword.iskeyword(field["name"]) else "is_" + field["name"]
+				field_name : str = field["name"] if not keyword.iskeyword(field["name"]) else "is_" + field["name"]
 				self.attrs.add(field_name)
 				self.definitions[v].append((field_name, mctype(field["type"])))
 				if field_name not in self.types:
@@ -269,7 +275,7 @@ class PacketClassWriter:
 			OBJECT.format(
 				name=self.name, 
 				ids=format_dict(self.ids, depth=2), 
-				definitions=format_dict({ k : Ref(format_list(Ref(format_tuple(x)) for x in v)) for k,v in self.definitions.items() }, depth=2),
+				definitions=format_dict({ k : Ref(format_list([Ref(format_tuple(x)) for x in v])) for k,v in self.definitions.items() }, depth=2),
 				slots=format_tuple(["id"] + sorted(self.attrs), depth=0), # TODO jank fix when no slots
 				fields="\n\t" + "\n\t".join(f"{a} : {pytype(sorted(self.hints[a]))}" for a in sorted(self.attrs)),
 				state=self.state,
@@ -345,6 +351,9 @@ def compile():
 			"serverbound": {},
 		}
 	}
+
+	METADATA = {}
+	PARTICLES = {}
 	
 	all_versions = os.listdir(mc_path / f'{folder_name}/data/pc/')
 	all_versions.remove("common")
@@ -367,6 +376,15 @@ def compile():
 
 		with open(mc_path / f'{folder_name}/data/pc/{v}/protocol.json') as f:
 			data = json.load(f)
+
+		METADATA[proto_version] = {}
+		for meta_id, meta_type in data["types"]["entityMetadataItem"][1]["fields"].items():
+			METADATA[proto_version][int(meta_id)] = mctype(meta_type)
+
+		if "particleData" in data["types"]:
+			PARTICLES[proto_version] = {}
+			for p_id, p_type in data["types"]["particleData"][1]["fields"].items():
+				PARTICLES[proto_version][int(p_id)] = mctype(p_type)
 
 		# Build data structure containing all packets with all their definitions for different versions
 		for state in ("handshaking", "status", "login", "play"):
@@ -402,6 +420,15 @@ def compile():
 	_STATE_MAP = {"handshaking": 0, "status":1, "login":2, "play":3}
 
 	_make_module(mc_path / 'proto', { k:"*" for k in PACKETS.keys() })
+
+	with open(mc_path / 'proto' / 'ext.py', 'w') as f:
+		f.write(
+			EXT_FORMATTER.format(
+				metadata = format_dict(METADATA, depth=2),
+				particles = format_dict(PARTICLES, depth=2),
+			)
+		)
+
 	for state in PACKETS.keys():
 		_make_module(mc_path / f"proto/{state}", { k:"*" for k in PACKETS[state].keys() })
 		for direction in PACKETS[state].keys():
