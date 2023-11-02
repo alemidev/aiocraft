@@ -391,9 +391,12 @@ class ParticleType(Type):
 	# TODO this changes across versions!
 	def read(self, data:dict, buffer:io.BytesIO, ctx:Context):
 		from aiocraft.mc.proto.ext import ParticlesDefinitions
+		proto = ctx._proto
+		while proto not in ParticlesDefinitions._definitions:
+			proto -= 1
 		data_id = VarInt.read(buffer, ctx)
-		if data_id in ParticlesDefinitions._definitions[ctx._proto]:
-			t = ParticlesDefinitions._definitions[ctx._proto][data_id]
+		if data_id in ParticlesDefinitions._definitions[proto]:
+			t = ParticlesDefinitions._definitions[proto][data_id]
 			data = t.read(buffer, ctx)
 			data["id"] = data_id
 		else:
@@ -412,7 +415,10 @@ class EntityMetadataType(Type):
 
 	def read(self, buffer:io.BytesIO, ctx:Context) -> Dict[int, Any]:
 		from aiocraft.mc.proto.ext import MetadataDefinitions
-		types_map = MetadataDefinitions._definitions[ctx._proto]
+		proto = ctx._proto
+		while proto not in MetadataDefinitions._definitions:
+			proto -= 1
+		types_map = MetadataDefinitions._definitions[proto]
 		out : Dict[int, Any] = {}
 		while True:
 			index = UnsignedByte.read(buffer, ctx)
