@@ -1,4 +1,4 @@
-use std::io::{Read, ErrorKind};
+use std::io::Read;
 
 use pyo3::prelude::*;
 
@@ -26,7 +26,7 @@ pub trait ChunkSection : Default + Iterator {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct ChunkSectionModern {
+pub struct ChunkSection754 {
 	pub block_count: i16,
 	pub bits_per_block: u8,
 	pub palette: Vec<i32>,
@@ -38,7 +38,7 @@ pub struct ChunkSectionModern {
 	y: usize,
 }
 
-impl ChunkSectionModern {
+impl ChunkSection754 {
 	fn count_up_coordinates(&mut self) {
 		self.x += 1;
 		if self.x >= 16 {
@@ -52,7 +52,7 @@ impl ChunkSectionModern {
 	}
 }
 
-impl Iterator for ChunkSectionModern {
+impl Iterator for ChunkSection754 {
 	type Item = ((usize, usize, usize), u16);
 
 	fn next(&mut self) -> Option<Self::Item> {
@@ -88,21 +88,19 @@ impl Iterator for ChunkSectionModern {
 	}
 }
 
-impl ChunkSection for ChunkSectionModern {
+impl ChunkSection for ChunkSection754 {
 	fn read<R: Read>(&mut self, buffer: &mut R) -> PyResult<()> {
 		let mut block_count_buf: [u8; 2] = [0; 2];
 		buffer.read_exact(&mut block_count_buf)?;
 		self.block_count = i16::from_be_bytes(block_count_buf);
-		log::info!("block count is {}", self.block_count);
 
 		let mut bits_per_block_buf: [u8; 1] = [0u8; 1];
 		buffer.read_exact(&mut bits_per_block_buf)?;
 		self.bits_per_block = u8::from_be_bytes(bits_per_block_buf);
-		log::info!("bits per block is {}", self.bits_per_block);
 		self.bits_per_block = match self.bits_per_block {
 			0..=4 => 4,
 			5..=8 => self.bits_per_block,
-			9..   => ChunkSectionModern::max_bits(),
+			9..   => ChunkSection754::max_bits(),
 		};
 
 		self.palette = Vec::new();
@@ -112,10 +110,8 @@ impl ChunkSection for ChunkSectionModern {
 				self.palette.push(read_varint(buffer)?);
 			}
 		}
-		log::info!("palette of len {}: {:?}", self.palette.len(), self.palette);
 
 		let content_len = read_varint(buffer)? as usize;
-		log::info!("reading {} longs from buffer ({} bytes)", content_len, content_len * 8);
 
 		let mut data_buf = vec![0u8; content_len * 8];
 		buffer.read_exact(&mut data_buf)?;
@@ -145,79 +141,4 @@ pub struct ChunkSection340 {
 	pub block_states: [[[u16; 16]; 16]; 16],
 	pub block_light: [[[u16; 16]; 16]; 16],
 	pub sky_light: Option<[[[u16; 16]; 16]; 16]>,
-}
-
-#[allow(unused)]
-fn read_paletted_container<R: Read>(buffer: &mut R) -> PyResult<[[[u16; 16]; 16]; 16]> {
-	let mut data: [u8; 1] = [0u8; 1];
-	buffer.read_exact(&mut data)?;
-	// bits = UnsignedByte.read(buffer, ctx=ctx) # FIXME if bits > 4 it reads trash
-	// #logging.debug("[%d|%d@%d] Bits per block : %d", ctx.x, ctx.z, ctx.sec, bits)
-	let bits_raw = u8::from_be_bytes(data);
-	let bits = match bits_raw {
-		0     => 0,
-		1..=4 => 4,
-		5..=8 => bits_raw,
-		9..   => 13, // this should not be hardcoded but we have no way to calculate all possible block states
-	};
-	log::info!("bits per block: {} -> {}", bits_raw, bits);
-	let palette_len = read_varint(buffer)?;
-	log::info!("palette len: {}", palette_len);
-	if bits == 0 { // single value palette: the length is the actual value and it fills the chunk
-		let _container_size = read_varint(buffer)? as usize; // this is still sent
-		assert_eq!(_container_size, 0);
-		return Ok([[[palette_len as u16; 16]; 16]; 16]);
-	}
-	let mut palette = vec![0; palette_len as usize];
-	for p in 0..palette_len as usize {
-		palette[p] = read_varint(buffer)?;
-	}
-	// # logging.debug("[%d|%d@%d] Palette section : [%d] %s", ctx.x, ctx.z, ctx.sec, palette_len, str(palette))
-	let container_size = read_varint(buffer)? as usize;
-	log::info!("reading off socket {}x8 = {} bytes (palette of {} bits)", container_size, container_size * 8, bits);
-	let mut block_data_buffer = vec![0u8; container_size * 8];
-	buffer.read_exact(&mut block_data_buffer)?;
-	let block_data : Vec<u64> = block_data_buffer
-		.chunks_exact(8)
-		.map(|x| u64::from_be_bytes(x.try_into().unwrap())) // wtf rust!!!
-		.collect();
-	let mut section = [[[0u16; 16]; 16]; 16];
-	let max_val: u16 = (1 << bits) - 1;
-	let mut i = 0;
-	for y in 0..16 {
-		for z in 0..16 {
-			for x in 0..16 {
-				// let i = (y * 16 * 16) + (z * 16) + x;
-				let start_byte = (i * bits as usize) / 64;
-				let start_offset = (i * bits as usize) % 64;
-				let end_byte = ((i + 1) * bits as usize) / 64;
-				if start_byte >= container_size || end_byte >= container_size {
-					log::warn!("early exit? is this ok?");
-					return Ok(section); // early exit? is this OK?
-				}
-				let value: u16;
-				if start_byte == end_byte {
-					value = ((block_data[start_byte as usize] //FIXME out of bounds?
-						>> start_offset) & max_val as u64) as u16;
-				} else {
-					let end_offset = 64 - start_offset;
-					value = (((block_data[start_byte as usize] as usize)
-						>> start_offset
-						| (block_data[end_byte as usize] as usize) << end_offset) // FIXME: out of bounds?
-						& max_val as usize) as u16;
-				}
-				if bits == 13 {
-					section[x][y][z] = value;
-				} else if value as i32 >= palette_len {
-					log::warn!("index out of palette bounds : {}/{} (bits {})", value, palette_len, bits);
-					section[x][y][z] = value;
-				} else {
-					section[x][y][z] = palette[value as usize] as u16;
-				}
-
-				i += 1;
-			}
-		}
-	}
-	return Ok(section);
 }

@@ -7,9 +7,6 @@ use world::World;
 
 use pyo3::prelude::*;
 
-/// A Python module implemented in Rust. The name of this function must match
-/// the `lib.name` setting in the `Cargo.toml`, else Python will not be able to
-/// import the module.
 #[pymodule]
 fn aiocraft(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
 	pyo3_log::init();
@@ -23,9 +20,9 @@ fn aiocraft(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
 
 fn abs(v:i32, modulo:i32) -> i32 {
 	if v < 0 {
-		return (modulo + (v % modulo)) % modulo;
+		(modulo + (v % modulo)) % modulo
 	} else {
-		return v % modulo;
+		v % modulo
 	}
 }
 
@@ -40,16 +37,17 @@ pub fn bit_pack(data: Vec<i32>, bits: i32, size: i32) -> PyResult<Vec<i32>> {
 	let mut cursor = 0;
 	let mut buffer = 0;
 	for el in data {
+		// TODO what did i know then that i don't know now ??????
 		if cursor + bits > size {
 			let delta = (cursor + bits) - size;
-			buffer |= (el & (2 << (bits - delta) - 1)) << cursor;
+			buffer |= (el & (2 << ((bits - delta) - 1))) << cursor;
 			out.push(buffer);
-			buffer = 0 | ((el >> (bits - delta)) & (2 << delta - 1));
+			buffer = (el >> (bits - delta)) & (2 << (delta - 1));
 			cursor = delta;
 		} else {
-			buffer |= (el & (2 << bits - 1)) << cursor;
+			buffer |= (el & (2 << (bits - 1))) << cursor;
 			cursor += bits;
 		}
 	}
-	return Ok(out);
+	Ok(out)
 }
