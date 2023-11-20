@@ -5,7 +5,7 @@ edition = "2021"
 
 [lib]
 name = "aiocraft"
-path = "src/lib.rs"    # The source file of the target.
+path = "src/aiocraft/rs/lib.rs"    # The source file of the target.
 crate-type = ["cdylib"] 
 
 [dependencies]
