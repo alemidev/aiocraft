@@ -1,6 +1,6 @@
 import json
 
-from typing import Union, List, Dict
+from typing import Union, List
 
 from termcolor import colored # TODO don't use a lib and put ANSI escaped by hand maybe?
 

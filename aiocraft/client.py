@@ -1,78 +1,74 @@
-import asyncio
 import logging
 import json
-import uuid
 
-from dataclasses import dataclass
 from asyncio import Task
-from enum import Enum
 from time import time
 
-from typing import Dict, List, Callable, Type, Optional, Tuple, AsyncIterator, Any, Set
+from typing import Any, Type
 
 import dns.resolver
 
 from .dispatcher import Dispatcher
-from .mc.packet import Packet
-from .mc.auth import AuthInterface, AuthException, MojangAuthenticator, MicrosoftAuthenticator
-from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
-from .mc.proto.status.serverbound import PacketPing, PacketPingStart
-from .mc.proto.status.clientbound import PacketServerInfo, PacketPing as PacketPong
-from .mc.proto.handshaking.serverbound import PacketSetProtocol
-from .mc.proto.play.serverbound import PacketKeepAlive as PacketKeepAliveResponse
-from .mc.proto.play.clientbound import PacketKeepAlive, PacketSetCompression, PacketKickDisconnect
-from .mc.proto.login.serverbound import PacketLoginStart, PacketEncryptionBegin as PacketEncryptionResponse
-from .mc.proto.login.clientbound import (
+from .auth import AuthInterface, AuthException
+from .types import ConnectionState
+from .packet import Packet
+from .proto.status.serverbound import PacketPing, PacketPingStart
+from .proto.status.clientbound import PacketServerInfo, PacketPing as PacketPong
+from .proto.handshaking.serverbound import PacketSetProtocol
+from .proto.play.serverbound import PacketKeepAlive as PacketKeepAliveResponse
+from .proto.play.clientbound import PacketKeepAlive, PacketSetCompression, PacketKickDisconnect
+from .proto.login.serverbound import PacketLoginStart, PacketEncryptionBegin as PacketEncryptionResponse
+from .proto.login.clientbound import (
 	PacketCompress, PacketDisconnect, PacketEncryptionBegin, PacketLoginPluginRequest, PacketSuccess
 )
 from .util import encryption, helpers
 
 LOGGER = logging.getLogger(__name__)
 
-class MinecraftClient:
-	online_mode:bool
-	authenticator:AuthInterface
-	dispatcher : Dispatcher
-	logger : logging.Logger
-	_authenticated : bool
-	_processing : bool
-	_worker : Task
+class AbstractMinecraftClient:
+	online_mode: bool
+	authenticator: AuthInterface
+	logger: logging.Logger
+	_dispatcher: Dispatcher | None
+	_authenticated: bool
+	_processing: bool
+	_worker: Task
 
 	def __init__(
 		self,
-		server:str,
 		authenticator:AuthInterface,
 		online_mode:bool = True,
-		force_port:int = 0,
-		resolve_srv:bool = True,
 	):
-		self.logger = LOGGER.getChild(f"on({server})")
+		self.logger = LOGGER.getChild(f"as({authenticator.selectedProfile.name})")
 		self.online_mode = online_mode
 		self.authenticator = authenticator
 		self._authenticated = False
 		self._processing = False
+		self._dispatcher = None
 
-		host = server
-		port = force_port or 25565
-
-		if resolve_srv:
-			try:
-				answ = dns.resolver.resolve(f"_minecraft._tcp.{server}", "SRV")
-				# TODO can we just use the 1st record?
-				host = str(answ[0].target).rstrip('.')
-				port = answ[0].port
-			except Exception:  # TODO what can I catch? dns.resolver.exception doesn't always exist, wtf
-				self.logger.warning("Failed resolving SRV record for '%s'", server)
-
-		self.dispatcher = Dispatcher().set_host(host, port)
+	def resolve_srv(self, server: str) -> tuple[str, int]:
+		try:
+			answ = dns.resolver.resolve(f"_minecraft._tcp.{server}", "SRV")
+			# TODO can we just use the 1st record?
+			host = str(answ[0].target).rstrip('.')
+			port = answ[0].port
+			return (host, port)
+		except Exception:  # TODO what can I catch? dns.resolver.exception doesn't always exist, wtf
+			self.logger.warning("Failed resolving SRV record for '%s'", server)
+			return (server, 25565)
 
 	@property
 	def connected(self) -> bool:
-		return self.dispatcher.connected
+		return self._dispatcher is not None and self.dispatcher.connected
 
-	async def write(self, packet:Packet, wait:bool=False):
-		# TODO get rid of this, too many ways to do one thing...
-		await self.dispatcher.write(packet, wait)
+	@property
+	def dispatcher(self) -> Dispatcher:
+		# This is a weird fix to avoid asserting dispatcher is not None in all handlers:
+		# if i'm receiving a packet callback dispatcher is very likely not None, if I received 
+		# a callback and it's None it's because client is stopping so an exc is ok
+		if self._dispatcher is None:
+			raise ValueError("Invalid state: connect first")
+		return self._dispatcher
 
 	async def authenticate(self):
 		if self._authenticated:
@@ -90,46 +86,78 @@ class MinecraftClient:
 				self.logger.info("Logged in")
 		self._authenticated = True
 
-	async def info(self, host:str="", port:int=0, proto:int=0, ping:bool=False) -> Dict[str, Any]:
+	async def info(
+			self,
+			host:str,
+			port:int=0,
+			proto:int=0,
+			ping:bool=False,
+			log_ignored_packets:bool=False,
+			whitelist: set[Type[Packet]] = set(),
+	) -> dict[str, Any]:
 		"""Make a mini connection to asses server status and version"""
+		if not port:
+			host, port = self.resolve_srv(host)
+		self._dispatcher = Dispatcher(
+			host=host,
+			port=port,
+			proto=proto,
+			log_ignored_packets=log_ignored_packets,
+			whitelist=whitelist
+		)
 		try:
-			await self.dispatcher.set_host(host, port).connect()
+			await self.dispatcher.connect()
 			await self._handshake(ConnectionState.STATUS)
 			return await self._status(ping)
 		finally:
 			if self.dispatcher.connected:
 				await self.dispatcher.disconnect()
+			self._dispatcher = None
 
-	async def join(self, host:str="", port:int=0, proto:int=0):
+	async def join(
+			self,
+			host:str,
+			port:int=0,
+			proto:int=0,
+			log_ignored_packets:bool=False,
+			whitelist: set[Type[Packet]]=set(),
+	):
+		if not port:
+			host, port = self.resolve_srv(host)
+		self._dispatcher = Dispatcher(
+			host=host,
+			port=port,
+			proto=proto,
+			log_ignored_packets=log_ignored_packets,
+			whitelist=whitelist,
+		)
 		if self.online_mode:
 			await self.authenticate()
 		try:
-			await self.dispatcher.set_host(host, port).set_proto(proto).connect()
+			await self.dispatcher.connect()
 			await self._handshake(ConnectionState.LOGIN)
 			if await self._login():
 				await self._play()
 		finally:
 			if self.dispatcher.connected:
 				await self.dispatcher.disconnect()
+			self._dispatcher = None
 
 	async def _handshake(self, state:ConnectionState):
 		await self.dispatcher.write(
 			PacketSetProtocol(
-				self.dispatcher._proto,
-				protocolVersion=self.dispatcher._proto,
-				serverHost=self.dispatcher._host,
-				serverPort=self.dispatcher._port,
+				protocolVersion=self.dispatcher.proto,
+				serverHost=self.dispatcher.host,
+				serverPort=self.dispatcher.port,
 				nextState=state.value
 			)
 		)
 
-	async def _status(self, ping:bool=False) -> Dict[str, Any]:
-		self.dispatcher.state = ConnectionState.STATUS
-		await self.dispatcher.write(
-			PacketPingStart(self.dispatcher._proto) #empty packet
-		)
+	async def _status(self, ping:bool=False) -> dict[str, Any]:
+		self.dispatcher.promote(ConnectionState.STATUS)
+		await self.dispatcher.write(PacketPingStart()) #empty packet
 		#Response
-		data : Dict[str, Any] = {}
+		data : dict[str, Any] = {}
 		ping_id : int = 0
 		ping_time : float = 0
 		async for packet in self.dispatcher.packets():
@@ -141,10 +169,7 @@ class MinecraftClient:
 				ping_id = int(time())
 				ping_time = time()
 				await self.dispatcher.write(
-					PacketPing(
-						self.dispatcher._proto,
-						time=ping_id,
-					)
+					PacketPing(time=ping_id)
 				)
 			if isinstance(packet, PacketPong):
 				if packet.time == ping_id:
@@ -153,12 +178,9 @@ class MinecraftClient:
 		return data
 
 	async def _login(self) -> bool:
-		self.dispatcher.state = ConnectionState.LOGIN
+		self.dispatcher.promote(ConnectionState.LOGIN)
 		await self.dispatcher.write(
-			PacketLoginStart(
-				self.dispatcher._proto,
-				username=self.authenticator.selectedProfile.name
-			)
+			PacketLoginStart(username=self.authenticator.selectedProfile.name)
 		)
 		async for packet in self.dispatcher.packets():
 			if isinstance(packet, PacketEncryptionBegin):
@@ -187,7 +209,6 @@ class MinecraftClient:
 				else:
 					self.logger.warning("Server gave an offline-mode serverId but still requested Encryption")
 				encryption_response = PacketEncryptionResponse(
-					self.dispatcher._proto,
 					sharedSecret=encrypted_secret,
 					verifyToken=token
 				)
@@ -207,7 +228,7 @@ class MinecraftClient:
 		return False
 
 	async def _play(self):
-		self.dispatcher.state = ConnectionState.PLAY
+		self.dispatcher.promote(ConnectionState.PLAY)
 		async for packet in self.dispatcher.packets():
 			self.logger.debug("[ * ] Processing %s", packet.__class__.__name__)
 			if isinstance(packet, PacketSetCompression):

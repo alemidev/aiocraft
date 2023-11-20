@@ -1,19 +1,18 @@
 import io
 import asyncio
-import contextlib
 import zlib
 import logging
+
+from typing import Type, AsyncIterator
 from asyncio import StreamReader, StreamWriter, Queue, Task
-from enum import Enum
-from typing import List, Dict, Set, Optional, AsyncIterator, Type, Union
 from types import ModuleType
 
 from cryptography.hazmat.primitives.ciphers import CipherContext
 
-from .mc import proto as minecraft_protocol
-from .mc.types import VarInt, Context
-from .mc.packet import Packet
-from .mc.definitions import ConnectionState
+from . import proto as minecraft_protocol
+from .primitives import VarInt, Context
+from .packet import Packet
+from .types import ConnectionState
 from .util import encryption
 
 LOGGER = logging.getLogger(__name__)
@@ -29,11 +28,11 @@ class Dispatcher:
 	_is_server : bool # True when receiving packets from clients
 
 	_down : StreamReader
-	_reader : Optional[Task]
+	_reader : Task | None
 	_decryptor : CipherContext
 
 	_up   : StreamWriter
-	_writer : Optional[Task]
+	_writer : Task | None
 	_encryptor : CipherContext
 
 	_dispatching : bool
@@ -41,8 +40,8 @@ class Dispatcher:
 	_incoming : Queue
 	_outgoing : Queue
 
-	_packet_whitelist : Optional[Set[Type[Packet]]]
-	_packet_id_whitelist : Optional[Set[int]]
+	_packet_whitelist : set[Type[Packet]] | None
+	_packet_id_whitelist : set[int] | None
 
 	_log_ignored_packets : bool
 
@@ -52,20 +51,39 @@ class Dispatcher:
 	_proto : int
 
 	_encryption : bool
-	_compression : Optional[int]
+	_compression : int | None
 
 	state : ConnectionState # TODO make getter/setter ?
 	logger : logging.Logger
 
-	def __init__(self, server:bool = False):
-		self._proto = 757
+	def __init__(
+			self,
+			host:str = "localhost",
+			port:int = 25565,
+			proto:int = 757,
+			compression_threshold: int | None = None,
+			server:bool = False,
+			log_ignored_packets: bool = False,
+			whitelist: set[Type[Packet]] = set(),
+	):
+		self._proto = proto
+		self._host = host
+		self._port = port
+		self._compression = compression_threshold
 		self._is_server = server
-		self._host = "localhost"
-		self._port = 25565
 		self._dispatching = False
 		self._packet_whitelist = None
 		self._packet_id_whitelist = None
-		self._log_ignored_packets = False
+		self._log_ignored_packets = log_ignored_packets
+		self._packet_whitelist = set(whitelist) if whitelist is not None else None
+		if self._packet_whitelist:
+			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKeepAlive)
+			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKickDisconnect)
+		self._packet_id_whitelist = set((P().for_proto(self.proto) for P in self._packet_whitelist)) if self._packet_whitelist else None
+
+	def promote(self, next_state:ConnectionState):
+		# change dispatcher state
+		self.state = next_state
 
 	@property
 	def proto(self) -> int:
@@ -84,7 +102,7 @@ class Dispatcher:
 		return self._encryption
 
 	@property
-	def compression(self) -> Optional[int]:
+	def compression(self) -> int | None:
 		return self._compression
 
 	@property
@@ -112,7 +130,7 @@ class Dispatcher:
 			except asyncio.TimeoutError:
 				pass # so we recheck self.connected
 
-	def encrypt(self, secret:Optional[bytes]=None) -> 'Dispatcher':
+	def encrypt(self, secret: bytes | None = None):
 		if secret is not None:
 			cipher = encryption.create_AES_cipher(secret)
 			self._encryptor = cipher.encryptor()
@@ -122,51 +140,19 @@ class Dispatcher:
 		else:
 			self._encryption = False
 			self.logger.info("Encryption disabled")
-		return self
 
-	def whitelist(self, ids:Optional[List[Type[Packet]]]) -> 'Dispatcher':
-		self._packet_whitelist = set(ids) if ids is not None else None
-		if self._packet_whitelist:
-			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKeepAlive)
-			self._packet_whitelist.add(minecraft_protocol.play.clientbound.PacketKickDisconnect)
-		self._packet_id_whitelist = set((P(self._proto).id for P in self._packet_whitelist)) if self._packet_whitelist else None
-		return self
-
-	def set_host(
-		self,
-		host:Optional[str]="",
-		port:Optional[int]=0,
-	) -> 'Dispatcher':
-		self._host = host or self._host
-		self._port = port or self._port
-		self.logger = LOGGER.getChild(f"on({self._host}:{self._port})")
-		return self
-
-	def set_proto(self, proto:Optional[int]=757) -> 'Dispatcher':
-		self._proto = proto or self._proto
-		if self._packet_whitelist:
-			self._packet_id_whitelist = set((P(self._proto).id for P in self._packet_whitelist))
-		return self
-
-	def set_compression(self, threshold:Optional[int] = None) -> 'Dispatcher':
-		self._compression = threshold
-		return self
-
-	def set_state(self, state:Optional[ConnectionState]=ConnectionState.HANDSHAKING) -> 'Dispatcher':
-		self.state = state or self.state
-		return self
-
-	def log_ignored_packets(self, log:bool) -> 'Dispatcher':
-		self._log_ignored_packets = log
-		return self
+	def update_compression_threshold(self, threshold: int | None):
+		self._compression = threshold or 0
 
 	async def connect(self,
-			reader : Optional[StreamReader] = None,
-			writer : Optional[StreamWriter] = None,
-			queue_size : int = 100,
-	) -> 'Dispatcher':
+		reader : StreamReader | None = None,
+		writer : StreamWriter | None = None,
+		queue_size : int = 100,
+	):
 		if self.connected:
 			raise InvalidState("Dispatcher already connected")
+
+		self.logger = LOGGER.getChild(f"on({self._host}:{self._port})")
 
 		self._encryption = False
 		self._compression = None
@@ -191,7 +177,7 @@ class Dispatcher:
 		self.logger.info("Connected")
 		return self
 
-	async def disconnect(self, block:bool=True) -> 'Dispatcher':
+	async def disconnect(self, block:bool=True):
 		self._dispatching = False
 		if block and self._writer and self._reader:
 			await asyncio.gather(self._writer, self._reader)
@@ -314,7 +300,7 @@ class Dispatcher:
 				self.logger.debug("%s", buffer.getvalue())
 				await self.disconnect(block=False)
 
-	async def _up_worker(self, timeout=1):
+	async def _up_worker(self, timeout:float = 1.):
 		while self._dispatching:
 			try:
 				packet : Packet = await asyncio.wait_for(self._outgoing.get(), timeout=timeout)
@@ -325,7 +311,7 @@ class Dispatcher:
 				return
 
 			try:
-				buffer = packet.serialize()
+				buffer = packet.serialize(self.proto)
 				length = len(buffer.getvalue()) # ewww TODO
 
 				if self._compression is not None:

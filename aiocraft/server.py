@@ -7,24 +7,15 @@ import uuid
 from dataclasses import dataclass
 from asyncio import Task, StreamReader, StreamWriter
 from asyncio.base_events import Server # just for typing
-from enum import Enum
-
-from typing import Dict, List, Callable, Coroutine, Type, Optional, Tuple, AsyncIterator
 
 from .dispatcher import Dispatcher
-from .mc.packet import Packet
-from .mc.auth import AuthException, AuthInterface
-from .mc.definitions import Dimension, Difficulty, Gamemode, ConnectionState
-from .mc.proto.status.serverbound import PacketPing, PacketPingStart
-from .mc.proto.status.clientbound import PacketServerInfo, PacketPing as PacketPong
-from .mc.proto.handshaking.serverbound import PacketSetProtocol
-from .mc.proto.play.serverbound import PacketKeepAlive as PacketKeepAliveResponse
-from .mc.proto.play.clientbound import PacketKeepAlive, PacketSetCompression, PacketKickDisconnect, PacketPosition, PacketLogin
-from .mc.proto.login.serverbound import PacketLoginStart, PacketEncryptionBegin as PacketEncryptionResponse
-from .mc.proto.login.clientbound import (
-	PacketCompress, PacketDisconnect, PacketEncryptionBegin, PacketLoginPluginRequest, PacketSuccess
-)
-from .util import encryption
+from .types import ConnectionState
+from .proto.status.serverbound import PacketPing, PacketPingStart
+from .proto.status.clientbound import PacketServerInfo, PacketPing as PacketPong
+from .proto.handshaking.serverbound import PacketSetProtocol
+from .proto.play.clientbound import PacketKickDisconnect, PacketPosition, PacketLogin
+from .proto.login.serverbound import PacketLoginStart, PacketEncryptionBegin as PacketEncryptionResponse
+from .proto.login.clientbound import PacketDisconnect, PacketSuccess
 
 REMOVE_COLOR_FORMATS = re.compile(r"§[0-9a-z]")
 LOGGER = logging.getLogger(__name__)
@@ -37,12 +28,12 @@ class ServerOptions:
 	motd : str
 	max_players : int
 
-class MinecraftServer:
+class AbstractMinecraftServer:
 	host:str
 	port:int
 	options:ServerOptions
 
-	_dispatcher_pool : List[Dispatcher]
+	_dispatcher_pool : list[Dispatcher]
 	_processing : bool
 	_server : Server
 	_worker : Task
@@ -103,7 +94,7 @@ class MinecraftServer:
 			await self._server.wait_closed()
 
 	async def _server_worker(self, reader:StreamReader, writer:StreamWriter):
-		dispatcher = Dispatcher(server=True).set_host(self.host, self.port)
+		dispatcher = Dispatcher(host=self.host, port=self.port, server=True)
 		self._dispatcher_pool.append(dispatcher)
 
 		self.logger.debug("Starting dispatcher for client")
@@ -118,9 +109,9 @@ class MinecraftServer:
 
 		if dispatcher.connected:
 			await dispatcher.write(
-				PacketKickDisconnect(dispatcher.proto, reason="Connection terminated")
+				PacketKickDisconnect(reason="Connection terminated")
 				if dispatcher.state == ConnectionState.PLAY else
-				PacketDisconnect(dispatcher.proto, reason="Connection terminated")
+				PacketDisconnect(reason="Connection terminated")
 			)
 			await dispatcher.disconnect()
 
@@ -129,7 +120,7 @@ class MinecraftServer:
 		async for packet in dispatcher.packets():
 			if isinstance(packet, PacketSetProtocol):
 				self.logger.info("Received set protocol packet")
-				dispatcher.proto = packet.protocolVersion
+				dispatcher._proto = packet.protocolVersion # TODO shouldn't be doing it this way
 				if packet.nextState == 1:
 					self.logger.debug("Changing state to STATUS")
 					dispatcher.state = ConnectionState.STATUS
@@ -146,7 +137,6 @@ class MinecraftServer:
 			if isinstance(packet, PacketPingStart):
 				await dispatcher.write(
 					PacketServerInfo(
-						dispatcher.proto,
 						response=json.dumps({
 							"online": True,
 							"ip": self.host,
@@ -181,7 +171,7 @@ class MinecraftServer:
 					)
 				)
 			elif isinstance(packet, PacketPing):
-				await dispatcher.write(PacketPong(dispatcher.proto, packet.time))
+				await dispatcher.write(PacketPong(time=packet.time))
 		return False
 
 	async def _login(self, dispatcher:Dispatcher) -> bool:
@@ -201,16 +191,15 @@ class MinecraftServer:
 				else:
 					await dispatcher.write(
 						PacketSuccess(
-							dispatcher.proto,
 							uuid=str(uuid.uuid4()),
 							username=packet.username,
 						)
 					)
 					return True
 			elif isinstance(packet, PacketEncryptionResponse):
-				shared_secret = packet.sharedSecret
-				verify_token = packet.verifyToken
-				# TODO enable encryption?
+				pass # TODO enable encryption?
+				# shared_secret = packet.sharedSecret
+				# verify_token = packet.verifyToken
 				# return True
 		return False
 
@@ -220,10 +209,9 @@ class MinecraftServer:
 		if self.options.spawn_player:
 			await dispatcher.write(
 				PacketLogin(
-					dispatcher.proto,
 					gameMode=3,
 					isFlat=False,
-					worldNames=b'',
+					worldNames=[],
 					worldName='aiocraft',
 					previousGameMode=3,
 					entityId=1,
@@ -242,7 +230,6 @@ class MinecraftServer:
 
 			await dispatcher.write(
 				PacketPosition(
-					dispatcher.proto,
 					dismountVehicle=True,
 					x=0,
 					y=120,

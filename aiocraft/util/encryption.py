@@ -2,8 +2,6 @@
 # TODO read more about this, improve implementation if possible
 import os
 from hashlib import sha1
-from asyncio import StreamWriter, StreamReader
-from dataclasses import dataclass
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
