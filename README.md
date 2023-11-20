@@ -11,8 +11,9 @@ aiocraft provides a raw implementation of a client but it isn't ready to be used
 the whole Minecraft protocol from `0.30c` to `1.19.3` is compiled and available
 feature flags to only include certain protocol versions are planned
 all types and packets are instantiable and serializable on all supported protocols:
-```
+```py
 from aiocraft.proto import PacketArmAnimation
+
 a_packet = PacketArmAnimation(hand=0)
 await client.dispatcher.write(a_packet)
 ```
