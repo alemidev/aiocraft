@@ -12,9 +12,9 @@ the whole Minecraft protocol from `0.30c` to `1.19.3` is compiled and available
 feature flags to only include certain protocol versions are planned
 all types and packets are instantiable and serializable on all supported protocols:
 ```py
-from aiocraft.proto import PacketArmAnimation
+from aiocraft.proto.play.serverbound import PacketPosition
 
-a_packet = PacketArmAnimation(hand=0)
+a_packet = PacketPosition(x=-4.0, y=64.0, z=10.5, onGround=True)
 await client.dispatcher.write(a_packet)
 ```
 
