@@ -4,7 +4,6 @@ build-backend = "maturin"
 
 [project]
 name = "aiocraft"
-version = "0.1.0"
 authors = [
 	{ email = "me@alemi.dev", name = "alemi"},
 	{ email = "francescotolomei@mail.com", name = "f-tml" },
@@ -30,6 +29,7 @@ classifiers = [
 readme = "README.md"
 license = {file = "LICENSE"}
 keywords = ["python", "rust", "mc", "minecraft", "protocol", "async", "asyncio", "definitions"]
+dynamic = ["version"]
 
 dependencies = [
 	"pynbt",
