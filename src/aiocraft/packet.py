@@ -56,8 +56,9 @@ class Packet:
 			fallback_proto -= 1
 		for k, t in cls._definitions[fallback_proto]:
 			setattr(ctx, k, t.read(buffer, ctx=ctx))
-		return cls(**ctx.serialize())
-		# return cls(proto, **{ name : t.read(buffer) for (name, t) in cls._definitions[proto] })
+		packet = cls(**ctx.serialize())
+		packet.for_proto(fallback_proto)
+		return packet
 
 	def serialize(self, proto:int) -> io.BytesIO:
 		self.for_proto(proto) # this sets both id and definitions but mypy doesn't know...
